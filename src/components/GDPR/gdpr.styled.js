@@ -109,7 +109,7 @@ export const ModalOverlay = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 50;
+    z-index: 100000;
     padding: 1rem;
 `;
 
