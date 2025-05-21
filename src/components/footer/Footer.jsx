@@ -13,6 +13,7 @@ import {useTranslations} from 'next-intl';
 import {Address} from "@/components/footer/Adress.styled";
 import {Copyright} from "@/components/footer/Copyright.styled";
 
+
 const Footer = () => {
     const t = useTranslations('components.footer');
 
