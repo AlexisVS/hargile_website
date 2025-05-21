@@ -75,7 +75,6 @@ export const getServiceIcons = (isMobile) => {
         <BlurBackground
           color={color}
           size={`${iconSize}px`}
-          intensity={intensity}
         />
       </motion.div>
     </motion.div>
