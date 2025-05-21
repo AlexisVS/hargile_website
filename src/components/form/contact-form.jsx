@@ -199,9 +199,9 @@ export default function ContactForm() {
 
         <StatusMessageDisplay
           $show={!!submitStatus.message}
-          success={submitStatus.success} 
+          $success={submitStatus.success}
         >
-          {submitStatus.message} 
+          {submitStatus.message}
         </StatusMessageDisplay>
         <PrivacyFooter t={t} />
       </FormContainer>

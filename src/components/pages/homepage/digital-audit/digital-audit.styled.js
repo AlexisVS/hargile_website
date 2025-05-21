@@ -32,7 +32,7 @@ export const SectionDescription = styled.p.attrs({
 })`
     color: var(--color-text-light);
     margin-bottom: 2rem;
-    max-width: 80ch;
+    max-width: 81ch;
 
     strong {
         font-weight: 600;

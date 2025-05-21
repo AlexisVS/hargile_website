@@ -38,7 +38,8 @@
   $max-size: $base-size * $max-factor * config.$scale-factor-large;
 
   // Calculate the size at the mid viewport for a more controlled curve
-  $mid-factor: ($min-factor + $max-factor) / 2;
+  // FIXED: Using math.div() instead of the / operator
+  $mid-factor: math.div($min-factor + $max-factor, 2);
   $mid-size: $base-size * $mid-factor;
 
   // First segment: min viewport to mid viewport
@@ -82,7 +83,11 @@
 
       // Apply fluid typography without size restrictions
       @include fluid-type($min-step, $max-step);
-      line-height: $line-height;
+
+      // FIXED: Wrapping declarations after nested rules in & {}
+      & {
+        line-height: $line-height;
+      }
     } @else {
       @error "No fluid typography configuration found for key '#{$size-key}'";
     }

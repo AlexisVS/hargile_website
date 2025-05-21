@@ -26,7 +26,8 @@ $type-scale-increment: 0.5;
   @if $step == 0 {
     @return 1;
   } @else if $step < 0 {
-    @return math.pow(1 / $type-scale-ratio, abs($step));
+    // FIXED: Using math.div() instead of the / operator
+    @return math.pow(math.div(1, $type-scale-ratio), abs($step));
   } @else {
     @return math.pow($type-scale-ratio, $step);
   }
