@@ -674,7 +674,7 @@
           "title": "Automatisation des processus métier"
         },
         "banking-connector": {
-          "description": "Solutions bancaire, Wordline payment, SIPS Atos, ...",
+          "description": "Solutions bancaires, Wordline payment, SIPS Atos, ...",
           "title": "Connecteur(s) bancaire(s)"
         },
         "cloud": {
@@ -703,7 +703,7 @@
         },
         "mobile": {
           "description": "Développement d'applications iOS et Android.",
-          "title": "Applications mobile"
+          "title": "Applications mobiles"
         },
         "performance": {
           "description": "Amélioration de la vitesse et de l'expérience utilisateur",

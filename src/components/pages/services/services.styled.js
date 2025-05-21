@@ -40,7 +40,7 @@ export const SectionIcon = styled.div`
     width: 4.5rem;
     height: 4.5rem;
     border-radius: 1rem;
-    background-color: ${({bgColor}) => bgColor || 'rgba(255, 255, 255, 0.05)'};
+    background-color: ${({$bgColor}) => $bgColor || 'rgba(255, 255, 255, 0.05)'};
     position: relative;
     top: -8px;
     color: var(--color-text-light);
