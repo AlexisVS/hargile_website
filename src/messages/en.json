@@ -75,6 +75,30 @@
         "serviceRequired": "Please select at least one service."
       }
     },
+    "footer": {
+      "address": {
+        "line1": "Rue Sterckx 5, bt. 28",
+        "line2": "1060 Saint-Gilles",
+        "line3": "Belgium"
+      },
+      "contact": {
+        "general": "General",
+        "clients": "Client Contact",
+        "administration": "Administration"
+      },
+      "copyright": "© {year} Hargile. All Rights Reserved",
+      "sections": {
+        "solutions": "Solutions",
+        "services": "Services",
+        "company": "Company"
+      },
+      "links": {
+        "aboutUs": "About Us",
+        "contact": "Contact",
+        "privacyPolicy": "Privacy Policy",
+        "siteMap": "Site Map"
+      }
+    },
     "gdpr": {
       "acceptAll": "Accept All",
       "analyticsCookies": {
