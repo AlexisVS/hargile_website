@@ -1,45 +1,40 @@
 {
   "components": {
-    "gdpr": {
-      "title": "Privacy Settings",
-      "description": "We use cookies to enhance your experience on our site, analyze our traffic, and personalize our content. You can choose which cookies you accept and change your preferences at any time.",
-      "acceptAll": "Accept All",
-      "rejectAll": "Reject All",
-      "customize": "Customize",
-      "save": "Save my preferences",
-      "cookieSettings": "Cookie settings",
-      "privacyPolicy": {
-        "link": "Privacy Policy",
-        "description": "Learn more about how we use your data and your rights regarding your personal information."
-      },
-      "necessaryCookies": {
-        "title": "Necessary Cookies",
-        "alwaysActive": "Always Active",
-        "description": "These cookies are essential for the proper functioning of our website. They enable the use of core features and secure your visit. These cookies cannot be disabled."
-      },
-      "analyticsCookies": {
-        "title": "Analytics Cookies",
-        "description": "These cookies allow us to collect anonymous statistical data about the use of our website to improve user experience and optimize our services."
-      },
-      "marketingCookies": {
-        "title": "Marketing Cookies",
-        "description": "These cookies are used to track visitors across websites. They are designed to display relevant and engaging advertisements based on your interests."
-      },
-      "preferencesCookies": {
-        "title": "Preference Cookies",
-        "description": "These cookies allow our website to remember your preferences, such as language or region, to provide a personalized experience during your future visits."
-      }
+    "audit-button": {
+      "description": "",
+      "title": "Audit your website"
+    },
+    "audit-modal": {
+      "analysis-complete": "Analysis complete! Fill in your details to view the results.",
+      "analyzing": "Analyzing your website... You can complete the form while we work.",
+      "back-url": "Go back",
+      "company": "Is this for your company?",
+      "contact": "Contact Information",
+      "error": "Error during the audit. The URL you entered might be incorrect. Please try again.",
+      "first-name": "First Name",
+      "incomplete": "Please complete all required fields marked with *",
+      "industry": "Industry",
+      "last-name": "Last Name",
+      "modal-description": "Enter your website URL below to start a comprehensive performance audit of your site.",
+      "modal-title": "Website Audit",
+      "modal-url-placeholder": "yourwebiste.com",
+      "no": "No",
+      "processing": "Processing...",
+      "select": "Please Select",
+      "start-audit": "Start Audit",
+      "view-results": "View Audit Results",
+      "wait": "Please wait for the audit to complete before accessing results.",
+      "yes": "Yes"
     },
     "contact-form": {
       "contact": {
         "email": "Email",
         "message": "Your message",
         "name": "First and Last Name",
-        "phone": "Phone",
         "object": "Object",
+        "phone": "Phone",
         "projectDescription": "Your message",
         "timeline": {
-
           "1To3months": "1 - 3 months",
           "3To6months": "3 - 6 months",
           "label": "Desired Timeline",
@@ -56,69 +51,73 @@
         "text": "By submitting this form, you accept our"
       },
       "services": {
+        "advice": "Advice",
         "ai": "Artificial Intelligence",
         "cloud": "Cloud Solutions",
         "description": "Select one or more options",
         "mobileApps": "Mobile Applications",
         "title": "Service Type",
-        "webDevelopment": "Web Development",
-        "advice": "Advice"
+        "webDevelopment": "Web Development"
       },
       "submit": "Submit",
-      "title": "Contact us",
-      "submitting": "Submitting...",
-      "submitSuccess": "Thank you! Your message has been sent successfully.",
       "submitError": "Sorry, there was an error sending your message. Please try again.",
-      "submitNetworkError": "A network error occurred. Please check your connection and try again.",
       "submitErrorProvider": "A error provider occurred. Please check your connection and try again.",
+      "submitNetworkError": "A network error occurred. Please check your connection and try again.",
+      "submitSuccess": "Thank you! Your message has been sent successfully.",
+      "submitting": "Submitting...",
+      "title": "Contact us",
       "validation": {
-        "nameRequired": "Please enter your name.",
-        "emailRequired": "Please enter your email address.",
         "emailInvalid": "Please enter a valid email address.",
-        "objectRequired": "Please enter the subject of your inquiry.",
+        "emailRequired": "Please enter your email address.",
         "messageRequired": "Please enter your message (minimum {min} characters).",
+        "nameRequired": "Please enter your name.",
+        "objectRequired": "Please enter the subject of your inquiry.",
         "serviceRequired": "Please select at least one service."
       }
     },
-    "audit-button": {
-      "description": "",
-      "title": "Audit your website"
+    "gdpr": {
+      "acceptAll": "Accept All",
+      "analyticsCookies": {
+        "description": "These cookies allow us to collect anonymous statistical data about the use of our website to improve user experience and optimize our services.",
+        "title": "Analytics Cookies"
+      },
+      "cookieSettings": "Cookie settings",
+      "customize": "Customize",
+      "description": "We use cookies to enhance your experience on our site, analyze our traffic, and personalize our content. You can choose which cookies you accept and change your preferences at any time.",
+      "marketingCookies": {
+        "description": "These cookies are used to track visitors across websites. They are designed to display relevant and engaging advertisements based on your interests.",
+        "title": "Marketing Cookies"
+      },
+      "necessaryCookies": {
+        "alwaysActive": "Always Active",
+        "description": "These cookies are essential for the proper functioning of our website. They enable the use of core features and secure your visit. These cookies cannot be disabled.",
+        "title": "Necessary Cookies"
+      },
+      "preferencesCookies": {
+        "description": "These cookies allow our website to remember your preferences, such as language or region, to provide a personalized experience during your future visits.",
+        "title": "Preference Cookies"
+      },
+      "privacyPolicy": {
+        "description": "Learn more about how we use your data and your rights regarding your personal information.",
+        "link": "Privacy Policy"
+      },
+      "rejectAll": "Reject All",
+      "save": "Save my preferences",
+      "title": "Privacy Settings"
     },
-    "audit-modal": {
-      "modal-title": "Website Audit",
-      "modal-description": "Enter your website URL below to start a comprehensive performance audit of your site.",
-      "modal-url-placeholder": "yourwebiste.com",
-      "start-audit": "Start Audit",
-      "analyzing": "Analyzing your website... You can complete the form while we work.",
-      "analysis-complete": "Analysis complete! Fill in your details to view the results.",
-      "contact": "Contact Information",
-      "error": "Error during the audit. The URL you entered might be incorrect. Please try again.",
-      "first-name": "First Name",
-      "last-name": "Last Name",
-      "company": "Is this for your company?",
-      "select": "Please Select",
-      "yes": "Yes",
-      "no": "No",
-      "industry": "Industry",
-      "processing": "Processing...",
-      "view-results": "View Audit Results",
-      "wait": "Please wait for the audit to complete before accessing results.",
-      "back-url": "Go back",
-      "incomplete": "Please complete all required fields marked with *"
+    "menu": {
+      "agves": "AGVES",
+      "contact": "Contact",
+      "i-go": "I go",
+      "multipass": "Multipass",
+      "our-dna": "Our DNA",
+      "portfolio": "Portfolio",
+      "services": "Services",
+      "solutions": "Solutions"
     },
     "read-more": {
       "less": "Show less",
       "more": "Show more"
-    },
-    "menu": {
-      "contact": "Contact",
-      "our-dna": "Our DNA",
-      "portfolio": "Portfolio",
-      "services": "Services",
-      "solutions": "Solutions",
-      "i-go": "I go",
-      "agves": "AGVES",
-      "multipass": "Multipass"
     }
   },
   "pages": {
@@ -193,6 +192,56 @@
         }
       }
     },
+    "audit-results": {
+      "sections": {
+        "audit-results": {
+          "Accessibility": "Accessibility",
+          "Best Practices": "Best Practices",
+          "Performance": "Performance",
+          "SEO": "SEO",
+          "access-average": "50-89 (Average): Some elements are inaccessible (e.g. missing labels, poor contrast, etc.).",
+          "access-good": "90-100 (Good): Complies with WCAG guidelines, keyboard navigation works, color contrast is appropriate.",
+          "access-poor": "0-49 (Poor): Major issues preventing use by people with disabilities. Legal compliance risks.",
+          "average": "Average",
+          "best-average": "50-89 (Average): Some deprecated methods, inefficient resource loading, minor security flags.",
+          "best-good": "90-100 (Good): Secure HTTPS setup, no deprecated APIs, good coding practices.",
+          "best-poor": "0-49 (Poor): Usage of insecure libraries, unoptimized code, or unsafe requests.",
+          "book": "Book a meeting with our team",
+          "company": "For Company",
+          "contact": "Make an appointment",
+          "description-accessibility": "Accessibility ensures that your website can be used by people with disabilities. This not only improves your reach but also shows commitment to inclusion and can be legally important in some regions.",
+          "description-bestpractices": "Best Practices refer to modern web development techniques that ensure your site runs reliably and securely. This includes avoiding deprecated APIs, using HTTPS, ensuring correct image aspect ratios, and more.",
+          "description-performance": "A high performance score means your website loads quickly and efficiently. This improves user experience, reduces bounce rates, and positively impacts your SEO ranking.",
+          "description-seo": "A strong SEO score ensures your website is well structured for search engines. It means your pages are crawlable, mobile-friendly, and follow best practices.",
+          "experts": "Our experts can help you optimize your digital impact",
+          "good": "Good",
+          "improve": "Want to improve your performance :",
+          "industry": "Industry",
+          "informations": "Your Informations",
+          "may-look": "% may look okay, but it still indicates ",
+          "may-look-access": " your site isn't accessible to everyone. This could be excluding part of your audience and pose compliance risks.",
+          "may-look-best": " a lack of secure and modern web development standards, which can expose your site to vulnerabilities and harm user trust.",
+          "may-look-performances": "suboptimal load times or resource usage. On slower connections or mobile devices, this could mean users leave before the page loads.",
+          "may-look-seo": " fewer pages indexed and lost traffic to competitors.",
+          "name": "Name",
+          "performances-average": "50-89 (Average): Room for improvement in script execution time, image optimization, or render-blocking resources.",
+          "performances-good": "90-100 (Good): Your site loads extremely fast, with optimized assets, minimal main-thread work, and reduced TTI.",
+          "performances-poor": "0-49 (Poor): Users likely face long load times, jank, or unresponsive pages — especially on mobile.",
+          "poor": "Poor",
+          "score-breakdown": "Score Breakdown:",
+          "score-like": "A score like",
+          "seo-average": "50-89 (Average): Minor issues like missing meta tags or some mobile usability flaws.",
+          "seo-good": "90-100 (Good): Well-structured HTML, mobile-friendly design, meta tags correctly used, good crawlability.",
+          "seo-poor": "0-49 (Poor): Major problems like missing titles, broken links, or poor mobile optimization.",
+          "title": "Audit Results",
+          "warning-accessibility": "Your accessibility score needs work. We can help make your website more inclusive and compliant.",
+          "warning-bestpractices": "Your site doesn't follow all best practices. Let's address outdated code, insecure endpoints, or minor implementation flaws.",
+          "warning-performance": "Your performance score could be improved. Let us help you optimize your loading speed, scripts, and assets.",
+          "warning-seo": "Your SEO score can be improved. We can help enhance your visibility and boost your traffic.",
+          "website": "Website"
+        }
+      }
+    },
     "homepage": {
       "sections": {
         "about-us": {
@@ -236,6 +285,73 @@
           "who_description": "At HARGILE, we shape our development like sculpting a work of art: with care, intention, and attention to detail.\n\nOur ambition? To create digital solutions that make sense, serve your objectives, and evolve with you.",
           "who_title": "Our vision of growth"
         },
+        "digital-audit": {
+          "description": "Is your website generating enough traffic? Does it effectively convert visitors into customers? Is your visibility optimized?<br/><br/><strong>HARGILE has developed an online performance analysis tool. By simply entering a website URL, you get a precise diagnosis in seconds</strong>:",
+          "details": {
+            "accessibility": {
+              "text": "An accessible website ensures that everyone, including people with disabilities, can navigate and interact with your content. Beyond the ethical aspect, this expands your potential audience and strengthens your compliance with accessibility standards.",
+              "title": "Accessibility"
+            },
+            "bestPractices": {
+              "text": "Following the best technical practices ensures that your site is robust, performant, and secure. The audit identifies common errors such as obsolete resources, poorly optimized JavaScript or CSS, insecure libraries, and misconfigurations that can affect user experience and organic ranking. A good Best Practices score guarantees an up-to-date, reliable site that complies with modern web standards.",
+              "title": "Technical Best Practices"
+            },
+            "mobile": {
+              "text": "Currently, more than 50% of web traffic comes from mobile devices. A site not adapted to mobile offers a poor experience and suffers penalties from search engines. The audit evaluates mobile compatibility to ensure smooth navigation on all screens.",
+              "title": "Mobile Optimization"
+            },
+            "performance": {
+              "text": "A slow website increases bounce rate and generates frustration among users. It also negatively impacts your organic search ranking. Conversely, a fast site offers a better user experience and improves conversions.",
+              "title": "Performance"
+            },
+            "security": {
+              "text": "An unsecured site is exposed to cyber attacks and can quickly lose user trust, especially in e-commerce. The audit verifies the presence of SSL certificates, secure headers, and essential protection mechanisms.",
+              "title": "Security"
+            },
+            "seo": {
+              "text": "A well-optimized site structure makes it easier for search engines to crawl and index your content. The result: better positioning and increased traffic to your site.",
+              "title": "Visibility (SEO)"
+            }
+          },
+          "features": {
+            "security": "✅ <strong>Security & Reliability</strong> – Is your site well protected?",
+            "seo": "✅ <strong>SEO Ranking</strong> – Are you visible ?",
+            "speed": "✅ <strong>Loading Speed</strong> – A slow site drives visitors away!",
+            "ux": "✅ <strong>User Experience (UX)</strong> – Smooth and responsive navigation?"
+          },
+          "form": {
+            "loading": "Analyzing...",
+            "placeholder": "yourwebsite.com",
+            "submit": "Start Audit"
+          },
+          "moreInfo": {
+            "description": "Our digital audit tool helps identify your website's weaknesses and define a clear roadmap to improve its technical performance, accessibility, security, and search engine optimization (SEO).",
+            "title": "The Digital Audit"
+          },
+          "results": {
+            "accessibility": "Accessibility",
+            "accessibilityLabel": "Accessibility",
+            "bestPractices": "Best Practices",
+            "bestPracticesLabel": "Practices",
+            "contactUs": "Contact Us",
+            "detailedReport": "View Detailed Report",
+            "mobile": "Mobile",
+            "mobileLabel": "Mobile",
+            "performance": "Performance",
+            "performanceLabel": "Performance",
+            "security": "Security",
+            "securityLabel": "Security",
+            "seo": "SEO",
+            "seoLabel": "SEO",
+            "title": "Audit Results"
+          },
+          "title": "A performing website is much more than ",
+          "titleAccent": "beautiful design.",
+          "whyImportant": {
+            "text": "because good performance indicators create more traffic, more engagement, and more conversions.",
+            "title": "Why is this important?"
+          }
+        },
         "hero": {
           "arrowAlt": "Arrow",
           "companyName": "HARGILE",
@@ -257,8 +373,8 @@
         "our-solutions": {
           "coming-soon": "Coming soon",
           "description": "Our tech expertise is your lever — creating human solutions, tailored to your objectives and boosting your development.",
-          "learn-more": "Learn More about ",
           "explain": "Explain ",
+          "learn-more": "Learn More about ",
           "paragraph": "HARGILE offers customized digital solutions based on the principle of technological mastery and creative innovation. Our team combines expertise, ingenuity, and strategic business vision to transform your challenges into growth levers.",
           "solutions": {
             "agves": {
@@ -325,95 +441,28 @@
           "dev": {
             "items": {
               "cms": "CMS",
+              "e-payment": "Integration of banking connectors",
               "ecommerce": "E-Commerce",
               "mobile": "Mobile Application",
-              "web": "Web Design and Development",
-              "e-payment": "Integration of banking connectors"
+              "web": "Web Design and Development"
             },
             "title": "Development and Solution Design"
           },
+          "discover-link": "Discover <br/> our services",
           "maintenance": {
             "items": {
               "migration": "Application Migration and Modernization",
-              "seo": "SEO",
               "performance": "Performance",
+              "seo": "SEO",
               "support": "Maintenance Support"
             },
             "title": "Maintenance and Modernization"
           },
           "subtitle": "We have all the tools to elevate your business",
-          "title": "Our services",
-          "discover-link": "Discover <br/> our services"
+          "title": "Our services"
         },
         "trusted-brands": {
           "title": "They trust us"
-        },
-        "digital-audit": {
-          "title": "A performing website is much more than ",
-          "titleAccent": "beautiful design.",
-          "description": "Is your website generating enough traffic? Does it effectively convert visitors into customers? Is your visibility optimized?<br/><br/><strong>HARGILE has developed an online performance analysis tool. By simply entering a website URL, you get a precise diagnosis in seconds</strong>:",
-          "features": {
-            "speed": "✅ <strong>Loading Speed</strong> – A slow site drives visitors away!",
-            "seo": "✅ <strong>SEO Ranking</strong> – Are you visible ?",
-            "ux": "✅ <strong>User Experience (UX)</strong> – Smooth and responsive navigation?",
-            "security": "✅ <strong>Security & Reliability</strong> – Is your site well protected?"
-          },
-          "whyImportant": {
-            "title": "Why is this important?",
-            "text": "because good performance indicators create more traffic, more engagement, and more conversions."
-          },
-          "form": {
-            "placeholder": "yourwebsite.com",
-            "submit": "Start Audit",
-            "loading": "Analyzing..."
-          },
-          "results": {
-            "title": "Audit Results",
-            "performance": "Performance",
-            "performanceLabel": "Performance",
-            "seo": "SEO",
-            "seoLabel": "SEO",
-            "accessibility": "Accessibility",
-            "accessibilityLabel": "Accessibility",
-            "security": "Security",
-            "securityLabel": "Security",
-            "mobile": "Mobile",
-            "mobileLabel": "Mobile",
-            "bestPractices": "Best Practices",
-            "bestPracticesLabel": "Practices",
-            "detailedReport": "View Detailed Report",
-            "contactUs": "Contact Us"
-          },
-          "moreInfo": {
-            "title": "The Digital Audit",
-            "description": "Our digital audit tool helps identify your website's weaknesses and define a clear roadmap to improve its technical performance, accessibility, security, and search engine optimization (SEO)."
-          },
-          "details": {
-            "performance": {
-              "title": "Performance",
-              "text": "A slow website increases bounce rate and generates frustration among users. It also negatively impacts your organic search ranking. Conversely, a fast site offers a better user experience and improves conversions."
-            },
-            "seo": {
-              "title": "Visibility (SEO)",
-              "text": "A well-optimized site structure makes it easier for search engines to crawl and index your content. The result: better positioning and increased traffic to your site."
-            },
-            "security": {
-              "title": "Security",
-              "text": "An unsecured site is exposed to cyber attacks and can quickly lose user trust, especially in e-commerce. The audit verifies the presence of SSL certificates, secure headers, and essential protection mechanisms."
-            },
-            "accessibility": {
-              "title": "Accessibility",
-              "text": "An accessible website ensures that everyone, including people with disabilities, can navigate and interact with your content. Beyond the ethical aspect, this expands your potential audience and strengthens your compliance with accessibility standards."
-            },
-            "mobile": {
-              "title": "Mobile Optimization",
-              "text": "Currently, more than 50% of web traffic comes from mobile devices. A site not adapted to mobile offers a poor experience and suffers penalties from search engines. The audit evaluates mobile compatibility to ensure smooth navigation on all screens."
-            },
-            "bestPractices": {
-              "title": "Technical Best Practices",
-              "text": "Following the best technical practices ensures that your site is robust, performant, and secure. The audit identifies common errors such as obsolete resources, poorly optimized JavaScript or CSS, insecure libraries, and misconfigurations that can affect user experience and organic ranking. A good Best Practices score guarantees an up-to-date, reliable site that complies with modern web standards."
-            }
-          }
         }
       }
     },
@@ -426,17 +475,9 @@
       "description": "Explore our collection of innovative digital solutions tailored for diverse industries. Each project reflects our commitment to excellence, sustainable practices, and user-centered design philosophies.",
       "featuredProjects": "Featured Projects",
       "projects": {
-        "trussogne": {
-          "description": "Charming and fully-equipped holiday home in the Belgian Ardennes, perfect for family or group stays, with wellness and catering services.",
-          "subtitle": "Nature & Comfort Stay in the Ardennes"
-        },
-        "delphine": {
-          "description": "Abstract and poetic acrylic paintings on canvas, accompanied by audio descriptions, by artist Delphine Simonis.",
-          "subtitle": "Contemporary Painting"
-        },
-        "eren": {
-          "description": "Industrial battery solutions for business energy optimization and cost savings.",
-          "subtitle": "Profitable Industrial Battery Solutions"
+        "alianature": {
+          "description": "Discover natural & locally-made beauty, jewelry, wellness, and home products.",
+          "subtitle": "Natural Well-being & Beauty"
         },
         "aluvi": {
           "description": "ALUVI-immo offers trusted real estate services including property management (syndic & private), sales, and rentals in Brussels & Walloon Brabant.",
@@ -446,41 +487,49 @@
           "description": "Feature-rich online art marketplace.",
           "subtitle": "Gallery for emerging artists"
         },
-        "dripdrops": {
-          "description": "Your destination for hyped sneakers, streetwear, and accessories.",
-          "subtitle": "That Good Good"
-        },
-        "ferme_de_basseilles": {
-          "description": "Discover unique glamping (domes, bubbles, treehouses) and traditional guesthouses (gîtes & B&Bs) at a historic farm in Mozet, perfect for a memorable nature escape.",
-          "subtitle": "Unique Stays & Guesthouses in Nature"
-        },
-        "gve": {
-          "description": "Offering businesses cutting-edge, customized solutions and impactful partnerships for transformative progress.",
-          "subtitle": "Innovation meets sustainability"
-        },
-        "foorn": {
-          "description": "Foor'n brings authentic Lebanese flavors to Brussels, specializing in unique kaak (sesame bread handbags) in savory & sweet versions, alongside traditional dishes.",
-          "subtitle": "Brussels - Beirut : Immediate Boarding"
-        },
-        "inspirite": {
-          "description": "Corporate coaching and well-being solutions to transform company culture, enhance performance, and nurture team development for lasting success.",
-          "subtitle": "Coaching excellence"
-        },
-        "alianature": {
-          "description": "Discover natural & locally-made beauty, jewelry, wellness, and home products.",
-          "subtitle": "Natural Well-being & Beauty"
-        },
-        "mayaglobal": {
-          "description": "Intelligent software for sustainable land management. Get real-time insights & predictive alerts to optimize golf courses, vineyards, parks, and sports turf.",
-          "subtitle": "Intelligent Sustainable Land Management"
+        "azza": {
+          "description": "A leader in European scrapbooking and creative hobbies, offering unique products (Azza & Izzy styles), tools, and inspiration for creating beautiful photo albums",
+          "subtitle": "Scrapbooking & Creative Inspiration"
         },
         "creativeid": {
           "description": "Your source for European scrapbooking and cardmaking supplies.",
           "subtitle": "Inspiring Your Creative Paper Crafts"
         },
+        "defierlant": {
+          "description": "Belgian abstract expressionist painter and poet who creates a bridge between his large-scale paintings and his poems, which serve as their backbone. Discover his gallery, books, and events.",
+          "subtitle": "Belgian Painter & Poet"
+        },
+        "delphine": {
+          "description": "Abstract and poetic acrylic paintings on canvas, accompanied by audio descriptions, by artist Delphine Simonis.",
+          "subtitle": "Contemporary Painting"
+        },
+        "dripdrops": {
+          "description": "Your destination for hyped sneakers, streetwear, and accessories.",
+          "subtitle": "That Good Good"
+        },
+        "eren": {
+          "description": "Industrial battery solutions for business energy optimization and cost savings.",
+          "subtitle": "Profitable Industrial Battery Solutions"
+        },
+        "ferme_de_basseilles": {
+          "description": "Discover unique glamping (domes, bubbles, treehouses) and traditional guesthouses (gîtes & B&Bs) at a historic farm in Mozet, perfect for a memorable nature escape.",
+          "subtitle": "Unique Stays & Guesthouses in Nature"
+        },
+        "foorn": {
+          "description": "Foor'n brings authentic Lebanese flavors to Brussels, specializing in unique kaak (sesame bread handbags) in savory & sweet versions, alongside traditional dishes.",
+          "subtitle": "Brussels - Beirut : Immediate Boarding"
+        },
+        "gve": {
+          "description": "Offering businesses cutting-edge, customized solutions and impactful partnerships for transformative progress.",
+          "subtitle": "Innovation meets sustainability"
+        },
         "hexidesigns": {
           "description": "HEXI DESIGNS features the works of Hector Ducoux, a fashion design student at Parsons, NYC.",
           "subtitle": "Emergig artist"
+        },
+        "inspirite": {
+          "description": "Corporate coaching and well-being solutions to transform company culture, enhance performance, and nurture team development for lasting success.",
+          "subtitle": "Coaching excellence"
         },
         "locafut": {
           "description": "Flexible and cost-effective stainless steel keg rental and maintenance services for breweries and HORECA, helping optimize production, reduce investment, and promote ecological practices.",
@@ -490,13 +539,13 @@
           "description": "Fashion brand offering a curated selection of women's clothing and accessories, including knitwear, tops, trousers, dresses.",
           "subtitle": "Chic Contemporary Womenswear"
         },
-        "defierlant": {
-          "description": "Belgian abstract expressionist painter and poet who creates a bridge between his large-scale paintings and his poems, which serve as their backbone. Discover his gallery, books, and events.",
-          "subtitle": "Belgian Painter & Poet"
+        "mayaglobal": {
+          "description": "Intelligent software for sustainable land management. Get real-time insights & predictive alerts to optimize golf courses, vineyards, parks, and sports turf.",
+          "subtitle": "Intelligent Sustainable Land Management"
         },
-        "azza": {
-          "description": "A leader in European scrapbooking and creative hobbies, offering unique products (Azza & Izzy styles), tools, and inspiration for creating beautiful photo albums",
-          "subtitle": "Scrapbooking & Creative Inspiration"
+        "trussogne": {
+          "description": "Charming and fully-equipped holiday home in the Belgian Ardennes, perfect for family or group stays, with wellness and catering services.",
+          "subtitle": "Nature & Comfort Stay in the Ardennes"
         }
       },
       "readCaseStudy": "Read case study",
@@ -686,324 +735,274 @@
       "subtitleItalic": "Innovative solutions",
       "title": "Our services"
     },
-    "audit-results": {
+    "sitemap": {
+      "description": "Find all the pages and resources on our website organized in a structured way. This sitemap will help you navigate our site and find the information you're looking for quickly.",
       "sections": {
-        "audit-results": {
-          "title": "Audit Results",
-          "informations": "Your Informations",
-          "name": "Name",
-          "company": "For Company",
-          "industry": "Industry",
-          "website": "Website",
-          "Performance": "Performance",
-          "SEO": "SEO",
-          "Accessibility": "Accessibility",
-          "Best Practices": "Best Practices",
-          "good": "Good",
-          "average": "Average",
-          "poor": "Poor",
-          "description-performance": "A high performance score means your website loads quickly and efficiently. This improves user experience, reduces bounce rates, and positively impacts your SEO ranking.",
-          "warning-performance": "Your performance score could be improved. Let us help you optimize your loading speed, scripts, and assets.",
-          "description-seo": "A strong SEO score ensures your website is well structured for search engines. It means your pages are crawlable, mobile-friendly, and follow best practices.",
-          "warning-seo": "Your SEO score can be improved. We can help enhance your visibility and boost your traffic.",
-          "description-accessibility": "Accessibility ensures that your website can be used by people with disabilities. This not only improves your reach but also shows commitment to inclusion and can be legally important in some regions.",
-          "warning-accessibility": "Your accessibility score needs work. We can help make your website more inclusive and compliant.",
-          "description-bestpractices": "Best Practices refer to modern web development techniques that ensure your site runs reliably and securely. This includes avoiding deprecated APIs, using HTTPS, ensuring correct image aspect ratios, and more.",
-          "warning-bestpractices": "Your site doesn't follow all best practices. Let's address outdated code, insecure endpoints, or minor implementation flaws.",
-          "score-breakdown": "Score Breakdown:",
-          "performances-good": "90-100 (Good): Your site loads extremely fast, with optimized assets, minimal main-thread work, and reduced TTI.",
-          "performances-average": "50-89 (Average): Room for improvement in script execution time, image optimization, or render-blocking resources.",
-          "performances-poor": "0-49 (Poor): Users likely face long load times, jank, or unresponsive pages — especially on mobile.",
-          "seo-good": "90-100 (Good): Well-structured HTML, mobile-friendly design, meta tags correctly used, good crawlability.",
-          "seo-average": "50-89 (Average): Minor issues like missing meta tags or some mobile usability flaws.",
-          "seo-poor": "0-49 (Poor): Major problems like missing titles, broken links, or poor mobile optimization.",
-          "access-good": "90-100 (Good): Complies with WCAG guidelines, keyboard navigation works, color contrast is appropriate.",
-          "access-average": "50-89 (Average): Some elements are inaccessible (e.g. missing labels, poor contrast, etc.).",
-          "access-poor": "0-49 (Poor): Major issues preventing use by people with disabilities. Legal compliance risks.",
-          "best-good": "90-100 (Good): Secure HTTPS setup, no deprecated APIs, good coding practices.",
-          "best-average": "50-89 (Average): Some deprecated methods, inefficient resource loading, minor security flags.",
-          "best-poor": "0-49 (Poor): Usage of insecure libraries, unoptimized code, or unsafe requests.",
-          "score-like": "A score like",
-          "may-look": "% may look okay, but it still indicates ",
-          "may-look-performances": "suboptimal load times or resource usage. On slower connections or mobile devices, this could mean users leave before the page loads.",
-          "may-look-seo": " fewer pages indexed and lost traffic to competitors.",
-          "may-look-access": " your site isn't accessible to everyone. This could be excluding part of your audience and pose compliance risks.",
-          "may-look-best": " a lack of secure and modern web development standards, which can expose your site to vulnerabilities and harm user trust.",
-          "improve": "Want to improve your performance :",
-          "experts": "Our experts can help you optimize your digital impact",
-          "book": "Book a meeting with our team",
-          "contact": "Make an appointment"
+        "company": {
+          "aboutUs": "About Our Company",
+          "mission": "Our Mission",
+          "team": "Our Team",
+          "title": "Company Information",
+          "values": "Company Values"
+        },
+        "legal": {
+          "cookies": "Cookie Policy",
+          "privacy": "Privacy Policy",
+          "terms": "Terms of Service",
+          "title": "Legal Information"
+        },
+        "main": {
+          "aboutUs": "About Us",
+          "contact": "Contact Us",
+          "home": "Home",
+          "services": "Services",
+          "title": "Main Navigation"
+        },
+        "services": {
+          "marketing": "Digital Marketing",
+          "mobileDev": "Mobile App Development",
+          "seo": "SEO Optimization",
+          "title": "Our Services",
+          "webDesign": "Web Design & Development"
+        },
+        "support": {
+          "contact": "Contact Support",
+          "title": "Support"
+        },
+        "tools": {
+          "performanceCheck": "Website Performance Check",
+          "seoAudit": "SEO Audit Tool",
+          "title": "Tools & Resources"
         }
-      }
+      },
+      "title": "Site Map"
     },
     "solutions": {
       "agves": {
-        "title": "AGVES",
-        "subtitleRegular": "Transforming school",
-        "subtitleHighlight": "management",
+        "cta": "Contact us for a demonstration",
         "description": "Specialized sales management application for the education sector.",
-        "paragraph1": "AGVES revolutionizes school and extracurricular communication through the implementation of a simplifying interface. It improves all operations related to financial transactions and security processes.",
-        "paragraph2": "AGVES ensures students have access to the resources they need while providing administrators with powerful and efficient management tools.",
         "features": {
-          "wallet": {
-            "title": "Integrated Electronic Wallet",
-            "description": "Secure payment solution for managing school fees, meals, activities, and other transactions, with real-time tracking."
-          },
           "access": {
-            "title": "Digital Access Keys",
-            "description": "Secure authentication via encrypted credentials or NFC badges for enhanced control of physical and digital access."
+            "description": "Secure authentication via encrypted credentials or NFC badges for enhanced control of physical and digital access.",
+            "title": "Digital Access Keys"
           },
           "communication": {
-            "title": "Parent-School Communication Portal",
-            "description": "Integrated messaging, real-time notifications, announcement broadcasting, and permission management."
-          },
-          "finance": {
-            "title": "Financial Management Module",
-            "description": "Budget tracking, automated billing, grant management, and accounting exports."
+            "description": "Integrated messaging, real-time notifications, announcement broadcasting, and permission management.",
+            "title": "Parent-School Communication Portal"
           },
           "dashboard": {
-            "title": "Ergonomic Administrator Dashboard",
-            "description": "Centralized interface for school data supervision, with customizable indicators and multi-profile access."
+            "description": "Centralized interface for school data supervision, with customizable indicators and multi-profile access.",
+            "title": "Ergonomic Administrator Dashboard"
+          },
+          "finance": {
+            "description": "Budget tracking, automated billing, grant management, and accounting exports.",
+            "title": "Financial Management Module"
+          },
+          "wallet": {
+            "description": "Secure payment solution for managing school fees, meals, activities, and other transactions, with real-time tracking.",
+            "title": "Integrated Electronic Wallet"
           }
         },
-        "cta": "Contact us for a demonstration"
+        "paragraph1": "AGVES revolutionizes school and extracurricular communication through the implementation of a simplifying interface. It improves all operations related to financial transactions and security processes.",
+        "paragraph2": "AGVES ensures students have access to the resources they need while providing administrators with powerful and efficient management tools.",
+        "subtitleHighlight": "management",
+        "subtitleRegular": "Transforming school",
+        "title": "AGVES"
       },
       "i-go": {
-        "title": "I GO",
-        "subtitleRegular": "Reinventing",
-        "subtitleHighlight": "urban mobility",
+        "cta": "Join the electric mobility revolution",
         "description": "A dedicated mobile application designed for users of personal mobility devices (PMDs) and electric-assisted bicycles (EABs).",
-        "paragraph1": "I GO is an innovative mobile application dedicated to electric mobility, designed to meet the growing needs of users of Personal Mobility Devices (PMDs) and Electric-Assisted Bicycles (EABs).",
-        "paragraph2": "Born from the observation of the increasing difficulty for these users to find charging stations, I GO offers an enhanced user experience through a comprehensive solution for referencing and locating these charging points through its intuitive search engine.",
         "features": {
-          "database": {
-            "title": "Enhanced Charging Points Database",
-            "description": "Comprehensive indexing of charging stations, with classification by type, power, compatibility, and operator."
-          },
-          "realtime": {
-            "title": "Real-time Updates",
-            "description": "Dynamic availability updates of charging stations through synchronization with operators and user feedback."
-          },
           "collaborative": {
-            "title": "Collaborative Contribution System",
-            "description": "Addition of new charging points by the community, integrated moderation, and participatory validation."
-          },
-          "navigation": {
-            "title": "Integrated Intelligent Navigation",
-            "description": "Optimized route calculation taking into account autonomy, traffic, and charging station locations."
+            "description": "Addition of new charging points by the community, integrated moderation, and participatory validation.",
+            "title": "Collaborative Contribution System"
           },
           "community": {
-            "title": "Advanced Community Features",
-            "description": "Route sharing, reviews, ratings, and exchanges between users around electric mobility."
+            "description": "Route sharing, reviews, ratings, and exchanges between users around electric mobility.",
+            "title": "Advanced Community Features"
+          },
+          "database": {
+            "description": "Comprehensive indexing of charging stations, with classification by type, power, compatibility, and operator.",
+            "title": "Enhanced Charging Points Database"
+          },
+          "navigation": {
+            "description": "Optimized route calculation taking into account autonomy, traffic, and charging station locations.",
+            "title": "Integrated Intelligent Navigation"
+          },
+          "realtime": {
+            "description": "Dynamic availability updates of charging stations through synchronization with operators and user feedback.",
+            "title": "Real-time Updates"
           }
         },
-        "cta": "Join the electric mobility revolution"
+        "paragraph1": "I GO is an innovative mobile application dedicated to electric mobility, designed to meet the growing needs of users of Personal Mobility Devices (PMDs) and Electric-Assisted Bicycles (EABs).",
+        "paragraph2": "Born from the observation of the increasing difficulty for these users to find charging stations, I GO offers an enhanced user experience through a comprehensive solution for referencing and locating these charging points through its intuitive search engine.",
+        "subtitleHighlight": "urban mobility",
+        "subtitleRegular": "Reinventing",
+        "title": "I GO"
       },
       "multipass": {
-        "title": "Multipass",
-        "subtitleRegular": "The future of",
-        "subtitleHighlight": "CRM",
+        "cta": "Discover Multipass in action",
         "description": "A versatile CRM digital solution with modular options adaptable to all market segments.",
-        "paragraph1": "Whether you're an ambitious startup or an established company, Multipass offers you a scalable and evolving CRM platform. Designed to adapt to all business sectors, our solution allows you to centralize, manage, and optimize your customer relationships with unmatched flexibility.",
+        "features": {
+          "integration": {
+            "description": "Native interoperability with existing information systems (ERP, messaging tools, databases, etc.).",
+            "title": "Seamless Integration"
+          },
+          "modules": {
+            "description": "Modular architecture allowing activation of only relevant features according to specific business needs.",
+            "title": "Customizable Modules"
+          },
+          "reporting": {
+            "description": "Dynamic dashboards, customized indicators, export, and report automation.",
+            "title": "Advanced Reporting & Analytics"
+          },
+          "scalable": {
+            "description": "Infrastructure designed to support increased load and organizational changes.",
+            "title": "Scalable Architecture"
+          },
+          "ui": {
+            "description": "UX/UI designed to maximize productivity and reduce learning time.",
+            "title": "Optimized User Interface"
+          }
+        },
         "highlights": [
           "Modular: activate only the features you need",
           "Versatile: suitable for all types of businesses, across all sectors",
           "Scalable: grows with you, at your own pace"
         ],
+        "paragraph1": "Whether you're an ambitious startup or an established company, Multipass offers you a scalable and evolving CRM platform. Designed to adapt to all business sectors, our solution allows you to centralize, manage, and optimize your customer relationships with unmatched flexibility.",
         "paragraph2": "Switch to intelligent customer management!",
-        "features": {
-          "modules": {
-            "title": "Customizable Modules",
-            "description": "Modular architecture allowing activation of only relevant features according to specific business needs."
-          },
-          "integration": {
-            "title": "Seamless Integration",
-            "description": "Native interoperability with existing information systems (ERP, messaging tools, databases, etc.)."
-          },
-          "scalable": {
-            "title": "Scalable Architecture",
-            "description": "Infrastructure designed to support increased load and organizational changes."
-          },
-          "reporting": {
-            "title": "Advanced Reporting & Analytics",
-            "description": "Dynamic dashboards, customized indicators, export, and report automation."
-          },
-          "ui": {
-            "title": "Optimized User Interface",
-            "description": "UX/UI designed to maximize productivity and reduce learning time."
-          }
-        },
-        "cta": "Discover Multipass in action"
-      }
-    },
-    "sitemap": {
-      "title": "Site Map",
-      "description": "Find all the pages and resources on our website organized in a structured way. This sitemap will help you navigate our site and find the information you're looking for quickly.",
-      "sections": {
-        "main": {
-          "title": "Main Navigation",
-          "home": "Home",
-          "services": "Services",
-          "aboutUs": "About Us",
-          "contact": "Contact Us"
-        },
-        "services": {
-          "title": "Our Services",
-          "webDesign": "Web Design & Development",
-          "mobileDev": "Mobile App Development",
-          "seo": "SEO Optimization",
-          "marketing": "Digital Marketing"
-        },
-        "tools": {
-          "title": "Tools & Resources",
-          "seoAudit": "SEO Audit Tool",
-          "performanceCheck": "Website Performance Check"
-        },
-        "company": {
-          "title": "Company Information",
-          "aboutUs": "About Our Company",
-          "team": "Our Team",
-          "mission": "Our Mission",
-          "values": "Company Values"
-        },
-        "legal": {
-          "title": "Legal Information",
-          "terms": "Terms of Service",
-          "privacy": "Privacy Policy",
-          "cookies": "Cookie Policy"
-        },
-        "support": {
-          "title": "Support",
-          "contact": "Contact Support"
-        }
+        "subtitleHighlight": "CRM",
+        "subtitleRegular": "The future of",
+        "title": "Multipass"
       }
     }
   },
   "seo": {
     "global": {
-      "siteName": "HARGILE",
-      "defaultTitle": "HARGILE - Digital Innovation for Your Business",
       "defaultDescription": "Transform your digital presence with HARGILE's innovative web development, AI solutions, and strategic marketing. Elevate your business in today's competitive landscape.",
       "defaultImageAlt": "HARGILE Digital Agency",
-      "twitterHandle": "@hargile_agency",
-      "domain": "hargile.com"
+      "defaultTitle": "HARGILE - Digital Innovation for Your Business",
+      "domain": "hargile.com",
+      "siteName": "HARGILE",
+      "twitterHandle": "@hargile_agency"
     },
     "pages": {
-      "home": {
-        "title": "HARGILE - Digital Innovation for Your Business Success",
-        "description": "Partner with HARGILE for transformative digital solutions. We deliver custom web development, AI integration, and strategic marketing that drives growth and maximizes your online potential.",
-        "og": {
-          "title": "HARGILE - Digital Innovation for Your Business Success",
-          "description": "Unlock your business potential with HARGILE's custom digital solutions. From web development to AI integration, we deliver results-driven strategies for today's digital marketplace.",
-          "imageAlt": "HARGILE - Digital Agency"
-        },
-        "schemaType": "WebSite"
-      },
       "about-us": {
-        "title": "About HARGILE - Our Story & Mission | Digital Innovation Agency",
         "description": "Discover HARGILE's journey, values, and mission. Meet our expert team dedicated to creating meaningful digital experiences that amplify your business growth through ethical innovation.",
         "og": {
-          "title": "About HARGILE - Our Story & Mission | Digital Innovation Agency",
           "description": "Meet the minds behind HARGILE's digital innovation. Learn how our values and expertise create lasting partnerships that deliver exceptional results for businesses worldwide.",
-          "imageAlt": "HARGILE Team"
+          "imageAlt": "HARGILE Team",
+          "title": "About HARGILE - Our Story & Mission | Digital Innovation Agency"
         },
-        "schemaType": "AboutPage"
-      },
-      "services": {
-        "title": "Our Digital Services | Web, Mobile & AI Solutions | HARGILE",
-        "description": "Explore HARGILE's comprehensive digital services tailored to your business needs. From custom web development and mobile apps to AI solutions and performance optimization.",
-        "og": {
-          "title": "Our Digital Services | Web, Mobile & AI Solutions | HARGILE",
-          "description": "Transform your business with HARGILE's full-spectrum digital services. Custom web development, mobile applications, AI integration, and performance optimization for measurable results.",
-          "imageAlt": "HARGILE Services"
-        },
-        "schemaType": "ServicePage"
-      },
-      "portfolio": {
-        "title": "Our Portfolio | Innovative Digital Projects | HARGILE",
-        "description": "Explore HARGILE's showcase of successful digital projects. Discover how we've helped clients transform their businesses through custom web development, mobile apps and AI solutions.",
-        "og": {
-          "title": "Our Portfolio | Innovative Digital Projects | HARGILE",
-          "description": "See how HARGILE delivers digital excellence through our portfolio of transformative projects. Case studies that demonstrate our expertise across industries and technologies.",
-          "imageAlt": "HARGILE Portfolio"
-        },
-        "schemaType": "CollectionPage"
-      },
-      "contact": {
-        "title": "Contact HARGILE | Expert Digital Solutions Team",
-        "description": "Ready to elevate your digital presence? Connect with HARGILE's team of experts today. Get a personalized consultation and discover how our solutions can transform your business.",
-        "og": {
-          "title": "Contact HARGILE | Expert Digital Solutions Team",
-          "description": "Start your digital transformation journey with HARGILE. Reach out to our team for a personalized consultation and discover tailored solutions for your unique business needs.",
-          "imageAlt": "HARGILE Contact"
-        },
-        "schemaType": "ContactPage"
-      },
-      "legal": {
-        "privacy": {
-          "title": "Privacy Policy & Legal Notices | HARGILE",
-          "description": "Review HARGILE's privacy policy and legal information. Learn how we protect your data, our terms of service, and our commitment to maintaining your privacy and security.",
-          "og": {
-            "title": "Privacy Policy & Legal Notices | HARGILE",
-            "description": "Understand how HARGILE handles your information with our comprehensive privacy policy. Learn about our data protection measures and your rights as a user.",
-            "imageAlt": "HARGILE Legal Notices"
-          },
-          "schemaType": "WebPage"
-        }
+        "schemaType": "AboutPage",
+        "title": "About HARGILE - Our Story & Mission | Digital Innovation Agency"
       },
       "audit": {
         "result": {
-          "title": "Website Audit Results | Performance Analysis | HARGILE",
           "description": "Review your comprehensive website audit results from HARGILE. Get actionable insights on performance, SEO, accessibility, and best practices to improve your digital presence.",
           "og": {
-            "title": "Website Audit Results | Performance Analysis | HARGILE",
             "description": "Unlock your website's full potential with HARGILE's detailed performance audit. Discover opportunities to enhance speed, SEO, accessibility, and user experience.",
-            "imageAlt": "HARGILE Website Audit"
+            "imageAlt": "HARGILE Website Audit",
+            "title": "Website Audit Results | Performance Analysis | HARGILE"
           },
-          "schemaType": "WebPage"
+          "schemaType": "WebPage",
+          "title": "Website Audit Results | Performance Analysis | HARGILE"
         }
+      },
+      "contact": {
+        "description": "Ready to elevate your digital presence? Connect with HARGILE's team of experts today. Get a personalized consultation and discover how our solutions can transform your business.",
+        "og": {
+          "description": "Start your digital transformation journey with HARGILE. Reach out to our team for a personalized consultation and discover tailored solutions for your unique business needs.",
+          "imageAlt": "HARGILE Contact",
+          "title": "Contact HARGILE | Expert Digital Solutions Team"
+        },
+        "schemaType": "ContactPage",
+        "title": "Contact HARGILE | Expert Digital Solutions Team"
+      },
+      "home": {
+        "description": "Partner with HARGILE for transformative digital solutions. We deliver custom web development, AI integration, and strategic marketing that drives growth and maximizes your online potential.",
+        "og": {
+          "description": "Unlock your business potential with HARGILE's custom digital solutions. From web development to AI integration, we deliver results-driven strategies for today's digital marketplace.",
+          "imageAlt": "HARGILE - Digital Agency",
+          "title": "HARGILE - Digital Innovation for Your Business Success"
+        },
+        "schemaType": "WebSite",
+        "title": "HARGILE - Digital Innovation for Your Business Success"
+      },
+      "legal": {
+        "privacy": {
+          "description": "Review HARGILE's privacy policy and legal information. Learn how we protect your data, our terms of service, and our commitment to maintaining your privacy and security.",
+          "og": {
+            "description": "Understand how HARGILE handles your information with our comprehensive privacy policy. Learn about our data protection measures and your rights as a user.",
+            "imageAlt": "HARGILE Legal Notices",
+            "title": "Privacy Policy & Legal Notices | HARGILE"
+          },
+          "schemaType": "WebPage",
+          "title": "Privacy Policy & Legal Notices | HARGILE"
+        }
+      },
+      "portfolio": {
+        "description": "Explore HARGILE's showcase of successful digital projects. Discover how we've helped clients transform their businesses through custom web development, mobile apps and AI solutions.",
+        "og": {
+          "description": "See how HARGILE delivers digital excellence through our portfolio of transformative projects. Case studies that demonstrate our expertise across industries and technologies.",
+          "imageAlt": "HARGILE Portfolio",
+          "title": "Our Portfolio | Innovative Digital Projects | HARGILE"
+        },
+        "schemaType": "CollectionPage",
+        "title": "Our Portfolio | Innovative Digital Projects | HARGILE"
+      },
+      "services": {
+        "description": "Explore HARGILE's comprehensive digital services tailored to your business needs. From custom web development and mobile apps to AI solutions and performance optimization.",
+        "og": {
+          "description": "Transform your business with HARGILE's full-spectrum digital services. Custom web development, mobile applications, AI integration, and performance optimization for measurable results.",
+          "imageAlt": "HARGILE Services",
+          "title": "Our Digital Services | Web, Mobile & AI Solutions | HARGILE"
+        },
+        "schemaType": "ServicePage",
+        "title": "Our Digital Services | Web, Mobile & AI Solutions | HARGILE"
+      },
+      "sitemap": {
+        "description": "Navigate HARGILE's website easily with our comprehensive sitemap. Find all our services, resources, and information organized in a structured, user-friendly format.",
+        "og": {
+          "description": "Find exactly what you're looking for with HARGILE's sitemap. Our organized directory helps you navigate through all sections of our website efficiently.",
+          "imageAlt": "HARGILE Sitemap",
+          "title": "Sitemap | Complete Website Navigation | HARGILE"
+        },
+        "schemaType": "WebPage",
+        "title": "Sitemap | Complete Website Navigation | HARGILE"
       },
       "solutions": {
         "agves": {
-          "title": "AGVES | School Management Solution | HARGILE",
           "description": "Discover AGVES, the revolutionary school management platform that streamlines communication and optimizes financial transactions with an intuitive, secure interface.",
           "og": {
-            "title": "AGVES | School Management Solution | HARGILE",
             "description": "Transform educational management with AGVES. Our comprehensive platform enhances school communication, simplifies financial transactions, and provides powerful admin tools.",
-            "imageAlt": "AGVES by HARGILE"
+            "imageAlt": "AGVES by HARGILE",
+            "title": "AGVES | School Management Solution | HARGILE"
           },
-          "schemaType": "SoftwareApplication"
+          "schemaType": "SoftwareApplication",
+          "title": "AGVES | School Management Solution | HARGILE"
         },
         "i-go": {
-          "title": "I GO | Electric Mobility Navigation App | HARGILE",
           "description": "Experience I GO, the innovative electric mobility app that revolutionizes urban navigation. Find charging stations, optimize routes, and connect with a community of EV enthusiasts.",
           "og": {
-            "title": "I GO | Electric Mobility Navigation App | HARGILE",
             "description": "Navigate the electric mobility landscape with I GO. Our app provides comprehensive charging station mapping, intelligent route planning, and real-time updates for EV users.",
-            "imageAlt": "I GO by HARGILE"
+            "imageAlt": "I GO by HARGILE",
+            "title": "I GO | Electric Mobility Navigation App | HARGILE"
           },
-          "schemaType": "MobileApplication"
+          "schemaType": "MobileApplication",
+          "title": "I GO | Electric Mobility Navigation App | HARGILE"
         },
         "multipass": {
-          "title": "Multipass | Flexible CRM Platform | HARGILE",
           "description": "Meet Multipass, the adaptable CRM solution designed for businesses of all sizes. Tailor your customer relationship management with modular features that grow with your needs.",
           "og": {
-            "title": "Multipass | Flexible CRM Platform | HARGILE",
             "description": "Revolutionize your customer relationships with Multipass. Our scalable, modular CRM adapts to your business needs with intuitive interfaces and powerful analytics.",
-            "imageAlt": "Multipass by HARGILE"
+            "imageAlt": "Multipass by HARGILE",
+            "title": "Multipass | Flexible CRM Platform | HARGILE"
           },
-          "schemaType": "SoftwareApplication"
+          "schemaType": "SoftwareApplication",
+          "title": "Multipass | Flexible CRM Platform | HARGILE"
         }
-      },
-      "sitemap": {
-        "title": "Sitemap | Complete Website Navigation | HARGILE",
-        "description": "Navigate HARGILE's website easily with our comprehensive sitemap. Find all our services, resources, and information organized in a structured, user-friendly format.",
-        "og": {
-          "title": "Sitemap | Complete Website Navigation | HARGILE",
-          "description": "Find exactly what you're looking for with HARGILE's sitemap. Our organized directory helps you navigate through all sections of our website efficiently.",
-          "imageAlt": "HARGILE Sitemap"
-        },
-        "schemaType": "WebPage"
       }
     }
   }

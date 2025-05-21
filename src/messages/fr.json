@@ -1,42 +1,38 @@
 {
   "components": {
-    "gdpr": {
-      "title": "Paramètres de confidentialité",
-      "description": "Nous utilisons des cookies pour améliorer votre expérience sur notre site, analyser notre trafic et personnaliser notre contenu. Vous pouvez choisir les cookies que vous acceptez et modifier vos préférences à tout moment.",
-      "acceptAll": "Tout accepter",
-      "rejectAll": "Tout refuser",
-      "customize": "Personnaliser",
-      "save": "Enregistrer mes choix",
-      "cookieSettings": "Paramètres des cookies",
-      "privacyPolicy": {
-        "link": "Politique de confidentialité",
-        "description": "En savoir plus sur la façon dont nous utilisons vos données personnelles et vos droits en matière de confidentialité."
-      },
-      "necessaryCookies": {
-        "title": "Cookies nécessaires",
-        "alwaysActive": "Toujours actifs",
-        "description": "Ces cookies sont indispensables au bon fonctionnement de notre site. Ils permettent l'utilisation des fonctionnalités principales et sécurisent votre visite. Ces cookies ne peuvent pas être désactivés."
-      },
-      "analyticsCookies": {
-        "title": "Cookies d'analyse",
-        "description": "Ces cookies nous permettent de collecter des données statistiques anonymes sur l'utilisation de notre site afin d'améliorer l'expérience utilisateur et d'optimiser nos services."
-      },
-      "marketingCookies": {
-        "title": "Cookies marketing",
-        "description": "Ces cookies sont utilisés pour suivre les visiteurs sur les sites web. Ils sont conçus pour afficher des publicités pertinentes et engageantes pour l'utilisateur, en fonction de ses centres d'intérêt."
-      },
-      "preferencesCookies": {
-        "title": "Cookies de préférences",
-        "description": "Ces cookies permettent à notre site de mémoriser vos préférences, comme votre langue ou votre région, pour vous offrir une expérience personnalisée lors de vos prochaines visites."
-      }
+    "audit-button": {
+      "description": "",
+      "title": "Auditer votre site web"
+    },
+    "audit-modal": {
+      "analysis-complete": "Analyse terminée ! Remplissez vos informations pour consulter les résultats.",
+      "analyzing": "Analyse de votre site en cours... Vous pouvez remplir le formulaire pendant ce temps.",
+      "back-url": "Retour à l’audit",
+      "company": "Est-ce pour votre entreprise ?",
+      "contact": "Formulaire de Contact",
+      "error": "Erreur lors de l'audit. Il se pourrait que l'URL que vous avez indiquée soit mauvaise. Veuillez réessayer.",
+      "first-name": "Prénom",
+      "incomplete": "Veuillez remplir tous les champs obligatoires marqués d’un *",
+      "industry": "Secteur d’activité",
+      "last-name": "Nom",
+      "modal-description": "Entrez l’URL de votre site ci-dessous pour lancer un audit complet de ses performances.",
+      "modal-title": "Audit de votre site",
+      "modal-url-placeholder": "votresite.com",
+      "no": "Non",
+      "processing": "Traitement en cours...",
+      "select": "Veuillez sélectionner",
+      "start-audit": "Lancer l’audit",
+      "view-results": "Voir les résultats de l’audit",
+      "wait": "Veuillez patienter jusqu’à la fin de l’audit avant d’accéder aux résultats.",
+      "yes": "Oui"
     },
     "contact-form": {
       "contact": {
         "email": "E-mail",
         "message": "Votre message",
         "name": "Prénom et Nom",
-        "phone": "Téléphone",
         "object": "Objet",
+        "phone": "Téléphone",
         "projectDescription": "Votre message",
         "timeline": {
           "1To3months": "1 - 3 mois",
@@ -55,69 +51,73 @@
         "text": "En soumettant ce formulaire, vous acceptez notre"
       },
       "services": {
+        "advice": "Conseil",
         "ai": "Intelligence Artificielle",
         "cloud": "Solutions Cloud",
         "description": "Sélectionnez une ou plusieurs options",
         "mobileApps": "Applications Mobiles",
         "title": "Type de service",
-        "webDevelopment": "Développement Web",
-        "advice": "Conseil"
+        "webDevelopment": "Développement Web"
       },
       "submit": "Envoyer",
-      "title": "Contactez-nous",
-      "submitting": "Envoi en cours...",
-      "submitSuccess": "Merci ! Votre message a été envoyé avec succès.",
       "submitError": "Désolé, une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer.",
-      "submitNetworkError": "Une erreur de réseau s'est produite. Veuillez vérifier votre connexion et réessayer.",
       "submitErrorProvider": "Une erreur lors de l'envoi s'est produite. Veuillez vérifier votre connexion et réessayer.",
+      "submitNetworkError": "Une erreur de réseau s'est produite. Veuillez vérifier votre connexion et réessayer.",
+      "submitSuccess": "Merci ! Votre message a été envoyé avec succès.",
+      "submitting": "Envoi en cours...",
+      "title": "Contactez-nous",
       "validation": {
-        "nameRequired": "Veuillez entrer votre nom.",
-        "emailRequired": "Veuillez entrer votre adresse e-mail.",
         "emailInvalid": "Veuillez entrer une adresse e-mail valide.",
-        "objectRequired": "Veuillez entrer l'objet de votre demande.",
+        "emailRequired": "Veuillez entrer votre adresse e-mail.",
         "messageRequired": "Veuillez entrer votre message (minimum {min} caractères).",
+        "nameRequired": "Veuillez entrer votre nom.",
+        "objectRequired": "Veuillez entrer l'objet de votre demande.",
         "serviceRequired": "Veuillez sélectionner au moins un service."
       }
     },
-    "audit-button": {
-      "description": "",
-      "title": "Auditer votre site web"
+    "gdpr": {
+      "acceptAll": "Tout accepter",
+      "analyticsCookies": {
+        "description": "Ces cookies nous permettent de collecter des données statistiques anonymes sur l'utilisation de notre site afin d'améliorer l'expérience utilisateur et d'optimiser nos services.",
+        "title": "Cookies d'analyse"
+      },
+      "cookieSettings": "Paramètres des cookies",
+      "customize": "Personnaliser",
+      "description": "Nous utilisons des cookies pour améliorer votre expérience sur notre site, analyser notre trafic et personnaliser notre contenu. Vous pouvez choisir les cookies que vous acceptez et modifier vos préférences à tout moment.",
+      "marketingCookies": {
+        "description": "Ces cookies sont utilisés pour suivre les visiteurs sur les sites web. Ils sont conçus pour afficher des publicités pertinentes et engageantes pour l'utilisateur, en fonction de ses centres d'intérêt.",
+        "title": "Cookies marketing"
+      },
+      "necessaryCookies": {
+        "alwaysActive": "Toujours actifs",
+        "description": "Ces cookies sont indispensables au bon fonctionnement de notre site. Ils permettent l'utilisation des fonctionnalités principales et sécurisent votre visite. Ces cookies ne peuvent pas être désactivés.",
+        "title": "Cookies nécessaires"
+      },
+      "preferencesCookies": {
+        "description": "Ces cookies permettent à notre site de mémoriser vos préférences, comme votre langue ou votre région, pour vous offrir une expérience personnalisée lors de vos prochaines visites.",
+        "title": "Cookies de préférences"
+      },
+      "privacyPolicy": {
+        "description": "En savoir plus sur la façon dont nous utilisons vos données personnelles et vos droits en matière de confidentialité.",
+        "link": "Politique de confidentialité"
+      },
+      "rejectAll": "Tout refuser",
+      "save": "Enregistrer mes choix",
+      "title": "Paramètres de confidentialité"
     },
-    "audit-modal": {
-      "modal-title": "Audit de votre site",
-      "modal-description": "Entrez l’URL de votre site ci-dessous pour lancer un audit complet de ses performances.",
-      "modal-url-placeholder": "votresite.com",
-      "start-audit": "Lancer l’audit",
-      "analyzing": "Analyse de votre site en cours... Vous pouvez remplir le formulaire pendant ce temps.",
-      "analysis-complete": "Analyse terminée ! Remplissez vos informations pour consulter les résultats.",
-      "contact": "Formulaire de Contact",
-      "error": "Erreur lors de l'audit. Il se pourrait que l'URL que vous avez indiquée soit mauvaise. Veuillez réessayer.",
-      "first-name": "Prénom",
-      "last-name": "Nom",
-      "company": "Est-ce pour votre entreprise ?",
-      "select": "Veuillez sélectionner",
-      "yes": "Oui",
-      "no": "Non",
-      "industry": "Secteur d’activité",
-      "processing": "Traitement en cours...",
-      "view-results": "Voir les résultats de l’audit",
-      "wait": "Veuillez patienter jusqu’à la fin de l’audit avant d’accéder aux résultats.",
-      "back-url": "Retour à l’audit",
-      "incomplete": "Veuillez remplir tous les champs obligatoires marqués d’un *"
+    "menu": {
+      "agves": "AGVES",
+      "contact": "Contact",
+      "i-go": "I go",
+      "multipass": "Multipass",
+      "our-dna": "Notre ADN",
+      "portfolio": "Portfolio",
+      "services": "Services",
+      "solutions": "Solutions"
     },
     "read-more": {
       "less": "Réduire",
       "more": "Voir plus"
-    },
-    "menu": {
-      "contact": "Contact",
-      "our-dna": "Notre ADN",
-      "portfolio": "Portfolio",
-      "services": "Services",
-      "solutions": "Solutions",
-      "i-go": "I go",
-      "agves": "AGVES",
-      "multipass": "Multipass"
     }
   },
   "pages": {
@@ -192,6 +192,56 @@
         }
       }
     },
+    "audit-results": {
+      "sections": {
+        "audit-results": {
+          "Accessibility": "Accessibilité",
+          "Best Practices": "Bonnes pratiques",
+          "Performance": "Performance",
+          "SEO": "SEO",
+          "access-average": "50-89 (Moyen) : Certains éléments sont inaccessibles (ex : étiquettes manquantes, faible contraste, etc.).",
+          "access-good": "90-100 (Bon) : Conforme aux directives WCAG, navigation au clavier fonctionnelle, contraste des couleurs adéquat.",
+          "access-poor": "0-49 (Médiocre) : Problèmes majeurs empêchant l’utilisation par des personnes en situation de handicap. Risques de non-conformité légale.",
+          "average": "Moyen",
+          "best-average": "50-89 (Moyen) : Certaines méthodes obsolètes, chargement inefficace des ressources, petits problèmes de sécurité.",
+          "best-good": "90-100 (Bon) : HTTPS bien configuré, aucune API obsolète, bonnes pratiques de codage.",
+          "best-poor": "0-49 (Médiocre) : Utilisation de bibliothèques non sécurisées, code non optimisé ou requêtes non sûres.",
+          "book": "Réservez un rendez-vous avec notre équipe",
+          "company": "Pour l'entreprise",
+          "contact": "Prendre rendez-vous",
+          "description-accessibility": "L'accessibilité garantit que votre site peut être utilisé par les personnes en situation de handicap. Cela augmente votre portée, démontre votre engagement pour l’inclusion, et peut être une obligation légale dans certaines régions.",
+          "description-bestpractices": "Les bonnes pratiques font référence aux techniques modernes de développement web qui garantissent la fiabilité et la sécurité de votre site. Cela inclut l’évitement des API obsolètes, l’utilisation de HTTPS, le respect des proportions d’image, etc.",
+          "description-performance": "Un score de performance élevé signifie que votre site se charge rapidement et efficacement. Cela améliore l’expérience utilisateur, réduit le taux de rebond et a un impact positif sur votre classement SEO.",
+          "description-seo": "Un bon score SEO garantit que votre site est bien structuré pour les moteurs de recherche. Cela signifie que vos pages sont explorables, adaptées aux mobiles et suivent les bonnes pratiques.",
+          "experts": "Nos experts peuvent vous aider à optimiser votre impact digital",
+          "good": "Bon",
+          "improve": "Vous souhaitez améliorer vos performances :",
+          "industry": "Secteur d'activité",
+          "informations": "Vos Informations",
+          "may-look": "% peut sembler correct, mais il indique tout de même",
+          "may-look-access": " que votre site n’est pas accessible à tous. Cela pourrait exclure une partie de votre audience et poser des problèmes de conformité.",
+          "may-look-best": " un manque de standards modernes et sécurisés en développement web, ce qui peut exposer votre site à des vulnérabilités et nuire à la confiance des utilisateurs.",
+          "may-look-performances": " des temps de chargement ou une utilisation des ressources sous-optimale. Sur des connexions lentes ou mobiles, cela peut faire fuir les utilisateurs avant que la page ne s’affiche.",
+          "may-look-seo": " moins de pages indexées et une perte de trafic face à vos concurrents.",
+          "name": "Nom",
+          "performances-average": "50-89 (Moyen) : Des améliorations sont possibles sur l’exécution des scripts, l’optimisation des images ou les ressources bloquant le rendu.",
+          "performances-good": "90-100 (Bon) : Votre site se charge très rapidement, avec des ressources optimisées, peu de travail sur le thread principal et un temps interactif réduit.",
+          "performances-poor": "0-49 (Médiocre) : Les utilisateurs rencontrent probablement de longs temps de chargement, des saccades ou des pages non réactives — surtout sur mobile.",
+          "poor": "Médiocre",
+          "score-breakdown": "Détail des scores :",
+          "score-like": "Un score de",
+          "seo-average": "50-89 (Moyen) : Petits problèmes comme des balises meta manquantes ou des défauts d’ergonomie mobile.",
+          "seo-good": "90-100 (Bon) : HTML bien structuré, design mobile-friendly, balises meta bien utilisées, bonne explorabilité.",
+          "seo-poor": "0-49 (Médiocre) : Problèmes majeurs comme titres manquants, liens cassés ou mauvaise optimisation mobile.",
+          "title": "Résultats de l’Audit",
+          "warning-accessibility": "Votre score d’accessibilité nécessite des améliorations. Nous pouvons vous aider à rendre votre site plus inclusif et conforme.",
+          "warning-bestpractices": "Votre site ne suit pas toutes les bonnes pratiques. Corrigeons ensemble le code obsolète, les points d’accès non sécurisés ou les petites failles d’implémentation.",
+          "warning-performance": "Votre score de performance peut être amélioré. Laissez-nous vous aider à optimiser la vitesse de chargement, les scripts et les ressources.",
+          "warning-seo": "Votre score SEO peut être amélioré. Nous pouvons vous aider à améliorer votre visibilité et à augmenter votre trafic.",
+          "website": "Site web"
+        }
+      }
+    },
     "homepage": {
       "sections": {
         "about-us": {
@@ -235,6 +285,73 @@
           "who_description": "Chez HARGILE, nous façonnons notre développement comme on sculpte une œuvre : avec soin, intention et sens du détail.\n\nNotre ambition ? Créer des solutions numériques qui ont du sens, qui servent vos objectifs et qui évoluent avec vous.",
           "who_title": "Notre vision de la croissance"
         },
+        "digital-audit": {
+          "description": "Votre site génère-t-il assez de trafic ? Convertit-il bien vos visiteurs en clients ? Votre visibilité est-elle optimisée ?<br/><br/><strong>HARGILE a développé un outil d'analyse de performance en ligne. En entrant simplement l'URL d'un site web, vous obtenez en quelques secondes un diagnostic précis</strong> :",
+          "details": {
+            "accessibility": {
+              "text": "Un site accessible garantit que tout le monde, y compris les personnes en situation de handicap, peut naviguer et interagir avec votre contenu. Au-delà de l'aspect éthique, cela élargit votre audience potentielle et renforce votre conformité aux normes d'accessibilité.",
+              "title": "Accessibilité"
+            },
+            "bestPractices": {
+              "text": "Respecter les meilleures pratiques techniques recommandées assure que votre site est robuste, performant et sécurisé. L'audit identifie les erreurs courantes telles que des ressources obsolètes, du JavaScript ou CSS mal optimisé, des bibliothèques non sécurisées, ainsi que les mauvaises configurations qui peuvent affecter l'expérience utilisateur et le référencement naturel. Un bon score en Best Practices garantit un site à jour, fiable et conforme aux standards modernes du web.",
+              "title": "Bonnes pratiques techniques (Best Practices)"
+            },
+            "mobile": {
+              "text": "Actuellement, plus de 50 % du trafic web provient des appareils mobiles. Un site non adapté aux mobiles offre une expérience médiocre et subit des pénalités de la part des moteurs de recherche. L'audit évalue la compatibilité mobile pour garantir une navigation fluide sur tous les écrans.",
+              "title": "Optimisation mobile"
+            },
+            "performance": {
+              "text": "Un site lent augmente le taux de rebond et génère de la frustration chez les utilisateurs. Cela impacte également négativement votre référencement naturel. À l'inverse, un site rapide offre une meilleure expérience utilisateur et améliore les conversions.",
+              "title": "Performance"
+            },
+            "security": {
+              "text": "Un site non sécurisé est exposé aux cyberattaques et peut rapidement perdre la confiance des utilisateurs, notamment dans le cadre du e-commerce. L'audit vérifie la présence de certificats SSL, d'en-têtes sécurisés et de mécanismes de protection essentiels.",
+              "title": "Sécurité"
+            },
+            "seo": {
+              "text": "Une structure de site bien optimisée facilite le travail des moteurs de recherche pour explorer et indexer votre contenu. Résultat : un meilleur positionnement et une augmentation du trafic qualifié vers votre site.",
+              "title": "Visibilité (SEO)"
+            }
+          },
+          "features": {
+            "security": "✅ <strong>Sécurité et fiabilité</strong> – Votre site est-il bien protégé ?",
+            "seo": "✅ <strong>Référencement SEO</strong> – Êtes-vous visible ?",
+            "speed": "✅ <strong>Vitesse de chargement</strong> – Un site lent fait fuir les visiteurs !",
+            "ux": "✅ <strong>Expérience utilisateur (UX)</strong> – Navigation fluide et responsive ?"
+          },
+          "form": {
+            "loading": "Analyse en cours...",
+            "placeholder": "votresite.com",
+            "submit": "Lancer l'audit"
+          },
+          "moreInfo": {
+            "description": "Notre outil d'audit digital permet d'identifier les faiblesses de votre site web et de définir une feuille de route claire pour améliorer sa performance technique, son accessibilité, sa sécurité ainsi que son optimisation pour les moteurs de recherche (SEO).",
+            "title": "L'audit digital"
+          },
+          "results": {
+            "accessibility": "Accessibilité",
+            "accessibilityLabel": "Accessibilité",
+            "bestPractices": "Bonnes pratiques",
+            "bestPracticesLabel": "Pratiques",
+            "contactUs": "Nous contacter",
+            "detailedReport": "Voir le rapport détaillé",
+            "mobile": "Mobile",
+            "mobileLabel": "Mobile",
+            "performance": "Performance",
+            "performanceLabel": "Performance",
+            "security": "Sécurité",
+            "securityLabel": "Sécurité",
+            "seo": "SEO",
+            "seoLabel": "SEO",
+            "title": "Résultats de l'audit"
+          },
+          "title": "Un site web performant, c'est bien plus qu'un ",
+          "titleAccent": "beau design.",
+          "whyImportant": {
+            "text": "parce que de bons indices de performances créent plus de trafic, plus d'engagement et plus de conversions.",
+            "title": "Pourquoi est-ce important ?"
+          }
+        },
         "hero": {
           "arrowAlt": "Flèche",
           "companyName": "HARGILE",
@@ -256,8 +373,8 @@
         "our-solutions": {
           "coming-soon": "Bientôt disponible",
           "description": "Notre expertise tech est votre levier — créer des solutions humaines, taillées pour vos objectifs et booster votre développement.",
-          "learn-more": "En savoir plus à propos de ",
           "explain": "Expliquez nous ",
+          "learn-more": "En savoir plus à propos de ",
           "paragraph": "HARGILE propose des solutions numériques personnalisées fondées sur le principe de la maîtrise technologique et l'innovation créative. Notre équipe associe expertise, ingéniosité et vision stratégique d’entreprise pour transformer vos défis en leviers de croissance.",
           "solutions": {
             "agves": {
@@ -324,95 +441,28 @@
           "dev": {
             "items": {
               "cms": "CMS",
+              "e-payment": "Intégration de connecteurs bancaires",
               "ecommerce": "E-Commerce",
               "mobile": "Applications mobiles",
-              "web": "Conception Web",
-              "e-payment": "Intégration de connecteurs bancaires"
+              "web": "Conception Web"
             },
             "title": "Développement et conception de solutions"
           },
+          "discover-link": "Découvrez <br/> nos services",
           "maintenance": {
             "items": {
               "migration": "Migration, modernisation d'applications",
-              "seo": "SEO",
               "performance": "Performance",
+              "seo": "SEO",
               "support": "Maintenance support"
             },
             "title": "Maintenace et modernisation"
           },
           "subtitle": "Libérez tout le potentiel de votre entreprise grâce à l’univers digital de HARGILE!",
-          "title": "Nos services",
-          "discover-link": "Découvrez <br/> nos services"
+          "title": "Nos services"
         },
         "trusted-brands": {
           "title": "Ils nous font confiance"
-        },
-        "digital-audit": {
-          "title": "Un site web performant, c'est bien plus qu'un ",
-          "titleAccent": "beau design.",
-          "description": "Votre site génère-t-il assez de trafic ? Convertit-il bien vos visiteurs en clients ? Votre visibilité est-elle optimisée ?<br/><br/><strong>HARGILE a développé un outil d'analyse de performance en ligne. En entrant simplement l'URL d'un site web, vous obtenez en quelques secondes un diagnostic précis</strong> :",
-          "features": {
-            "speed": "✅ <strong>Vitesse de chargement</strong> – Un site lent fait fuir les visiteurs !",
-            "seo": "✅ <strong>Référencement SEO</strong> – Êtes-vous visible ?",
-            "ux": "✅ <strong>Expérience utilisateur (UX)</strong> – Navigation fluide et responsive ?",
-            "security": "✅ <strong>Sécurité et fiabilité</strong> – Votre site est-il bien protégé ?"
-          },
-          "whyImportant": {
-            "title": "Pourquoi est-ce important ?",
-            "text": "parce que de bons indices de performances créent plus de trafic, plus d'engagement et plus de conversions."
-          },
-          "form": {
-            "placeholder": "votresite.com",
-            "submit": "Lancer l'audit",
-            "loading": "Analyse en cours..."
-          },
-          "results": {
-            "title": "Résultats de l'audit",
-            "performance": "Performance",
-            "performanceLabel": "Performance",
-            "seo": "SEO",
-            "seoLabel": "SEO",
-            "accessibility": "Accessibilité",
-            "accessibilityLabel": "Accessibilité",
-            "security": "Sécurité",
-            "securityLabel": "Sécurité",
-            "mobile": "Mobile",
-            "mobileLabel": "Mobile",
-            "bestPractices": "Bonnes pratiques",
-            "bestPracticesLabel": "Pratiques",
-            "detailedReport": "Voir le rapport détaillé",
-            "contactUs": "Nous contacter"
-          },
-          "moreInfo": {
-            "title": "L'audit digital",
-            "description": "Notre outil d'audit digital permet d'identifier les faiblesses de votre site web et de définir une feuille de route claire pour améliorer sa performance technique, son accessibilité, sa sécurité ainsi que son optimisation pour les moteurs de recherche (SEO)."
-          },
-          "details": {
-            "performance": {
-              "title": "Performance",
-              "text": "Un site lent augmente le taux de rebond et génère de la frustration chez les utilisateurs. Cela impacte également négativement votre référencement naturel. À l'inverse, un site rapide offre une meilleure expérience utilisateur et améliore les conversions."
-            },
-            "seo": {
-              "title": "Visibilité (SEO)",
-              "text": "Une structure de site bien optimisée facilite le travail des moteurs de recherche pour explorer et indexer votre contenu. Résultat : un meilleur positionnement et une augmentation du trafic qualifié vers votre site."
-            },
-            "security": {
-              "title": "Sécurité",
-              "text": "Un site non sécurisé est exposé aux cyberattaques et peut rapidement perdre la confiance des utilisateurs, notamment dans le cadre du e-commerce. L'audit vérifie la présence de certificats SSL, d'en-têtes sécurisés et de mécanismes de protection essentiels."
-            },
-            "accessibility": {
-              "title": "Accessibilité",
-              "text": "Un site accessible garantit que tout le monde, y compris les personnes en situation de handicap, peut naviguer et interagir avec votre contenu. Au-delà de l'aspect éthique, cela élargit votre audience potentielle et renforce votre conformité aux normes d'accessibilité."
-            },
-            "mobile": {
-              "title": "Optimisation mobile",
-              "text": "Actuellement, plus de 50 % du trafic web provient des appareils mobiles. Un site non adapté aux mobiles offre une expérience médiocre et subit des pénalités de la part des moteurs de recherche. L'audit évalue la compatibilité mobile pour garantir une navigation fluide sur tous les écrans."
-            },
-            "bestPractices": {
-              "title": "Bonnes pratiques techniques (Best Practices)",
-              "text": "Respecter les meilleures pratiques techniques recommandées assure que votre site est robuste, performant et sécurisé. L'audit identifie les erreurs courantes telles que des ressources obsolètes, du JavaScript ou CSS mal optimisé, des bibliothèques non sécurisées, ainsi que les mauvaises configurations qui peuvent affecter l'expérience utilisateur et le référencement naturel. Un bon score en Best Practices garantit un site à jour, fiable et conforme aux standards modernes du web."
-            }
-          }
         }
       }
     },
@@ -425,17 +475,9 @@
       "description": "Explorez notre collection de solutions numériques innovantes adaptées à diverses industries. Chaque projet reflète notre engagement envers l'excellence, les pratiques durables et les philosophies de conception centrées sur l'utilisateur.",
       "featuredProjects": "Projets en Vedette",
       "projects": {
-        "delphine": {
-          "description": "Œuvres abstraites et poétiques en acrylique sur toile, accompagnées de descriptifs audio, par l'artiste Delphine Simonis.",
-          "subtitle": "Peinture Contemporaine"
-        },
-        "trussogne": {
-          "description": "Gîte de charme tout confort en Ardennes belges, idéal pour les séjours en famille ou entre amis, avec services bien-être et traiteur.",
-          "subtitle": "Séjour Nature et Confort en Ardennes"
-        },
-        "eren": {
-          "description": "Solutions de batteries industrielles pour l'optimisation énergétique et la réduction des coûts des entreprises.",
-          "subtitle": "Solutions Rentables de Batteries Industrielles"
+        "alianature": {
+          "description": "Découvrez des produits de beauté, bijoux, bien-être et maison naturels & fabriqués localement.",
+          "subtitle": "Bien-être & Beauté au Naturel"
         },
         "aluvi": {
           "description": "ALUVI-immo propose des services immobiliers de confiance incluant la gestion immobilière (syndic & privative), la vente et la location à Bruxelles & en Brabant Wallon.",
@@ -445,41 +487,49 @@
           "description": "Place de marché d'art en ligne riche en fonctionnalités.",
           "subtitle": "Galerie pour artistes émergents"
         },
-        "dripdrops": {
-          "description": "Votre destination pour les baskets, le streetwear et les accessoires tendance.",
-          "subtitle": "Les Tendances Sneakers & Streetwear"
-        },
-        "ferme_de_basseilles": {
-          "description": "Découvrez des hébergements insolites (dômes, bulles, cabanes) et traditionnels (gîtes & chambres d'hôtes) dans une ferme historique à Mozet, parfaits pour une escapade nature mémorable.",
-          "subtitle": "Séjours Uniques & Chambres d'Hôtes en Pleine Nature"
-        },
-        "gve": {
-          "description": "Offrant aux entreprises des solutions de pointe personnalisées et des partenariats impactants pour un progrès transformateur.",
-          "subtitle": "L'innovation rencontre la durabilité"
-        },
-        "foorn": {
-          "description": "Foor'n apporte les saveurs libanaises authentiques à Bruxelles, spécialisé dans le kaak unique (pain au sésame en forme de sac à main) en versions salées et sucrées, ainsi que des plats traditionnels.",
-          "subtitle": "Bruxelles - Beyrouth : Embarquement Immédiat"
-        },
-        "inspirite": {
-          "description": "Solutions de coaching d'entreprise et de bien-être pour transformer la culture d'entreprise, améliorer la performance et favoriser le développement d'équipe pour un succès durable.",
-          "subtitle": "L'excellence en coaching"
-        },
-        "alianature": {
-          "description": "Découvrez des produits de beauté, bijoux, bien-être et maison naturels & fabriqués localement.",
-          "subtitle": "Bien-être & Beauté au Naturel"
-        },
-        "mayaglobal": {
-          "description": "Logiciel intelligent pour la gestion durable des terrains. Obtenez des informations en temps réel et des alertes prédictives pour optimiser golfs, vignobles, parcs et terrains de sport.",
-          "subtitle": "Gestion Intelligente et Durable des Terrains"
+        "azza": {
+          "description": "Leader du scrapbooking européen et des loisirs créatifs, proposant des produits uniques (styles Azza & Izzy), outils et inspiration pour la création de beaux albums photos.",
+          "subtitle": "Scrapbooking & Inspiration Créative"
         },
         "creativeid": {
           "description": "Votre source pour les fournitures européennes de scrapbooking et de carterie.",
           "subtitle": "Inspirer Vos Loisirs Créatifs Papier"
         },
+        "defierlant": {
+          "description": "Peintre expressionniste abstrait et poète belge qui crée un pont entre ses peintures grand format et ses poèmes. Découvrez sa galerie, ses livres et ses événements.",
+          "subtitle": "Peintre & Poète Belge"
+        },
+        "delphine": {
+          "description": "Œuvres abstraites et poétiques en acrylique sur toile, accompagnées de descriptifs audio, par l'artiste Delphine Simonis.",
+          "subtitle": "Peinture Contemporaine"
+        },
+        "dripdrops": {
+          "description": "Votre destination pour les baskets, le streetwear et les accessoires tendance.",
+          "subtitle": "Les Tendances Sneakers & Streetwear"
+        },
+        "eren": {
+          "description": "Solutions de batteries industrielles pour l'optimisation énergétique et la réduction des coûts des entreprises.",
+          "subtitle": "Solutions Rentables de Batteries Industrielles"
+        },
+        "ferme_de_basseilles": {
+          "description": "Découvrez des hébergements insolites (dômes, bulles, cabanes) et traditionnels (gîtes & chambres d'hôtes) dans une ferme historique à Mozet, parfaits pour une escapade nature mémorable.",
+          "subtitle": "Séjours Uniques & Chambres d'Hôtes en Pleine Nature"
+        },
+        "foorn": {
+          "description": "Foor'n apporte les saveurs libanaises authentiques à Bruxelles, spécialisé dans le kaak unique (pain au sésame en forme de sac à main) en versions salées et sucrées, ainsi que des plats traditionnels.",
+          "subtitle": "Bruxelles - Beyrouth : Embarquement Immédiat"
+        },
+        "gve": {
+          "description": "Offrant aux entreprises des solutions de pointe personnalisées et des partenariats impactants pour un progrès transformateur.",
+          "subtitle": "L'innovation rencontre la durabilité"
+        },
         "hexidesigns": {
           "description": "HEXI DESIGNS présente les œuvres d'Hector Ducoux, étudiant en design de mode à Parsons, NYC.",
           "subtitle": "Artiste émergent"
+        },
+        "inspirite": {
+          "description": "Solutions de coaching d'entreprise et de bien-être pour transformer la culture d'entreprise, améliorer la performance et favoriser le développement d'équipe pour un succès durable.",
+          "subtitle": "L'excellence en coaching"
         },
         "locafut": {
           "description": "Services flexibles et économiques de location et d'entretien de fûts en acier inoxydable pour brasseries et HORECA, aidant à optimiser la production, réduire les investissements et promouvoir des pratiques écologiques.",
@@ -489,13 +539,13 @@
           "description": "Marque de mode proposant une sélection de vêtements et accessoires pour femmes, incluant maille, hauts, pantalons, robes.",
           "subtitle": "Mode Féminine Chic et Contemporaine"
         },
-        "defierlant": {
-          "description": "Peintre expressionniste abstrait et poète belge qui crée un pont entre ses peintures grand format et ses poèmes. Découvrez sa galerie, ses livres et ses événements.",
-          "subtitle": "Peintre & Poète Belge"
+        "mayaglobal": {
+          "description": "Logiciel intelligent pour la gestion durable des terrains. Obtenez des informations en temps réel et des alertes prédictives pour optimiser golfs, vignobles, parcs et terrains de sport.",
+          "subtitle": "Gestion Intelligente et Durable des Terrains"
         },
-        "azza": {
-          "description": "Leader du scrapbooking européen et des loisirs créatifs, proposant des produits uniques (styles Azza & Izzy), outils et inspiration pour la création de beaux albums photos.",
-          "subtitle": "Scrapbooking & Inspiration Créative"
+        "trussogne": {
+          "description": "Gîte de charme tout confort en Ardennes belges, idéal pour les séjours en famille ou entre amis, avec services bien-être et traiteur.",
+          "subtitle": "Séjour Nature et Confort en Ardennes"
         }
       },
       "readCaseStudy": "Lire l'étude de cas",
@@ -685,328 +735,278 @@
       "subtitleItalic": "Solutions innovantes",
       "title": "Nos services"
     },
-    "audit-results": {
+    "sitemap": {
+      "description": "Retrouvez toutes les pages et ressources de notre site web organisées de manière structurée. Ce plan du site vous aidera à naviguer et à trouver rapidement les informations que vous recherchez.",
+      "lastUpdated": "Plan du site mis à jour le :",
+      "noResults": "Aucune page correspondant à votre recherche.",
+      "searchPlaceholder": "Rechercher des pages...",
       "sections": {
-        "audit-results": {
-          "title": "Résultats de l’Audit",
-          "informations": "Vos Informations",
-          "name": "Nom",
-          "company": "Pour l'entreprise",
-          "industry": "Secteur d'activité",
-          "website": "Site web",
-          "Performance": "Performance",
-          "SEO": "SEO",
-          "Accessibility": "Accessibilité",
-          "Best Practices": "Bonnes pratiques",
-          "good": "Bon",
-          "average": "Moyen",
-          "poor": "Médiocre",
-          "description-performance": "Un score de performance élevé signifie que votre site se charge rapidement et efficacement. Cela améliore l’expérience utilisateur, réduit le taux de rebond et a un impact positif sur votre classement SEO.",
-          "warning-performance": "Votre score de performance peut être amélioré. Laissez-nous vous aider à optimiser la vitesse de chargement, les scripts et les ressources.",
-          "description-seo": "Un bon score SEO garantit que votre site est bien structuré pour les moteurs de recherche. Cela signifie que vos pages sont explorables, adaptées aux mobiles et suivent les bonnes pratiques.",
-          "warning-seo": "Votre score SEO peut être amélioré. Nous pouvons vous aider à améliorer votre visibilité et à augmenter votre trafic.",
-          "description-accessibility": "L'accessibilité garantit que votre site peut être utilisé par les personnes en situation de handicap. Cela augmente votre portée, démontre votre engagement pour l’inclusion, et peut être une obligation légale dans certaines régions.",
-          "warning-accessibility": "Votre score d’accessibilité nécessite des améliorations. Nous pouvons vous aider à rendre votre site plus inclusif et conforme.",
-          "description-bestpractices": "Les bonnes pratiques font référence aux techniques modernes de développement web qui garantissent la fiabilité et la sécurité de votre site. Cela inclut l’évitement des API obsolètes, l’utilisation de HTTPS, le respect des proportions d’image, etc.",
-          "warning-bestpractices": "Votre site ne suit pas toutes les bonnes pratiques. Corrigeons ensemble le code obsolète, les points d’accès non sécurisés ou les petites failles d’implémentation.",
-          "score-breakdown": "Détail des scores :",
-          "performances-good": "90-100 (Bon) : Votre site se charge très rapidement, avec des ressources optimisées, peu de travail sur le thread principal et un temps interactif réduit.",
-          "performances-average": "50-89 (Moyen) : Des améliorations sont possibles sur l’exécution des scripts, l’optimisation des images ou les ressources bloquant le rendu.",
-          "performances-poor": "0-49 (Médiocre) : Les utilisateurs rencontrent probablement de longs temps de chargement, des saccades ou des pages non réactives — surtout sur mobile.",
-          "seo-good": "90-100 (Bon) : HTML bien structuré, design mobile-friendly, balises meta bien utilisées, bonne explorabilité.",
-          "seo-average": "50-89 (Moyen) : Petits problèmes comme des balises meta manquantes ou des défauts d’ergonomie mobile.",
-          "seo-poor": "0-49 (Médiocre) : Problèmes majeurs comme titres manquants, liens cassés ou mauvaise optimisation mobile.",
-          "access-good": "90-100 (Bon) : Conforme aux directives WCAG, navigation au clavier fonctionnelle, contraste des couleurs adéquat.",
-          "access-average": "50-89 (Moyen) : Certains éléments sont inaccessibles (ex : étiquettes manquantes, faible contraste, etc.).",
-          "access-poor": "0-49 (Médiocre) : Problèmes majeurs empêchant l’utilisation par des personnes en situation de handicap. Risques de non-conformité légale.",
-          "best-good": "90-100 (Bon) : HTTPS bien configuré, aucune API obsolète, bonnes pratiques de codage.",
-          "best-average": "50-89 (Moyen) : Certaines méthodes obsolètes, chargement inefficace des ressources, petits problèmes de sécurité.",
-          "best-poor": "0-49 (Médiocre) : Utilisation de bibliothèques non sécurisées, code non optimisé ou requêtes non sûres.",
-          "score-like": "Un score de",
-          "may-look": "% peut sembler correct, mais il indique tout de même",
-          "may-look-performances": " des temps de chargement ou une utilisation des ressources sous-optimale. Sur des connexions lentes ou mobiles, cela peut faire fuir les utilisateurs avant que la page ne s’affiche.",
-          "may-look-seo": " moins de pages indexées et une perte de trafic face à vos concurrents.",
-          "may-look-access": " que votre site n’est pas accessible à tous. Cela pourrait exclure une partie de votre audience et poser des problèmes de conformité.",
-          "may-look-best": " un manque de standards modernes et sécurisés en développement web, ce qui peut exposer votre site à des vulnérabilités et nuire à la confiance des utilisateurs.",
-          "improve": "Vous souhaitez améliorer vos performances :",
-          "experts": "Nos experts peuvent vous aider à optimiser votre impact digital",
-          "book": "Réservez un rendez-vous avec notre équipe",
-          "contact": "Prendre rendez-vous"
+        "company": {
+          "aboutUs": "À Propos de Notre Entreprise",
+          "mission": "Notre Mission",
+          "team": "Notre Équipe",
+          "title": "Informations sur l'Entreprise",
+          "values": "Nos Valeurs"
+        },
+        "legal": {
+          "cookies": "Politique des Cookies",
+          "privacy": "Politique de Confidentialité",
+          "terms": "Conditions d'Utilisation",
+          "title": "Informations Légales"
+        },
+        "main": {
+          "aboutUs": "À Propos",
+          "contact": "Contact",
+          "home": "Accueil",
+          "services": "Services",
+          "title": "Navigation Principale"
+        },
+        "services": {
+          "marketing": "Marketing Digital",
+          "mobileDev": "Développement d'Applications Mobiles",
+          "seo": "Optimisation SEO",
+          "title": "Nos Services",
+          "webDesign": "Conception & Développement Web"
+        },
+        "support": {
+          "contact": "Contacter le Support",
+          "faq": "FAQ",
+          "title": "Support"
+        },
+        "tools": {
+          "performanceCheck": "Vérification de Performance Web",
+          "seoAudit": "Outil d'Audit SEO",
+          "title": "Outils & Ressources"
         }
-      }
+      },
+      "title": "Plan du Site"
     },
     "solutions": {
       "agves": {
-        "title": "AGVES",
-        "subtitleRegular": "Transforme la gestion",
-        "subtitleHighlight": "scolaire",
+        "cta": "Contactez-nous pour une démonstration",
         "description": "Application de gestion des ventes spécialisée pour le secteur de l'éducation.",
-        "paragraph1": "AGVES révolutionne la communication de la vie scolaire et extrascolaire par la mise en place d'un interface simplificateur. Il améliore toutes opérations liées aux transactions financières comme les process de sécurité.",
-        "paragraph2": "AGVES garantit aux élèves l'accès aux ressources dont ils ont besoin tout en fournissant aux administrateurs des outils de gestion puissants et performants.",
         "features": {
-          "wallet": {
-            "title": "Portefeuille électronique intégré",
-            "description": "solution de paiement sécurisée pour la gestion des frais scolaires, repas, activités et autres transactions, avec suivi en temps réel."
-          },
           "access": {
-            "title": "Clés d'accès numériques",
-            "description": "authentification sécurisée via identifiants cryptés ou badges NFC pour un contrôle renforcé des accès physiques et numériques."
+            "description": "authentification sécurisée via identifiants cryptés ou badges NFC pour un contrôle renforcé des accès physiques et numériques.",
+            "title": "Clés d'accès numériques"
           },
           "communication": {
-            "title": "Portail de communication parents-école",
-            "description": "messagerie intégrée, notifications en temps réel, diffusion d'annonces et gestion des autorisations."
-          },
-          "finance": {
-            "title": "Module de gestion financière",
-            "description": "suivi budgétaire, facturation automatisée, gestion des subventions et export comptable."
+            "description": "messagerie intégrée, notifications en temps réel, diffusion d'annonces et gestion des autorisations.",
+            "title": "Portail de communication parents-école"
           },
           "dashboard": {
-            "title": "Tableau de bord administrateur ergonomique",
-            "description": "interface centralisée pour la supervision des données scolaires, avec indicateurs personnalisables et accès multi-profil."
+            "description": "interface centralisée pour la supervision des données scolaires, avec indicateurs personnalisables et accès multi-profil.",
+            "title": "Tableau de bord administrateur ergonomique"
+          },
+          "finance": {
+            "description": "suivi budgétaire, facturation automatisée, gestion des subventions et export comptable.",
+            "title": "Module de gestion financière"
+          },
+          "wallet": {
+            "description": "solution de paiement sécurisée pour la gestion des frais scolaires, repas, activités et autres transactions, avec suivi en temps réel.",
+            "title": "Portefeuille électronique intégré"
           }
         },
-        "cta": "Contactez-nous pour une démonstration"
+        "paragraph1": "AGVES révolutionne la communication de la vie scolaire et extrascolaire par la mise en place d'une interface simplificatrice. Il améliore toutes opérations liées aux transactions financières comme les processus de sécurité.",
+        "paragraph2": "AGVES garantit aux élèves l'accès aux ressources dont ils ont besoin tout en fournissant aux administrateurs des outils de gestion puissants et performants.",
+        "subtitleHighlight": "scolaire",
+        "subtitleRegular": "Transforme la gestion",
+        "title": "AGVES"
       },
       "i-go": {
-        "title": "I GO",
-        "subtitleRegular": "Réinventer la",
-        "subtitleHighlight": "mobilité urbaine",
+        "cta": "Rejoignez la révolution de la mobilité électrique",
         "description": "Une application mobile dédiée conçue pour les utilisateurs d'engins de déplacement personnel motorisés (EDPM) et de vélos à assistance électrique (VAE).",
-        "paragraph1": "I GO est une application mobile innovante dédiée à la mobilité électrique, conçue pour répondre aux besoins croissants des utilisateurs d'Engins de Déplacement Personnel Motorisés (EDPM) et de Vélo à Assistance Électrique (VAE).",
-        "paragraph2": "Né du constat lié à la difficulté croissante pour ces utilisateurs de trouver des bornes de recharge, I GO propose un enrichissement de l'expérience utilisateur par une solution complète de référencement et de localisation de ces points de recharge à travers son moteur de recherche intuitif.",
         "features": {
-          "database": {
-            "title": "Base de données enrichie des points de recharge",
-            "description": "référencement exhaustif des bornes de recharge, avec classification par type, puissance, compatibilité et opérateur."
-          },
-          "realtime": {
-            "title": "Mises à jour en temps réel",
-            "description": "actualisation dynamique de la disponibilité des bornes grâce à la synchronisation avec les opérateurs et les retours utilisateurs."
-          },
           "collaborative": {
-            "title": "Système collaboratif de contribution",
-            "description": "ajout de nouveaux points de recharge par la communauté, modération intégrée et validation participative."
-          },
-          "navigation": {
-            "title": "Navigation intelligente intégrée",
-            "description": "calcul d'itinéraires optimisés tenant compte de l'autonomie, du trafic et de la localisation des bornes."
+            "description": "ajout de nouveaux points de recharge par la communauté, modération intégrée et validation participative.",
+            "title": "Système collaboratif de contribution"
           },
           "community": {
-            "title": "Fonctionnalités communautaires avancées",
-            "description": "partages d'itinéraires, avis, notations et échanges entre utilisateurs autour de la mobilité électrique."
+            "description": "partages d'itinéraires, avis, notations et échanges entre utilisateurs autour de la mobilité électrique.",
+            "title": "Fonctionnalités communautaires avancées"
+          },
+          "database": {
+            "description": "référencement exhaustif des bornes de recharge, avec classification par type, puissance, compatibilité et opérateur.",
+            "title": "Base de données enrichie des points de recharge"
+          },
+          "navigation": {
+            "description": "calcul d'itinéraires optimisés tenant compte de l'autonomie, du trafic et de la localisation des bornes.",
+            "title": "Navigation intelligente intégrée"
+          },
+          "realtime": {
+            "description": "actualisation dynamique de la disponibilité des bornes grâce à la synchronisation avec les opérateurs et les retours utilisateurs.",
+            "title": "Mises à jour en temps réel"
           }
         },
-        "cta": "Rejoignez la révolution de la mobilité électrique"
+        "paragraph1": "I GO est une application mobile innovante dédiée à la mobilité électrique, conçue pour répondre aux besoins croissants des utilisateurs d'Engins de Déplacement Personnel Motorisés (EDPM) et de Vélo à Assistance Électrique (VAE).",
+        "paragraph2": "Né du constat lié à la difficulté croissante pour ces utilisateurs de trouver des bornes de recharge, I GO propose un enrichissement de l'expérience utilisateur par une solution complète de référencement et de localisation de ces points de recharge à travers son moteur de recherche intuitif.",
+        "subtitleHighlight": "mobilité urbaine",
+        "subtitleRegular": "Réinventer la",
+        "title": "I GO"
       },
       "multipass": {
-        "title": "Multipass",
-        "subtitleRegular": "L'avenir du",
-        "subtitleHighlight": "CRM",
+        "cta": "Découvrez Multipass en action",
         "description": "Une solution numérique CRM polyvalente avec des options modulaires adaptables à tous les segments de marché.",
-        "paragraph1": "Que vous soyez une startup ambitieuse ou une entreprise bien établie, Multipass vous offre une plateforme CRM modulable et évolutive. Conçue pour s'adapter à tous les secteurs d'activité, notre solution vous permet de centraliser, gérer et optimiser vos relations clients avec une flexibilité inégalée.",
+        "features": {
+          "integration": {
+            "description": "interopérabilité native avec les systèmes d'information existants (ERP, outils de messagerie, bases de données, etc.).",
+            "title": "Intégration transparente"
+          },
+          "modules": {
+            "description": "architecture modulaire permettant d'activer uniquement les fonctionnalités pertinentes selon les besoins métiers spécifiques.",
+            "title": "Modules personnalisables"
+          },
+          "reporting": {
+            "description": "tableaux de bord dynamiques, indicateurs personnalisés, export et automatisation des rapports.",
+            "title": "Reporting & analytics avancés"
+          },
+          "scalable": {
+            "description": "infrastructure pensée pour accompagner la montée en charge et les évolutions organisationnelles.",
+            "title": "Architecture évolutive (scalable)"
+          },
+          "ui": {
+            "description": "UX/UI conçue pour maximiser la productivité et réduire le temps de prise en main.",
+            "title": "Interface utilisateur optimisée"
+          }
+        },
         "highlights": [
           "Modulaire : activez uniquement les fonctionnalités dont vous avez besoin",
           "Polyvalente : convient à tous les types d'entreprises, de tous secteurs",
           "Scalable : grandit avec vous, à votre rythme"
         ],
+        "paragraph1": "Que vous soyez une startup ambitieuse ou une entreprise bien établie, Multipass vous offre une plateforme CRM modulable et évolutive. Conçue pour s'adapter à tous les secteurs d'activité, notre solution vous permet de centraliser, gérer et optimiser vos relations clients avec une flexibilité inégalée.",
         "paragraph2": "Passez à une gestion client intelligente !",
-        "features": {
-          "modules": {
-            "title": "Modules personnalisables",
-            "description": "architecture modulaire permettant d'activer uniquement les fonctionnalités pertinentes selon les besoins métiers spécifiques."
-          },
-          "integration": {
-            "title": "Intégration transparente",
-            "description": "interopérabilité native avec les systèmes d'information existants (ERP, outils de messagerie, bases de données, etc.)."
-          },
-          "scalable": {
-            "title": "Architecture évolutive (scalable)",
-            "description": "infrastructure pensée pour accompagner la montée en charge et les évolutions organisationnelles."
-          },
-          "reporting": {
-            "title": "Reporting & analytics avancés",
-            "description": "tableaux de bord dynamiques, indicateurs personnalisés, export et automatisation des rapports."
-          },
-          "ui": {
-            "title": "Interface utilisateur optimisée",
-            "description": "UX/UI conçue pour maximiser la productivité et réduire le temps de prise en main."
-          }
-        },
-        "cta": "Découvrez Multipass en action"
-      }
-    },
-    "sitemap": {
-      "title": "Plan du Site",
-      "description": "Retrouvez toutes les pages et ressources de notre site web organisées de manière structurée. Ce plan du site vous aidera à naviguer et à trouver rapidement les informations que vous recherchez.",
-      "searchPlaceholder": "Rechercher des pages...",
-      "noResults": "Aucune page correspondant à votre recherche.",
-      "lastUpdated": "Plan du site mis à jour le :",
-      "sections": {
-        "main": {
-          "title": "Navigation Principale",
-          "home": "Accueil",
-          "services": "Services",
-          "aboutUs": "À Propos",
-          "contact": "Contact"
-        },
-        "services": {
-          "title": "Nos Services",
-          "webDesign": "Conception & Développement Web",
-          "mobileDev": "Développement d'Applications Mobiles",
-          "seo": "Optimisation SEO",
-          "marketing": "Marketing Digital"
-        },
-        "tools": {
-          "title": "Outils & Ressources",
-          "seoAudit": "Outil d'Audit SEO",
-          "performanceCheck": "Vérification de Performance Web"
-        },
-        "company": {
-          "title": "Informations sur l'Entreprise",
-          "aboutUs": "À Propos de Notre Entreprise",
-          "team": "Notre Équipe",
-          "mission": "Notre Mission",
-          "values": "Nos Valeurs"
-        },
-        "legal": {
-          "title": "Informations Légales",
-          "terms": "Conditions d'Utilisation",
-          "privacy": "Politique de Confidentialité",
-          "cookies": "Politique des Cookies"
-        },
-        "support": {
-          "title": "Support",
-          "contact": "Contacter le Support",
-          "faq": "FAQ"
-        }
+        "subtitleHighlight": "CRM",
+        "subtitleRegular": "L'avenir du",
+        "title": "Multipass"
       }
     }
   },
   "seo": {
     "global": {
-      "siteName": "HARGILE",
-      "defaultTitle": "HARGILE - Innovation digitale au service de votre entreprise",
       "defaultDescription": "Transformez votre présence numérique avec les solutions web innovantes, l'IA et le marketing stratégique d'HARGILE. Élevez votre entreprise dans le paysage concurrentiel actuel.",
       "defaultImageAlt": "HARGILE Agence Digitale",
-      "twitterHandle": "@hargile_agency",
-      "domain": "hargile.com"
+      "defaultTitle": "HARGILE - Innovation digitale au service de votre entreprise",
+      "domain": "hargile.com",
+      "siteName": "HARGILE",
+      "twitterHandle": "@hargile_agency"
     },
     "pages": {
-      "home": {
-        "title": "HARGILE - Innovation digitale pour le succès de votre entreprise",
-        "description": "Collaborez avec HARGILE pour des solutions numériques transformatives. Nous proposons du développement web sur mesure, de l'intégration IA et du marketing stratégique qui stimule votre croissance.",
-        "og": {
-          "title": "HARGILE - Innovation digitale pour le succès de votre entreprise",
-          "description": "Libérez le potentiel de votre entreprise avec les solutions numériques personnalisées d'HARGILE. Du développement web à l'intégration IA, nous délivrons des stratégies efficaces.",
-          "imageAlt": "HARGILE - Agence digitale"
-        },
-        "schemaType": "WebSite"
-      },
       "about-us": {
-        "title": "À Propos d'HARGILE - Notre Histoire & Mission | Agence d'Innovation Digitale",
         "description": "Découvrez le parcours, les valeurs et la mission d'HARGILE. Rencontrez notre équipe d'experts dédiée à créer des expériences numériques significatives qui amplifient votre croissance.",
         "og": {
-          "title": "À Propos d'HARGILE - Notre Histoire & Mission | Agence d'Innovation Digitale",
           "description": "Découvrez les esprits derrière l'innovation digitale d'HARGILE. Apprenez comment nos valeurs et notre expertise créent des partenariats durables qui délivrent des résultats exceptionnels.",
-          "imageAlt": "L'équipe HARGILE"
+          "imageAlt": "L'équipe HARGILE",
+          "title": "À Propos d'HARGILE - Notre Histoire & Mission | Agence d'Innovation Digitale"
         },
-        "schemaType": "AboutPage"
-      },
-      "services": {
-        "title": "Nos Services Digitaux | Solutions Web, Mobile & IA | HARGILE",
-        "description": "Explorez les services numériques complets d'HARGILE adaptés aux besoins de votre entreprise. Du développement web personnalisé aux applications mobiles et solutions d'IA.",
-        "og": {
-          "title": "Nos Services Digitaux | Solutions Web, Mobile & IA | HARGILE",
-          "description": "Transformez votre entreprise avec les services numériques complets d'HARGILE. Développement web sur mesure, applications mobiles, intégration IA et optimisation pour des résultats mesurables.",
-          "imageAlt": "Services HARGILE"
-        },
-        "schemaType": "ServicePage"
-      },
-      "portfolio": {
-        "title": "Notre Portfolio | Projets Digitaux Innovants | HARGILE",
-        "description": "Explorez la vitrine des projets numériques réussis d'HARGILE. Découvrez comment nous avons aidé nos clients à transformer leurs entreprises par le développement web, mobile et l'IA.",
-        "og": {
-          "title": "Notre Portfolio | Projets Digitaux Innovants | HARGILE",
-          "description": "Découvrez comment HARGILE livre l'excellence numérique à travers notre portfolio de projets transformateurs. Des études de cas qui démontrent notre expertise à travers les industries.",
-          "imageAlt": "Portfolio HARGILE"
-        },
-        "schemaType": "CollectionPage"
-      },
-      "contact": {
-        "title": "Contactez HARGILE | Équipe d'Experts en Solutions Digitales",
-        "description": "Prêt à élever votre présence numérique ? Connectez-vous avec l'équipe d'experts d'HARGILE aujourd'hui. Obtenez une consultation personnalisée pour transformer votre entreprise.",
-        "og": {
-          "title": "Contactez HARGILE | Équipe d'Experts en Solutions Digitales",
-          "description": "Commencez votre parcours de transformation numérique avec HARGILE. Contactez notre équipe pour une consultation personnalisée et découvrez des solutions adaptées à vos besoins uniques.",
-          "imageAlt": "Contact HARGILE"
-        },
-        "schemaType": "ContactPage"
-      },
-      "legal": {
-        "privacy": {
-          "title": "Politique de Confidentialité & Mentions Légales | HARGILE",
-          "description": "Consultez la politique de confidentialité et les informations légales d'HARGILE. Découvrez comment nous protégeons vos données et notre engagement envers votre sécurité.",
-          "og": {
-            "title": "Politique de Confidentialité & Mentions Légales | HARGILE",
-            "description": "Comprenez comment HARGILE gère vos informations avec notre politique de confidentialité complète. Découvrez nos mesures de protection des données et vos droits en tant qu'utilisateur.",
-            "imageAlt": "HARGILE Mentions Légales"
-          },
-          "schemaType": "WebPage"
-        }
+        "schemaType": "AboutPage",
+        "title": "À Propos d'HARGILE - Notre Histoire & Mission | Agence d'Innovation Digitale"
       },
       "audit": {
         "result": {
-          "title": "Résultats d'Audit de Site Web | Analyse de Performance | HARGILE",
           "description": "Consultez les résultats complets de l'audit de votre site web par HARGILE. Obtenez des insights pratiques sur les performances, le SEO, l'accessibilité et les meilleures pratiques.",
           "og": {
-            "title": "Résultats d'Audit de Site Web | Analyse de Performance | HARGILE",
             "description": "Libérez tout le potentiel de votre site web avec l'audit détaillé d'HARGILE. Découvrez des opportunités d'amélioration de la vitesse, du SEO, de l'accessibilité et de l'expérience utilisateur.",
-            "imageAlt": "Audit de Site Web HARGILE"
+            "imageAlt": "Audit de Site Web HARGILE",
+            "title": "Résultats d'Audit de Site Web | Analyse de Performance | HARGILE"
           },
-          "schemaType": "WebPage"
+          "schemaType": "WebPage",
+          "title": "Résultats d'Audit de Site Web | Analyse de Performance | HARGILE"
         }
+      },
+      "contact": {
+        "description": "Prêt à élever votre présence numérique ? Connectez-vous avec l'équipe d'experts d'HARGILE aujourd'hui. Obtenez une consultation personnalisée pour transformer votre entreprise.",
+        "og": {
+          "description": "Commencez votre parcours de transformation numérique avec HARGILE. Contactez notre équipe pour une consultation personnalisée et découvrez des solutions adaptées à vos besoins uniques.",
+          "imageAlt": "Contact HARGILE",
+          "title": "Contactez HARGILE | Équipe d'Experts en Solutions Digitales"
+        },
+        "schemaType": "ContactPage",
+        "title": "Contactez HARGILE | Équipe d'Experts en Solutions Digitales"
+      },
+      "home": {
+        "description": "Collaborez avec HARGILE pour des solutions numériques transformatives. Nous proposons du développement web sur mesure, de l'intégration IA et du marketing stratégique qui stimule votre croissance.",
+        "og": {
+          "description": "Libérez le potentiel de votre entreprise avec les solutions numériques personnalisées d'HARGILE. Du développement web à l'intégration IA, nous délivrons des stratégies efficaces.",
+          "imageAlt": "HARGILE - Agence digitale",
+          "title": "HARGILE - Innovation digitale pour le succès de votre entreprise"
+        },
+        "schemaType": "WebSite",
+        "title": "HARGILE - Innovation digitale pour le succès de votre entreprise"
+      },
+      "legal": {
+        "privacy": {
+          "description": "Consultez la politique de confidentialité et les informations légales d'HARGILE. Découvrez comment nous protégeons vos données et notre engagement envers votre sécurité.",
+          "og": {
+            "description": "Comprenez comment HARGILE gère vos informations avec notre politique de confidentialité complète. Découvrez nos mesures de protection des données et vos droits en tant qu'utilisateur.",
+            "imageAlt": "HARGILE Mentions Légales",
+            "title": "Politique de Confidentialité & Mentions Légales | HARGILE"
+          },
+          "schemaType": "WebPage",
+          "title": "Politique de Confidentialité & Mentions Légales | HARGILE"
+        }
+      },
+      "portfolio": {
+        "description": "Explorez la vitrine des projets numériques réussis d'HARGILE. Découvrez comment nous avons aidé nos clients à transformer leurs entreprises par le développement web, mobile et l'IA.",
+        "og": {
+          "description": "Découvrez comment HARGILE livre l'excellence numérique à travers notre portfolio de projets transformateurs. Des études de cas qui démontrent notre expertise à travers les industries.",
+          "imageAlt": "Portfolio HARGILE",
+          "title": "Notre Portfolio | Projets Digitaux Innovants | HARGILE"
+        },
+        "schemaType": "CollectionPage",
+        "title": "Notre Portfolio | Projets Digitaux Innovants | HARGILE"
+      },
+      "services": {
+        "description": "Explorez les services numériques complets d'HARGILE adaptés aux besoins de votre entreprise. Du développement web personnalisé aux applications mobiles et solutions d'IA.",
+        "og": {
+          "description": "Transformez votre entreprise avec les services numériques complets d'HARGILE. Développement web sur mesure, applications mobiles, intégration IA et optimisation pour des résultats mesurables.",
+          "imageAlt": "Services HARGILE",
+          "title": "Nos Services Digitaux | Solutions Web, Mobile & IA | HARGILE"
+        },
+        "schemaType": "ServicePage",
+        "title": "Nos Services Digitaux | Solutions Web, Mobile & IA | HARGILE"
+      },
+      "sitemap": {
+        "description": "Naviguez facilement sur le site d'HARGILE avec notre plan du site complet. Trouvez tous nos services, ressources et informations organisés dans un format structuré et convivial.",
+        "og": {
+          "description": "Trouvez exactement ce que vous cherchez avec le plan du site d'HARGILE. Notre répertoire organisé vous aide à naviguer efficacement à travers toutes les sections de notre site web.",
+          "imageAlt": "Plan du site HARGILE",
+          "title": "Plan du Site | Navigation Complète | HARGILE"
+        },
+        "schemaType": "WebPage",
+        "title": "Plan du Site | Navigation Complète | HARGILE"
       },
       "solutions": {
         "agves": {
-          "title": "AGVES | Solution de Gestion Scolaire | HARGILE",
           "description": "Découvrez AGVES, la plateforme révolutionnaire de gestion scolaire qui simplifie la communication et optimise les transactions financières avec une interface intuitive et sécurisée.",
           "og": {
-            "title": "AGVES | Solution de Gestion Scolaire | HARGILE",
             "description": "Transformez la gestion éducative avec AGVES. Notre plateforme complète améliore la communication scolaire, simplifie les transactions financières et fournit des outils administratifs puissants.",
-            "imageAlt": "AGVES par HARGILE"
+            "imageAlt": "AGVES par HARGILE",
+            "title": "AGVES | Solution de Gestion Scolaire | HARGILE"
           },
-          "schemaType": "SoftwareApplication"
+          "schemaType": "SoftwareApplication",
+          "title": "AGVES | Solution de Gestion Scolaire | HARGILE"
         },
         "i-go": {
-          "title": "I GO | Application de Navigation pour Mobilité Électrique | HARGILE",
           "description": "Découvrez I GO, l'application innovante qui révolutionne la mobilité urbaine électrique. Trouvez des bornes de recharge, optimisez vos itinéraires et rejoignez une communauté passionnée.",
           "og": {
-            "title": "I GO | Application de Navigation pour Mobilité Électrique | HARGILE",
             "description": "Naviguez dans l'univers de la mobilité électrique avec I GO. Notre application fournit une cartographie complète des bornes de recharge, une planification d'itinéraire intelligente et des mises à jour en temps réel.",
-            "imageAlt": "I GO par HARGILE"
+            "imageAlt": "I GO par HARGILE",
+            "title": "I GO | Application de Navigation pour Mobilité Électrique | HARGILE"
           },
-          "schemaType": "MobileApplication"
+          "schemaType": "MobileApplication",
+          "title": "I GO | Application de Navigation pour Mobilité Électrique | HARGILE"
         },
         "multipass": {
-          "title": "Multipass | Plateforme CRM Flexible | HARGILE",
           "description": "Découvrez Multipass, la solution CRM adaptable conçue pour les entreprises de toutes tailles. Personnalisez votre gestion de relation client avec des fonctionnalités modulaires évolutives.",
           "og": {
-            "title": "Multipass | Plateforme CRM Flexible | HARGILE",
             "description": "Révolutionnez vos relations clients avec Multipass. Notre CRM modulaire et évolutif s'adapte aux besoins de votre entreprise avec des interfaces intuitives et des analyses puissantes.",
-            "imageAlt": "Multipass par HARGILE"
+            "imageAlt": "Multipass par HARGILE",
+            "title": "Multipass | Plateforme CRM Flexible | HARGILE"
           },
-          "schemaType": "SoftwareApplication"
+          "schemaType": "SoftwareApplication",
+          "title": "Multipass | Plateforme CRM Flexible | HARGILE"
         }
-      },
-      "sitemap": {
-        "title": "Plan du Site | Navigation Complète | HARGILE",
-        "description": "Naviguez facilement sur le site d'HARGILE avec notre plan du site complet. Trouvez tous nos services, ressources et informations organisés dans un format structuré et convivial.",
-        "og": {
-          "title": "Plan du Site | Navigation Complète | HARGILE",
-          "description": "Trouvez exactement ce que vous cherchez avec le plan du site d'HARGILE. Notre répertoire organisé vous aide à naviguer efficacement à travers toutes les sections de notre site web.",
-          "imageAlt": "Plan du site HARGILE"
-        },
-        "schemaType": "WebPage"
       }
     }
   }
