@@ -207,14 +207,15 @@ docker compose stop nginx || docker-compose stop nginx
 
 # Renouveler le certificat avec IPv4 uniquement pour éviter les problèmes
 docker run --rm -p 80:80 -p 443:443 \
-  -v $PWD/certbot-etc:/etc/letsencrypt \
-  -v $PWD/certbot-var:/var/lib/letsencrypt \
+  -v "$PWD"/certbot-etc:/etc/letsencrypt \
+  -v "$PWD"/certbot-var:/var/lib/letsencrypt \
   certbot/certbot certonly --standalone \
-  --preferred-ip-version ipv4 \
   --non-interactive \
   --agree-tos \
-  -m $EMAIL \
-  $(echo $KNOWN_DOMAINS | sed 's/,/ -d /g' | sed 's/^/-d /')
+  --expand \
+  -m "$EMAIL" \
+  $(echo "$KNOWN_DOMAINS" | tr ',' '\n' | sed 's/^/-d /')
+
 
 # Redémarrer Nginx
 docker compose start nginx || docker-compose start nginx
@@ -282,11 +283,10 @@ docker run --rm -p 80:80 -p 443:443 \
   -v "$PWD"/certbot-etc:/etc/letsencrypt \
   -v "$PWD"/certbot-var:/var/lib/letsencrypt \
   certbot/certbot certonly --standalone \
-  --preferred-ip-version ipv4 \
   --non-interactive \
   --agree-tos \
   -m "$EMAIL" \
-  $(echo "$KNOWN_DOMAINS" | sed 's/,/ -d /g' | sed 's/^/-d /')
+  $(echo "$KNOWN_DOMAINS" | tr ',' '\n' | sed 's/^/-d /')
 
   if [ $? -eq 0 ]; then
     log_success "Certificats SSL obtenus avec succès."
