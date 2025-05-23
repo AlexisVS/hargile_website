@@ -214,8 +214,7 @@ docker run --rm -p 80:80 -p 443:443 \
   --non-interactive \
   --agree-tos \
   -m $EMAIL \
-
-$(echo $KNOWN_DOMAINS | sed 's/,/ -d /g' | sed 's/^/-d /')
+  $(echo $KNOWN_DOMAINS | sed 's/,/ -d /g' | sed 's/^/-d /')
 
 # Redémarrer Nginx
 docker compose start nginx || docker-compose start nginx
@@ -280,17 +279,14 @@ if [ "$CERTS_VALID" = false ]; then
 
   # Utilisation de l'option preferred-ip-version pour forcer IPv4
 docker run --rm -p 80:80 -p 443:443 \
-  # shellcheck disable=SC2086
-  -v $PWD/certbot-etc:/etc/letsencrypt \
-  -v $PWD/certbot-var:/var/lib/letsencrypt \
+  -v "$PWD"/certbot-etc:/etc/letsencrypt \
+  -v "$PWD"/certbot-var:/var/lib/letsencrypt \
   certbot/certbot certonly --standalone \
   --preferred-ip-version ipv4 \
   --non-interactive \
   --agree-tos \
   -m "$EMAIL" \
-
-  # shellcheck disable=SC2091
-  $(echo $KNOWN_DOMAINS | sed 's/,/ -d /g' | sed 's/^/-d /')
+  $(echo "$KNOWN_DOMAINS" | sed 's/,/ -d /g' | sed 's/^/-d /')
 
   if [ $? -eq 0 ]; then
     log_success "Certificats SSL obtenus avec succès."
