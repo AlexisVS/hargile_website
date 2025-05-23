@@ -20,6 +20,7 @@
     "@sendgrid/mail": "^8.1.5",
     "@tailwindcss/oxide": "^4.0.13",
     "animejs": "^3.2.2",
+    "babel-plugin-react-compiler": "^19.1.0-rc.2",
     "classnames": "^2.5.1",
     "country-flag-icons": "^1.5.18",
     "framer-motion": "^12.4.10",
