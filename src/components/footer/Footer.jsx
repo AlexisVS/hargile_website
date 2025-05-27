@@ -111,7 +111,7 @@ const Footer = () => {
 
                     <ColumnStyled>
                         {socials.map((social) => (
-                            <SocialLinkIcon key={`social-${social.title}`}>
+                            <SocialLinkIcon href={social.href} key={`social-${social.title}`}>
                                 {social.icon}
                                 <span>{social.title}</span>
                             </SocialLinkIcon>
