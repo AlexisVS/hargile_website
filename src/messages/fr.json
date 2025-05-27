@@ -82,21 +82,22 @@
         "line3": "Belgique"
       },
       "contact": {
-        "general": "Général",
+        "administration": "Administration",
         "clients": "Contact clients",
-        "administration": "Administration"
+        "general": "Général"
       },
       "copyright": "© {year} Hargile. Tous droits réservés",
-      "sections": {
-        "solutions": "Solutions",
-        "services": "Services",
-        "company": "Entreprise"
-      },
       "links": {
         "aboutUs": "À propos de nous",
         "contact": "Contact",
         "privacyPolicy": "Politique de confidentialité",
         "siteMap": "Plan du site"
+      },
+      "sections": {
+        "company": "Entreprise",
+        "services": "Services",
+        "socials": "Réseaux sociaux",
+        "solutions": "Solutions"
       }
     },
     "gdpr": {

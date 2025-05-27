@@ -12,10 +12,43 @@ import {TransitionLink} from "@/components/TransitionLink";
 import {useTranslations} from 'next-intl';
 import {Address} from "@/components/footer/Adress.styled";
 import {Copyright} from "@/components/footer/Copyright.styled";
+import {SocialLinkIcon} from "@/components/footer/social-medias.styled";
+import {SiGithub, SiGooglemaps, SiInstagram, SiYoutube} from "@icons-pack/react-simple-icons";
+import {LucideLinkedin} from "lucide-react";
 
 
 const Footer = () => {
     const t = useTranslations('components.footer');
+
+    const iconSize = '22px'
+
+    const socials = [
+        {
+            title: "@hargile_is",
+            icon: <SiInstagram title={"hargile"} size={iconSize}/>,
+            href: "https://www.instagram.com/hargile_is/"
+        },
+        {
+            title: "HARGILE - innovative solutions",
+            icon: <LucideLinkedin size={iconSize}/>,
+            href: "https://www.linkedin.com/company/hargile"
+        },
+        {
+            title: "@HARGILEinnovativesolutions",
+            icon: <SiYoutube title={"hargile"} size={iconSize}/>,
+            href: "https://www.youtube.com/@HARGILEinnovativesolutions"
+        },
+        {
+            title: "HARGILE innovative solutions",
+            icon: <SiGooglemaps size={iconSize}/>,
+            href: "https://maps.app.goo.gl/RuYC96MNXGnuPrpM7"
+        },
+        {
+            title: "HARGILE innovative solutions",
+            icon: <SiGithub title={"hargile"} size={iconSize}/>,
+            href: "https://github.com/HARGILE-innovative-solutions"
+        }
+    ]
 
     return (
         <FooterContainerStyled>
@@ -71,6 +104,19 @@ const Footer = () => {
                     <HeadingStyled>{t('sections.company')}</HeadingStyled>
                     <FooterLinkStyled as={TransitionLink} href="/about-us">{t('links.aboutUs')}</FooterLinkStyled>
                     <FooterLinkStyled as={TransitionLink} href="/contact">{t('links.contact')}</FooterLinkStyled>
+                </ColumnStyled>
+
+                <ColumnStyled>
+                    <HeadingStyled>{t('sections.socials')}</HeadingStyled>
+
+                    <ColumnStyled>
+                        {socials.map((social) => (
+                            <SocialLinkIcon key={`social-${social.title}`}>
+                                {social.icon}
+                                <span>{social.title}</span>
+                            </SocialLinkIcon>
+                        ))}
+                    </ColumnStyled>
                 </ColumnStyled>
             </FooterContentStyled>
 

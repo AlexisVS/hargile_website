@@ -82,21 +82,22 @@
         "line3": "Belgium"
       },
       "contact": {
-        "general": "General",
+        "administration": "Administration",
         "clients": "Client Contact",
-        "administration": "Administration"
+        "general": "General"
       },
       "copyright": "© {year} Hargile. All Rights Reserved",
-      "sections": {
-        "solutions": "Solutions",
-        "services": "Services",
-        "company": "Company"
-      },
       "links": {
         "aboutUs": "About Us",
         "contact": "Contact",
         "privacyPolicy": "Privacy Policy",
         "siteMap": "Site Map"
+      },
+      "sections": {
+        "company": "Company",
+        "services": "Services",
+        "socials": "Social Networks",
+        "solutions": "Solutions"
       }
     },
     "gdpr": {
@@ -761,6 +762,9 @@
     },
     "sitemap": {
       "description": "Find all the pages and resources on our website organized in a structured way. This sitemap will help you navigate our site and find the information you're looking for quickly.",
+      "lastUpdated": "Sitemap updated at: ",
+      "noResults": "No pages matching your search.",
+      "searchPlaceholder": "Search for pages...",
       "sections": {
         "company": {
           "aboutUs": "About Our Company",
@@ -791,6 +795,7 @@
         },
         "support": {
           "contact": "Contact Support",
+          "faq": "FAQ",
           "title": "Support"
         },
         "tools": {
