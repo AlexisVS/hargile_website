@@ -112,7 +112,7 @@ const Navbar = () => {
                     <OptimizedImage
                         width={750}
                         height={348}
-                        src="/images/brand/brand_large.png"
+                        src="/images/brand/brand-large-white.png"
                         alt="Brand Logo"
                         style={{
                             width: "calc(100px + 6vw)",

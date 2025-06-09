@@ -33,7 +33,7 @@ const Footer = () => {
             <FooterContentStyled>
                 {/* Company info */}
                 <ColumnStyled>
-                    <HeadingStyled>Hargile</HeadingStyled>
+                    <HeadingStyled>HARGILE</HeadingStyled>
                     {/*<Text>123 Lorem ipsum</Text>*/}
                     <dl>
                         <dd>Général</dd>
