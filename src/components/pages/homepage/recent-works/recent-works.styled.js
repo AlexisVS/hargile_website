@@ -29,7 +29,7 @@ export const SectionTitle = styled.h2`
   margin-bottom: 3rem;
 
   @media (min-width: 768px) {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
     margin-bottom: 4rem;
   }
 `;
@@ -63,7 +63,7 @@ export const ViewAllButton = styled(motion.a)`
     color-mix(in srgb, var(--cta-accent-color) 75%, black 10%) 100%
   );
   color: white;
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: 600;
   padding: 0.85rem 2.25rem;
   border-radius: 9999px;
