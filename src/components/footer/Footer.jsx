@@ -1,7 +1,6 @@
 "use client"
 
 import React from 'react';
-import styled from 'styled-components';
 import {FooterLinkStyled} from "@/components/footer/footer-link.styled";
 import {ColumnStyled} from "@/components/footer/column.styled";
 import {HeadingStyled} from "@/components/footer/heading.styled";
@@ -10,59 +9,86 @@ import {FooterContentStyled} from "@/components/footer/footer-content.styled";
 import {BottomBarStyled} from "@/components/footer/bottom-bar.styled";
 import {BottomLinksStyled} from "@/components/footer/bottom-links.styled";
 import {TransitionLink} from "@/components/TransitionLink";
+import {useTranslations} from 'next-intl';
+import {Address} from "@/components/footer/Adress.styled";
+import {Copyright} from "@/components/footer/Copyright.styled";
+import {SocialLinkIcon} from "@/components/footer/social-medias.styled";
+import {SiGithub, SiGooglemaps, SiInstagram, SiYoutube} from "@icons-pack/react-simple-icons";
+import {LucideLinkedin} from "lucide-react";
 
-const Text = styled.p`
-    margin-bottom: 0.5rem;
-`;
-
-const Copyright = styled.div`
-    color: rgba(255, 255, 255, 0.7);
-    order: 1;
-    text-align: center;
-
-    @media (min-width: 640px) {
-        order: 2;
-        text-align: right;
-    }
-`;
 
 const Footer = () => {
-    return (
+    const t = useTranslations('components.footer');
 
+    const iconSize = '22px'
+
+    const socials = [
+        {
+            title: "@hargile_is",
+            icon: <SiInstagram title={"hargile"} size={iconSize}/>,
+            href: "https://www.instagram.com/hargile_is/"
+        },
+        {
+            title: "HARGILE - innovative solutions",
+            icon: <LucideLinkedin size={iconSize}/>,
+            href: "https://www.linkedin.com/company/hargile"
+        },
+        {
+            title: "@HARGILEinnovativesolutions",
+            icon: <SiYoutube title={"hargile"} size={iconSize}/>,
+            href: "https://www.youtube.com/@HARGILEinnovativesolutions"
+        },
+        {
+            title: "HARGILE innovative solutions",
+            icon: <SiGooglemaps size={iconSize}/>,
+            href: "https://maps.app.goo.gl/RuYC96MNXGnuPrpM7"
+        },
+        {
+            title: "HARGILE innovative solutions",
+            icon: <SiGithub title={"hargile"} size={iconSize}/>,
+            href: "https://github.com/HARGILE-innovative-solutions"
+        }
+    ]
+
+    return (
         <FooterContainerStyled>
             <FooterContentStyled>
                 {/* Company info */}
                 <ColumnStyled>
-                    <HeadingStyled>HARGILE</HeadingStyled>
-                    {/*<Text>123 Lorem ipsum</Text>*/}
+                    <HeadingStyled>Hargile</HeadingStyled>
+                    <Address>
+                        {t('address.line1')}<br/>
+                        {t('address.line2')}<br/>
+                        {t('address.line3')}
+                    </Address>
+
                     <dl>
-                        <dd>Général</dd>
+                        <dd>{t('contact.general')}</dd>
                         <dt>
                             <FooterLinkStyled target={'_blank'} href="mailto:info@hargile.com">
                                 info@hargile.com
                             </FooterLinkStyled>
                         </dt>
 
-                        <dd>Contact clients</dd>
+                        <dd>{t('contact.clients')}</dd>
                         <dt>
                             <FooterLinkStyled target={'_blank'} href="mailto:charles.dl@hargile.com">
                                 charles.dl@hargile.com
                             </FooterLinkStyled>
                         </dt>
 
-                        <dd>Administration</dd>
+                        <dd>{t('contact.administration')}</dd>
                         <dt>
                             <FooterLinkStyled target={'_blank'} href="mailto:pascal.l@hargile.com">
                                 pascal.l@hargile.com
                             </FooterLinkStyled>
                         </dt>
                     </dl>
-                    {/*<Text>Numéro de téléphone</Text>*/}
                 </ColumnStyled>
 
                 {/* Solutions */}
                 <ColumnStyled>
-                    <HeadingStyled>Solutions</HeadingStyled>
+                    <HeadingStyled>{t('sections.solutions')}</HeadingStyled>
                     <FooterLinkStyled as={TransitionLink} href="/solutions/agves">AGVES</FooterLinkStyled>
                     <FooterLinkStyled as={TransitionLink} href="/solutions/i-go">I GO</FooterLinkStyled>
                     <FooterLinkStyled as={TransitionLink} href="/solutions/multipass">MultiPass</FooterLinkStyled>
@@ -70,49 +96,38 @@ const Footer = () => {
 
                 {/* Services */}
                 <ColumnStyled>
-                    <HeadingStyled>Services</HeadingStyled>
-                    <FooterLinkStyled as={TransitionLink} href="/services">Services</FooterLinkStyled>
-                    {/*<FooterLinkStyled as={TransitionLink} href="/services/web-development">Web*/}
-                    {/*    Development</FooterLinkStyled>*/}
-                {/*    <FooterLinkStyled as={TransitionLink} href="/services/digital-marketing">Digital*/}
-                {/*        Marketing</FooterLinkStyled>*/}
-                {/*    <FooterLinkStyled as={TransitionLink} href="/services/mobile-applications">Mobile*/}
-                {/*        applications</FooterLinkStyled>*/}
-                {/*    <FooterLinkStyled as={TransitionLink} href="/services/ai-solutions">AI Solutions</FooterLinkStyled>*/}
-                {/*    <FooterLinkStyled as={TransitionLink} href="/services/cloud">Cloud</FooterLinkStyled>*/}
+                    <HeadingStyled>{t('sections.services')}</HeadingStyled>
+                    <FooterLinkStyled as={TransitionLink} href="/services">{t('sections.services')}</FooterLinkStyled>
                 </ColumnStyled>
 
                 {/* Company */}
                 <ColumnStyled>
-                    <HeadingStyled>Company</HeadingStyled>
-                    <FooterLinkStyled as={TransitionLink} href="/about-us">About Us</FooterLinkStyled>
-                    <FooterLinkStyled as={TransitionLink} href="/contact">Contact</FooterLinkStyled>
+                    <HeadingStyled>{t('sections.company')}</HeadingStyled>
+                    <FooterLinkStyled as={TransitionLink} href="/about-us">{t('links.aboutUs')}</FooterLinkStyled>
+                    <FooterLinkStyled as={TransitionLink} href="/contact">{t('links.contact')}</FooterLinkStyled>
                 </ColumnStyled>
 
-                {/* Resources */}
-                {/*<ColumnStyled>*/}
-                {/*    <HeadingStyled>Resources</HeadingStyled>*/}
-                {/*    <FooterLinkStyled as={TransitionLink} href="/blog">Blog</FooterLinkStyled>*/}
-                {/*    <FooterLinkStyled as={TransitionLink} href="/case-studies">Case studies</FooterLinkStyled>*/}
-                {/*</ColumnStyled>*/}
-            </FooterContentStyled>
+                <ColumnStyled>
+                    <HeadingStyled>{t('sections.socials')}</HeadingStyled>
 
-            {/* Newsletter */}
-            {/*<NewsletterSectionStyled>*/}
-            {/*    <HeadingStyled>Stay updated</HeadingStyled>*/}
-            {/*    <Text>Subscribe to our newsletter</Text>*/}
-            {/*    <EmailInputStyled type="email" placeholder="Your email address"/>*/}
-            {/*</NewsletterSectionStyled>*/}
+                    <ColumnStyled>
+                        {socials.map((social) => (
+                            <SocialLinkIcon target={'_blank'} href={social.href} key={`social-${social.title}`}>
+                                {social.icon}
+                                <span>{social.title}</span>
+                            </SocialLinkIcon>
+                        ))}
+                    </ColumnStyled>
+                </ColumnStyled>
+            </FooterContentStyled>
 
             {/* Bottom bar */}
             <BottomBarStyled>
-                <Copyright>© 2025 Hargile. All Rights Reserved</Copyright>
+                <Copyright>{t('copyright', {year: new Date().getFullYear()})}</Copyright>
                 <BottomLinksStyled>
-                    <FooterLinkStyled as={TransitionLink} href="/legal/privacy-policy">Privacy Policy</FooterLinkStyled>
-                    {/*<FooterLinkStyled as={TransitionLink} href="/legal/terms">Terms of Services</FooterLinkStyled>*/}
-                    {/*<FooterLinkStyled as={TransitionLink} href="/legal/cookies">Cookie Policy</FooterLinkStyled>*/}
-                    {/*<FooterLinkStyled as={TransitionLink} href="/accessibility">Accessibility</FooterLinkStyled>*/}
-                    <FooterLinkStyled as={TransitionLink} href="/sitemap">Site Map</FooterLinkStyled>
+                    <FooterLinkStyled as={TransitionLink}
+                                      href="/legal/privacy-policy">{t('links.privacyPolicy')}</FooterLinkStyled>
+                    <FooterLinkStyled as={TransitionLink} href="/sitemap">{t('links.siteMap')}</FooterLinkStyled>
                 </BottomLinksStyled>
             </BottomBarStyled>
         </FooterContainerStyled>

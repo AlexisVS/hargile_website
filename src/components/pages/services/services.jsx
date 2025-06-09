@@ -240,7 +240,7 @@ const Services = () => {
                 {serviceSections.map((section) => (
                     <SectionContainer key={section.id} as={motion.section} variants={itemVariants}>
                         <SectionHeader>
-                            <SectionIcon bgcolor={section.bgColor}>{section.icon}</SectionIcon>
+                            <SectionIcon $bgcolor={section.bgColor}>{section.icon}</SectionIcon>
                             <SectionTitle>{section.title}</SectionTitle>
                         </SectionHeader>
 

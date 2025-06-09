@@ -95,7 +95,7 @@ const OurCommitment = () => {
 
                     <motion.div variants={itemVariants}>
                         <Description>
-                            {t("paragraph1", "We strive to create digital solutions that not only transform businesses but also respect our planet and empower communities, making technology more sustainable, responsible, and impactful.")}
+                            {t("paragraph2", "We strive to create digital solutions that not only transform businesses but also respect our planet and empower communities, making technology more sustainable, responsible, and impactful.")}
                         </Description>
                     </motion.div>
 

@@ -3,14 +3,8 @@ import Image from "next/image";
 import {useTranslations} from "next-intl";
 import {useSiteNavigation} from "@/components/providers/site-navigation-provider";
 import {useEffect, useRef} from "react";
-import styled from "styled-components";
+import {AuditLink} from "@/components/pages/homepage/hero/heroSection.styled";
 
-
-export const AuditLink = styled.button`
-    &:hover {
-        color: var(--color-accent-blue-planet);
-    }
-`
 
 const HeroSection = () => {
     const t = useTranslations("pages.homepage.sections.hero");

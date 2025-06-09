@@ -66,7 +66,7 @@ export default function LanguageSelector() {
                     {LANGUAGES.map((language) => (
                         <LanguageOption
                             key={language.locale}
-                            isactive={`${language.locale === currentLocale}`}
+                            $isactive={`${language.locale === currentLocale}`}
                             onClick={() => changeLanguage(language.locale)}
                             data-locale={language.locale}
                         >

@@ -1,23 +1,12 @@
 "use client"
 
 import React, {memo} from "react";
-import styled from "styled-components";
 import {useSiteNavigation} from "@/components/providers/site-navigation-provider";
 import AnimatedMenuCircle from "@/components/navigation/button/animated-menu-circle";
 import AnimatedMenuIcon from "@/components/navigation/button/animated-menu-icon";
 import {useMenuCrashState} from "@/hooks/useMenuCrashState";
+import {BoxStyled} from "@/components/navigation/button/navbar-button.styled";
 
-const BoxStyled = styled.button`
-    position: relative;
-    width: max-content;
-    aspect-ratio: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    pointer-events: all;
-    z-index: 100;
-`
 
 const NavbarButton = ({width = '2vw'}) => {
     const {isOpen, toggleMenu} = useSiteNavigation();

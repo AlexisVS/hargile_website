@@ -208,33 +208,31 @@ export const SelectButton = styled.button.attrs({
   background-color: #19103b;
   color: white;
   border-radius: 0.375rem;
-  padding: 1rem;
-  padding-right: 2.5rem;
+  padding: 1rem 2.5rem 1rem 1rem;
   outline: none;
-  border: 1px solid
-    ${(props) => (props.hasError ? "#EF4444" : "rgba(107, 33, 168, 0.1)")};
+  /* FIXED: Added $ prefix to hasError prop */
+  border: 1px solid ${(props) => (props.$hasError ? "#EF4444" : "rgba(107, 33, 168, 0.1)")};
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
 
   span.text-content {
-    /* Added a specific class for the text content */
     display: block;
-    width: calc(100% - 2rem); /* Adjust width to make space for the icon */
-    text-align: center; /* Changed from center to left */
+    width: calc(100% - 2rem);
+    text-align: center;
   }
 
   .icon {
     position: absolute;
     top: 0;
     bottom: 0;
-    right: 0; /* Keep icon at the right */
+    right: 0;
     display: flex;
     align-items: center;
     padding-right: 0.75rem;
     color: white;
-    pointer-events: none; /* Make sure clicks pass through to the button */
+    pointer-events: none;
 
     .icon-up,
     .icon-down {
@@ -355,19 +353,19 @@ export const SubmitButton = styled.button.attrs({
   className: "fluid-type-0", // Keep your responsive font class
 })`
   margin-top: auto; /* Pushes to bottom if in a flex column like ServiceTypesColumn */
-  padding-top: 1.5rem; /* Ensure space above if content before it is dynamic */
+  /* Ensure space above if content before it is dynamic */
 
   /* Define accent color and its RGB components (fallback if CSS vars not set) */
   --accent-color: var(
-    --color-accent-mihai,
-    #6366f1
+      --color-accent-mihai,
+      #6366f1
   ); /* Indigo-500 as a fallback */
   --accent-color-rgb: var(--color-accent-mihai-rgb, 99, 102, 241);
 
   background: linear-gradient(
-    135deg,
-    var(--accent-color) 0%,
-    color-mix(in srgb, var(--accent-color) 70%, #4f46e5) 100%
+      135deg,
+      var(--accent-color) 0%,
+      color-mix(in srgb, var(--accent-color) 70%, #4f46e5) 100%
   ); /* Gradient with a slightly darker shade */
   color: white;
   font-weight: 600; /* Bolder */
@@ -383,19 +381,19 @@ export const SubmitButton = styled.button.attrs({
 
   /* Subtle shadow for depth */
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1),
-    0 2px 8px rgba(var(--accent-color-rgb), 0.2); /* Shadow with accent color tint */
+  0 2px 8px rgba(var(--accent-color-rgb), 0.2); /* Shadow with accent color tint */
 
   &:hover:not(:disabled) {
     transform: translateY(-2px) scale(1.01); /* Slight lift and scale */
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15),
-      0 4px 12px rgba(var(--accent-color-rgb), 0.3); /* Enhanced shadow */
+    0 4px 12px rgba(var(--accent-color-rgb), 0.3); /* Enhanced shadow */
     /* You could also change the gradient slightly on hover if desired */
   }
 
   &:active:not(:disabled) {
     transform: translateY(0px) scale(0.99); /* Press down effect */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1),
-      0 1px 6px rgba(var(--accent-color-rgb), 0.2);
+    0 1px 6px rgba(var(--accent-color-rgb), 0.2);
   }
 
   &:focus-visible {
@@ -403,14 +401,14 @@ export const SubmitButton = styled.button.attrs({
     outline: none;
     box-shadow: 0 0 0 3px rgba(var(--accent-color-rgb), 0.4),
       /* Outer ring */ 0 4px 15px rgba(0, 0, 0, 0.1),
-      0 2px 8px rgba(var(--accent-color-rgb), 0.2);
+    0 2px 8px rgba(var(--accent-color-rgb), 0.2);
   }
 
   &:disabled {
     background: linear-gradient(
-      135deg,
-      #6b7280 0%,
-      #4b5563 100%
+        135deg,
+        #6b7280 0%,
+        #4b5563 100%
     ); /* Tailwind Gray-500 to Gray-600 */
     color: rgba(255, 255, 255, 0.5);
     cursor: not-allowed;
@@ -438,41 +436,42 @@ export const RequiredNote = styled.p`
 
 
 export const StatusMessageDisplay = styled.div`
-  margin-top: 1.5rem; /* Space above the message */
-  padding: 1rem 1.5rem; /* Padding inside */
-  border-radius: 0.75rem; /* Rounded corners */
-  text-align: center;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: white; /* Default text color */
+    margin-top: 1.5rem; /* Space above the message */
+    padding: 1rem 1.5rem; /* Padding inside */
+    border-radius: 0.75rem; /* Rounded corners */
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: white; /* Default text color */
 
-  /* Glassmorphism effect */
-  background-color: ${(props) =>
-    props.success === true
-      ? "rgba(40, 167, 69, 0.65)" /* Greenish glass for success */
-      : props.success === false
-      ? "rgba(220, 53, 69, 0.65)" /* Reddish glass for error */
-      : "rgba(50, 50, 80, 0.65)"}; /* Neutral/blueish glass for other states (e.g. pending - though not used here) */
+    /* Glassmorphism effect */
+    background-color: ${(props) =>
+            props.$success === true
+                    ? "rgba(40, 167, 69, 0.65)" /* Greenish glass for success */
+                    : props.$success === false
+                            ? "rgba(220, 53, 69, 0.65)" /* Reddish glass for error */
+                            : "rgba(50, 50, 80, 0.65)"}; /* Neutral/blueish glass for other states */
 
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px); /* Safari support */
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px); /* Safari support */
 
-  border: 1px solid
-    ${(props) =>
-      props.success === true
-        ? "rgba(40, 167, 69, 0.8)"
-        : props.success === false
-        ? "rgba(220, 53, 69, 0.8)"
-        : "rgba(100, 100, 150, 0.5)"};
+    /* FIXED: Added $ prefix to success props */
+    border: 1px solid ${(props) =>
+            props.$success === true
+                    ? "rgba(40, 167, 69, 0.8)"
+                    : props.$success === false
+                            ? "rgba(220, 53, 69, 0.8)"
+                            : "rgba(100, 100, 150, 0.5)"};
 
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 
-  /* Animation for appearing (optional) */
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-  opacity: ${(props) => (props.$show ? 1 : 0)};
-  transform: ${(props) => (props.$show ? "translateY(0)" : "translateY(-10px)")};
-  visibility: ${(props) =>
-    props.$show
-      ? "visible"
-      : "hidden"}; /* Ensure it's not interactable when hidden */
+    /* Animation for appearing (optional) */
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    opacity: ${(props) => (props.$show ? 1 : 0)};
+    transform: ${(props) => (props.$show ? "translateY(0)" : "translateY(-10px)")};
+    visibility: ${(props) =>
+            props.$show
+                    ? "visible"
+                    : "hidden"}; /* Ensure it's not interactable when hidden */
 `;
+

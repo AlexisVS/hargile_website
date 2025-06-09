@@ -14,9 +14,13 @@ html {
   $line-height: list.nth($config-data, 3);
 
   @include fluid.fluid-type($min-step, $max-step);
-  font-weight: v.$font-weight-dark;
-  line-height: $line-height;
-  letter-spacing: 0.01em;
+
+  // FIXED: Wrapping declarations after nested rules in & {}
+  & {
+    font-weight: v.$font-weight-dark;
+    line-height: $line-height;
+    letter-spacing: 0.01em;
+  }
 }
 
 // Headings
@@ -28,92 +32,141 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   @include fluid.element-typography('h1');
-  margin-bottom: 0.5em;
+
+  // FIXED: Wrapping declarations after nested rules in & {}
+  & {
+    margin-bottom: 0.5em;
+  }
 }
 
 h2 {
   @include fluid.element-typography('h2');
-  margin-bottom: 0.6em;
+
+  & {
+    margin-bottom: 0.6em;
+  }
 }
 
 h3 {
   @include fluid.element-typography('h3');
-  margin-bottom: 0.7em;
+
+  & {
+    margin-bottom: 0.7em;
+  }
 }
 
 h4 {
   @include fluid.element-typography('h4');
-  margin-bottom: 0.8em;
+
+  & {
+    margin-bottom: 0.8em;
+  }
 }
 
 h5 {
   @include fluid.element-typography('h5');
-  margin-bottom: 0.9em;
+
+  & {
+    margin-bottom: 0.9em;
+  }
 }
 
 h6 {
   @include fluid.element-typography('h6');
-  margin-bottom: 1em;
+
+  & {
+    margin-bottom: 1em;
+  }
 }
 
 // Body text
 p {
   @include fluid.element-typography('p');
-  margin-bottom: 1.5em;
+
+  & {
+    margin-bottom: 1.5em;
+  }
 }
 
 // Other elements using the same pattern
 blockquote {
   @include fluid.element-typography('blockquote');
-  margin: 2em 0;
-  padding-left: 1.5em;
+
+  & {
+    margin: 2em 0;
+    padding-left: 1.5em;
+  }
 }
 
 pre {
   @include fluid.element-typography('pre');
-  padding: 1.5em;
-  background: rgba(var(--color-primary-rgb, 0, 0, 0), 0.05);
+
+  & {
+    padding: 1.5em;
+    background: rgba(var(--color-primary-rgb, 0, 0, 0), 0.05);
+  }
 }
 
 code {
   @include fluid.element-typography('code');
-  font-family: monospace;
-  background: rgba(var(--color-primary-rgb, 0, 0, 0), 0.1);
-  padding: 0.2em 0.4em;
+
+  & {
+    font-family: monospace;
+    background: rgba(var(--color-primary-rgb, 0, 0, 0), 0.1);
+    padding: 0.2em 0.4em;
+  }
 }
 
 // Lists
 ul, ol {
   @include fluid.element-typography('ul, ol');
-  margin-bottom: 1.5em;
-  padding-left: 1.5em;
+
+  & {
+    margin-bottom: 1.5em;
+    padding-left: 1.5em;
+  }
 }
 
 li {
   @include fluid.element-typography('li');
-  margin-bottom: 0.5em;
+
+  & {
+    margin-bottom: 0.5em;
+  }
 }
 
 // Form elements
 button, input, select, textarea {
   @include fluid.element-typography('button, input, select, textarea');
-  padding: 0.5em 0em;
+
+  & {
+    padding: 0.5em 0;
+  }
 }
 
 label {
   @include fluid.element-typography('label');
-  margin-bottom: 0.5em;
+
+  & {
+    margin-bottom: 0.5em;
+  }
 }
 
 // Tables
 table {
   @include fluid.element-typography('table');
-  margin-bottom: 2em;
+
+  & {
+    margin-bottom: 2em;
+  }
 }
 
 th {
   @include fluid.element-typography('th');
-  font-weight: v.$font-weight-dark;
+
+  & {
+    font-weight: v.$font-weight-dark;
+  }
 }
 
 td {
@@ -131,7 +184,10 @@ sup, sub {
 
 address {
   @include fluid.element-typography('address');
-  font-style: normal;
+
+  & {
+    font-style: normal;
+  }
 }
 
 time {
@@ -140,5 +196,8 @@ time {
 
 a {
   @include fluid.element-typography('a');
-  text-decoration: underline;
+
+  & {
+    text-decoration: underline;
+  }
 }

@@ -11,7 +11,7 @@ const nextConfig = {
         formats: ['image/avif', 'image/webp'],
         deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
         imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-        domains: [process.env.NEXT_PUBLIC_SITE_URL],
+        // Removed 'domains' property as it's deprecated
         remotePatterns: [
             {
                 protocol: 'https',
@@ -19,7 +19,17 @@ const nextConfig = {
                 port: '',
                 pathname: '/images/**',
             },
+            // If you need to allow all paths on your domain, add this pattern
+            {
+                protocol: 'https',
+                hostname: process.env.NEXT_PUBLIC_SITE_URL,
+                port: '',
+                pathname: '/**', // This covers all paths
+            },
         ],
+    },
+    experimental: {
+        reactCompiler: true,
     },
 };
 

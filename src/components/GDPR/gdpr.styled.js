@@ -8,7 +8,7 @@ export const CookieBanner = styled.div`
     background-color: rgba(17, 12, 41, 0.95);
     backdrop-filter: blur(12px);
     color: var(--color-text-light);
-    z-index: 50;
+    z-index: 100000;
     border-top: 1px solid rgba(147, 51, 234, 0.2);
     box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.25);
 `;
@@ -109,7 +109,7 @@ export const ModalOverlay = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 50;
+    z-index: 100000;
     padding: 1rem;
 `;
 

@@ -8,7 +8,8 @@ export const SectionContainer = styled.section`
     width: 100%;
     display: flex;
     flex-direction: column;
-    padding: 15vh 0;
+    padding-bottom: calc(15vh + 3vw);
+    padding-top: calc(15vh + 8vw);
     justify-content: center;
     overflow: hidden;
 

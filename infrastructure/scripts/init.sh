@@ -207,9 +207,15 @@ docker compose stop nginx || docker-compose stop nginx
 
 # Renouveler le certificat avec IPv4 uniquement pour éviter les problèmes
 docker run --rm -p 80:80 -p 443:443 \
-  -v $PWD/certbot-etc:/etc/letsencrypt \
-  -v $PWD/certbot-var:/var/lib/letsencrypt \
-  certbot/certbot renew --preferred-ip-version ipv4
+  -v "$PWD"/certbot-etc:/etc/letsencrypt \
+  -v "$PWD"/certbot-var:/var/lib/letsencrypt \
+  certbot/certbot certonly --standalone \
+  --non-interactive \
+  --agree-tos \
+  --expand \
+  -m "$EMAIL" \
+  $(echo "$KNOWN_DOMAINS" | tr ',' '\n' | sed 's/^/-d /')
+
 
 # Redémarrer Nginx
 docker compose start nginx || docker-compose start nginx
@@ -273,13 +279,14 @@ if [ "$CERTS_VALID" = false ]; then
   log_info "Domaines inclus: $DOMAIN_PARAMS"
 
   # Utilisation de l'option preferred-ip-version pour forcer IPv4
-  docker run --rm -it -p 80:80 -p 443:443 \
-    -v $PWD/certbot-etc:/etc/letsencrypt \
-    -v $PWD/certbot-var:/var/lib/letsencrypt \
-    certbot/certbot certonly --standalone \
-    --preferred-ip-version ipv4 \
-    --email $EMAIL --agree-tos --no-eff-email \
-    $DOMAIN_PARAMS
+docker run --rm -p 80:80 -p 443:443 \
+  -v "$PWD"/certbot-etc:/etc/letsencrypt \
+  -v "$PWD"/certbot-var:/var/lib/letsencrypt \
+  certbot/certbot certonly --standalone \
+  --non-interactive \
+  --agree-tos \
+  -m "$EMAIL" \
+  $(echo "$KNOWN_DOMAINS" | tr ',' '\n' | sed 's/^/-d /')
 
   if [ $? -eq 0 ]; then
     log_success "Certificats SSL obtenus avec succès."
