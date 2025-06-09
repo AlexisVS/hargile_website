@@ -19,7 +19,6 @@ export const SectionTitle = styled.h2.attrs({
 })`
     margin-bottom: 2rem;
     color: var(--color-text-light);
-    width: 19ch;
 
     .accent {
         color: var(--color-accent-mihai);

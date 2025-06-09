@@ -1,101 +1,83 @@
 // src/components/pages/homepage/recent-works/recent-works.styled.js
+// Styles copied from your Portfolio Page for perfect consistency
+
 import styled from "styled-components";
-import { Link } from "@/i18n/navigation";
-import {TransitionLink} from "@/components/TransitionLink";
+import { motion } from "framer-motion";
 
-export const SectionContainer = styled.section`
-    position: relative;
-    width: 100%;
-    min-height: 75vh; /* Adjusted for better vertical space */
-    padding: 10vh 0; /* Increased vertical padding */
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+export const RecentWorksSection = styled.section`
+  color: white;
+  position: relative;
+  padding: 4rem 2rem; /* Consistent padding */
+
+  @media (min-width: 768px) {
+    padding: 6rem 4rem;
+  }
 `;
 
-export const SectionTitle = styled.h2.attrs({
-    className: 'fluid-type-4'
-})`
-    position: relative;
-    margin-bottom: calc(18vh); /* Adjusted spacing */
-    color: var(--color-text-light);
-    text-align: center; /* Centered title */
-    width: 100%;
-    z-index: 10;
-
-    @media screen and (min-width: 650px) {
-        margin-bottom: calc(14vh - 0.5vw); /* Adjusted spacing */
-    }
+export const ContentContainer = styled.div`
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
 `;
 
-export const WorksGrid = styled.div`
-    display: grid;
-    grid-template-columns: repeat(1, minmax(280px, max-content));
-    grid-gap: 4vw;
+export const SectionTitle = styled.h2`
+  font-size: 2.25rem; /* Larger title for the homepage section */
+  font-weight: 700;
+  color: white;
+  text-align: center; /* Center the title */
+  margin-bottom: 3rem;
+
+  @media (min-width: 768px) {
+    font-size: 3.5rem;
     margin-bottom: 4rem;
-    position: relative; /* Enable positioning for parallax children */
-    width: 90%; /* Increased width for better display */
-    margin-left: auto;
-    margin-right: auto;
-    justify-content: center;
-    min-height: 40vh; /* Ensures minimum height for cards */
-
-    .work-card-wrapper {
-        position: relative;
-        will-change: transform;
-        height: auto;
-    }
-
-    @media (min-width: 650px) {
-        grid-template-columns: repeat(3, 1fr);
-        grid-gap: 3vw; /* Slightly reduced gap for better alignment */
-        width: 100%;
-        min-height: 40vh; /* Ensure enough height for parallax */
-
-        .work-card-container {
-            height: 40vh;
-        }
-    }
+  }
 `;
 
-export const OurWorksLink = styled.div`
-    margin-top: calc(1vw + 2vh);
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
+// This is the key part - an exact copy of your portfolio grid style
+export const ProjectsGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
 
-    @media screen  and  (min-width: 650px) {
-        margin-top: calc(2vw + 2vh);
-    }
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3.5rem;
+  }
 `;
 
-export const SectionLink = styled(TransitionLink)`
-    display: inline-block;
-    color: var(--color-text-light);
-    font-size: 1.125rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: transform 0.3s ease;
-    position: relative; /* Allow for absolute positioning of pseudo-elements */
+// A nice button, similar to your portfolio CTA button
+export const ViewAllButton = styled(motion.a)`
+  display: inline-block;
+  --cta-accent-color: #6366f1;
+  --cta-accent-color-rgb: 99, 102, 241;
 
-    &:after {
-        content: '';
-        position: absolute;
-        bottom: -4px;
-        left: 0;
-        width: 0;
-        height: 1px;
-        background-color: var(--color-text-light);
-        transition: width 0.3s ease;
-    }
+  background: linear-gradient(
+    135deg,
+    var(--cta-accent-color) 0%,
+    color-mix(in srgb, var(--cta-accent-color) 75%, black 10%) 100%
+  );
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+  padding: 0.85rem 2.25rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
 
-    &:hover {
-        transform: translateX(5px);
+  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(var(--cta-accent-color-rgb), 0.25);
 
-        &:after {
-            width: 100%;
-        }
-    }
+  &:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15),
+      0 4px 12px rgba(var(--cta-accent-color-rgb), 0.35);
+  }
 `;

@@ -61,6 +61,7 @@ const Footer = () => {
                         {t('address.line2')}<br/>
                         {t('address.line3')}
                     </Address>
+
                     <dl>
                         <dd>{t('contact.general')}</dd>
                         <dt>
