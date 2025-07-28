@@ -65,8 +65,8 @@ const Footer = () => {
                     <dl>
                         <dd>{t('contact.general')}</dd>
                         <dt>
-                            <FooterLinkStyled target={'_blank'} href="mailto:info@hargile.com">
-                                info@hargile.com
+                            <FooterLinkStyled target={'_blank'} href="mailto:contact@hargile.com">
+                                contact@hargile.com
                             </FooterLinkStyled>
                         </dt>
 
@@ -77,12 +77,12 @@ const Footer = () => {
                             </FooterLinkStyled>
                         </dt>
 
-                        <dd>{t('contact.administration')}</dd>
-                        <dt>
-                            <FooterLinkStyled target={'_blank'} href="mailto:pascal.l@hargile.com">
-                                pascal.l@hargile.com
-                            </FooterLinkStyled>
-                        </dt>
+                        {/*<dd>{t('contact.administration')}</dd>*/}
+                        {/*<dt>*/}
+                        {/*    <FooterLinkStyled target={'_blank'} href="mailto:pascal.l@hargile.com">*/}
+                        {/*        pascal.l@hargile.com*/}
+                        {/*    </FooterLinkStyled>*/}
+                        {/*</dt>*/}
                     </dl>
                 </ColumnStyled>
 
