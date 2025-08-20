@@ -24,20 +24,27 @@ export const useNavigationVisibility = (isOpen) => {
 
         if (isOpen) {
             setMenuItemDisplayed(true);
-
-            const visibilityTimer = setTimeout(() => {
-                setNavigationVisible(true);
-            }, 50);
-
-            timers.current.push(visibilityTimer);
+            setNavigationVisible(true);
         } else {
-            setNavigationVisible(false);
+            // Calculate timing based on actual number of menu items
+            const menuItems = document.querySelectorAll('.navbar__navigation__item');
+            const totalItems = menuItems.length;
+            const staggerDelay = 60;
+            const animationDuration = 300;
+            
+            // Last item starts at (totalItems-1) * staggerDelay and takes animationDuration to complete
+            const totalMenuItemsAnimationTime = (totalItems - 1) * staggerDelay + animationDuration;
+            
+            // Keep background fully visible until ALL menu items are completely gone
+            const visibilityTimer = setTimeout(() => {
+                setNavigationVisible(false);
+            }, totalMenuItemsAnimationTime + 100); // Wait extra time to ensure last item is fully gone
 
             const hideTimer = setTimeout(() => {
                 setMenuItemDisplayed(false);
-            }, 800);
+            }, totalMenuItemsAnimationTime + 700); // Background fade duration + cleanup
 
-            timers.current.push(hideTimer);
+            timers.current.push(visibilityTimer, hideTimer);
         }
     }, [isOpen]);
 

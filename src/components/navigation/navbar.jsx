@@ -9,13 +9,24 @@ import {useMenuItems} from "@/hooks/useMenuItems";
 import {useNavigationVisibility} from "@/hooks/useNavigationVisibility";
 import {useTranslations} from "next-intl";
 import LanguageSelector from "@/app/[locale]/components/language-selector/language-selector";
+import {SiGithub, SiGooglemaps, SiInstagram, SiYoutube} from "@icons-pack/react-simple-icons";
+import {LucideLinkedin} from "lucide-react";
 import {
     Brand,
     NavbarMenuButtons,
     NavbarNavigation,
     Spacer,
     StyledLink,
-    StyledNavbar
+    StyledNavbar,
+    MenuItemsContainer,
+    MenuLabel,
+    ContactInfo,
+    ContactEmail,
+    ContactPhone,
+    ContactAddress,
+    SocialIcons,
+    SocialIcon,
+    CloseButton
 } from "@/components/navigation/navbar.styled";
 import {BLACK_SCREEN_DURATION, TRANSITION_DURATION, usePageTransition} from '@/components/TransitionLink';
 
@@ -31,6 +42,7 @@ const menuItems = [
 
 const Navbar = () => {
     const {isOpen, closeMenu} = useSiteNavigation();
+    console.log('Menu is open:', isOpen);
     const router = useRouter();
     const navbarRef = useRef(null);
     const brandRef = useRef(null);
@@ -133,16 +145,59 @@ const Navbar = () => {
                     $visible={navigationVisible}
                     data-lenis-prevent
                 >
-                    {menuItems.map((item, index) => (
-                        <StyledLink
-                            onClick={handleMenuItemClick}
-                            key={index}
-                            className="navbar__navigation__item"
-                            href={item.path}
-                        >
-                            {t(item.id)}
-                        </StyledLink>
-                    ))}
+                    <CloseButton onClick={closeMenu} aria-label="Close menu">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </CloseButton>
+                    
+                    <MenuLabel>MENU</MenuLabel>
+                    
+                    <MenuItemsContainer>
+                        {menuItems.map((item, index) => (
+                            <StyledLink
+                                onClick={handleMenuItemClick}
+                                key={index}
+                                className="navbar__navigation__item"
+                                href={item.path}
+                            >
+                                {t(item.id)}
+                            </StyledLink>
+                        ))}
+                    </MenuItemsContainer>
+                    
+                    <ContactInfo>
+                        <ContactEmail href="mailto:contact@hargile.com">
+                            contact@hargile.com
+                        </ContactEmail>
+                        <ContactPhone href="mailto:charles.dl@hargile.com">
+                            charles.dl@hargile.com
+                        </ContactPhone>
+                        <ContactAddress>
+                            Rue Sterckx 5, bt. 28<br/>
+                            1060 Saint-Gilles<br/>
+                            Belgium
+                        </ContactAddress>
+                    </ContactInfo>
+                    
+                    <SocialIcons>
+                        <SocialIcon href="https://www.instagram.com/hargile_is/" target="_blank" aria-label="Instagram">
+                            <SiInstagram size="22px" />
+                        </SocialIcon>
+                        <SocialIcon href="https://www.linkedin.com/company/hargile" target="_blank" aria-label="LinkedIn">
+                            <LucideLinkedin size="22px" />
+                        </SocialIcon>
+                        <SocialIcon href="https://www.youtube.com/@HARGILEinnovativesolutions" target="_blank" aria-label="YouTube">
+                            <SiYoutube size="22px" />
+                        </SocialIcon>
+                        <SocialIcon href="https://maps.app.goo.gl/RuYC96MNXGnuPrpM7" target="_blank" aria-label="Location">
+                            <SiGooglemaps size="22px" />
+                        </SocialIcon>
+                        <SocialIcon href="https://github.com/HARGILE-innovative-solutions" target="_blank" aria-label="GitHub">
+                            <SiGithub size="22px" />
+                        </SocialIcon>
+                    </SocialIcons>
                 </NavbarNavigation>
             </StyledNavbar>
 
