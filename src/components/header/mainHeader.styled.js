@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const HeaderSection = styled.header`
     position: relative;
     margin-bottom: 3rem;
+    margin-top: 2rem;
 `;
 
 export const BackgroundBlur = styled.div`

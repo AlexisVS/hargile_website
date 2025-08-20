@@ -6,5 +6,6 @@ export const BottomLinksStyled = styled.div`
 
     @media (max-width: 640px) {
         flex-wrap: wrap;
+        gap: 1rem;
     }
 `;

@@ -24,27 +24,32 @@ const Footer = () => {
 
     const socials = [
         {
+            id: "instagram",
             title: "@hargile_is",
             icon: <SiInstagram title={"hargile"} size={iconSize}/>,
             href: "https://www.instagram.com/hargile_is/"
         },
         {
+            id: "linkedin",
             title: "HARGILE - innovative solutions",
             icon: <LucideLinkedin size={iconSize}/>,
             href: "https://www.linkedin.com/company/hargile"
         },
         {
+            id: "youtube",
             title: "@HARGILEinnovativesolutions",
             icon: <SiYoutube title={"hargile"} size={iconSize}/>,
             href: "https://www.youtube.com/@HARGILEinnovativesolutions"
         },
         {
-            title: "HARGILE innovative solutions",
+            id: "maps",
+            title: "Our Location",
             icon: <SiGooglemaps size={iconSize}/>,
             href: "https://maps.app.goo.gl/RuYC96MNXGnuPrpM7"
         },
         {
-            title: "HARGILE innovative solutions",
+            id: "github",
+            title: "HARGILE GitHub",
             icon: <SiGithub title={"hargile"} size={iconSize}/>,
             href: "https://github.com/HARGILE-innovative-solutions"
         }
@@ -112,7 +117,7 @@ const Footer = () => {
 
                     <ColumnStyled>
                         {socials.map((social) => (
-                            <SocialLinkIcon target={'_blank'} href={social.href} key={`social-${social.title}`}>
+                            <SocialLinkIcon target={'_blank'} href={social.href} key={`social-${social.id}`}>
                                 {social.icon}
                                 <span>{social.title}</span>
                             </SocialLinkIcon>
