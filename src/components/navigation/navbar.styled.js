@@ -112,14 +112,13 @@ export const NavbarNavigation = styled.nav`
     
     @media (max-width: 768px) {
         grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto auto auto;
+        grid-template-rows: auto auto auto auto;
         grid-template-areas: 
-            "logo"
             "menu-label"
             "menu-items"
             "contact-info"
             "social-icons";
-        padding: 80px 20px 20px 20px;
+        padding: 100px 20px 20px 20px;
         text-align: center;
         transform-origin: top center;
         justify-content: start;
@@ -148,9 +147,12 @@ export const MenuLogo = styled.button`
     }
     
     @media (max-width: 768px) {
-        align-self: start;
-        justify-self: center;
-        margin-bottom: 10px;
+        position: fixed;
+        left: 2rem;
+        z-index: 1002;
+        align-self: unset;
+        justify-self: unset;
+        margin-bottom: 0;
     }
 `;
 
