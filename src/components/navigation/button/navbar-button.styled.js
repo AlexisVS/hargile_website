@@ -9,8 +9,7 @@ export const BoxStyled = styled.button`
     align-items: center;
     cursor: pointer;
     pointer-events: all;
-    z-index: 100;
-    background: rgba(255, 255, 255, 0.1);
+    z-index: 1003;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
     backdrop-filter: blur(10px);
