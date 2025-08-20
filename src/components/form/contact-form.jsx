@@ -192,7 +192,7 @@ export default function ContactForm() {
             serviceCheckboxesState={activeServiceCheckboxes} // Pass local UI state
             toggleService={toggleService} // Pass function to update UI state and RHF
             serviceIds={serviceIds} // Pass list of service IDs
-            errors={errors} // Pass RHF errors for services validation feedback
+            errors={errors} // Pass RHF errors for services validation feedbacks
             isSubmitting={isSubmittingAPI} // Pass API submission state to disable button
           />
         </FormGrid>
