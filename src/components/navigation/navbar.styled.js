@@ -9,7 +9,7 @@ export const StyledNavbar = styled.div`
     left: 0;
     justify-content: space-between;
     align-items: center;
-    padding: 0 24px 0 12px;
+    padding: 1rem 24px 1rem 12px;
     z-index: 1002;
     backdrop-filter: blur(12px);
     background: rgba(0, 0, 0, 0.1);

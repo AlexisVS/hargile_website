@@ -50,7 +50,7 @@
   --color-accent-mihai: #{theme.$accent-mihai};
   --color-accent-blue-planet: #{theme.$accent-blue-planet};
 
-  --transition-duration: 600ms;
+  --transition-duration: 150ms;
 }
 
 
@@ -85,7 +85,7 @@ body {
   overflow-x: hidden;
 
   &::after {
-    //content: '';
+    content: '';
     position: fixed;
     top: 0;
     left: 0;
@@ -99,13 +99,44 @@ body {
     will-change: opacity;
   }
 
+  &::before {
+    content: '';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    border: 2px solid transparent;
+    border-top: 2px solid var(--color-accent-mihai);
+    border-radius: 50%;
+    z-index: 10000;
+    opacity: 0;
+    animation: spin 1s linear infinite;
+    transition: opacity var(--transition-duration) ease;
+    pointer-events: none;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
   &.exiting::after {
+    opacity: 1;
+  }
+
+  &.exiting::before {
     opacity: 1;
   }
 
   &.entering::after {
     opacity: 1;
     transition-duration: var(--transition-duration);
+  }
+
+  &.entering::before {
+    opacity: 1;
   }
 }
 

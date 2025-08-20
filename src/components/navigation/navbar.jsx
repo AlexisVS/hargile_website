@@ -102,9 +102,9 @@ const Navbar = () => {
                         }
                         setIsTransitioning(false);
                         setTransitionState('idle');
-                    }, TRANSITION_DURATION || 600);
-                }, BLACK_SCREEN_DURATION || 400);
-            }, TRANSITION_DURATION || 600);
+                    }, TRANSITION_DURATION || 150);
+                }, BLACK_SCREEN_DURATION || 50);
+            }, TRANSITION_DURATION || 150);
         }
     }, [isMounted, isOpen, closeMenu, router, setIsTransitioning, setTransitionState]);
 
@@ -127,7 +127,7 @@ const Navbar = () => {
                         src="/images/brand/brand-large-white.png"
                         alt="Brand Logo"
                         style={{
-                            width: "calc(100px + 6vw)",
+                            width: "16rem",
                         }}
                         priority={true}
                         fetchpriority={'high'}

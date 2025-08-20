@@ -4,8 +4,8 @@ import {createContext, useContext, useEffect, useState} from 'react';
 import {Link, useRouter} from "@/i18n/navigation";
 
 // Simple transition timing variables
-export const TRANSITION_DURATION = 600; // milliseconds
-export const BLACK_SCREEN_DURATION = 600; // milliseconds
+export const TRANSITION_DURATION = 150; // milliseconds
+export const BLACK_SCREEN_DURATION = 50; // milliseconds
 
 const PageTransitionContext = createContext({
     isTransitioning: false,
