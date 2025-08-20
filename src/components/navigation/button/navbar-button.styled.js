@@ -12,7 +12,8 @@ export const BoxStyled = styled.button`
     z-index: 1003;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
     transition: all 0.15s ease;
     
     &:hover {

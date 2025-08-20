@@ -101,9 +101,9 @@ const Navbar = () => {
                         }
                         setIsTransitioning(false);
                         setTransitionState('idle');
-                    }, TRANSITION_DURATION || 150);
-                }, BLACK_SCREEN_DURATION || 50);
-            }, TRANSITION_DURATION || 150);
+                    }, TRANSITION_DURATION || 0);
+                }, BLACK_SCREEN_DURATION || 0);
+            }, TRANSITION_DURATION || 0);
         }
     }, [isMounted, isOpen, closeMenu, router, setIsTransitioning, setTransitionState]);
 

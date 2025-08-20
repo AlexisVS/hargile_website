@@ -11,8 +11,9 @@ export const StyledNavbar = styled.div`
     align-items: center;
     padding: 1rem 24px 1rem 9.5rem;
     z-index: 1002;
-    backdrop-filter: blur(12px);
-    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(0, 0, 0, 0.3);
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     
     @media (max-width: 768px) {
@@ -52,10 +53,36 @@ export const NavbarNavigation = styled.nav`
     width: 100vw;
     height: 100vh;
     background: ${({$active}) => $active 
-        ? 'radial-gradient(circle at 30% 40%, rgba(20, 20, 40, 0.8) 0%, rgba(10, 10, 20, 0.9) 70%)' 
+        ? `
+            linear-gradient(135deg, 
+                #0a0a1a 0%, 
+                #1a1a2e 25%, 
+                #16213e 50%, 
+                #0f0f23 75%, 
+                #050510 100%
+            )
+          ` 
         : 'rgba(0, 0, 0, 0)'};
-    backdrop-filter: ${({$active}) => $active ? 'blur(25px) saturate(150%)' : 'blur(0px)'};
-    -webkit-backdrop-filter: ${({$active}) => $active ? 'blur(25px) saturate(150%)' : 'blur(0px)'};
+    
+    /* Add subtle overlay pattern for visual interest */
+    ${({$active}) => $active && `
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 70%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+    `}
+    backdrop-filter: ${({$active}) => $active ? 'blur(35px) saturate(200%)' : 'blur(0px)'};
+    -webkit-backdrop-filter: ${({$active}) => $active ? 'blur(35px) saturate(200%)' : 'blur(0px)'};
     z-index: 1001;
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -75,29 +102,13 @@ export const NavbarNavigation = styled.nav`
     pointer-events: ${({$visible}) => ($visible ? 'auto' : 'none')};
     transform: ${({$visible}) => $visible ? 'scale(1)' : 'scale(0.98)'};
     backdrop-filter: ${({$visible}) => $visible 
-        ? 'blur(25px) saturate(150%)' 
-        : 'blur(5px) saturate(100%)'};
+        ? 'blur(35px) saturate(200%)' 
+        : 'blur(10px) saturate(120%)'};
     -webkit-backdrop-filter: ${({$visible}) => $visible 
-        ? 'blur(25px) saturate(150%)' 
-        : 'blur(5px) saturate(100%)'};
+        ? 'blur(35px) saturate(200%)' 
+        : 'blur(10px) saturate(120%)'};
     transform-origin: top right;
     
-    &::before {
-        content: '';
-        position: absolute;
-        top: 34px;
-        right: 33px;
-        width: 48px;
-        height: 48px;
-        background: radial-gradient(circle, rgba(100, 150, 255, 0.4) 0%, rgba(100, 150, 255, 0.1) 40%, transparent 70%);
-        border-radius: 50%;
-        pointer-events: none;
-        opacity: ${({$active}) => $active ? '0.8' : '0'};
-        transform: ${({$active}) => $active ? 'scale(35)' : 'scale(1)'};
-        transition: all 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        transform-origin: center;
-        z-index: -1;
-    }
     
     &::after {
         content: '';
@@ -109,9 +120,9 @@ export const NavbarNavigation = styled.nav`
         background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
         border-radius: 50%;
         pointer-events: none;
-        opacity: ${({$active}) => $active ? '0.6' : '0'};
-        transform: ${({$active}) => $active ? 'scale(50)' : 'scale(0.5)'};
-        transition: all 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        opacity: ${({$visible}) => $visible ? '0.6' : '0'};
+        transform: ${({$visible}) => $visible ? 'scale(50)' : 'scale(0.5)'};
+        transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         transform-origin: center;
         z-index: -2;
     }
@@ -142,6 +153,8 @@ export const MenuItemsContainer = styled.div`
     flex-direction: column;
     gap: 20px;
     align-self: center;
+    position: relative;
+    z-index: 1;
     
     @media (max-width: 768px) {
         gap: 12px;
@@ -160,6 +173,8 @@ export const MenuLabel = styled.div`
     align-self: center;
     writing-mode: vertical-lr;
     text-orientation: mixed;
+    position: relative;
+    z-index: 1;
     
     @media (max-width: 768px) {
         writing-mode: horizontal-tb;
@@ -174,6 +189,8 @@ export const ContactInfo = styled.div`
     gap: 10px;
     align-self: center;
     text-align: right;
+    position: relative;
+    z-index: 1;
     
     @media (max-width: 768px) {
         text-align: center;
@@ -218,6 +235,8 @@ export const SocialIcons = styled.div`
     gap: 20px;
     align-self: end;
     justify-self: end;
+    position: relative;
+    z-index: 1;
     
     @media (max-width: 768px) {
         justify-self: center;
@@ -240,7 +259,8 @@ export const SocialIcon = styled.a`
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
     
     &:hover {
         color: #fff;
