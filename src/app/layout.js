@@ -1,5 +1,10 @@
 import "./styles/global.scss";
+import StyledComponentsRegistry from "@/components/StyledComponentsRegistry";
 
 export default function RootLayout({children}) {
-    return children;
+    return (
+        <StyledComponentsRegistry>
+            {children}
+        </StyledComponentsRegistry>
+    );
 }

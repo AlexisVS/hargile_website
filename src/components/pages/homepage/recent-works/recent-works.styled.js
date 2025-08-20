@@ -21,7 +21,7 @@ export const ContentContainer = styled.div`
   z-index: 1;
 `;
 
-export const SectionTitle = styled.h2`
+export const SectionTitle = styled(motion.h2)`
   font-size: 2.25rem; /* Larger title for the homepage section */
   font-weight: 700;
   color: white;
