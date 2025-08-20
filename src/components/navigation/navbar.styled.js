@@ -14,6 +14,10 @@ export const StyledNavbar = styled.div`
     backdrop-filter: blur(12px);
     background: rgba(0, 0, 0, 0.1);
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    @media (max-width: 768px) {
+        padding: 1rem 24px 1rem 12px;
+    }
 `;
 
 export const Brand = styled.button`
