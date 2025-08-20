@@ -52,6 +52,8 @@ export const NavbarNavigation = styled.nav`
     left: 0;
     width: 100vw;
     height: 100vh;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
     background: ${({$active}) => $active 
         ? `
             linear-gradient(135deg, 
@@ -142,7 +144,10 @@ export const NavbarNavigation = styled.nav`
         align-content: start;
         gap: 20px;
         height: 100vh;
-        overflow-y: auto;
+        overflow: hidden;
+        touch-action: none;
+        overscroll-behavior: none;
+        -webkit-overflow-scrolling: auto;
     }
 `;
 

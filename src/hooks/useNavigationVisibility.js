@@ -20,14 +20,19 @@ export const useNavigationVisibility = (isOpen) => {
     useEffect(() => {
         clearTimers();
 
-        // REMOVED: document.body.style.overflow = isOpen ? "hidden" : "auto";
-        // Let the ScrollManager handle this instead
-
+        // Prevent body scroll and touch actions when menu is open
         if (isOpen) {
+            document.body.style.overflow = "hidden";
+            document.body.style.touchAction = "none";
+            document.body.style.overscrollBehavior = "none";
             setMenuItemDisplayed(true);
             setNavigationVisible(true);
             setBackgroundActive(true);
         } else {
+            document.body.style.overflow = "";
+            document.body.style.touchAction = "";
+            document.body.style.overscrollBehavior = "";
+            
             // Calculate timing based on actual number of menu items
             const menuItems = document.querySelectorAll('.navbar__navigation__item');
             const totalItems = menuItems.length;
