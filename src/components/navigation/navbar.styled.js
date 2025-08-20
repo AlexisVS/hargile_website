@@ -55,7 +55,7 @@ export const NavbarNavigation = styled.nav`
     grid-template-columns: auto 1fr auto;
     grid-template-rows: auto 1fr auto;
     grid-template-areas: 
-        ". . ."
+        ". logo ."
         "menu-label menu-items contact-info"
         ". . social-icons";
     padding: 100px 80px 60px 80px;
@@ -112,8 +112,9 @@ export const NavbarNavigation = styled.nav`
     
     @media (max-width: 768px) {
         grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto auto;
+        grid-template-rows: auto auto auto auto auto;
         grid-template-areas: 
+            "logo"
             "menu-label"
             "menu-items"
             "contact-info"
@@ -126,6 +127,30 @@ export const NavbarNavigation = styled.nav`
         gap: 20px;
         height: 100vh;
         overflow-y: auto;
+    }
+`;
+
+export const MenuLogo = styled.button`
+    grid-area: logo;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    align-self: start;
+    justify-self: start;
+    transition: all 0.2s ease;
+    
+    &:hover {
+        transform: scale(1.05);
+    }
+    
+    &:active {
+        transform: scale(0.98);
+    }
+    
+    @media (max-width: 768px) {
+        align-self: start;
+        justify-self: center;
+        margin-bottom: 10px;
     }
 `;
 

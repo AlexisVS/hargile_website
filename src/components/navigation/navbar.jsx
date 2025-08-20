@@ -20,6 +20,7 @@ import {
     StyledNavbar,
     MenuItemsContainer,
     MenuLabel,
+    MenuLogo,
     ContactInfo,
     ContactEmail,
     ContactPhone,
@@ -151,6 +152,20 @@ const Navbar = () => {
                             <line x1="6" y1="6" x2="18" y2="18"></line>
                         </svg>
                     </CloseButton>
+                    
+                    <MenuLogo onClick={triggerHomeTransitionAnimation} aria-label="Go to home page">
+                        <OptimizedImage
+                            width={750}
+                            height={348}
+                            src="/images/brand/brand-large-white.png"
+                            alt="Hargile Logo"
+                            style={{
+                                width: "16rem",
+                                height: "auto",
+                            }}
+                            priority={false}
+                        />
+                    </MenuLogo>
                     
                     <MenuLabel>MENU</MenuLabel>
                     
