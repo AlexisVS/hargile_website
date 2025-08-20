@@ -144,10 +144,12 @@ export const NavbarNavigation = styled.nav`
         align-content: start;
         gap: 20px;
         height: 100vh;
-        overflow: hidden;
-        touch-action: none;
-        overscroll-behavior: none;
-        -webkit-overflow-scrolling: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
+        overscroll-behavior-x: none;
+        overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
     }
 `;
 

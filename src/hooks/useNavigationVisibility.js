@@ -20,18 +20,24 @@ export const useNavigationVisibility = (isOpen) => {
     useEffect(() => {
         clearTimers();
 
-        // Prevent body scroll and touch actions when menu is open
+        // Prevent body scroll but allow menu to scroll when menu is open
         if (isOpen) {
             document.body.style.overflow = "hidden";
-            document.body.style.touchAction = "none";
-            document.body.style.overscrollBehavior = "none";
+            document.body.style.position = "fixed";
+            document.body.style.width = "100%";
+            document.body.style.top = `-${window.scrollY}px`;
             setMenuItemDisplayed(true);
             setNavigationVisible(true);
             setBackgroundActive(true);
         } else {
+            const scrollY = document.body.style.top;
             document.body.style.overflow = "";
-            document.body.style.touchAction = "";
-            document.body.style.overscrollBehavior = "";
+            document.body.style.position = "";
+            document.body.style.width = "";
+            document.body.style.top = "";
+            if (scrollY) {
+                window.scrollTo(0, parseInt(scrollY || '0') * -1);
+            }
             
             // Calculate timing based on actual number of menu items
             const menuItems = document.querySelectorAll('.navbar__navigation__item');
