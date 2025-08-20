@@ -21,6 +21,8 @@ export const Brand = styled.button`
     background: transparent;
     border: none;
     transition: all 0.2s ease;
+    position: relative;
+    z-index: 1004;
 
     &:hover {
         box-shadow: none;
@@ -55,7 +57,7 @@ export const NavbarNavigation = styled.nav`
     grid-template-columns: auto 1fr auto;
     grid-template-rows: auto 1fr auto;
     grid-template-areas: 
-        ". logo ."
+        ". . ."
         "menu-label menu-items contact-info"
         ". . social-icons";
     padding: 100px 80px 60px 80px;
@@ -129,32 +131,6 @@ export const NavbarNavigation = styled.nav`
     }
 `;
 
-export const MenuLogo = styled.button`
-    grid-area: logo;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    align-self: start;
-    justify-self: start;
-    transition: all 0.2s ease;
-    
-    &:hover {
-        transform: scale(1.05);
-    }
-    
-    &:active {
-        transform: scale(0.98);
-    }
-    
-    @media (max-width: 768px) {
-        position: fixed;
-        left: 2rem;
-        z-index: 1002;
-        align-self: unset;
-        justify-self: unset;
-        margin-bottom: 0;
-    }
-`;
 
 export const MenuItemsContainer = styled.div`
     grid-area: menu-items;

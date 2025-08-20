@@ -20,7 +20,6 @@ import {
     StyledNavbar,
     MenuItemsContainer,
     MenuLabel,
-    MenuLogo,
     ContactInfo,
     ContactEmail,
     ContactPhone,
@@ -146,19 +145,6 @@ const Navbar = () => {
                     data-lenis-prevent
                 >
                     
-                    <MenuLogo onClick={triggerHomeTransitionAnimation} aria-label="Go to home page">
-                        <OptimizedImage
-                            width={750}
-                            height={348}
-                            src="/images/brand/brand-large-white.png"
-                            alt="Hargile Logo"
-                            style={{
-                                width: "16rem",
-                                height: "auto",
-                            }}
-                            priority={false}
-                        />
-                    </MenuLogo>
                     
                     <MenuLabel>MENU</MenuLabel>
                     
