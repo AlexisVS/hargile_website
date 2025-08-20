@@ -117,8 +117,6 @@ export const NavbarNavigation = styled.nav`
         position: absolute;
         top: 34px;
         right: 33px;
-        width: 48px;
-        height: 48px;
         background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
         border-radius: 50%;
         pointer-events: none;
@@ -137,7 +135,7 @@ export const NavbarNavigation = styled.nav`
             "menu-items"
             "contact-info"
             "social-icons";
-        padding: 100px 20px 20px 20px;
+        padding: 100px 20px 40px 20px;
         text-align: center;
         transform-origin: top center;
         justify-content: start;
