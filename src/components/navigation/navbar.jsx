@@ -52,7 +52,7 @@ const Navbar = () => {
     const [isMounted, setIsMounted] = useState(false);
 
     useMenuItems(isOpen);
-    const {navigationVisible} = useNavigationVisibility(isOpen);
+    const {navigationVisible, backgroundActive} = useNavigationVisibility(isOpen);
 
     useEffect(() => {
         setIsMounted(true);
@@ -141,7 +141,7 @@ const Navbar = () => {
 
                 <NavbarNavigation
                     className="navbar-navigation"
-                    $active={isOpen}
+                    $active={backgroundActive}
                     $visible={navigationVisible}
                     data-lenis-prevent
                 >

@@ -60,9 +60,10 @@ export const NavbarNavigation = styled.nav`
         ". . social-icons";
     padding: 100px 80px 60px 80px;
     gap: 40px;
-    transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
-                transform 0.6s cubic-bezier(0.25, 1, 0.5, 1),
-                visibility 0s linear ${({$visible}) => $visible ? '0s' : '0.6s'};
+    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                backdrop-filter 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                visibility 0s linear ${({$visible}) => $visible ? '0s' : '0.8s'};
     opacity: ${({$visible}) => ($visible ? '1' : '0')};
     visibility: ${({$visible}) => ($visible ? 'visible' : 'hidden')};
     pointer-events: ${({$visible}) => ($visible ? 'auto' : 'none')};
@@ -87,7 +88,7 @@ export const NavbarNavigation = styled.nav`
         pointer-events: none;
         opacity: ${({$active}) => $active ? '0.8' : '0'};
         transform: ${({$active}) => $active ? 'scale(35)' : 'scale(1)'};
-        transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        transition: all 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         transform-origin: center;
         z-index: -1;
     }
@@ -104,7 +105,7 @@ export const NavbarNavigation = styled.nav`
         pointer-events: none;
         opacity: ${({$active}) => $active ? '0.6' : '0'};
         transform: ${({$active}) => $active ? 'scale(50)' : 'scale(0.5)'};
-        transition: all 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+        transition: all 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         transform-origin: center;
         z-index: -2;
     }
@@ -117,9 +118,14 @@ export const NavbarNavigation = styled.nav`
             "menu-items"
             "contact-info"
             "social-icons";
-        padding: 80px 40px 40px 40px;
+        padding: 80px 20px 20px 20px;
         text-align: center;
         transform-origin: top center;
+        justify-content: start;
+        align-content: start;
+        gap: 20px;
+        height: 100vh;
+        overflow-y: auto;
     }
 `;
 
@@ -129,6 +135,12 @@ export const MenuItemsContainer = styled.div`
     flex-direction: column;
     gap: 20px;
     align-self: center;
+    
+    @media (max-width: 768px) {
+        gap: 12px;
+        align-self: start;
+        margin-top: 10px;
+    }
 `;
 
 export const MenuLabel = styled.div`
@@ -158,6 +170,8 @@ export const ContactInfo = styled.div`
     
     @media (max-width: 768px) {
         text-align: center;
+        margin-top: 15px;
+        gap: 6px;
     }
 `;
 
@@ -200,6 +214,10 @@ export const SocialIcons = styled.div`
     
     @media (max-width: 768px) {
         justify-self: center;
+        align-self: end;
+        margin-top: 10px;
+        gap: 12px;
+        margin-bottom: 10px;
     }
 `;
 
@@ -222,6 +240,12 @@ export const SocialIcon = styled.a`
         background: rgba(255, 255, 255, 0.1);
         border-color: rgba(255, 255, 255, 0.2);
         transform: translateY(-2px);
+    }
+    
+    @media (max-width: 768px) {
+        width: 38px;
+        height: 38px;
+        font-size: 20px;
     }
 `;
 
@@ -253,17 +277,16 @@ export const CloseButton = styled.button`
 export const StyledLink = styled(TransitionLink)`
     text-decoration: none;
     color: #fff;
-    font-size: clamp(3rem, 8vw, 6rem);
+    font-size: clamp(3rem, 6vw, 4rem);
+    cursor: pointer;
     font-weight: 400;
     text-transform: capitalize;
     line-height: 0.9;
     transition: all 0.2s ease;
-    cursor: pointer;
     
     &:hover {
-        color: #64ffda;
+        color: var(--color-accent-mihai);
         transform: translateX(10px);
-        text-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
     }
     
     @media (max-width: 768px) {

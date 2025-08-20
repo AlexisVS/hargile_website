@@ -5,6 +5,7 @@ import {useEffect, useRef, useState} from 'react';
 export const useNavigationVisibility = (isOpen) => {
     const [menuItemDisplayed, setMenuItemDisplayed] = useState(false);
     const [navigationVisible, setNavigationVisible] = useState(false);
+    const [backgroundActive, setBackgroundActive] = useState(false);
     const timers = useRef([]);
 
     const clearTimers = () => {
@@ -25,6 +26,7 @@ export const useNavigationVisibility = (isOpen) => {
         if (isOpen) {
             setMenuItemDisplayed(true);
             setNavigationVisible(true);
+            setBackgroundActive(true);
         } else {
             // Calculate timing based on actual number of menu items
             const menuItems = document.querySelectorAll('.navbar__navigation__item');
@@ -35,18 +37,23 @@ export const useNavigationVisibility = (isOpen) => {
             // Last item starts at (totalItems-1) * staggerDelay and takes animationDuration to complete
             const totalMenuItemsAnimationTime = (totalItems - 1) * staggerDelay + animationDuration;
             
-            // Keep background fully visible until ALL menu items are completely gone
+            // Keep background colors/blur active until menu items are gone
+            const backgroundTimer = setTimeout(() => {
+                setBackgroundActive(false);
+            }, totalMenuItemsAnimationTime + 50);
+
+            // Then start fading the background opacity
             const visibilityTimer = setTimeout(() => {
                 setNavigationVisible(false);
-            }, totalMenuItemsAnimationTime + 100); // Wait extra time to ensure last item is fully gone
+            }, totalMenuItemsAnimationTime + 100);
 
             const hideTimer = setTimeout(() => {
                 setMenuItemDisplayed(false);
-            }, totalMenuItemsAnimationTime + 700); // Background fade duration + cleanup
+            }, totalMenuItemsAnimationTime + 1000);
 
-            timers.current.push(visibilityTimer, hideTimer);
+            timers.current.push(backgroundTimer, visibilityTimer, hideTimer);
         }
     }, [isOpen]);
 
-    return {menuItemDisplayed, navigationVisible};
+    return {menuItemDisplayed, navigationVisible, backgroundActive};
 };
