@@ -128,15 +128,14 @@ export const NavbarNavigation = styled.nav`
     }
     
     @media (max-width: 768px) {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto auto;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto auto;
         grid-template-areas: 
-            "menu-label"
-            "menu-items"
-            "contact-info"
-            "social-icons";
+            "menu-items menu-label"
+            "contact-info contact-info"
+            "social-icons social-icons";
         padding: 100px 20px 40px 20px;
-        text-align: center;
+        text-align: left;
         transform-origin: top center;
         justify-content: start;
         align-content: start;
@@ -165,6 +164,7 @@ export const MenuItemsContainer = styled.div`
         gap: 12px;
         align-self: start;
         margin-top: 10px;
+        text-align: left;
     }
 `;
 
@@ -182,8 +182,12 @@ export const MenuLabel = styled.div`
     z-index: 1;
     
     @media (max-width: 768px) {
-        writing-mode: horizontal-tb;
-        text-align: center;
+        writing-mode: vertical-lr;
+        text-orientation: mixed;
+        align-self: center;
+        margin-left: 30px;
+        margin-top: 0;
+        justify-self: end;
     }
 `;
 
@@ -198,7 +202,7 @@ export const ContactInfo = styled.div`
     z-index: 1;
     
     @media (max-width: 768px) {
-        text-align: center;
+        text-align: left;
         margin-top: 15px;
         gap: 6px;
     }
@@ -220,7 +224,11 @@ export const ContactPhone = styled.a`
     text-decoration: none;
     font-size: 16px;
     font-weight: 400;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
+    
+    &:last-of-type {
+        margin-bottom: 20px;
+    }
     
     &:hover {
         text-decoration: underline;
@@ -244,7 +252,7 @@ export const SocialIcons = styled.div`
     z-index: 1;
     
     @media (max-width: 768px) {
-        justify-self: center;
+        justify-self: start;
         align-self: end;
         margin-top: 10px;
         gap: 12px;
@@ -323,10 +331,10 @@ export const StyledLink = styled(TransitionLink)`
     
     @media (max-width: 768px) {
         font-size: clamp(2.5rem, 12vw, 4rem);
-        text-align: center;
+        text-align: left;
         
         &:hover {
-            transform: translateX(0) scale(1.02);
+            transform: translateX(10px);
         }
     }
 `;

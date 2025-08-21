@@ -168,6 +168,9 @@ const Navbar = () => {
                         <ContactPhone href="mailto:charles.dl@hargile.com">
                             charles.dl@hargile.com
                         </ContactPhone>
+                        <ContactPhone href="tel:+32477045080">
+                            +32 477 04 50 80
+                        </ContactPhone>
                         <ContactAddress>
                             Rue Sterckx 5, bt. 28<br/>
                             1060 Saint-Gilles<br/>
