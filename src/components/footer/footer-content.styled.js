@@ -10,7 +10,7 @@ export const FooterContentStyled = styled.div`
     @media (min-width: 400px) {
         grid-template-columns: repeat(2, 1fr);
         column-gap: 0.75rem;
-        row-gap: 1.5rem;
+        row-gap: 1.6rem;
     }
 
     @media (min-width: 550px) {
