@@ -165,7 +165,7 @@ export function ProjectCard(
                     </CardHeader>
                     <CardBody>{description}</CardBody>
                     <CardFooter>
-                        <CardButton href={actionUrl}>{actionText}</CardButton>
+                        <CardButton href={actionUrl} target="_blank" rel="noopener noreferrer">{actionText}</CardButton>
                     </CardFooter>
                 </CardContent>
             </CardContainer>
