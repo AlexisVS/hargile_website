@@ -516,6 +516,10 @@
           "description": "Leader du scrapbooking européen et des loisirs créatifs, proposant des produits uniques (styles Azza & Izzy), outils et inspiration pour la création de beaux albums photos.",
           "subtitle": "Scrapbooking & Inspiration Créative"
         },
+        "centrespms": {
+          "description": "Accompagnement psychologique, médical et social gratuit pour les élèves de la maternelle au secondaire et leurs familles.",
+          "subtitle": "Centres Psycho-Médico-Sociaux"
+        },
         "creativeid": {
           "description": "Votre source pour les fournitures européennes de scrapbooking et de carterie.",
           "subtitle": "Inspirer Vos Loisirs Créatifs Papier"

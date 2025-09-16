@@ -1,5 +1,15 @@
 export const projectsData = [
   {
+    id: 19,
+    title: "Centres PMS de Woluwe",
+    subtitleKey: "projects.centrespms.subtitle",
+    descriptionKey: "projects.centrespms.description",
+    image: "/images/portfolio/centrespms.webp",
+    actionKey: "viewMore",
+    actionUrl: "https://pmswl.be/",
+    category: "healthcare",
+  },
+  {
     id: 18,
     title: "Delphine Simonis",
     subtitleKey: "projects.delphine.subtitle",
