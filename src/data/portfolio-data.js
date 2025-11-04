@@ -1,5 +1,25 @@
 export const projectsData = [
   {
+    id: 21,
+    title: "It's About To Go",
+    subtitleKey: "projects.itsabouttogo.subtitle",
+    descriptionKey: "projects.itsabouttogo.description",
+    image: "/images/portfolio/itsaboutogo.webp",
+    actionKey: "viewMore",
+    actionUrl: "https://itsabouttogo.com/",
+    category: "documentary",
+  },
+  {
+    id: 20,
+    title: "MY BOB",
+    subtitleKey: "projects.mybob.subtitle",
+    descriptionKey: "projects.mybob.description",
+    image: "/images/portfolio/mybob.webp",
+    actionKey: "viewMore",
+    actionUrl: "https://mybob.be/",
+    category: "ecommerce",
+  },
+  {
     id: 19,
     title: "Centres PMS de Woluwe",
     subtitleKey: "projects.centrespms.subtitle",
