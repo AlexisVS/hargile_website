@@ -52,24 +52,25 @@ const OurTeam = () => {
         })
     };
 
+    // Fixed assignment of images from teamImages folder (each image used once)
     const teamMembers = [
         {
             id: "charles",
             name: "Charles de Lalaing",
             role: t("members.charles.role"),
-            imageSrc: "/images/pages/our-story/our-team/charles.png"
+            imageSrc: "/images/teamImages/niketh-vellanki-QkSN_8XcXwQ-unsplash.jpg"
         },
         {
             id: "pascal",
             name: "Pascal Laye",
             role: t("members.pascal.role"),
-            imageSrc: "/images/pages/our-story/our-team/charles.png",
+            imageSrc: "/images/teamImages/brian-mcgowan-I0fDR8xtApA-unsplash.jpg",
         },
         {
             id: "alexis",
             name: "Alexis Van San",
             role: t("members.alexis.role"),
-            imageSrc: "/images/pages/our-story/our-team/charles.png",
+            imageSrc: "/images/teamImages/y-m-LboRnt38jpA-unsplash.jpg",
             width: 800,
             height: 800,
         },
@@ -77,7 +78,7 @@ const OurTeam = () => {
             id: "dorian",
             name: "Dorian Duraku",
             role: t("members.alexis.role"),
-            imageSrc: "/images/pages/our-story/our-team/charles.png",
+            imageSrc: "/images/teamImages/history-in-hd-e5eDHbmHprg-unsplash.jpg",
             width: 800,
             height: 800,
         },
@@ -85,7 +86,7 @@ const OurTeam = () => {
             id: "mihai",
             name: "Mihai Patap",
             role: t("members.alexis.role"),
-            imageSrc: "/images/pages/our-story/our-team/charles.png",
+            imageSrc: "/images/teamImages/alexey-sabulevskiy-14BHYPL4AqQ-unsplash.jpg",
             width: 800,
             height: 800,
         }
