@@ -99,17 +99,6 @@ class StaticPortfolioDataSource {
         category: "industrial",
       },
       {
-        id: 3,
-        title: "Artaban",
-        subtitle: "Creative Studio",
-        description:
-          "Creative portfolio website for design studio featuring bold visuals and interactive elements.",
-        image: "/images/portfolio/artaban.webp",
-        actionText: "Read Case Study",
-        actionUrl: "https://artabanstudio.com/",
-        category: "creative",
-      },
-      {
         id: 4,
         title: "Drip Drops",
         subtitle: "Fashion E-commerce",

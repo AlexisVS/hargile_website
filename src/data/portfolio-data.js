@@ -70,16 +70,6 @@ export const projectsData = [
     category: "industrial",
   },
   {
-    id: 3,
-    title: "Artaban",
-    subtitleKey: "projects.artaban.subtitle",
-    descriptionKey: "projects.artaban.description",
-    image: "/images/portfolio/artaban.webp",
-    actionKey: "readCaseStudy",
-    actionUrl: "https://artabanstudio.com/",
-    category: "creative",
-  },
-  {
     id: 4,
     title: "Drip Drops",
     subtitleKey: "projects.dripdrops.subtitle",
