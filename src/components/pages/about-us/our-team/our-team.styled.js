@@ -39,7 +39,7 @@ export const SectionTitle = styled.h2.attrs({
 export const TeamGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(1, minmax(295px, 15vw));
-    justify-content: stretch;
+    justify-content: center;
     gap: calc(4vw + 1vh);
     width: 100%;
     margin: 0 auto;
@@ -50,7 +50,13 @@ export const TeamGrid = styled.div`
 
     @media (min-width: 1024px) {
         gap: calc(1vw + 1vh);
-        grid-template-columns: repeat(auto-fit, minmax(295px, 12vw));
-        max-width: 80vw;
+        grid-template-columns: repeat(auto-fit, minmax(295px, 1fr));
+        max-width: min(1400px, 85vw);
+    }
+
+    @media (min-width: 1920px) {
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 320px));
+        max-width: 1600px;
     }
 `;
