@@ -121,16 +121,6 @@ export const projectsData = [
   },
   {
     id: 9,
-    title: "I N S P I R I T E Coaching",
-    subtitleKey: "projects.inspirite.subtitle",
-    descriptionKey: "projects.inspirite.description",
-    image: "/images/portfolio/inspirite.webp",
-    actionKey: "viewMore",
-    actionUrl: "https://inspiritecoaching.com/",
-    category: "coaching",
-  },
-  {
-    id: 10,
     title: "Alia Nature",
     subtitleKey: "projects.alianature.subtitle",
     descriptionKey: "projects.alianature.description",
