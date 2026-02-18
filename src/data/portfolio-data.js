@@ -1,5 +1,25 @@
 export const projectsData = [
   {
+    id: 23,
+    title: "VENIZI",
+    subtitleKey: "projects.venizi.subtitle",
+    descriptionKey: "projects.venizi.description",
+    image: "/images/portfolio/venizi.webp",
+    actionKey: "viewMore",
+    actionUrl: "https://www.venizi.com/",
+    category: "ecommerce",
+  },
+  {
+    id: 22,
+    title: "Fondacio",
+    subtitleKey: "projects.fondacio.subtitle",
+    descriptionKey: "projects.fondacio.description",
+    image: "/images/portfolio/fondacio.webp",
+    actionKey: "viewMore",
+    actionUrl: "https://fondacio.be/",
+    category: "corporate",
+  },
+  {
     id: 21,
     title: "It's About To Go",
     subtitleKey: "projects.itsabouttogo.subtitle",

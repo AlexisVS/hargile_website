@@ -575,6 +575,14 @@
         "trussogne": {
           "description": "Gîte de charme tout confort en Ardennes belges, idéal pour les séjours en famille ou entre amis, avec services bien-être et traiteur.",
           "subtitle": "Séjour Nature et Confort en Ardennes"
+        },
+        "fondacio": {
+          "description": "Mouvement chrétien international qui accompagne les personnes dans leur quête de sens, de relations authentiques et d'engagement dans la société, à travers des lieux de rencontre, des formations et des projets à portée sociale sur quatre continents.",
+          "subtitle": "Croissance Humaine & Vie Communautaire"
+        },
+        "venizi": {
+          "description": "Bijoux tendance, élégants et accessibles inspirés du savoir-faire vénitien, disponibles en ligne et dans un réseau de 50 boutiques en Belgique et en France.",
+          "subtitle": "Bijoux d'Inspiration Vénitienne"
         }
       },
       "readCaseStudy": "Lire l'étude de cas",
