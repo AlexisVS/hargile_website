@@ -1,5 +1,15 @@
 export const projectsData = [
   {
+    id: 24,
+    title: "Domaine de Puybernier",
+    subtitleKey: "projects.domainedepuy.subtitle",
+    descriptionKey: "projects.domainedepuy.description",
+    image: "/images/portfolio/domainedepuy.webp",
+    actionKey: "viewMore",
+    actionUrl: "https://domainedepuybernier.com/",
+    category: "hospitality",
+  },
+  {
     id: 23,
     title: "VENIZI",
     subtitleKey: "projects.venizi.subtitle",
