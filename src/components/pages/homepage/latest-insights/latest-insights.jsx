@@ -2,7 +2,7 @@
 
 import {useEffect, useRef, useState} from "react";
 import {useTranslations} from "next-intl";
-import {motion, useAnimation, useInView} from "framer-motion";
+import {motion, useAnimation, useInView} from "motion/react";
 import {ArrowRight} from "lucide-react";
 import {
     ContentWrapper,

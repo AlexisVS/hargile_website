@@ -1,11 +1,11 @@
 // SectionHeader.jsx
 import React from "react";
 import PropTypes from "prop-types";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 /**
  * Renders the header for a section with title and subtitle
- * Now with animations using framer-motion
+ * Now with animations using motion/react
  */
 const SectionHeader = ({ title, subtitle }) => {
   // Animation variants

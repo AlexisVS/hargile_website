@@ -1,6 +1,6 @@
 // src/components/pages/homepage/recent-works/work-card.jsx
 import {useEffect, useRef} from "react";
-import {motion, useAnimation, useInView} from "framer-motion";
+import {motion, useAnimation, useInView} from "motion/react";
 import {CardContainer, CardContent, CardDescription, CardImage, CardTitle, ImageContainer} from "./work-card.styled";
 
 const WorkCard = ({work, index, inView}) => {

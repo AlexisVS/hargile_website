@@ -20,7 +20,7 @@ import {
     ValueTitle
 } from "./about-us.styled";
 import React, {useEffect, useRef, useState} from "react";
-import {motion, useInView} from "framer-motion";
+import {motion, useInView} from "motion/react";
 import {Plus} from "lucide-react";
 
 const AboutUs = () => {

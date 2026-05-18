@@ -3,7 +3,7 @@
 
 import {useRef} from "react";
 import {useTranslations} from "next-intl";
-import {motion, useInView} from "framer-motion";
+import {motion, useInView} from "motion/react";
 import TeamMember from "./team-member";
 import {SectionContainer, SectionTitle, TeamGrid, TitleWrapper} from "./our-team.styled";
 

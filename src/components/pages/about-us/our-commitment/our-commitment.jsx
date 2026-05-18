@@ -2,7 +2,7 @@
 
 import {useTranslations} from "next-intl";
 import {useRef} from "react";
-import {motion, useInView} from "framer-motion";
+import {motion, useInView} from "motion/react";
 import {
     BubblePercentage,
     BubbleText,

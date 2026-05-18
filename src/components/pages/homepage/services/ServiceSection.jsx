@@ -1,13 +1,13 @@
 // ServiceSection.jsx
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { DOT_COLORS } from "./constants";
 import ServiceItem from "./ServiceItem";
 
 /**
  * Renders a section of services with title, icon and list of items
- * Now with animations using framer-motion
+ * Now with animations using motion/react
  */
 const ServiceSection = ({ icon, title, items, position }) => {
   const isRight = position.includes("right");

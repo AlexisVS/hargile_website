@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {motion} from "framer-motion";
+import {motion} from "motion/react";
 import {TransitionLink} from "@/components/TransitionLink";
 
 export const SolutionContainer = styled.section`

@@ -2,8 +2,6 @@
 
 import * as THREE from "three";
 import {useEffect} from "react";
-import {canvas} from "framer-motion/m";
-// import {createLight} from "@/components/testThree";
 
 export default function Orbitals() {
     useEffect(() => {

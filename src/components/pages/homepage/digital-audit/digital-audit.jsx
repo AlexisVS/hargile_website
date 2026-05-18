@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {useTranslations} from 'next-intl';
-import {useAnimation} from 'framer-motion';
+import {useAnimation} from 'motion/react';
 import {
     AuditContainer,
     ContentWrapper,

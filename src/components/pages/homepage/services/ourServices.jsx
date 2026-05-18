@@ -1,6 +1,6 @@
 import React from "react";
 import {useTranslations} from "next-intl";
-import {motion} from "framer-motion";
+import {motion} from "motion/react";
 import ServiceSection from "./ServiceSection";
 import SectionHeader from "./SectionHeader";
 import DiscoverButton from "./DiscoverButton";

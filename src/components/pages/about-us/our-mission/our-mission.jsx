@@ -3,7 +3,7 @@
 
 import {useTranslations} from "next-intl";
 import React, {useRef} from "react";
-import {motion, useInView} from "framer-motion";
+import {motion, useInView} from "motion/react";
 import {
     ConnectorLine,
     ContentWrapper,

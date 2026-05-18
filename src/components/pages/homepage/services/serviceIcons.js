@@ -1,6 +1,6 @@
 // serviceIcons.jsx
 import React from "react";
-import {motion} from "framer-motion";
+import {motion} from "motion/react";
 import {POSITIONS} from "./constants";
 // Import from lucide-react
 import {BrainCircuit, ChartNoAxesCombined, Globe, LaptopMinimalCheck,} from "lucide-react";

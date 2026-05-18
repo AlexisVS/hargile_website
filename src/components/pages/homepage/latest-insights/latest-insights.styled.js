@@ -2,7 +2,7 @@
 import styled from "styled-components";
 import {Link} from "@/i18n/navigation";
 import {TransitionLink} from "@/components/TransitionLink";
-import {motion} from "framer-motion";
+import {motion} from "motion/react";
 
 export const SectionContainer = styled.section`
     position: relative;

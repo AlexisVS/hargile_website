@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 // Styled Components and Child Components (Ensure paths are correct)
 import { Header } from "@/components/header/mainHeader";
@@ -173,7 +173,7 @@ export default function ContactForm() {
       <FormContainer>
         <Header // Assuming Header component exists
           title={t("title")}
-          titleAs={motion.h2} // Assuming framer-motion h2
+          titleAs={motion.h2} // Assuming motion h2
           description={t("description")}
           showUnderline={true}
           showBackgroundBlur={false}

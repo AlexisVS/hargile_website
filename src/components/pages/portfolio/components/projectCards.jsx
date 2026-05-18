@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import {motion} from "framer-motion";
+import {motion} from "motion/react";
 import {OptimizedImage} from "@/components/optimizedImage";
 
 // Using a completely different approach with CSS-only blur

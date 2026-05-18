@@ -2,7 +2,7 @@
 // Styles copied from your Portfolio Page for perfect consistency
 
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 export const RecentWorksSection = styled.section`
   color: white;
