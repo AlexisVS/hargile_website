@@ -1,9 +1,11 @@
+import "@/app/styles/global.scss";
 import {hasLocale, NextIntlClientProvider} from 'next-intl';
 import {notFound} from 'next/navigation';
 import {routing} from '@/i18n/routing';
 import {getMessages, setRequestLocale} from 'next-intl/server';
 import {generateSharedMetadata} from './shared-metadata';
 import {SITE_URL} from '@/lib/site-url';
+import StyledComponentsRegistry from "@/components/StyledComponentsRegistry";
 import ClientGDPRWrapper from "@/components/GDPR/ClientGDPRWrapper";
 
 export function generateStaticParams() {
@@ -27,7 +29,7 @@ export default async function LocaleLayout({children, params}) {
 
     return (
 
-        <html lang={locale || null}>
+        <html lang={locale}>
         <head>
             <meta charSet="utf-8"/>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -44,10 +46,12 @@ export default async function LocaleLayout({children, params}) {
             <link rel="manifest" href="/site.webmanifest"/>
         </head>
         <body style={{overflowX: 'hidden', minHeight: '100vh'}} suppressHydrationWarning={true}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-            {children}
-            <ClientGDPRWrapper/>
-        </NextIntlClientProvider>
+        <StyledComponentsRegistry>
+            <NextIntlClientProvider locale={locale} messages={messages}>
+                {children}
+                <ClientGDPRWrapper/>
+            </NextIntlClientProvider>
+        </StyledComponentsRegistry>
         </body>
         </html>
     );
