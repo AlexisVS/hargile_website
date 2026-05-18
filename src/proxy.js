@@ -3,7 +3,7 @@ import {routing} from '@/i18n/routing';
 
 const PUBLIC_FILE = /\.(.*)$/;
 
-export async function middleware(req) {
+export async function proxy(req) {
     // Skip middleware for static files, API routes, and Next.js internal routes
     if (
         req.nextUrl.pathname.startsWith('/_next') ||
