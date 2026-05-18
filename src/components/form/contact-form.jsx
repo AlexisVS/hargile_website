@@ -30,13 +30,13 @@ export default function ContactForm() {
   const MIN_MESSAGE_CHARS = 10;
 
   const contactFormSchema = z.object({
-    name: z.string().min(1, { message: t("validation.nameRequired") }),
+    name: z.string().min(1, { error: t("validation.nameRequired") }),
     email: z
       .string()
-      .min(1, { message: t("validation.emailRequired") })
-      .email({ message: t("validation.emailInvalid") }),
+      .min(1, { error: t("validation.emailRequired") })
+      .pipe(z.email({ error: t("validation.emailInvalid") })),
     phone: z.string().trim().optional().or(z.literal("")),
-    object: z.string().min(1, { message: t("validation.objectRequired") }),
+    object: z.string().min(1, { error: t("validation.objectRequired") }),
 
     // Schema for the main text area field, named 'description'
     description: z
@@ -48,13 +48,13 @@ export default function ContactForm() {
       })
       .pipe(
         z.string().min(MIN_MESSAGE_CHARS, {
-          message: t("validation.messageRequired", { min: MIN_MESSAGE_CHARS }), // Using 'messageRequired' key for description
+          error: t("validation.messageRequired", { min: MIN_MESSAGE_CHARS }), // Using 'messageRequired' key for description
         })
       ),
 
     services: z
       .array(z.string())
-      .min(1, { message: t("validation.serviceRequired") }),
+      .min(1, { error: t("validation.serviceRequired") }),
   });
 
   const {
