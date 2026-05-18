@@ -18,7 +18,7 @@
     "@next/third-parties": "16.2.6",
     "@plaiceholder/next": "^3.0.0",
     "@sendgrid/mail": "^8.1.5",
-    "@tailwindcss/oxide": "^4.0.13",
+    "@tailwindcss/oxide": "^4.3.0",
     "animejs": "^3.2.2",
     "babel-plugin-react-compiler": "^19.1.0-rc.2",
     "classnames": "^2.5.1",
@@ -35,21 +35,21 @@
     "react-dom": "19.2.6",
     "react-hook-form": "^7.56.3",
     "recharts": "^2.15.2",
-    "styled-components": "^6.1.15",
+    "styled-components": "^6.4.1",
     "three": "^0.184.0",
     "web-vitals": "^4.2.4",
     "zod": "^3.24.4"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.0.13",
+    "@tailwindcss/postcss": "^4.3.0",
     "@types/node": "22.14.1",
-    "autoprefixer": "^10.4.21",
+    "autoprefixer": "^10.5.0",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.6",
-    "postcss": "^8.5.3",
-    "postcss-import": "^16.1.0",
-    "sass": "^1.86",
-    "tailwindcss": "^4.0.13",
+    "postcss": "^8.5.14",
+    "postcss-import": "^16.1.1",
+    "sass": "^1.99.0",
+    "tailwindcss": "^4.3.0",
     "typescript": "5.8.3"
   }
 }
