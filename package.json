@@ -19,7 +19,6 @@
     "@plaiceholder/next": "^3.0.0",
     "@sendgrid/mail": "^8.1.6",
     "@tailwindcss/oxide": "^4.3.0",
-    "animejs": "^3.2.2",
     "babel-plugin-react-compiler": "^1.0.0",
     "classnames": "^2.5.1",
     "country-flag-icons": "^1.6.17",
