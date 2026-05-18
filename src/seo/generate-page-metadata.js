@@ -1,8 +1,8 @@
 import {getTranslations} from 'next-intl/server';
+import {SITE_URL} from '@/lib/site-url';
 
 /**
  * Generate metadata for specific page with optimized SEO descriptions
- * Maintains the same function signature and approach while enhancing descriptions
  *
  * @param {Object} params - Parameters object
  * @param pagePath dot notations
@@ -26,14 +26,13 @@ export async function generatePageMetadata({params, pagePath}) {
             namespace: `seo.pages.${pagePath}`
         });
 
-        // Base URL configuration
-        const domain = globalT('domain');
-        const baseUrl = `https://${domain}/${locale}${pagePath === 'home' ? '' : `/${pagePath.replace('.', '/')}`}`;
-        const imageUrl = `https://${domain}/images/brand/brand_large.png`;
+        // Base URL configuration (unified on SITE_URL — hargile.be)
+        const pathSuffix = pagePath === 'home' ? '' : `/${pagePath.replace('.', '/')}`;
+        const baseUrl = `${SITE_URL}/${locale}${pathSuffix}`;
+        const imageUrl = `${SITE_URL}/images/brand/brand_large.png`;
 
-        // Enhanced metadata with optimized descriptions
         return {
-            metadataBase: new URL(`https://${domain}`),
+            metadataBase: new URL(SITE_URL),
             title: pageT('title'),
             description: pageT('description'),
             applicationName: globalT('siteName'),
@@ -41,8 +40,8 @@ export async function generatePageMetadata({params, pagePath}) {
             alternates: {
                 canonical: baseUrl,
                 languages: {
-                    'fr': `https://${domain}/fr${pagePath === 'home' ? '' : `/${pagePath.replace('.', '/')}`}`,
-                    'en': `https://${domain}/en${pagePath === 'home' ? '' : `/${pagePath.replace('.', '/')}`}`,
+                    'fr': `${SITE_URL}/fr${pathSuffix}`,
+                    'en': `${SITE_URL}/en${pathSuffix}`,
                 },
             },
 

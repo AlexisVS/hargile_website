@@ -8,8 +8,7 @@ export async function buildJsonLd({locale, pagePath}) {
         const globalT = await getTranslations({locale, namespace: "seo.global"});
         const pageT = await getTranslations({locale, namespace: `seo.pages.${pagePath}`});
 
-        const domain = globalT("domain");
-        const baseUrl = `https://${domain}/${locale}${pagePath === "home" ? "" : `/${pagePath.replace(".", "/")}`}`;
+        const baseUrl = `${SITE_URL}/${locale}${pagePath === "home" ? "" : `/${pagePath.replace(".", "/")}`}`;
         const imageUrl = `${SITE_URL}/images/brand/brand_large.png`;
 
         let schemaType = "WebPage";
