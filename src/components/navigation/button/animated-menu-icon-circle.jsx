@@ -1,15 +1,12 @@
 "use client"
 
-import React, {memo, useEffect, useState} from "react";
+import React, {memo} from "react";
 import {AnimatedMenuIconCircleStyled} from "@/components/navigation/button/animated-menu-icon-circle.styled";
+import {useIsClient} from "@/hooks/useIsClient";
 
 
 const AnimatedMenuIconCircle = ({width, menuIconAnimationTime, isOpen}) => {
-    const [shouldAnimate, setShouldAnimate] = useState(false);
-
-    useEffect(() => {
-        setShouldAnimate(true);
-    }, []);
+    const shouldAnimate = useIsClient();
 
     return (
         <AnimatedMenuIconCircleStyled

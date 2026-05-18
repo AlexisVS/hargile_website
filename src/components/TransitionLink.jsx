@@ -1,7 +1,8 @@
 "use client";
 
-import {createContext, useContext, useEffect, useState} from 'react';
+import {createContext, useContext, useState} from 'react';
 import {Link, useRouter} from "@/i18n/navigation";
+import {useIsClient} from "@/hooks/useIsClient";
 
 // Simple transition timing variables
 export const TRANSITION_DURATION = 0; // milliseconds - instant navigation
@@ -43,11 +44,7 @@ export const PageTransitionProvider = ({children}) => {
 export const TransitionLink = ({href, children, className, onClick, ...props}) => {
     const router = useRouter();
     const {setIsTransitioning, setTransitionState} = usePageTransition();
-    const [isMounted, setIsMounted] = useState(false);
-
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
+    const isMounted = useIsClient();
 
     const handleClick = (e) => {
         if (!isMounted) return;

@@ -1,6 +1,6 @@
 'use client'
 
-import {Fragment, useEffect, useState} from 'react'
+import {Fragment, useState} from 'react'
 import {Dialog, DialogPanel, DialogTitle} from '@headlessui/react'
 import {useTranslations} from "next-intl";
 
@@ -16,13 +16,10 @@ export default function AuditMultiModal({onClose}) {
         industry: '',
     })
     const [loading, setLoading] = useState(false)
-    const [isFormComplete, setIsFormComplete] = useState(false)
     const [auditError, setAuditError] = useState(null);
 
-    useEffect(() => {
-        const {firstName, lastName, email, isForOwnCompany, industry} = formData
-        setIsFormComplete(!!(firstName && lastName && email && isForOwnCompany && industry))
-    }, [formData])
+    const {firstName, lastName, email, isForOwnCompany, industry} = formData
+    const isFormComplete = !!(firstName && lastName && email && isForOwnCompany && industry)
 
     const handleChange = (e) => {
         const {name, value} = e.target

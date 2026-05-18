@@ -2,33 +2,33 @@
 import Image from "next/image";
 import {useTranslations} from "next-intl";
 import {useSiteNavigation} from "@/components/providers/site-navigation-provider";
-import {useEffect, useRef} from "react";
+import {useEffect, useState} from "react";
 import {AuditLink} from "@/components/pages/homepage/hero/heroSection.styled";
+import {useIsClient} from "@/hooks/useIsClient";
 
 
 const HeroSection = () => {
     const t = useTranslations("pages.homepage.sections.hero");
     const navigation = useSiteNavigation()
-    let isMobile = true
-    const titleSize = useRef('fluid-type-3')
-
-
-    try {
-        isMobile = window.innerWidth <= 1024
-    } catch (e) {
-        isMobile = true
-    }
+    const isClient = useIsClient();
+    const [isMobile, setIsMobile] = useState(true);
 
     useEffect(() => {
-        isMobile ? titleSize.current = 'fluid-type-3' : titleSize.current = 'fluid-type-4'
-    }, [isMobile])
+        if (!isClient) return;
+        const check = () => setIsMobile(window.innerWidth <= 1024);
+        check();
+        window.addEventListener('resize', check);
+        return () => window.removeEventListener('resize', check);
+    }, [isClient]);
+
+    const titleSize = isMobile ? 'fluid-type-3' : 'fluid-type-4';
 
     return (
         <section className="min-h-screen flex flex-col justify-center">
             <div className="container">
                 <div className="flex">
                     <div className="w-full md:w-4/6 lg:w-4/5">
-                        <h1 className={titleSize.current}>
+                        <h1 className={titleSize}>
                             {t("headline.line1") + ' '}
                             <br/>
                             {t("headline.line2")}

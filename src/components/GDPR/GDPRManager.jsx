@@ -1,7 +1,9 @@
 'use client'
 
-import {createContext, useContext, useEffect, useState} from 'react'
+import {createContext, useContext, useState} from 'react'
 import {useTranslations} from 'next-intl'
+import {useIsClient} from '@/hooks/useIsClient'
+import {useLocalStorageState} from '@/hooks/useLocalStorageState'
 import {
     AlwaysActiveTag,
     BannerContainer,
@@ -50,27 +52,10 @@ const defaultConsents = {
 
 export default function GDPRManager({children}) {
     const t = useTranslations('components.gdpr')
-    const [consents, setConsents] = useState(defaultConsents)
-    const [modalState, setModalState] = useState('closed')
-    const [initialized, setInitialized] = useState(false)
-
-    useEffect(() => {
-        const storedConsents = localStorage.getItem('rgpd_consents')
-
-        if (storedConsents) {
-            try {
-                const parsedConsents = JSON.parse(storedConsents)
-                setConsents(parsedConsents)
-                setInitialized(true)
-            } catch (e) {
-                setModalState('banner')
-                setInitialized(true)
-            }
-        } else {
-            setModalState('banner')
-            setInitialized(true)
-        }
-    }, [])
+    const [consents, setConsents] = useLocalStorageState('rgpd_consents', defaultConsents)
+    const initialized = useIsClient();
+    const hasStoredConsents = initialized && typeof window !== 'undefined' && window.localStorage.getItem('rgpd_consents') !== null;
+    const [modalState, setModalState] = useState(hasStoredConsents ? 'closed' : 'banner')
 
     const updateConsent = (category, value) => {
         setConsents(prev => ({
@@ -80,31 +65,27 @@ export default function GDPRManager({children}) {
     }
 
     const acceptAll = () => {
-        const allAccepted = {
+        setConsents({
             necessary: true,
             analytics: true,
             marketing: true,
             preferences: true
-        }
-        setConsents(allAccepted)
-        localStorage.setItem('rgpd_consents', JSON.stringify(allAccepted))
+        })
         setModalState('closed')
     }
 
     const rejectAll = () => {
-        const allRejected = {
+        setConsents({
             necessary: true,
             analytics: false,
             marketing: false,
             preferences: false
-        }
-        setConsents(allRejected)
-        localStorage.setItem('rgpd_consents', JSON.stringify(allRejected))
+        })
         setModalState('closed')
     }
 
     const savePreferences = () => {
-        localStorage.setItem('rgpd_consents', JSON.stringify(consents))
+        setConsents(consents)
         setModalState('closed')
     }
 

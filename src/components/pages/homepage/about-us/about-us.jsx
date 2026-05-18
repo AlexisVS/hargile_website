@@ -22,18 +22,22 @@ import {
 import React, {useEffect, useRef, useState} from "react";
 import {motion, useInView} from "motion/react";
 import {Plus} from "lucide-react";
+import {useIsClient} from "@/hooks/useIsClient";
 
 const AboutUs = () => {
     const t = useTranslations("pages.homepage.sections.about-us");
     const sectionRef = useRef(null);
     const isInView = useInView(sectionRef, {once: true, amount: 0.2});
+    const isClient = useIsClient();
     const [windowWidth, setWindowWidth] = useState(null);
 
     useEffect(() => {
-        if (typeof window !== "undefined") {
-            setWindowWidth(window.innerWidth);
-        }
-    }, []);
+        if (!isClient) return;
+        const update = () => setWindowWidth(window.innerWidth);
+        update();
+        window.addEventListener("resize", update);
+        return () => window.removeEventListener("resize", update);
+    }, [isClient]);
 
     const stats = [
         {value: "10+", label: t("stats.years")},

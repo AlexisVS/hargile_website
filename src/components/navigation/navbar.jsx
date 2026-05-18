@@ -7,6 +7,7 @@ import {useRouter} from "@/i18n/navigation";
 import {OptimizedImage} from "@/components/optimizedImage";
 import {useMenuItems} from "@/hooks/useMenuItems";
 import {useNavigationVisibility} from "@/hooks/useNavigationVisibility";
+import {useIsClient} from "@/hooks/useIsClient";
 import {useTranslations} from "next-intl";
 import LanguageSelector from "@/app/[locale]/components/language-selector/language-selector";
 import {SiGithub, SiGooglemaps, SiInstagram, SiYoutube} from "@icons-pack/react-simple-icons";
@@ -41,21 +42,18 @@ const menuItems = [
 
 const Navbar = () => {
     const {isOpen, closeMenu} = useSiteNavigation();
-    console.log('Menu is open:', isOpen);
     const router = useRouter();
     const navbarRef = useRef(null);
     const brandRef = useRef(null);
     const [navbarHeight, setNavbarHeight] = useState(0);
     const t = useTranslations('components.menu');
     const {setIsTransitioning, setTransitionState} = usePageTransition();
-    const [isMounted, setIsMounted] = useState(false);
+    const isMounted = useIsClient();
 
     useMenuItems(isOpen);
     const {navigationVisible, backgroundActive} = useNavigationVisibility(isOpen);
 
     useEffect(() => {
-        setIsMounted(true);
-
         const updateNavbarHeight = () => {
             if (navbarRef.current) {
                 const height = navbarRef.current.offsetHeight;
@@ -69,7 +67,6 @@ const Navbar = () => {
 
         return () => {
             window.removeEventListener('resize', updateNavbarHeight);
-            setIsMounted(false);
         };
     }, []);
 

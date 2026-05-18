@@ -8,8 +8,9 @@ import Lenis from 'lenis';
 import Loading from "@/components/earth/Loading";
 
 export default function Earth({ children }) {
-    const [loading, setLoading] = useState(true);
     const [texturesLoaded, setTexturesLoaded] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const loading = !texturesLoaded;
     const canvasRef = useRef(null);
     const rendererRef = useRef(null);
     const sceneRef = useRef(null);
@@ -24,8 +25,10 @@ export default function Earth({ children }) {
     // Référence pour la position de scroll actuelle
     const scrollProgressRef = useRef(0);
     const lenisRef = useRef(null);
-
-    const loadingManager = new THREE.LoadingManager();
+    const loadingManagerRef = useRef(null);
+    if (loadingManagerRef.current === null) {
+        loadingManagerRef.current = new THREE.LoadingManager();
+    }
 
     // Fonction pour déterminer la qualité en fonction de l'appareil
     const getDeviceQuality = () => {
@@ -168,8 +171,12 @@ export default function Earth({ children }) {
         sceneRef.current.add(ambientLight);
 
         // Loading Manager
+        const loadingManager = loadingManagerRef.current;
         loadingManager.onLoad = () => {
             setTexturesLoaded(true);
+        };
+        loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
+            setProgress(Math.round((itemsLoaded / itemsTotal) * 100));
         };
 
         // Revenir aux paramètres originaux pour les textures
@@ -359,7 +366,6 @@ export default function Earth({ children }) {
         // Démarrer l'animation seulement après le chargement
         if (texturesLoaded) {
             animate();
-            setLoading(false);
         }
 
         // Nettoyage
@@ -423,7 +429,7 @@ export default function Earth({ children }) {
     return (
         <>
             {loading ? (
-                <Loading loadingManager={loadingManager} />
+                <Loading progress={progress} />
             ) : (
                 <>
                     <div ref={canvasRef} id="planet" />

@@ -1,27 +1,15 @@
 'use client'
 
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import GaugeChart from "@/components/pages/homepage/hero/GaugeChart";
 import {useTranslations} from "next-intl";
+import {useLocalStorageState} from "@/hooks/useLocalStorageState";
 
 export default function AuditResultPageClient() {
     const [showCalendar, setShowCalendar] = useState(false);
-    const [formData, setFormData] = useState(null)
-    const [auditData, setAuditData] = useState(null)
+    const [formData] = useLocalStorageState('auditFormData', null);
+    const [auditData] = useLocalStorageState('auditResult', null);
     const t = useTranslations('pages.audit-results.sections')
-
-
-    useEffect(() => {
-        const savedForm = localStorage.getItem('auditFormData')
-        const savedAudit = localStorage.getItem('auditResult')
-
-        console.log("Formulaire Sauvegardé : ", savedForm);
-
-        if (savedForm && savedAudit) {
-            setFormData(JSON.parse(savedForm))
-            setAuditData(JSON.parse(savedAudit))
-        }
-    }, [])
 
     if (!formData || !auditData) {
         return (

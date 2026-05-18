@@ -23,27 +23,31 @@ const LatestInsights = () => {
     const controls = useAnimation();
     const [scrollY, setScrollY] = useState(0);
     const [windowHeight, setWindowHeight] = useState(0);
+    const [sectionMetrics, setSectionMetrics] = useState({top: 0, height: 0});
 
-    // Track scroll position and window dimensions for parallax effect
+    // Track scroll position, window dimensions, and section rect for parallax effect
     useEffect(() => {
-        const handleResize = () => {
+        const updateMetrics = () => {
             setWindowHeight(window.innerHeight);
-        };
-
-        const handleScroll = () => {
             setScrollY(window.scrollY);
+            if (sectionRef.current) {
+                const rect = sectionRef.current.getBoundingClientRect();
+                setSectionMetrics({
+                    top: rect.top + window.scrollY,
+                    height: rect.height,
+                });
+            }
         };
 
-        // Set initial values
-        handleResize();
-        handleScroll();
+        updateMetrics();
 
+        const handleScroll = () => setScrollY(window.scrollY);
         window.addEventListener("scroll", handleScroll, {passive: true});
-        window.addEventListener("resize", handleResize, {passive: true});
+        window.addEventListener("resize", updateMetrics, {passive: true});
 
         return () => {
             window.removeEventListener("scroll", handleScroll);
-            window.removeEventListener("resize", handleResize);
+            window.removeEventListener("resize", updateMetrics);
         };
     }, []);
 
@@ -77,15 +81,10 @@ const LatestInsights = () => {
 
     // Generate unique parallax styles for each card
     const getCardParallaxStyle = (index) => {
-        if (!sectionRef.current || scrollY === 0) return {};
-
-        // Calculate section's position relative to viewport
-        const rect = sectionRef.current.getBoundingClientRect();
-        const sectionTop = rect.top + scrollY;
-        const sectionHeight = rect.height;
+        if (sectionMetrics.height === 0 || scrollY === 0) return {};
 
         // Calculate how far the user has scrolled within the section
-        const scrollProgress = (scrollY - sectionTop + windowHeight) / (sectionHeight + windowHeight);
+        const scrollProgress = (scrollY - sectionMetrics.top + windowHeight) / (sectionMetrics.height + windowHeight);
 
         // Apply different parallax factors based on card index
         // This creates a staggered effect where each card moves at a different speed

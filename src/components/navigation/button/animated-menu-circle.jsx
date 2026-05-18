@@ -1,115 +1,62 @@
 "use client"
 
-import React, {memo, useEffect, useRef} from "react";
+import React, {memo, useEffect, useReducer, useRef} from "react";
 import {AnimatedCircle, Ripple, SvgCircle} from "@/components/navigation/button/animated-menu-circle.styled";
 
 
-const AnimatedMenuCircle = ({width, menuIconAnimationTime, crashTriggered = false, isOpen}) => {
-    const circleRef = useRef(null);
-    const rippleRef = useRef(null);
-    const filterRef = useRef(null);
-    const timerRef = useRef(null);
+const INITIAL_STATE = {
+    radius: 150,
+    opacity: 0,
+    showRipple: false,
+    gaussianBlur: 2,
+};
 
-    const circleState = useRef({
-        radius: 150,
-        opacity: 0,
-        showRipple: false,
-        gaussianBlur: 2,
-    });
+const reducer = (state, patch) => ({...state, ...patch});
+
+const AnimatedMenuCircle = ({width, menuIconAnimationTime, crashTriggered = false, isOpen}) => {
+    const timersRef = useRef([]);
+    const [circleState, dispatch] = useReducer(reducer, INITIAL_STATE);
 
     const growDelay = crashTriggered ? 100 : menuIconAnimationTime;
 
     useEffect(() => {
-        if (timerRef.current) {
-            clearTimeout(timerRef.current);
-            timerRef.current = null;
-        }
-
-        const state = circleState.current;
+        const clearAll = () => {
+            timersRef.current.forEach((t) => clearTimeout(t));
+            timersRef.current = [];
+        };
+        clearAll();
 
         if (isOpen && crashTriggered) {
-            state.showRipple = true;
-            state.opacity = 1;
+            dispatch({showRipple: true, opacity: 1});
 
-            if (circleRef.current) {
-                circleRef.current.setAttribute('opacity', '1');
-            }
+            timersRef.current.push(setTimeout(() => {
+                dispatch({radius: 30000, gaussianBlur: 5});
+            }, 900));
 
-            if (rippleRef.current) {
-                rippleRef.current.style.display = 'block';
-            }
-
-            timerRef.current = setTimeout(() => {
-                state.radius = 30000;
-                state.gaussianBlur = 5;
-
-                if (circleRef.current) {
-                    circleRef.current.setAttribute('r', '30000');
-                }
-
-                if (filterRef.current) {
-                    filterRef.current.setAttribute('stdDeviation', '5');
-                }
-            }, 900);
-
-            setTimeout(() => {
-                state.showRipple = false;
-                if (rippleRef.current) {
-                    rippleRef.current.style.display = 'none';
-                }
-            }, 900);
+            timersRef.current.push(setTimeout(() => {
+                dispatch({showRipple: false});
+            }, 900));
         } else if (isOpen) {
-            state.opacity = 0;
+            dispatch({opacity: 0});
 
-            if (circleRef.current) {
-                circleRef.current.setAttribute('opacity', '0');
-            }
-
-            timerRef.current = setTimeout(() => {
-                state.opacity = 1;
-                if (circleRef.current) {
-                    circleRef.current.setAttribute('opacity', '1');
-                }
-
-                setTimeout(() => {
-                    state.radius = 30000;
-                    if (circleRef.current) {
-                        circleRef.current.setAttribute('r', '30000');
-                    }
-                }, 550);
-
-                setTimeout(() => {
-                    state.gaussianBlur = 5;
-                    if (filterRef.current) {
-                        filterRef.current.setAttribute('stdDeviation', '5');
-                    }
-                }, 750);
-            }, 40);
+            timersRef.current.push(setTimeout(() => {
+                dispatch({opacity: 1});
+                timersRef.current.push(setTimeout(() => {
+                    dispatch({radius: 30000});
+                }, 550));
+                timersRef.current.push(setTimeout(() => {
+                    dispatch({gaussianBlur: 5});
+                }, 750));
+            }, 40));
         } else {
-            state.radius = 150;
-            state.gaussianBlur = 2;
+            dispatch({radius: 150, gaussianBlur: 2});
 
-            if (circleRef.current) {
-                circleRef.current.setAttribute('r', '150');
-            }
-
-            if (filterRef.current) {
-                filterRef.current.setAttribute('stdDeviation', '2');
-            }
-
-            timerRef.current = setTimeout(() => {
-                state.opacity = 0;
-                if (circleRef.current) {
-                    circleRef.current.setAttribute('opacity', '0');
-                }
-            }, 150);
+            timersRef.current.push(setTimeout(() => {
+                dispatch({opacity: 0});
+            }, 150));
         }
 
-        return () => {
-            if (timerRef.current) {
-                clearTimeout(timerRef.current);
-            }
-        };
+        return clearAll;
     }, [isOpen, menuIconAnimationTime, crashTriggered]);
 
     return (
@@ -125,9 +72,8 @@ const AnimatedMenuCircle = ({width, menuIconAnimationTime, crashTriggered = fals
                 <defs>
                     <filter id="glowEffect" x="-50%" y="-50%" width="200%" height="200%">
                         <feGaussianBlur
-                            ref={filterRef}
                             in="SourceAlpha"
-                            stdDeviation={circleState.current.gaussianBlur}
+                            stdDeviation={circleState.gaussianBlur}
                             result="blur"
                         />
                         <feDropShadow dx="0" dy="0" stdDeviation="5" floodColor="rgba(255, 255, 255, 1)"/>
@@ -135,16 +81,14 @@ const AnimatedMenuCircle = ({width, menuIconAnimationTime, crashTriggered = fals
                 </defs>
 
                 <AnimatedCircle
-                    ref={circleRef}
                     cx="150"
                     cy="150"
-                    $r={circleState.current.radius}
-                    $opacity={circleState.current.opacity}
+                    $r={circleState.radius}
+                    $opacity={circleState.opacity}
                     filter="url(#glowEffect)"
                 />
-                {circleState.current.showRipple && (
+                {circleState.showRipple && (
                     <Ripple
-                        ref={rippleRef}
                         cx="150"
                         cy="150"
                         $opacity={0.9}

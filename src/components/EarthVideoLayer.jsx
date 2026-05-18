@@ -3,6 +3,7 @@
 import {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import {usePageTransition} from "@/components/TransitionLink";
+import {useIsClient} from "@/hooks/useIsClient";
 
 const VideoContainer = styled.div`
     position: fixed;
@@ -84,7 +85,7 @@ const EarthVideoLayer = () => {
     const [videoSrc, setVideoSrc] = useState("");
     const backgroundVideoRef = useRef(null);
     const videoElementRef = useRef(null);
-    const [isMounted, setIsMounted] = useState(false);
+    const isMounted = useIsClient();
     const {transitionState} = usePageTransition();
 
     const selectVideoResolution = () => {
@@ -98,14 +99,6 @@ const EarthVideoLayer = () => {
             return "/videos/earth/earth_540.mp4";
         }
     };
-
-    useEffect(() => {
-        setIsMounted(true);
-
-        return () => {
-            setIsMounted(false);
-        };
-    }, []);
 
     useEffect(() => {
         const handleVideoResize = () => {

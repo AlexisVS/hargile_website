@@ -1,6 +1,6 @@
 "use client"
 
-import React, {memo, useEffect, useRef} from "react";
+import React, {memo, useCallback, useEffect, useRef} from "react";
 import {CrossRippleContainer} from "@/components/navigation/button/cross-ripple-effect.styled";
 
 
@@ -11,37 +11,7 @@ export const CrossRippleEffect = ({width = '5.5vw', crashTriggered = false, isOp
     const baseWidth = typeof width === 'string' ?
         parseInt(width.replace(/[^\d.]/g, '')) * 5 : 12; // Convert to numeric value
 
-    useEffect(() => {
-        if (crashTriggered && isOpen && containerRef.current) {
-            createCrossRipples();
-        }
-
-        return () => {
-            animationsRef.current.forEach(animation => {
-                if (animation) {
-                    animation.cancel();
-                }
-            });
-            animationsRef.current = [];
-        };
-    }, [crashTriggered, isOpen, baseWidth]);
-
-    const createCrossRipples = () => {
-        if (!containerRef.current) return;
-
-        // Clear any existing ripples
-        while (containerRef.current.firstChild) {
-            containerRef.current.removeChild(containerRef.current.firstChild);
-        }
-
-        rippleCountRef.current = 2;
-        animationsRef.current = [];
-
-        // Create 3 sets of cross ripples with different delays
-        createRippleSet(2);
-    };
-
-    const createRippleSet = (setIndex) => {
+    const createRippleSet = useCallback((setIndex) => {
         if (!containerRef.current) return;
 
         // Create ripples for both diagonals of the cross
@@ -98,7 +68,37 @@ export const CrossRippleEffect = ({width = '5.5vw', crashTriggered = false, isOp
 
             rippleCountRef.current += 1
         });
-    };
+    }, [baseWidth]);
+
+    const createCrossRipples = useCallback(() => {
+        if (!containerRef.current) return;
+
+        // Clear any existing ripples
+        while (containerRef.current.firstChild) {
+            containerRef.current.removeChild(containerRef.current.firstChild);
+        }
+
+        rippleCountRef.current = 2;
+        animationsRef.current = [];
+
+        // Create 3 sets of cross ripples with different delays
+        createRippleSet(2);
+    }, [createRippleSet]);
+
+    useEffect(() => {
+        if (crashTriggered && isOpen && containerRef.current) {
+            createCrossRipples();
+        }
+
+        return () => {
+            animationsRef.current.forEach(animation => {
+                if (animation) {
+                    animation.cancel();
+                }
+            });
+            animationsRef.current = [];
+        };
+    }, [crashTriggered, isOpen, baseWidth, createCrossRipples]);
 
     return (
         <CrossRippleContainer ref={containerRef}/>

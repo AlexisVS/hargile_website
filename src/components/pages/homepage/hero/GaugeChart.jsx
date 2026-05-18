@@ -2,13 +2,14 @@
 
 import {Cell, Pie, PieChart} from 'recharts'
 import {animate, motion, useMotionValue} from 'motion/react'
-import {useEffect, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 
 const GaugeChart = ({score = 0, label = 'Score'}) => {
     const COLORS = ['#EF4444', '#F59E0B', '#22C55E'] // rouge, orange, vert
     const motionScore = useMotionValue(0)
     const [displayedScore, setDisplayedScore] = useState(0)
     const [needleAngle, setNeedleAngle] = useState(0)
+    const lastAngleRef = useRef(0)
 
     // Déterminer la couleur en fonction du score
     const getScoreColor = (score) => {
@@ -26,11 +27,12 @@ const GaugeChart = ({score = 0, label = 'Score'}) => {
             onUpdate: latest => setDisplayedScore(Math.round(latest)),
         })
 
-        const startAngle = needleAngle || 0
+        const startAngle = lastAngleRef.current
         const targetAngle = (score / 100) * 180
 
         let startTime = null
         const duration = 3000 // 3 secondes
+        let rafId = null
 
         const animateNeedle = (timestamp) => {
             if (!startTime) startTime = timestamp
@@ -40,19 +42,21 @@ const GaugeChart = ({score = 0, label = 'Score'}) => {
             const easeProgress = 1 - (1 - progress) * (1 - progress)
 
             const currentAngle = startAngle + (targetAngle - startAngle) * easeProgress
+            lastAngleRef.current = currentAngle
             setNeedleAngle(currentAngle)
 
             if (progress < 1) {
-                requestAnimationFrame(animateNeedle)
+                rafId = requestAnimationFrame(animateNeedle)
             }
         }
 
-        requestAnimationFrame(animateNeedle)
+        rafId = requestAnimationFrame(animateNeedle)
 
         return () => {
             scoreControls.stop()
+            if (rafId) cancelAnimationFrame(rafId)
         }
-    }, [score])
+    }, [score, motionScore])
 
     const scoreColor = displayedScore >= 90
         ? 'text-green-400'
