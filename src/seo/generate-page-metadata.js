@@ -83,25 +83,6 @@ export async function generatePageMetadata({params, pagePath}) {
                     'max-snippet': -1,
                 },
             },
-
-            other: {
-                'script:ld+json': {
-                    '@context': 'https://schema.org',
-                    '@type': pageT('schemaType') || 'WebPage',
-                    name: pageT('title'),
-                    description: pageT('description'),
-                    url: baseUrl,
-                    image: imageUrl,
-                    publisher: {
-                        '@type': 'Organization',
-                        name: globalT('siteName'),
-                        logo: {
-                            '@type': 'ImageObject',
-                            url: `https://${domain}/images/brand/brand_large.png`
-                        }
-                    }
-                },
-            }
         };
     } catch (error) {
         console.error('Error generating metadata:', error);

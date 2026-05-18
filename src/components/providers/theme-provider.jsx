@@ -1,13 +1,11 @@
 "use client"
 
 import {ThemeProvider as StyledThemeProvider} from "styled-components";
-import ThemeSCSSVariables from "@/app/styles/sass/theme-export.module.scss";
+import themeTokens from "@/app/styles/theme-tokens";
 
 export const ThemeProvider = ({children}) => {
-    "use client";
-
     return (
-        <StyledThemeProvider theme={ThemeSCSSVariables}>
+        <StyledThemeProvider theme={themeTokens}>
             {children}
         </StyledThemeProvider>
     );
