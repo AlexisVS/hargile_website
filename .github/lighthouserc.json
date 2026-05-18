@@ -1,0 +1,28 @@
+{
+    "ci": {
+        "collect": {
+            "settings": {
+                "preset": "desktop",
+                "throttlingMethod": "simulate",
+                "onlyCategories": [
+                    "performance",
+                    "accessibility",
+                    "best-practices",
+                    "seo"
+                ]
+            },
+            "numberOfRuns": 1
+        },
+        "assert": {
+            "preset": "lighthouse:no-pwa",
+            "assertions": {
+                "categories:performance": ["warn", {"minScore": 0.7}],
+                "categories:accessibility": ["warn", {"minScore": 0.85}],
+                "categories:best-practices": ["warn", {"minScore": 0.85}],
+                "categories:seo": ["warn", {"minScore": 0.9}],
+                "uses-text-compression": "off",
+                "csp-xss": "off"
+            }
+        }
+    }
+}
