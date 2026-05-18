@@ -28,8 +28,6 @@ import {
     SocialIcons,
     SocialIcon
 } from "@/components/navigation/navbar.styled";
-import {BLACK_SCREEN_DURATION, TRANSITION_DURATION, usePageTransition} from '@/components/TransitionLink';
-
 const menuItems = [
     {path: '/services', id: 'services'},
     {path: '/about-us', id: 'our-dna'},
@@ -47,7 +45,6 @@ const Navbar = () => {
     const brandRef = useRef(null);
     const [navbarHeight, setNavbarHeight] = useState(0);
     const t = useTranslations('components.menu');
-    const {setIsTransitioning, setTransitionState} = usePageTransition();
     const isMounted = useIsClient();
 
     useMenuItems(isOpen);
@@ -73,36 +70,10 @@ const Navbar = () => {
 
     const triggerHomeTransitionAnimation = useCallback((e) => {
         e.preventDefault();
-
         if (!isMounted) return;
-
-        if (brandRef.current) {
-            brandRef.current.classList.add('transition');
-
-            setIsTransitioning(true);
-            setTransitionState('exiting');
-
-            if (isOpen) {
-                closeMenu();
-            }
-
-            setTimeout(() => {
-                router.push('/');
-
-                setTimeout(() => {
-                    setTransitionState('entering');
-
-                    setTimeout(() => {
-                        if (brandRef.current) {
-                            brandRef.current.classList.remove('transition');
-                        }
-                        setIsTransitioning(false);
-                        setTransitionState('idle');
-                    }, TRANSITION_DURATION || 0);
-                }, BLACK_SCREEN_DURATION || 0);
-            }, TRANSITION_DURATION || 0);
-        }
-    }, [isMounted, isOpen, closeMenu, router, setIsTransitioning, setTransitionState]);
+        if (isOpen) closeMenu();
+        router.push('/');
+    }, [isMounted, isOpen, closeMenu, router]);
 
     const handleMenuItemClick = useCallback(() => {
         closeMenu();

@@ -8,7 +8,7 @@ import {FooterContainerStyled} from "@/components/footer/footer-container.styled
 import {FooterContentStyled} from "@/components/footer/footer-content.styled";
 import {BottomBarStyled} from "@/components/footer/bottom-bar.styled";
 import {BottomLinksStyled} from "@/components/footer/bottom-links.styled";
-import {TransitionLink} from "@/components/TransitionLink";
+import {Link} from "@/i18n/navigation";
 import {useTranslations} from 'next-intl';
 import {Address} from "@/components/footer/Adress.styled";
 import {Copyright} from "@/components/footer/Copyright.styled";
@@ -94,22 +94,22 @@ const Footer = () => {
                 {/* Solutions */}
                 <ColumnStyled>
                     <HeadingStyled>{t('sections.solutions')}</HeadingStyled>
-                    <FooterLinkStyled as={TransitionLink} href="/solutions/agves">AGVES</FooterLinkStyled>
-                    <FooterLinkStyled as={TransitionLink} href="/solutions/i-go">I GO</FooterLinkStyled>
-                    <FooterLinkStyled as={TransitionLink} href="/solutions/multipass">MultiPass</FooterLinkStyled>
+                    <FooterLinkStyled as={Link} href="/solutions/agves">AGVES</FooterLinkStyled>
+                    <FooterLinkStyled as={Link} href="/solutions/i-go">I GO</FooterLinkStyled>
+                    <FooterLinkStyled as={Link} href="/solutions/multipass">MultiPass</FooterLinkStyled>
                 </ColumnStyled>
 
                 {/* Services */}
                 <ColumnStyled>
                     <HeadingStyled>{t('sections.services')}</HeadingStyled>
-                    <FooterLinkStyled as={TransitionLink} href="/services">{t('sections.services')}</FooterLinkStyled>
+                    <FooterLinkStyled as={Link} href="/services">{t('sections.services')}</FooterLinkStyled>
                 </ColumnStyled>
 
                 {/* Company */}
                 <ColumnStyled>
                     <HeadingStyled>{t('sections.company')}</HeadingStyled>
-                    <FooterLinkStyled as={TransitionLink} href="/about-us">{t('links.aboutUs')}</FooterLinkStyled>
-                    <FooterLinkStyled as={TransitionLink} href="/contact">{t('links.contact')}</FooterLinkStyled>
+                    <FooterLinkStyled as={Link} href="/about-us">{t('links.aboutUs')}</FooterLinkStyled>
+                    <FooterLinkStyled as={Link} href="/contact">{t('links.contact')}</FooterLinkStyled>
                 </ColumnStyled>
 
                 <ColumnStyled>
@@ -130,9 +130,9 @@ const Footer = () => {
             <BottomBarStyled>
                 <Copyright>{t('copyright', {year: new Date().getFullYear()})}</Copyright>
                 <BottomLinksStyled>
-                    <FooterLinkStyled as={TransitionLink}
+                    <FooterLinkStyled as={Link}
                                       href="/legal/privacy-policy">{t('links.privacyPolicy')}</FooterLinkStyled>
-                    <FooterLinkStyled as={TransitionLink} href="/sitemap">{t('links.siteMap')}</FooterLinkStyled>
+                    <FooterLinkStyled as={Link} href="/sitemap">{t('links.siteMap')}</FooterLinkStyled>
                 </BottomLinksStyled>
             </BottomBarStyled>
         </FooterContainerStyled>

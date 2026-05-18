@@ -1,6 +1,6 @@
 import styled, {keyframes} from "styled-components";
 import {DOT_COLORS} from "./constants";
-import {TransitionLink} from "@/components/TransitionLink";
+import {Link} from "@/i18n/navigation";
 
 export const orbit1 = keyframes`
     0% {
@@ -48,7 +48,7 @@ export const ButtonContainer = styled.div`
     align-items: center;
 `;
 
-export const StyledLink = styled(TransitionLink).attrs({
+export const StyledLink = styled(Link).attrs({
     className: "fluid-type-0-5",
 })`
     display: flex;

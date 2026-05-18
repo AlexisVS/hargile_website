@@ -2,7 +2,6 @@
 
 import {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
-import {usePageTransition} from "@/components/TransitionLink";
 import {useIsClient} from "@/hooks/useIsClient";
 
 const VideoContainer = styled.div`
@@ -86,7 +85,6 @@ const EarthVideoLayer = () => {
     const backgroundVideoRef = useRef(null);
     const videoElementRef = useRef(null);
     const isMounted = useIsClient();
-    const {transitionState} = usePageTransition();
 
     const selectVideoResolution = () => {
         const width = window.innerWidth;
@@ -118,25 +116,12 @@ const EarthVideoLayer = () => {
         }
     }, [backgroundVideoRef, videoSrc]);
 
-    // Synchronisation lors des transitions
-    useEffect(() => {
-        if (videoElementRef.current) {
-            if (transitionState === 'entering') {
-                // Réinitialise et joue la vidéo lors de l'entrée sur une nouvelle page
-                videoElementRef.current.currentTime = 0;
-                videoElementRef.current.play();
-            }
-        }
-    }, [transitionState]);
-
     if (!isMounted) {
         return null;
     }
 
-    const isExiting = transitionState === 'exiting';
-
     return (
-        <div className={`earth-video-layer ${isExiting ? 'exiting' : ''}`} style={{position: 'fixed', top: 0}}>
+        <div className="earth-video-layer" style={{position: 'fixed', top: 0}}>
             <VideoContainer>
                 <BackgroundVideo ref={backgroundVideoRef}>
                     {videoSrc && (

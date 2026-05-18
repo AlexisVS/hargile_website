@@ -1,9 +1,9 @@
 // src/components/pages/homepage/recent-works/work-card.styled.js
 import styled from "styled-components";
 import {OptimizedImage} from "@/components/optimizedImage";
-import {TransitionLink} from "@/components/TransitionLink";
+import {Link} from "@/i18n/navigation";
 
-export const CardContainer = styled(TransitionLink)`
+export const CardContainer = styled(Link)`
     position: relative;
     display: block;
     height: 100%;

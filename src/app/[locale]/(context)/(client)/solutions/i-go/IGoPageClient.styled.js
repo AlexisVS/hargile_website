@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {motion} from "motion/react";
-import {TransitionLink} from "@/components/TransitionLink";
+import {Link} from "@/i18n/navigation";
 
 export const SolutionContainer = styled.section`
   position: relative;
@@ -84,7 +84,7 @@ export const CTASection = styled.div`
   text-align: center;
 `;
 
-export const CTAButton = styled(TransitionLink)`
+export const CTAButton = styled(Link)`
   display: inline-block;
   background: transparent;
   color: var(--color-text);

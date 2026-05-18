@@ -31,7 +31,7 @@ import {
     ToggleSlider,
     ToggleSwitch
 } from './gdpr.styled'
-import {TransitionLink} from "@/components/TransitionLink";
+import {Link} from "@/i18n/navigation";
 
 const RGPDContext = createContext(null)
 
@@ -199,9 +199,9 @@ export default function GDPRManager({children}) {
 
                             <PrivacyText>
                                 {t('privacyPolicy.description') + ' '}
-                                <TransitionLink href={"/legal/privacy-policy"}>
+                                <Link href={"/legal/privacy-policy"}>
                                     {t('privacyPolicy.link')}
-                                </TransitionLink>
+                                </Link>
                             </PrivacyText>
 
                             <ModalFooter>

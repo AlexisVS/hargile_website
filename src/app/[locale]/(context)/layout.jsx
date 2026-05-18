@@ -1,6 +1,5 @@
 "use client";
 
-import {usePageTransition} from "@/components/TransitionLink";
 import React, {useEffect, useState} from "react";
 import RootClientWrapper from "@/components/layout/RootClientWrapper";
 import {ThemeProvider} from "@/components/providers/theme-provider";
@@ -17,9 +16,6 @@ const EarthVideoLayer = dynamic(() => import("@/components/EarthVideoLayer"), {
 });
 
 export default function ContextLayout({children}) {
-    "use client"
-
-    const {isTransitioning} = usePageTransition();
     const [initialLoading, setInitialLoading] = useState(true);
 
     useEffect(() => {
@@ -75,11 +71,9 @@ export default function ContextLayout({children}) {
 
                 <ThemeProvider>
                     <RootClientWrapper>
-                        <div className={`page-transition-overlay ${isTransitioning ? 'active' : ''}`}/>
-
                         <Navbar/>
 
-                        <div className={`page-content ${!isTransitioning && !initialLoading ? 'loaded' : ''}`}>
+                        <div className={`page-content ${!initialLoading ? 'loaded' : ''}`}>
                             {children}
                         </div>
                         <AuditButton/>

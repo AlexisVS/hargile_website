@@ -11,7 +11,7 @@ import {
 } from "./our-story.styled";
 import {motion, useInView} from "motion/react";
 import React, {useRef} from "react";
-import {TransitionLink} from "@/components/TransitionLink";
+import {Link} from "@/i18n/navigation";
 
 const OurStoryContent = () => {
     const t = useTranslations("pages.about-us.sections.our-story");
@@ -74,7 +74,7 @@ const OurStoryContent = () => {
                     </motion.div>
 
                     <motion.div variants={itemVariants}>
-                        <GetInTouchButton as={TransitionLink} href="/contact">
+                        <GetInTouchButton as={Link} href="/contact">
                             {t("getInTouch")}
                         </GetInTouchButton>
                     </motion.div>

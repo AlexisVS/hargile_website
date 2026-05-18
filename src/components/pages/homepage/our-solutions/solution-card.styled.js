@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import {Link} from "@/i18n/navigation";
-import {TransitionLink} from "@/components/TransitionLink";
 
 export const CardContainer = styled.div`
     position: relative;
@@ -85,7 +84,7 @@ export const CardDescription = styled.p.attrs({
     text-align: justify;
 `;
 
-export const LearnMoreLink = styled(TransitionLink)`
+export const LearnMoreLink = styled(Link)`
     grid-area: button;
     display: flex;
     align-items: center;

@@ -1,7 +1,6 @@
 // src/components/pages/homepage/latest-insights/latest-insights.styled.js
 import styled from "styled-components";
 import {Link} from "@/i18n/navigation";
-import {TransitionLink} from "@/components/TransitionLink";
 import {motion} from "motion/react";
 
 export const SectionContainer = styled.section`
@@ -85,7 +84,7 @@ export const InsightsGrid = styled.div`
     }
 `;
 
-export const ViewAllLink = styled(TransitionLink)`
+export const ViewAllLink = styled(Link)`
     margin-top: calc(2vw + 12vh);
     align-self: flex-start;
     align-items: center;

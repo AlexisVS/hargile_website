@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {TransitionLink} from "@/components/TransitionLink";
+import {Link} from "@/i18n/navigation";
 
 export const StyledNavbar = styled.div`
     display: flex;
@@ -314,7 +314,7 @@ export const CloseButton = styled.button`
     }
 `;
 
-export const StyledLink = styled(TransitionLink)`
+export const StyledLink = styled(Link)`
     text-decoration: none;
     color: #fff;
     font-size: clamp(3rem, 6vw, 4rem);
