@@ -1,14 +1,17 @@
+const RAW_SITE = process.env.NEXT_PUBLIC_SITE_URL || 'hargile.be';
+const SITE_URL = /^https?:\/\//.test(RAW_SITE) ? RAW_SITE : `https://${RAW_SITE}`;
+
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-    siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+    siteUrl: SITE_URL,
     generateRobotsTxt: true,
     alternateRefs: [
         {
-            href: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/en`,
+            href: `${SITE_URL}/en`,
             hreflang: 'en',
         },
         {
-            href: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/fr`,
+            href: `${SITE_URL}/fr`,
             hreflang: 'fr',
         },
     ],

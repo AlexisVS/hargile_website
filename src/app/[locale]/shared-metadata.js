@@ -1,17 +1,18 @@
 // src/app/[locale]/shared-metadata.js
+import {SITE_URL} from '@/lib/site-url';
 
 export function generateSharedMetadata(params, translations) {
     const {locale} = params;
     const isDefault = locale === 'fr'; // French is the default
 
     // Base URL with locale
-    const baseUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}`;
+    const baseUrl = `${SITE_URL}/${locale}`;
 
     // Default image path (absolute URL required for OG/Twitter)
-    const imageUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/images/brand/brand_large.png`;
+    const imageUrl = `${SITE_URL}/images/brand/brand_large.png`;
 
     return {
-        metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL),
+        metadataBase: new URL(SITE_URL),
         title: {
             template: isDefault
                 ? '%s | HARGILE - Innovation digitale'
@@ -28,8 +29,8 @@ export function generateSharedMetadata(params, translations) {
         alternates: {
             canonical: baseUrl,
             languages: {
-                'fr': process.env.NEXT_PUBLIC_SITE_URL + '/fr',
-                'en': process.env.NEXT_PUBLIC_SITE_URL + '/en',
+                'fr': `${SITE_URL}/fr`,
+                'en': `${SITE_URL}/en`,
             },
         },
         // OpenGraph metadata

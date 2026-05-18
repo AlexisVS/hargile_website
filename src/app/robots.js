@@ -1,3 +1,5 @@
+import {SITE_URL} from '@/lib/site-url';
+
 export default function robots() {
     return {
         rules: {
@@ -5,6 +7,6 @@ export default function robots() {
             allow: '/',
             disallow: ['/api/', '/admin/'],
         },
-        sitemap: process.env.NEXT_PUBLIC_SITE_URL + '/sitemap.xml',
+        sitemap: `${SITE_URL}/sitemap.xml`,
     }
 }

@@ -3,6 +3,7 @@ import {notFound} from 'next/navigation';
 import {routing} from '@/i18n/routing';
 import {getMessages, setRequestLocale} from 'next-intl/server';
 import {generateSharedMetadata} from './shared-metadata';
+import {SITE_URL} from '@/lib/site-url';
 import ClientGDPRWrapper from "@/components/GDPR/ClientGDPRWrapper";
 
 export function generateStaticParams() {
@@ -34,9 +35,9 @@ export default async function LocaleLayout({children, params}) {
             <link rel="icon" href="/favicon.ico" sizes="any"/>
             <link rel="apple-touch-icon" href="/logo192.png"/>
             <meta name="robots" content="index, follow"/>
-            <link rel="alternate" hrefLang="x-default" href={process.env.NEXT_PUBLIC_SITE_URL + '/fr'}/>
-            <link rel="alternate" hrefLang="fr" href={process.env.NEXT_PUBLIC_SITE_URL + '/fr'}/>
-            <link rel="alternate" hrefLang="en" href={process.env.NEXT_PUBLIC_SITE_URL + '/en'}/>
+            <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}/fr`}/>
+            <link rel="alternate" hrefLang="fr" href={`${SITE_URL}/fr`}/>
+            <link rel="alternate" hrefLang="en" href={`${SITE_URL}/en`}/>
             <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
             <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
             <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
