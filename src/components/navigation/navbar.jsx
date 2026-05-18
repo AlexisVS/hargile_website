@@ -10,7 +10,7 @@ import {useNavigationVisibility} from "@/hooks/useNavigationVisibility";
 import {useTranslations} from "next-intl";
 import LanguageSelector from "@/app/[locale]/components/language-selector/language-selector";
 import {SiGithub, SiGooglemaps, SiInstagram, SiYoutube} from "@icons-pack/react-simple-icons";
-import {LucideLinkedin} from "lucide-react";
+import LinkedinIcon from "@/components/icons/LinkedinIcon";
 import {
     Brand,
     NavbarMenuButtons,
@@ -183,7 +183,7 @@ const Navbar = () => {
                             <SiInstagram size="22px" />
                         </SocialIcon>
                         <SocialIcon href="https://www.linkedin.com/company/hargile" target="_blank" aria-label="LinkedIn">
-                            <LucideLinkedin size="22px" />
+                            <LinkedinIcon size="22px" />
                         </SocialIcon>
                         <SocialIcon href="https://www.youtube.com/@HARGILEinnovativesolutions" target="_blank" aria-label="YouTube">
                             <SiYoutube size="22px" />

@@ -14,7 +14,7 @@ import {Address} from "@/components/footer/Adress.styled";
 import {Copyright} from "@/components/footer/Copyright.styled";
 import {SocialLinkIcon} from "@/components/footer/social-medias.styled";
 import {SiGithub, SiGooglemaps, SiInstagram, SiYoutube} from "@icons-pack/react-simple-icons";
-import {LucideLinkedin} from "lucide-react";
+import LinkedinIcon from "@/components/icons/LinkedinIcon";
 
 
 const Footer = () => {
@@ -32,7 +32,7 @@ const Footer = () => {
         {
             id: "linkedin",
             title: "HARGILE - innovative solutions",
-            icon: <LucideLinkedin size={iconSize}/>,
+            icon: <LinkedinIcon title={"hargile"} size={iconSize}/>,
             href: "https://www.linkedin.com/company/hargile"
         },
         {
