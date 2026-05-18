@@ -3,11 +3,13 @@
 import {useCallback, useSyncExternalStore} from "react";
 
 const subscribers = new Set();
+// Cache parsed values per key so that getSnapshot returns a stable
+// reference between renders. useSyncExternalStore would loop infinitely
+// if we returned a fresh JSON.parse() object each call.
+const cache = new Map(); // key → {raw, parsed}
 
 const subscribe = (callback) => {
-    const handler = (e) => {
-        if (!e || subscribers.has(callback)) callback();
-    };
+    const handler = () => callback();
     subscribers.add(callback);
     if (typeof window !== "undefined") {
         window.addEventListener("storage", handler);
@@ -24,33 +26,39 @@ const notify = () => {
     subscribers.forEach((cb) => cb());
 };
 
-const readRaw = (key) => {
-    if (typeof window === "undefined") return null;
+const readSnapshot = (key, defaultValue, deserialize) => {
+    if (typeof window === "undefined") return defaultValue;
+    let raw;
     try {
-        return window.localStorage.getItem(key);
+        raw = window.localStorage.getItem(key);
     } catch {
-        return null;
+        return defaultValue;
+    }
+    if (raw === null) {
+        cache.delete(key);
+        return defaultValue;
+    }
+    const cached = cache.get(key);
+    if (cached && cached.raw === raw) return cached.parsed;
+    try {
+        const parsed = deserialize(raw);
+        cache.set(key, {raw, parsed});
+        return parsed;
+    } catch {
+        return defaultValue;
     }
 };
 
 // React Compiler-safe `useLocalStorageState` — replaces the
 // `useEffect(() => setX(JSON.parse(localStorage.getItem(...))), [])` pattern
-// that triggers cascading renders. Returns [value, setValue].
+// that triggered cascading renders. Returns [value, setValue].
 // `serialize` defaults to JSON; pass `String`/identity for raw strings.
 export function useLocalStorageState(key, defaultValue, options = {}) {
     const {serialize = JSON.stringify, deserialize = JSON.parse} = options;
 
     const value = useSyncExternalStore(
         subscribe,
-        () => {
-            const raw = readRaw(key);
-            if (raw === null) return defaultValue;
-            try {
-                return deserialize(raw);
-            } catch {
-                return defaultValue;
-            }
-        },
+        () => readSnapshot(key, defaultValue, deserialize),
         () => defaultValue,
     );
 
@@ -61,8 +69,11 @@ export function useLocalStorageState(key, defaultValue, options = {}) {
                 const resolved = typeof next === "function" ? next(value) : next;
                 if (resolved === null || resolved === undefined) {
                     window.localStorage.removeItem(key);
+                    cache.delete(key);
                 } else {
-                    window.localStorage.setItem(key, serialize(resolved));
+                    const raw = serialize(resolved);
+                    window.localStorage.setItem(key, raw);
+                    cache.set(key, {raw, parsed: resolved});
                 }
                 notify();
             } catch {
