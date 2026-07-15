@@ -4,6 +4,9 @@
       "description": "",
       "title": "Audit your website"
     },
+    "contact-button": {
+      "title": "Contact us"
+    },
     "audit-modal": {
       "analysis-complete": "Analysis complete! Fill in your details to view the results.",
       "analyzing": "Analyzing your website... You can complete the form while we work.",
@@ -133,6 +136,7 @@
     "menu": {
       "agves": "AGVES",
       "contact": "Contact",
+      "home": "Home",
       "i-go": "I go",
       "multipass": "Multipass",
       "our-dna": "Our DNA",

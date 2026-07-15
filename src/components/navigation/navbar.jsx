@@ -29,7 +29,7 @@ import {
     SocialIcon
 } from "@/components/navigation/navbar.styled";
 const menuItems = [
-    {path: '/services', id: 'services'},
+    {path: '/', id: 'home'},
     {path: '/about-us', id: 'our-dna'},
     {path: '/contact', id: 'contact'},
 ];

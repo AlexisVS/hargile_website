@@ -3,7 +3,7 @@
 import React from 'react';
 import {FooterLinkStyled} from "@/components/footer/footer-link.styled";
 import {ColumnStyled} from "@/components/footer/column.styled";
-import {HeadingStyled} from "@/components/footer/heading.styled";
+import {HeadingStyled, BrandHeadingStyled} from "@/components/footer/heading.styled";
 import {FooterContainerStyled} from "@/components/footer/footer-container.styled";
 import {FooterContentStyled} from "@/components/footer/footer-content.styled";
 import {BottomBarStyled} from "@/components/footer/bottom-bar.styled";
@@ -60,7 +60,7 @@ const Footer = () => {
             <FooterContentStyled>
                 {/* Company info */}
                 <ColumnStyled>
-                    <HeadingStyled>Hargile</HeadingStyled>
+                    <BrandHeadingStyled>HARGILE</BrandHeadingStyled>
                     <Address>
                         {t('address.line1')}<br/>
                         {t('address.line2')}<br/>
@@ -89,20 +89,6 @@ const Footer = () => {
                         {/*    </FooterLinkStyled>*/}
                         {/*</dt>*/}
                     </dl>
-                </ColumnStyled>
-
-                {/* Solutions */}
-                <ColumnStyled>
-                    <HeadingStyled>{t('sections.solutions')}</HeadingStyled>
-                    <FooterLinkStyled as={Link} href="/solutions/agves">AGVES</FooterLinkStyled>
-                    <FooterLinkStyled as={Link} href="/solutions/i-go">I GO</FooterLinkStyled>
-                    <FooterLinkStyled as={Link} href="/solutions/multipass">MultiPass</FooterLinkStyled>
-                </ColumnStyled>
-
-                {/* Services */}
-                <ColumnStyled>
-                    <HeadingStyled>{t('sections.services')}</HeadingStyled>
-                    <FooterLinkStyled as={Link} href="/services">{t('sections.services')}</FooterLinkStyled>
                 </ColumnStyled>
 
                 {/* Company */}
