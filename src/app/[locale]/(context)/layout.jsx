@@ -4,16 +4,11 @@ import React, {useEffect, useState} from "react";
 import RootClientWrapper from "@/components/layout/RootClientWrapper";
 import {ThemeProvider} from "@/components/providers/theme-provider";
 import {OptimizedImage} from "@/components/optimizedImage";
-import dynamic from "next/dynamic";
 import {ContactButton} from "@/components/ContactButton";
 import Navbar from "@/components/navigation/navbar";
 import LenisProvider from "@/components/providers/lenis-provider";
 import '../../styles/global.scss'
 
-
-const EarthVideoLayer = dynamic(() => import("@/components/EarthVideoLayer"), {
-    ssr: true
-});
 
 export default function ContextLayout({children}) {
     const [initialLoading, setInitialLoading] = useState(true);
@@ -66,8 +61,6 @@ export default function ContextLayout({children}) {
                         fetchpriority={'high'}
                     />
                 </div>
-
-                <EarthVideoLayer/>
 
                 <ThemeProvider>
                     <RootClientWrapper>
