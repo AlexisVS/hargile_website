@@ -49,7 +49,7 @@ export const MainTitle = styled.h2.attrs({
 export const HighlightedText = styled.h3.attrs({
     className: 'fluid-type-3'
 })`
-    color: var(--color-accent-mihai); /* Purple color from the image */
+    color: var(--color-accent-mihai); /* Hargile blue accent */
     margin: 0;
     font-weight: 600;
     line-height: 1.2;

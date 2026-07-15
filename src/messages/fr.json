@@ -383,12 +383,35 @@
           "ctaButton": "Auditer votre site web",
           "description": "HARGILE est une agence digitale pensée pour concevoir et développer des solutions technologiques innovantes, adaptées à vos défis stratégiques et opérationnels.",
           "headline": {
-            "line1": "L’innovation digitale ",
-            "line2": "au service de ",
-            "line3": "votre entreprise"
+            "line1": "Lorem ipsum dolor ",
+            "line2": "sit amet consectetur",
+            "line3": ""
           },
-          "paragraph": "Transformer les défis complexes en solutions numériques est notre mission. \n\n Agence visionnaire portée par la synergie du Marketing Digital Stratégique et de l’Intelligence Artificielle, nous donnons vie à des expériences digitales puissantes et porteuses de sens. La technologie de pointe associée à l'approche Humaine, nous permet de proposer des solutions innovantes pour accompagner les entreprises dans leur transformation numérique.",
+          "paragraph": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
           "quote": "Se démarquer, grandir et prospérer dans un monde de plus en plus connecté."
+        },
+        "mvp-promo": {
+          "title": "Votre MVP en",
+          "titleAccent": "1 mois",
+          "lead": "Transformez votre idée en un produit concret, prêt pour vos utilisateurs — livré en 30 jours, à prix fixe.",
+          "steps": {
+            "scope": {
+              "week": "Semaine 1",
+              "title": "Cadrage & design",
+              "text": "On définit ensemble le périmètre, les priorités et les maquettes."
+            },
+            "build": {
+              "week": "Sem. 2–3",
+              "title": "Développement",
+              "text": "On construit votre produit avec une stack moderne (Next.js, IA)."
+            },
+            "launch": {
+              "week": "Semaine 4",
+              "title": "Tests & mise en ligne",
+              "text": "On teste, on peaufine et on met votre MVP en ligne."
+            }
+          },
+          "cta": "Démarrons votre projet"
         },
         "latest-insights": {
           "subtitle": "Nos réflexions et perspectives sur le monde numérique",

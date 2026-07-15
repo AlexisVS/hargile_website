@@ -34,7 +34,7 @@ export const FeaturesGrid = styled.div`
 export const FeatureCard = styled(motion.div)`
     background: rgba(13, 16, 45, 0.4);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(139, 92, 246, 0.15);
+    border: 1px solid rgba(91, 141, 239, 0.15);
     border-radius: 1rem;
     padding: 2rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease;

@@ -16,7 +16,7 @@ export default function AuditResultPageClient() {
             <div className="min-h-screen flex items-center justify-center bg-gray-900/70">
                 <div className="flex flex-col items-center space-y-4">
                     <div
-                        className="w-16 h-16 border-4 border-violet-600 border-t-transparent rounded-full animate-spin"></div>
+                        className="w-16 h-16 border-4 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
                     <p className="text-white text-xl font-medium">Loading audit results...</p>
                 </div>
             </div>
@@ -48,7 +48,7 @@ export default function AuditResultPageClient() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
                         <div className="space-y-3 !mx-auto">
-                            <h2 className="text-xl font-semibold text-violet-300 flex items-center">
+                            <h2 className="text-xl font-semibold text-sky-300 flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 !mr-2" fill="none"
                                      viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -78,7 +78,7 @@ export default function AuditResultPageClient() {
                         </div>
 
                         <div className="space-y-3 !mx-auto">
-                            <h2 className="text-xl font-semibold text-violet-300 flex items-center">
+                            <h2 className="text-xl font-semibold text-sky-300 flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 !mr-2" fill="none"
                                      viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -89,7 +89,7 @@ export default function AuditResultPageClient() {
                             <div className="flex items-center">
                                 <span className="w-32 text-gray-400">URL:</span>
                                 <a href={formData.url} target="_blank" rel="noopener noreferrer"
-                                   className="font-medium text-violet-400 hover:text-violet-300 transition-colors truncate">
+                                   className="font-medium text-sky-400 hover:text-sky-300 transition-colors truncate">
                                     {formData.url}
                                 </a>
                             </div>
@@ -103,7 +103,7 @@ export default function AuditResultPageClient() {
                     <div className="flex items-center !mb-6">
                         <h2 className="text-3xl font-bold">Audit Scores</h2>
                         <div
-                            className="!ml-4 !px-3 !py-1 !mb-3 bg-violet-600/20 rounded-full border border-violet-600 text-violet-400 text-sm font-medium">
+                            className="!ml-4 !px-3 !py-1 !mb-3 bg-sky-600/20 rounded-full border border-sky-600 text-sky-400 text-sm font-medium">
                             Lighthouse v7
                         </div>
                     </div>
@@ -128,8 +128,8 @@ export default function AuditResultPageClient() {
                                 <div className="flex justify-between items-center !mb-4">
                                     <div className="flex items-center content-center">
                                         <div
-                                            className="!mr-3 h-8 w-8 rounded-md bg-violet-600/20 flex items-center justify-center">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-violet-400"
+                                            className="!mr-3 h-8 w-8 rounded-md bg-sky-600/20 flex items-center justify-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-sky-400"
                                                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                                                       d={item.icon}/>
@@ -190,8 +190,8 @@ export default function AuditResultPageClient() {
                              className="backdrop-blur-md bg-gray-900/60 rounded-xl !p-6 border border-gray-800 shadow-lg !my-5">
                             <div className="flex items-center !mb-4">
                                 <div
-                                    className="!mr-3 h-10 w-10 rounded-md bg-violet-600/20 flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-violet-400"
+                                    className="!mr-3 h-10 w-10 rounded-md bg-sky-600/20 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-sky-400"
                                          fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                                               d={section.icon}/>
@@ -267,17 +267,17 @@ export default function AuditResultPageClient() {
 
                 {/* CTA Section */}
                 <div
-                    className="!mt-12 backdrop-blur-md bg-violet-600/10 rounded-xl !p-8 border border-violet-800/50 shadow-lg">
+                    className="!mt-12 backdrop-blur-md bg-sky-600/10 rounded-xl !p-8 border border-sky-800/50 shadow-lg">
                     <div className="flex flex-col md:flex-row items-center justify-between">
                         <div className="!mb-6 md:!mb-0">
                             <h3 className="text-2xl font-bold text-white !mb-2">{t('audit-results.improve')}</h3>
-                            <p className="text-violet-300">{t('audit-results.experts')}</p>
+                            <p className="text-sky-300">{t('audit-results.experts')}</p>
                         </div>
                         <div className="flex space-x-4">
                             <button
                                 aria-label={t('audit-results.contact')}
                                 onClick={() => setShowCalendar(true)}
-                                className="bg-white text-violet-900 hover:bg-gray-100 !px-6 !py-3 !mx-2 rounded-md font-medium transition-colors cursor-pointer"
+                                className="bg-white text-sky-900 hover:bg-gray-100 !px-6 !py-3 !mx-2 rounded-md font-medium transition-colors cursor-pointer"
                             >
                                 {t('audit-results.contact')}
                             </button>
@@ -290,11 +290,11 @@ export default function AuditResultPageClient() {
                      onClick={() => setShowCalendar(false)}
                 >
                     <div
-                        className="bg-violet-600/10 border border-violet-800/50 rounded-lg shadow-xl max-w-3xl w-full !mx-4 !p-4"
+                        className="bg-sky-600/10 border border-sky-800/50 rounded-lg shadow-xl max-w-3xl w-full !mx-4 !p-4"
                         onClick={(e) => e.stopPropagation()}>
                         <div className="flex justify-between items-center !mb-4">
                             <h3 id={'audit-result-title'}
-                                className="text-xl font-semibold text-violet-900">{t('audit-results.book')}</h3>
+                                className="text-xl font-semibold text-sky-900">{t('audit-results.book')}</h3>
                             <button onClick={() => setShowCalendar(false)}
                                     aria-labelledby={'audit-result-title'}
                                     className="text-gray-400 text-lg cursor-pointer">✕
@@ -302,13 +302,13 @@ export default function AuditResultPageClient() {
                         </div>
                         {/*TODO Hide/Bloquer les inputs SCORES*/}
                         <iframe
-                            src={`https://calendly.com/charles-delalaing/30min?hide_event_type_details=1&hide_gdpr_banner=1&background_color=403749&text_color=ffffff&primary_color=C183EB&name=${encodeURIComponent(`${formData.firstName} ${formData.lastName}`)}&email=${encodeURIComponent(formData.email || '')}&a1=${encodeURIComponent(formData.url)}&a2=${encodeURIComponent(performanceScore)}%25&a3=${encodeURIComponent(accessibilityScore)}%25&a4=${encodeURIComponent(seoScore)}%25&a5=${encodeURIComponent(bestPracticeScore)}%25&autofill=true`}
+                            src={`https://calendly.com/charles-delalaing/30min?hide_event_type_details=1&hide_gdpr_banner=1&background_color=403749&text_color=ffffff&primary_color=96B9F9&name=${encodeURIComponent(`${formData.firstName} ${formData.lastName}`)}&email=${encodeURIComponent(formData.email || '')}&a1=${encodeURIComponent(formData.url)}&a2=${encodeURIComponent(performanceScore)}%25&a3=${encodeURIComponent(accessibilityScore)}%25&a4=${encodeURIComponent(seoScore)}%25&a5=${encodeURIComponent(bestPracticeScore)}%25&autofill=true`}
                             width="100%"
                             height="475"
                         ></iframe>
 
                         {/*<iframe*/}
-                        {/*    src={`https://calendly.com/worldwidenine/digital-audit-meeting?hide_event_type_details=1&hide_gdpr_banner=1&background_color=403749&text_color=ffffff&primary_color=C183EB&name=${encodeURIComponent(`${formData.firstName} ${formData.lastName}`)}&email=${encodeURIComponent(formData.email || '')}&a1=${encodeURIComponent(formData.url)}&a2=${encodeURIComponent(performanceScore)}%25&a3=${encodeURIComponent(accessibilityScore)}%25&a4=${encodeURIComponent(seoScore)}%25&a5=${encodeURIComponent(bestPracticeScore)}%25`}*/}
+                        {/*    src={`https://calendly.com/worldwidenine/digital-audit-meeting?hide_event_type_details=1&hide_gdpr_banner=1&background_color=403749&text_color=ffffff&primary_color=96B9F9&name=${encodeURIComponent(`${formData.firstName} ${formData.lastName}`)}&email=${encodeURIComponent(formData.email || '')}&a1=${encodeURIComponent(formData.url)}&a2=${encodeURIComponent(performanceScore)}%25&a3=${encodeURIComponent(accessibilityScore)}%25&a4=${encodeURIComponent(seoScore)}%25&a5=${encodeURIComponent(bestPracticeScore)}%25`}*/}
                         {/*    width="100%"*/}
                         {/*    height="475"*/}
                         {/*></iframe>*/}

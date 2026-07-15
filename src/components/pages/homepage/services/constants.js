@@ -1,8 +1,8 @@
 export const DOT_COLORS = {
   topLeft: "#3B82F6", // blue
-  bottomLeft: "#EC4899", // pink
+  bottomLeft: "#F5C26B", // amber (complementary)
   topRight: "#10B981", // teal
-  bottomRight: "#A855F7", // purple
+  bottomRight: "#96B9F9", // Hargile blue
 };
 
 export const POSITIONS = {

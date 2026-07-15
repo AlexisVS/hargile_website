@@ -14,9 +14,10 @@ const themeTokens = {
     "background-cardLight": "rgba(15, 23, 42, 0.7)",
     accentAgves: "#4F46E5",
     accentIGo: "#0EA5E9",
-    accentMultipass: "#8B5CF6",
-    accentMihai: "#a855f7",
+    accentMultipass: "#5B8DEF",
+    accentMihai: "#96b9f9",
     accentBluePlanet: "#96b9fa",
+    accentAmber: "#F5C26B",
 } as const;
 
 export type ThemeTokens = typeof themeTokens;

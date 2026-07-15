@@ -91,7 +91,7 @@ export const FormGrid = styled.form`
 
 export const ContactInfoColumn = styled.div`
   background-color: rgba(17, 12, 41, 0.6);
-  border: 1px solid rgba(147, 51, 234, 0.2);
+  border: 1px solid rgba(150, 185, 249, 0.2);
   border-radius: 0.5rem;
   padding: 2.5rem;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
@@ -122,7 +122,7 @@ export const ContactInfoColumn = styled.div`
 
 export const ServiceTypesColumn = styled.div`
   background-color: rgba(21, 16, 53, 0.8);
-  border: 1px solid rgba(147, 51, 234, 0.1);
+  border: 1px solid rgba(150, 185, 249, 0.1);
   border-radius: 0.5rem;
   padding: 2.5rem;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
@@ -319,8 +319,8 @@ export const Checkbox = styled.button.attrs((props) => {
     const colors = {
       yellow: "#FCD34DFF",
       blue: "#3B82F6",
-      purple: "#8B5CF6",
-      pink: "#EC4899",
+      purple: "#5B8DEF",
+      pink: "#F5C26B",
       teal: "#14B8A6",
     };
 

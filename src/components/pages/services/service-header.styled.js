@@ -22,7 +22,7 @@ export const Divider = styled.div.attrs({
 })`
   width: calc(18vh + 10vw);
   height: 0.5rem;
-  background: #a855f7;
+  background: #96b9f9;
   margin-bottom: 2.5rem;
 `;
 

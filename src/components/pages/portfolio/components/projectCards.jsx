@@ -119,7 +119,7 @@ const CardButton = styled.a.attrs({
     transition: color 0.2s ease;
 
     &:hover {
-        color: #9333ea;
+        color: #96b9f9;
     }
 `;
 

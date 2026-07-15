@@ -69,8 +69,8 @@ const Services = () => {
             bg: "rgba(59, 130, 246, 0.15)"
         },
         maintenance: {
-            main: "#8B5CF6", // Violet
-            bg: "rgba(139, 92, 246, 0.15)"
+            main: "#5B8DEF", // Bleu profond
+            bg: "rgba(91, 141, 239, 0.15)"
         },
         ai: {
             main: "#06B6D4", // Cyan

@@ -65,7 +65,7 @@ export const ReadMore = ({id, text, amountOfWords = 36, classNames, style}: Read
                         <span>... </span>
                         <span
                             style={{paddingLeft: '1rem'}}
-                            className='text-violet-400 cursor-pointer'
+                            className='text-sky-400 cursor-pointer'
                         >
                             show more
                         </span>
@@ -107,7 +107,7 @@ export const ReadMore = ({id, text, amountOfWords = 36, classNames, style}: Read
                             fontWeight: 300,
                             textAlign: 'justify'
                         }}
-                        className='text-violet-400 cursor-pointer'
+                        className='text-sky-400 cursor-pointer'
                         role="button"
                         tabIndex={0}
                         aria-expanded={isExpanded}

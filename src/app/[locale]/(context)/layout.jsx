@@ -5,7 +5,6 @@ import RootClientWrapper from "@/components/layout/RootClientWrapper";
 import {ThemeProvider} from "@/components/providers/theme-provider";
 import {OptimizedImage} from "@/components/optimizedImage";
 import dynamic from "next/dynamic";
-import {AuditButton} from "@/components/AuditButton";
 import Navbar from "@/components/navigation/navbar";
 import LenisProvider from "@/components/providers/lenis-provider";
 import '../../styles/global.scss'
@@ -76,7 +75,6 @@ export default function ContextLayout({children}) {
                         <div className={`page-content ${!initialLoading ? 'loaded' : ''}`}>
                             {children}
                         </div>
-                        <AuditButton/>
                     </RootClientWrapper>
                 </ThemeProvider>
             </LenisProvider>

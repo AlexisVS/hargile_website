@@ -57,7 +57,7 @@ export const FeatureItem = styled.li`
     align-items: center;
     justify-content: flex-start;
     background-color: rgba(17, 12, 41, 0.4);
-    border: 1px solid rgba(147, 51, 234, 0.1);
+    border: 1px solid rgba(150, 185, 249, 0.1);
     border-radius: 0.75rem;
     padding: 1.5rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -100,7 +100,7 @@ export const DetailsList = styled.div`
 
 export const DetailItem = styled.div`
     background-color: rgba(17, 12, 41, 0.2);
-    border: 1px solid rgba(147, 51, 234, 0.1);
+    border: 1px solid rgba(150, 185, 249, 0.1);
     border-radius: 0.75rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     backdrop-filter: blur(6px);

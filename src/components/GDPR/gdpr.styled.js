@@ -9,7 +9,7 @@ export const CookieBanner = styled.div`
     backdrop-filter: blur(12px);
     color: var(--color-text-light);
     z-index: 100000;
-    border-top: 1px solid rgba(147, 51, 234, 0.2);
+    border-top: 1px solid rgba(150, 185, 249, 0.2);
     box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.25);
 `;
 
@@ -70,11 +70,11 @@ export const Button = styled.button`
 export const PrimaryButton = styled(Button)`
     background: linear-gradient(135deg, var(--color-accent-mihai) 0%, color-mix(in srgb, var(--color-accent-mihai) 70%, #4f46e5) 100%);
     color: var(--color-text-light);
-    box-shadow: 0 4px 12px rgba(147, 51, 234, 0.25);
+    box-shadow: 0 4px 12px rgba(150, 185, 249, 0.25);
 
     &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(147, 51, 234, 0.3);
+        box-shadow: 0 6px 15px rgba(150, 185, 249, 0.3);
     }
 
     &:active {
@@ -85,7 +85,7 @@ export const PrimaryButton = styled(Button)`
 export const SecondaryButton = styled(Button)`
     background-color: rgba(75, 85, 99, 0.3);
     color: var(--color-text-light);
-    border: 1px solid rgba(147, 51, 234, 0.2);
+    border: 1px solid rgba(150, 185, 249, 0.2);
 
     &:hover {
         background-color: rgba(75, 85, 99, 0.5);
@@ -122,7 +122,7 @@ export const ModalContainer = styled.div`
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
-    border: 1px solid rgba(147, 51, 234, 0.2);
+    border: 1px solid rgba(150, 185, 249, 0.2);
 
     &::-webkit-scrollbar {
         width: 10px;
@@ -134,7 +134,7 @@ export const ModalContainer = styled.div`
     }
 
     &::-webkit-scrollbar-thumb {
-        background: rgba(147, 51, 234, 0.3);
+        background: rgba(150, 185, 249, 0.3);
         border-radius: 8px;
     }
 `;
@@ -163,7 +163,7 @@ export const CookieCategory = styled.div`
     background-color: rgba(30, 20, 70, 0.3);
     border-radius: 0.75rem;
     padding: 1.25rem;
-    border: 1px solid rgba(147, 51, 234, 0.15);
+    border: 1px solid rgba(150, 185, 249, 0.15);
     transition: transform 0.2s ease;
 
     &:hover {
@@ -189,7 +189,7 @@ export const CategoryTitle = styled.h3.attrs({
 export const AlwaysActiveTag = styled.span.attrs({
     className: "fluid-type--1",
 })`
-    background-color: rgba(147, 51, 234, 0.2);
+    background-color: rgba(150, 185, 249, 0.2);
     color: var(--color-text-light);
     padding: 0.25rem 0.75rem;
     border-radius: 1rem;
@@ -222,7 +222,7 @@ export const ModalFooter = styled.div`
     justify-content: flex-end;
     gap: 0.75rem;
     padding-top: 1.5rem;
-    border-top: 1px solid rgba(147, 51, 234, 0.2);
+    border-top: 1px solid rgba(150, 185, 249, 0.2);
 `;
 
 export const ToggleSwitch = styled.label`
@@ -269,7 +269,7 @@ export const ToggleSlider = styled.div`
     }
 
     ${ToggleInput}:focus-visible + & {
-        box-shadow: 0 0 0 2px rgba(147, 51, 234, 0.5);
+        box-shadow: 0 0 0 2px rgba(150, 185, 249, 0.5);
     }
 `;
 
@@ -283,14 +283,14 @@ export const SettingsButton = styled.button`
     padding: 0.75rem;
     border-radius: 50%;
     backdrop-filter: blur(8px);
-    border: 1px solid rgba(147, 51, 234, 0.3);
+    border: 1px solid rgba(150, 185, 249, 0.3);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
 
     &:hover {
         transform: translateY(-3px) rotate(15deg);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        background-color: rgba(147, 51, 234, 0.4);
+        background-color: rgba(150, 185, 249, 0.4);
     }
 
     svg {

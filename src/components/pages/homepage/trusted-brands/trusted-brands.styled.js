@@ -46,7 +46,7 @@ export const LogoWrapper = styled.div`
     inset 0 5px 4px rgba(50, 50, 100, 0.6),
     inset -1px -1px 4px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(6px);
-    background: rgb(168, 85, 247, 0.05);
+    background: rgb(150, 185, 249, 0.05);
 
     @media screen and (min-width: 1200px) {
         --size: clamp(160px, calc(130px + 5vw), 9vw);

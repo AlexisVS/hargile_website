@@ -66,14 +66,14 @@ export const LanguageOption = styled.button.attrs({
     width: 100%;
     padding: 0.75rem 1rem;
     text-align: left;
-    background-color: ${props => props.$isactive ? 'rgba(147, 51, 234, 0.2)' : 'transparent'};
+    background-color: ${props => props.$isactive ? 'rgba(150, 185, 249, 0.2)' : 'transparent'};
     color: var(--color-text-light);
     border: none;
     cursor: pointer;
     transition: background-color 0.2s ease;
 
     &:hover {
-        background-color: rgba(147, 51, 234, 0.1);
+        background-color: rgba(150, 185, 249, 0.1);
     }
 
     span {

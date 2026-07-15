@@ -49,14 +49,14 @@ export function ServicesSection({
     {
       id: "mobileApps",
       color: "purple",
-      bgColor: "rgba(139, 92, 246, 0.1)",
-      hoverColor: "rgba(139, 92, 246, 0.15)",
+      bgColor: "rgba(91, 141, 239, 0.1)",
+      hoverColor: "rgba(91, 141, 239, 0.15)",
     },
     {
       id: "ai",
       color: "pink",
-      bgColor: "rgba(236, 72, 153, 0.1)",
-      hoverColor: "rgba(236, 72, 153, 0.15)",
+      bgColor: "rgba(245, 194, 107, 0.1)",
+      hoverColor: "rgba(245, 194, 107, 0.15)",
     },
     {
       id: "cloud",

@@ -3,7 +3,7 @@ import {useTranslations} from "next-intl";
 import React from "react";
 import {Radar} from "lucide-react";
 import {useSiteNavigation} from "@/components/providers/site-navigation-provider"
-import {AuditButtonStyled} from "@/components/AuditButton.styled";
+import {AuditButtonStyled} from "@/features/audit/AuditButton.styled";
 
 export const AuditButton = () => {
     const navigation = useSiteNavigation()

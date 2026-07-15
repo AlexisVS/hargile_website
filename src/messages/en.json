@@ -383,12 +383,35 @@
           "ctaButton": "Audit your website",
           "description": "We are a digital agency specializing in web development, AI solutions, and marketing strategies to elevate your business",
           "headline": {
-            "line1": "Digital innovation ",
-            "line2": "for your business",
+            "line1": "Lorem ipsum dolor ",
+            "line2": "sit amet consectetur",
             "line3": ""
           },
-          "paragraph": "Transforming complex challenges into digital solutions is our mission.\n Visionary agency driven by the synergy of Strategic Digital Marketing and Artificial Intelligence, we bring powerful and meaningful digital experiences to life. Cutting-edge technology combined with a Human approach allows us to offer innovative solutions to support businesses in their digital transformation.",
+          "paragraph": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
           "quote": "Stand out, grow and thrive in an increasingly connected world."
+        },
+        "mvp-promo": {
+          "title": "Your MVP in",
+          "titleAccent": "1 month",
+          "lead": "Turn your idea into a real, user-ready product — delivered in 30 days, at a fixed price.",
+          "steps": {
+            "scope": {
+              "week": "Week 1",
+              "title": "Scope & design",
+              "text": "We define the scope, priorities and mockups together."
+            },
+            "build": {
+              "week": "Weeks 2–3",
+              "title": "Development",
+              "text": "We build your product on a modern stack (Next.js, AI)."
+            },
+            "launch": {
+              "week": "Week 4",
+              "title": "Test & launch",
+              "text": "We test, polish and ship your MVP live."
+            }
+          },
+          "cta": "Start your project"
         },
         "latest-insights": {
           "subtitle": "Our thoughts and perspectives on the digital world",

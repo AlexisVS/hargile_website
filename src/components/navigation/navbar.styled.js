@@ -77,7 +77,7 @@ export const NavbarNavigation = styled.nav`
             height: 100%;
             background: 
                 radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(91, 141, 239, 0.08) 0%, transparent 50%),
                 radial-gradient(circle at 40% 70%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
             pointer-events: none;
             z-index: 0;

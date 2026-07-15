@@ -46,7 +46,7 @@ export const getServiceIcons = (isMobile) => {
     const colors = {
         laptopColor: "#E56062",
         brainColor: "#10B981",
-        chartColor: "#A855F7",
+        chartColor: "#96B9F9",
         globeColor: "#3B82F6",
     };
 
