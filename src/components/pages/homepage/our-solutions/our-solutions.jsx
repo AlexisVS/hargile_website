@@ -25,23 +25,6 @@ const OurSolutions = () => {
             link: '/solutions/multipass',
             subtitle: t('solutions.multipass.subtitle'),
         },
-
-        {
-            id: "i-go",
-            title: t("solutions.i-go.title"),
-            description: t("solutions.i-go.description"),
-            iconSrc: "/images/solutions/i-go-icon.svg",
-            link: "/solutions/i-go",
-            subtitle: t("solutions.i-go.subtitle"),
-        },
-        {
-            id: "agves",
-            title: t("solutions.agves.title"),
-            description: t("solutions.agves.description"),
-            iconSrc: "/images/solutions/agves-icon.svg",
-            link: "/solutions/agves",
-            subtitle: t("solutions.agves.subtitle"),
-        },
     ];
 
     return (

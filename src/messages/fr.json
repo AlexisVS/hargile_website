@@ -308,7 +308,7 @@
           },
           "subtitle": "Découvrez notre agence",
           "who_description": "Chez HARGILE, nous façonnons notre développement comme on sculpte une œuvre : avec soin, intention et sens du détail.\n\nNotre ambition ? Créer des solutions numériques qui ont du sens, qui servent vos objectifs et qui évoluent avec vous.",
-          "who_title": "Notre vision de la croissance"
+          "who_title": "Nos valeurs"
         },
         "digital-audit": {
           "description": "Votre site génère-t-il assez de trafic ? Convertit-il bien vos visiteurs en clients ? Votre visibilité est-elle optimisée ?<br/><br/><strong>HARGILE a développé un outil d'analyse de performance en ligne. En entrant simplement l'URL d'un site web, vous obtenez en quelques secondes un diagnostic précis</strong> :",
@@ -420,10 +420,10 @@
         },
         "our-solutions": {
           "coming-soon": "Bientôt disponible",
-          "description": "Notre expertise tech est votre levier — créer des solutions humaines, taillées pour vos objectifs et booster votre développement.",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
           "explain": "Expliquez nous ",
           "learn-more": "En savoir plus à propos de ",
-          "paragraph": "HARGILE propose des solutions numériques personnalisées fondées sur le principe de la maîtrise technologique et l'innovation créative. Notre équipe associe expertise, ingéniosité et vision stratégique d’entreprise pour transformer vos défis en leviers de croissance.",
+          "paragraph": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
           "solutions": {
             "agves": {
               "description": "Application de gestion des ventes spécialisée pour le secteur de l'éducation. AGVES révolutionne la communication de la vie scolaire et extrascolaire par la mise en place d’un interface simplificateur. Il améliore toutes opérations liées aux transactions financières comme les process de sécurité.",
@@ -446,7 +446,7 @@
               "title": "Votre projet"
             }
           },
-          "title": "Web, mobile, cloud, IA"
+          "title": "Conception & développement"
         },
         "recent-works": {
           "title": "Nos réalisations récentes",

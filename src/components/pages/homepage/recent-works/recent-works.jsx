@@ -18,7 +18,7 @@ const RecentWorks = () => {
 
 
   const { getLatestProjects } = usePortfolioData();
-  const latestProjects = getLatestProjects(6);
+  const latestProjects = getLatestProjects(3);
 
   return (
     <RecentWorksSection>

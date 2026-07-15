@@ -308,7 +308,7 @@
           },
           "subtitle": "Get to know our agency",
           "who_description": "At HARGILE, we shape our development like sculpting a work of art: with care, intention, and attention to detail.\n\nOur ambition? To create digital solutions that make sense, serve your objectives, and evolve with you.",
-          "who_title": "Our vision of growth"
+          "who_title": "Our Values"
         },
         "digital-audit": {
           "description": "Is your website generating enough traffic? Does it effectively convert visitors into customers? Is your visibility optimized?<br/><br/><strong>HARGILE has developed an online performance analysis tool. By simply entering a website URL, you get a precise diagnosis in seconds</strong>:",
@@ -420,10 +420,10 @@
         },
         "our-solutions": {
           "coming-soon": "Coming soon",
-          "description": "Our tech expertise is your lever — creating human solutions, tailored to your objectives and boosting your development.",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
           "explain": "Explain ",
           "learn-more": "Learn More about ",
-          "paragraph": "HARGILE offers customized digital solutions based on the principle of technological mastery and creative innovation. Our team combines expertise, ingenuity, and strategic business vision to transform your challenges into growth levers.",
+          "paragraph": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
           "solutions": {
             "agves": {
               "description": "Specialized sales management application for the education sector. AGVES revolutionizes school and extracurricular communication by implementing a simplifying interface. It improves all operations related to financial transactions such as security processes.",
@@ -446,7 +446,7 @@
               "title": "Your project"
             }
           },
-          "title": "Web, mobile, cloud, AI"
+          "title": "Design & development"
         },
         "recent-works": {
           "title": "Our recent works",
