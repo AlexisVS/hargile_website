@@ -392,7 +392,27 @@
             "line3": ""
           },
           "paragraph": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-          "quote": "Stand out, grow and thrive in an increasingly connected world."
+          "quote": "Stand out, grow and thrive in an increasingly connected world.",
+          "v2": {
+            "headline": "Digital experiences that elevate your business.",
+            "paragraph": "We are a digital agency specializing in web development, AI solutions, and marketing strategies — built to help you stand out, grow and thrive in an increasingly connected world.",
+            "ctaAudit": "Audit your website",
+            "ctaWork": "See our work",
+            "cards": {
+              "webdev": {
+                "title": "Web development",
+                "text": "Next.js products, built to last"
+              },
+              "ai": {
+                "title": "AI solutions",
+                "text": "Intelligence woven into your product"
+              },
+              "marketing": {
+                "title": "Marketing",
+                "text": "Strategies that make you visible"
+              }
+            }
+          }
         },
         "mvp-promo": {
           "title": "Your MVP in",
@@ -468,6 +488,10 @@
               "description": "The future of CRM",
               "title": "Multipass"
             }
+          },
+          "deck": {
+            "next": "Next project",
+            "show": "Show project"
           }
         },
         "services": {
@@ -515,6 +539,22 @@
         },
         "trusted-brands": {
           "title": "They trust us"
+        },
+        "design-dev": {
+          "title": "Design & development",
+          "lead": "From first sketch to production, we design and build digital products end-to-end — interfaces people enjoy using, on engineering that holds up over time.",
+          "offers": {
+            "your-project": {
+              "title": "Your project",
+              "tagline": "Growth factor.",
+              "description": "Behind every project, every person, there is a unique encounter. We put technology at the service of a vision: yours. Creating experiences that touch, that bring people together, that help them grow, that are sustainable and meaningful is our contribution to your success."
+            },
+            "multipass": {
+              "title": "Multipass",
+              "tagline": "The agile solution that adapts to your business.",
+              "description": "Whether you're an ambitious startup or an established company, Multipass offers you a flexible and scalable platform. Designed to adapt to all business sectors, our solution allows you to centralize, manage, and optimize your customer relationships with unmatched flexibility."
+            }
+          }
         }
       }
     },

@@ -1,0 +1,54 @@
+/* Shared helpers for all v2 homepage sections.
+   The homepage lives inside .content-container (from _earth.scss) which adds up to
+   6vw side padding and a legacy text-shadow on h1/h2/h3/p. These helpers let each
+   v2 section span full-bleed and opt out of the inherited text-shadow. */
+
+.section {
+  position: relative;
+  padding: clamp(112px, 10vw, 200px) 0 0;
+  /* Full-bleed: cancel the .content-container gutter so backgrounds reach the edges.
+     body has overflow-x: hidden, so negative margins never create a scrollbar. */
+  margin-inline: calc(50% - 50vw);
+
+  h2,
+  h3,
+  h4,
+  p {
+    text-shadow: none;
+  }
+}
+
+/* Last section adds bottom breathing room before the footer */
+.sectionEnd {
+  padding-bottom: clamp(112px, 10vw, 180px);
+}
+
+.container {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  box-sizing: border-box;
+
+  @media (max-width: 640px) {
+    padding: 0 20px;
+  }
+}
+
+.heading {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(34px, 3.6vw, 56px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+  color: #ededed;
+}
+
+.lead {
+  font-size: 16px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.68);
+  line-height: 1.6;
+  margin: 20px 0 0;
+}

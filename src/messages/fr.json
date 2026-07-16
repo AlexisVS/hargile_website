@@ -392,7 +392,27 @@
             "line3": ""
           },
           "paragraph": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-          "quote": "Se démarquer, grandir et prospérer dans un monde de plus en plus connecté."
+          "quote": "Se démarquer, grandir et prospérer dans un monde de plus en plus connecté.",
+          "v2": {
+            "headline": "Des expériences digitales qui élèvent votre entreprise.",
+            "paragraph": "Nous sommes une agence digitale spécialisée en développement web, solutions IA et stratégies marketing — pour vous démarquer, grandir et prospérer dans un monde toujours plus connecté.",
+            "ctaAudit": "Auditer votre site web",
+            "ctaWork": "Voir nos réalisations",
+            "cards": {
+              "webdev": {
+                "title": "Développement web",
+                "text": "Des produits Next.js, construits pour durer"
+              },
+              "ai": {
+                "title": "Solutions IA",
+                "text": "L'intelligence intégrée à votre produit"
+              },
+              "marketing": {
+                "title": "Marketing",
+                "text": "Des stratégies qui vous rendent visible"
+              }
+            }
+          }
         },
         "mvp-promo": {
           "title": "Votre MVP en",
@@ -468,6 +488,10 @@
               "description": "L'avenir du CRM",
               "title": "Multipass"
             }
+          },
+          "deck": {
+            "next": "Projet suivant",
+            "show": "Afficher le projet"
           }
         },
         "services": {
@@ -515,6 +539,22 @@
         },
         "trusted-brands": {
           "title": "Ils nous font confiance"
+        },
+        "design-dev": {
+          "title": "Design & développement",
+          "lead": "Du premier croquis à la mise en production, nous concevons et développons vos produits digitaux de bout en bout — des interfaces agréables à utiliser, sur des bases techniques qui tiennent dans le temps.",
+          "offers": {
+            "your-project": {
+              "title": "Votre projet",
+              "tagline": "Facteur de croissance.",
+              "description": "Derrière chaque projet, chaque personne, il y a une rencontre unique. Nous mettons la technologie au service d’une vision : la vôtre. Créer des expériences qui touchent, qui rassemblent, qui font grandir, durables et porteuses de sens est notre participation à votre succès."
+            },
+            "multipass": {
+              "title": "Multipass",
+              "tagline": "La solution agile qui s’adapte à votre entreprise.",
+              "description": "Que vous soyez une startup ambitieuse ou une entreprise bien établie, Multipass vous offre une plateforme modulable et évolutive. Conçue pour s’adapter à tous les secteurs d’activité, notre solution vous permet de centraliser, gérer et optimiser vos relations clients avec une flexibilité inégalée."
+            }
+          }
         }
       }
     },

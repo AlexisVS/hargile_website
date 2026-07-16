@@ -3,7 +3,8 @@
 import React from 'react';
 import {FooterLinkStyled} from "@/components/footer/footer-link.styled";
 import {ColumnStyled} from "@/components/footer/column.styled";
-import {HeadingStyled, BrandHeadingStyled} from "@/components/footer/heading.styled";
+import {HeadingStyled} from "@/components/footer/heading.styled";
+import {OptimizedImage} from "@/components/optimizedImage";
 import {FooterContainerStyled} from "@/components/footer/footer-container.styled";
 import {FooterContentStyled} from "@/components/footer/footer-content.styled";
 import {BottomBarStyled} from "@/components/footer/bottom-bar.styled";
@@ -60,7 +61,13 @@ const Footer = () => {
             <FooterContentStyled>
                 {/* Company info */}
                 <ColumnStyled>
-                    <BrandHeadingStyled>HARGILE</BrandHeadingStyled>
+                    <OptimizedImage
+                        width={750}
+                        height={348}
+                        src="/images/brand/brand-large-white.png"
+                        alt="HARGILE"
+                        style={{width: "12rem", height: "auto", marginBottom: "1.5rem"}}
+                    />
                     <Address>
                         {t('address.line1')}<br/>
                         {t('address.line2')}<br/>

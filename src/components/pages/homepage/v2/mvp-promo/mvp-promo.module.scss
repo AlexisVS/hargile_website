@@ -1,0 +1,111 @@
+/* MVP promo — timeline treatment (design: Homepage v2) */
+
+.accent {
+  color: #96b9f9;
+}
+
+.timeline {
+  position: relative;
+  margin-top: 80px;
+}
+
+.rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 5px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(150, 185, 249, 0.55), rgba(150, 185, 249, 0.15) 65%, transparent);
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 40px;
+}
+
+.step {
+  position: relative;
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #96b9f9;
+  box-shadow: 0 0 16px rgba(150, 185, 249, 0.9);
+}
+
+.ghostNum {
+  position: absolute;
+  top: 18px;
+  left: -6px;
+  font-family: var(--font-headings);
+  font-weight: 800;
+  font-size: 88px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: rgba(150, 185, 249, 0.07);
+  pointer-events: none;
+  user-select: none;
+}
+
+.stepBody {
+  position: relative;
+  padding-top: 44px;
+}
+
+.week {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: 14px;
+  color: #96b9f9;
+  letter-spacing: -0.01em;
+}
+
+.stepTitle {
+  font-family: var(--font-headings);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: -0.015em;
+  margin: 10px 0 8px;
+  color: #ededed;
+}
+
+.stepText {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.62);
+  line-height: 1.55;
+  margin: 0;
+  max-width: 34ch;
+}
+
+.ctaWrap {
+  margin-top: 44px;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #96b9f9;
+  color: #0a0a12;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px 26px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: box-shadow 0.25s, background 0.25s;
+
+  &:hover {
+    box-shadow: 0 0 32px rgba(150, 185, 249, 0.35);
+    background: #b8cdfb;
+    color: #0a0a12;
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(150, 185, 249, 0.7);
+    outline-offset: 2px;
+  }
+}

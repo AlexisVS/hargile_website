@@ -1,0 +1,79 @@
+/* Design & development — editorial offer rows (design: Homepage v2) */
+
+.list {
+  margin-top: 64px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 48px;
+  align-items: center;
+  padding: 44px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: inherit;
+  text-decoration: none;
+  transition: background 0.3s;
+
+  &:hover {
+    background: rgba(150, 185, 249, 0.04);
+
+    .arrow {
+      background: rgba(150, 185, 249, 0.12);
+      border-color: rgba(150, 185, 249, 0.4);
+      transform: translateX(3px);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(150, 185, 249, 0.7);
+    outline-offset: -2px;
+  }
+}
+
+.rowHead {
+  flex: 1 1 280px;
+  min-width: min(280px, 100%);
+}
+
+.rowTitle {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(26px, 2.6vw, 38px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+  color: #ededed;
+}
+
+.rowTagline {
+  font-size: 15px;
+  font-weight: 500;
+  color: #96b9f9;
+  margin-top: 8px;
+}
+
+.rowText {
+  flex: 2 1 360px;
+  font-size: 14.5px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.62);
+  line-height: 1.65;
+  margin: 0;
+  max-width: 64ch;
+}
+
+.arrow {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  color: #96b9f9;
+  flex-shrink: 0;
+  transition: background 0.3s, border-color 0.3s, transform 0.3s;
+}

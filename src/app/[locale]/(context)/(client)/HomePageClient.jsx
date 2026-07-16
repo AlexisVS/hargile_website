@@ -1,19 +1,17 @@
-"use client";
-
-import HeroSection from "@/components/pages/homepage/hero/heroSection";
-import MvpPromo from "@/components/pages/homepage/mvp-promo/mvp-promo";
-import OurSolutions from "@/components/pages/homepage/our-solutions/our-solutions";
-import AboutUs from "@/components/pages/homepage/about-us/about-us";
-import RecentWorks from "@/components/pages/homepage/recent-works/recent-works";
+import HeroV2 from "@/components/pages/homepage/v2/hero/hero";
+import MvpPromoV2 from "@/components/pages/homepage/v2/mvp-promo/mvp-promo";
+import DesignDevV2 from "@/components/pages/homepage/v2/design-dev/design-dev";
+import RecentWorksV2 from "@/components/pages/homepage/v2/recent-works/recent-works";
+import ValuesV2 from "@/components/pages/homepage/v2/values/values";
 
 export default function HomePageClient() {
     return (
         <div className="homepage-container page-exit">
-            <HeroSection/>
-            <MvpPromo/>
-            <OurSolutions/>
-            <RecentWorks/>
-            <AboutUs/>
+            <HeroV2/>
+            <MvpPromoV2/>
+            <DesignDevV2/>
+            <RecentWorksV2/>
+            <ValuesV2/>
         </div>
     );
 }
