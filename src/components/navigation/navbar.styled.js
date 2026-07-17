@@ -74,19 +74,22 @@ export const NavbarNavigation = styled.nav`
     height: 100vh;
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
-    background: ${({$active}) => $active 
+    /* Dark base re-tinted toward the hero color-bend blues (#2563eb / #96b9f9)
+       instead of the old purple-leaning mix, so the open menu reads as the same
+       theme as the hero backdrop. Kept dark for white-text legibility. */
+    background: ${({$active}) => $active
         ? `
-            linear-gradient(135deg, 
-                #0a0a1a 0%, 
-                #1a1a2e 25%, 
-                #16213e 50%, 
-                #0f0f23 75%, 
-                #050510 100%
+            linear-gradient(135deg,
+                #050a18 0%,
+                #0c1730 25%,
+                #12244a 50%,
+                #0a1428 75%,
+                #04060f 100%
             )
-          ` 
+          `
         : 'rgba(0, 0, 0, 0)'};
-    
-    /* Add subtle overlay pattern for visual interest */
+
+    /* Subtle glow overlay, drawn from the same two bend blues rather than indigo. */
     ${({$active}) => $active && `
         &::before {
             content: '';
@@ -95,10 +98,10 @@ export const NavbarNavigation = styled.nav`
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(91, 141, 239, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 40% 70%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
+            background:
+                radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.14) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(150, 185, 249, 0.10) 0%, transparent 50%),
+                radial-gradient(circle at 40% 70%, rgba(37, 99, 235, 0.07) 0%, transparent 50%);
             pointer-events: none;
             z-index: 0;
         }
