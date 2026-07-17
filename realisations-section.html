@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nos réalisations récentes — HARGILE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     Section « Nos réalisations récentes »
+     Scroll horizontal piloté par le scroll vertical (desktop),
+     balayage natif sur mobile (< 900px).
+     ============================================================ */
+  :root {
+    --hg-black: #1D1D1F;
+    --hg-grey: #86868B;
+    --hg-hairline: #D2D2D7;
+    --hg-blue: #0071E3;
+    --hg-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  body {
+    margin: 0;
+    background: #FFFFFF;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--hg-black);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--hg-blue); text-decoration: none; }
+  a:hover { color: #0077ED; }
+
+  /* --- Structure de l'épinglage ----------------------------- */
+  /* .hg-work reçoit une hauteur calculée en JS :
+     100vh + (largeur du rail - largeur du viewport).
+     .hg-sticky reste collé pendant que le rail se translate.   */
+  .hg-work {
+    position: relative;
+    background: #FFFFFF;
+  }
+
+  .hg-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .hg-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 88px max(24px, 6vw) 40px;
+  }
+
+  .hg-head h2 {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 700;
+    font-size: clamp(30px, 3.4vw, 48px);
+    letter-spacing: -0.03em;
+    color: var(--hg-black);
+    margin: 0;
+  }
+
+  .hg-progress {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0.06em;
+    color: var(--hg-grey);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hg-track-wrap {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .hg-track {
+    display: flex;
+    gap: 32px;
+    padding: 0 max(24px, 6vw) 48px;
+    align-items: stretch;
+    will-change: transform;
+  }
+
+  /* --- Cartes projet ----------------------------------------- */
+  .hg-card {
+    flex: 0 0 auto;
+    width: min(70vw, 980px);
+    border: 1px solid var(--hg-hairline);
+    border-radius: 24px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: #FFFFFF;
+    scroll-snap-align: center;
+  }
+
+  .hg-card-media {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    background:
+      repeating-linear-gradient(45deg, #F5F5F7 0, #F5F5F7 14px, #EDEDF0 14px, #EDEDF0 28px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Remplacer .hg-card-media par une vraie <img> :
+     <img src="..." alt="..." style="width:100%;height:100%;object-fit:cover"> */
+  .hg-card-media span {
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 12px;
+    color: var(--hg-grey);
+    letter-spacing: 0.04em;
+  }
+
+  .hg-card-body { padding: 28px 32px 30px; }
+
+  .hg-eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--hg-grey);
+    margin-bottom: 8px;
+  }
+
+  .hg-title {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 600;
+    font-size: clamp(24px, 2.2vw, 32px);
+    letter-spacing: -0.02em;
+    color: var(--hg-black);
+    margin-bottom: 10px;
+  }
+
+  .hg-desc {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--hg-grey);
+    max-width: 70ch;
+    margin-bottom: 14px;
+  }
+
+  .hg-more { font-size: 15px; font-weight: 500; }
+
+  /* --- Fin du rail ------------------------------------------- */
+  .hg-end {
+    flex: 0 0 auto;
+    width: min(40vw, 480px);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 4vw;
+  }
+
+  .hg-end a {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: clamp(18px, 1.8vw, 24px);
+    font-weight: 500;
+  }
+
+  /* --- Mobile : balayage natif -------------------------------- */
+  @media (max-width: 899px) {
+    .hg-work { height: auto !important; }
+    .hg-sticky { position: static; height: auto; }
+    .hg-track-wrap {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .hg-track { transform: none !important; }
+    .hg-card { width: 82vw; min-height: 70vh; }
+    .hg-head { padding-top: 64px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hg-work" id="hg-work">
+  <div class="hg-sticky">
+    <div class="hg-head">
+      <h2>Nos réalisations récentes.</h2>
+      <div class="hg-progress" id="hg-prog">01/04</div>
+    </div>
+    <div class="hg-track-wrap" id="hg-track-wrap">
+      <div class="hg-track" id="hg-track">
+
+        <article class="hg-card">
+          <div class="hg-card-media"><span>photo du domaine — vignes, pierre, lumière provençale</span></div>
+          <div class="hg-card-body">
+            <div class="hg-eyebrow">Domaine Provençal de Luxe</div>
+            <div class="hg-title">Domaine de Puybernier</div>
+            <div class="hg-desc">Domaine provençal d'exception de 200 hectares près d'Aix-en-Provence, proposant des séjours de luxe et des événements privés, au cœur de la vallée de la Sainte-Victoire.</div>
+            <a class="hg-more" href="#">En savoir plus →</a>
+          </div>
+        </article>
+
+        <article class="hg-card">
+          <div class="hg-card-media"><span>capture du produit — dashboard SaaS</span></div>
+          <div class="hg-card-body">
+            <div class="hg-eyebrow">Plateforme SaaS</div>
+            <div class="hg-title">Projet confidentiel</div>
+            <div class="hg-desc">Application métier sur mesure pour une PME belge — gestion, facturation et automatisation au même endroit.</div>
+            <a class="hg-more" href="#">En savoir plus →</a>
+          </div>
+        </article>
+
+        <article class="hg-card">
+          <div class="hg-card-media"><span>visuel du projet — interface IA</span></div>
+          <div class="hg-card-body">
+            <div class="hg-eyebrow">Solutions IA</div>
+            <div class="hg-title">Assistant intelligent</div>
+            <div class="hg-desc">Intégration d'un assistant IA au cœur d'un produit existant — recherche, synthèse et support client automatisés.</div>
+            <a class="hg-more" href="#">En savoir plus →</a>
+          </div>
+        </article>
+
+        <article class="hg-card">
+          <div class="hg-card-media"><span>visuel du projet — site e-commerce</span></div>
+          <div class="hg-card-body">
+            <div class="hg-eyebrow">E-commerce</div>
+            <div class="hg-title">Boutique nouvelle génération</div>
+            <div class="hg-desc">Expérience d'achat rapide et soignée, du catalogue au paiement, optimisée pour le référencement.</div>
+            <a class="hg-more" href="#">En savoir plus →</a>
+          </div>
+        </article>
+
+        <div class="hg-end">
+          <a href="#">Toutes nos réalisations →</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  var outer = document.getElementById('hg-work');
+  var track = document.getElementById('hg-track');
+  var wrap  = document.getElementById('hg-track-wrap');
+  var prog  = document.getElementById('hg-prog');
+  var CARDS = 4;
+  var pinned = false;
+
+  function setProgress(p) {
+    var idx = Math.min(CARDS - 1, Math.max(0, Math.round(p * (CARDS - 1))));
+    prog.textContent =
+      String(idx + 1).padStart(2, '0') + '/' + String(CARDS).padStart(2, '0');
+  }
+
+  // Hauteur de la section = 100vh + distance horizontale à parcourir.
+  function layout() {
+    pinned = window.innerWidth >= 900;
+    if (pinned) {
+      var dist = Math.max(0, track.scrollWidth - window.innerWidth);
+      outer.style.height = (window.innerHeight + dist) + 'px';
+    } else {
+      outer.style.height = 'auto';
+    }
+  }
+
+  // Le scroll vertical "consommé" par la section devient une translation X.
+  function onScroll() {
+    if (!pinned) return;
+    var dist = outer.offsetHeight - window.innerHeight;
+    if (dist <= 0) return;
+    var y = Math.min(Math.max(-outer.getBoundingClientRect().top, 0), dist);
+    track.style.transform = 'translateX(' + (-y) + 'px)';
+    setProgress(y / dist);
+  }
+
+  // Mobile : progression basée sur le balayage natif.
+  function onTrackScroll() {
+    if (pinned) return;
+    var max = wrap.scrollWidth - wrap.clientWidth;
+    if (max > 0) setProgress(wrap.scrollLeft / max);
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', function () { layout(); onScroll(); });
+  wrap.addEventListener('scroll', onTrackScroll, { passive: true });
+  layout();
+  onScroll();
+})();
+</script>
+
+</body>
+</html>

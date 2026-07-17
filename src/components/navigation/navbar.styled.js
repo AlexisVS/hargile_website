@@ -107,18 +107,25 @@ export const NavbarNavigation = styled.nav`
     -webkit-backdrop-filter: ${({$active}) => $active ? 'blur(35px) saturate(200%)' : 'blur(0px)'};
     z-index: 1001;
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: 1fr auto;
     grid-template-rows: auto 1fr auto;
-    grid-template-areas: 
-        ". . ."
-        "menu-label menu-items contact-info"
-        ". . social-icons";
-    padding: 100px 80px 60px 80px;
+    /* Two columns: the links sit in the first one, whose left edge is the
+       shared container measure — same x as the navbar logo. The vertical MENU
+       label lives in the side margin (absolutely positioned, see MenuLabel). */
+    grid-template-areas:
+        ". ."
+        "menu-items contact-info"
+        ". social-icons";
+    padding: 100px calc((100% - var(--container-max)) / 2 + var(--container-gutter)) 60px;
     gap: 40px;
-    transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
-                transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                backdrop-filter 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                visibility 0s linear ${({$visible}) => $visible ? '0s' : '0.8s'};
+    /* Asymmetric timing: opening snaps the panel in fast (0.3s), so it's fully
+       opaque before the items start their staggered entrance — panel and item
+       fades overlapping is what read as the items animating twice. Closing
+       takes 0.55s so the whole panel melts away with the items. */
+    transition: opacity ${({$visible}) => ($visible ? '0.3s' : '0.55s')} cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform ${({$visible}) => ($visible ? '0.3s' : '0.55s')} cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                backdrop-filter ${({$visible}) => ($visible ? '0.3s' : '0.55s')} cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                visibility 0s linear ${({$visible}) => $visible ? '0s' : '0.55s'};
     opacity: ${({$visible}) => ($visible ? '1' : '0')};
     visibility: ${({$visible}) => ($visible ? 'visible' : 'hidden')};
     pointer-events: ${({$visible}) => ($visible ? 'auto' : 'none')};
@@ -150,7 +157,7 @@ export const NavbarNavigation = styled.nav`
     @media (max-width: 768px) {
         grid-template-columns: 1fr auto;
         grid-template-rows: auto auto auto;
-        grid-template-areas: 
+        grid-template-areas:
             "menu-items menu-label"
             "contact-info contact-info"
             "social-icons social-icons";
@@ -189,19 +196,27 @@ export const MenuItemsContainer = styled.div`
 `;
 
 export const MenuLabel = styled.div`
-    grid-area: menu-label;
+    /* Desktop: out of the grid flow, in the side margin the container measure
+       leaves free — the links then start exactly on the logo's line. */
+    position: absolute;
+    left: 28px;
+    top: 50%;
+    transform: translateY(-50%);
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: #999;
-    align-self: center;
     writing-mode: vertical-lr;
     text-orientation: mixed;
-    position: relative;
     z-index: 1;
-    
+
     @media (max-width: 768px) {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        grid-area: menu-label;
         writing-mode: vertical-lr;
         text-orientation: mixed;
         align-self: center;
@@ -342,20 +357,20 @@ export const StyledLink = styled(Link)`
     font-weight: 400;
     text-transform: capitalize;
     line-height: 0.9;
-    transition: all 0.2s ease;
-    
+    /* NOT 'transition: all': the open/close hook drives opacity and transform
+       via inline styles, and a CSS transition on those replayed every inline
+       reset as its own animation — the "items animate twice" bug. The hover
+       shift uses padding instead of transform for the same reason. */
+    transition: color 0.2s ease, padding-left 0.2s ease;
+
     &:hover {
         color: var(--color-accent-mihai);
-        transform: translateX(10px);
+        padding-left: 10px;
     }
-    
+
     @media (max-width: 768px) {
         font-size: clamp(2.5rem, 12vw, 4rem);
         text-align: left;
-        
-        &:hover {
-            transform: translateX(10px);
-        }
     }
 `;
 

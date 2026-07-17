@@ -1,20 +1,21 @@
-/* Design & development — statement quote framed by brackets (design: Homepage v2) */
+/* Design & development — SplitText word reveal, one-shot shine on the closing phrase (design: Homepage v2) */
 
-.quote {
-  position: relative;
-  margin: clamp(72px, 8vw, 120px) auto 0;
-  max-width: 1000px;
-  padding: clamp(16px, 2.5vw, 28px) 0;
+.centered {
   text-align: center;
 }
 
-/* Soft blue radial glow behind the quote */
-.quoteGlow {
-  position: absolute;
-  inset: -60px -20px;
-  background: radial-gradient(ellipse 60% 70% at 50% 45%, rgba(37, 99, 235, 0.13), transparent 70%);
-  filter: blur(20px);
-  pointer-events: none;
+.lead {
+  text-align: center;
+  max-width: 58ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.quote {
+  position: relative;
+  margin: clamp(28px, 4vw, 52px) auto 0;
+  max-width: 1000px;
+  text-align: center;
 }
 
 .quoteText {
@@ -25,10 +26,38 @@
   font-size: clamp(24px, 2.9vw, 42px);
   line-height: 1.4;
   letter-spacing: -0.018em;
-  text-wrap: balance;
-  background: linear-gradient(135deg, #ffffff 25%, #96b9f9 100%);
+  text-shadow: none;
+}
+
+.word,
+.wordAccent {
+  display: inline-block;
+  margin: 0 0.13em;
+  background: linear-gradient(135deg, #ffffff 30%, #c9daff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: none;
+}
+
+/* Closing phrase: blue accent gradient + a highlight layer parked off-screen left,
+   swept across once (staggered per word) after the reveal finishes */
+.wordAccent {
+  background-image: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.95) 50%, transparent 62%),
+  linear-gradient(135deg, #b7cdfb 0%, #5f8ef7 100%);
+  background-size: 250% 100%, 100% 100%;
+  background-position: -140% 0, 0 0;
+  background-repeat: no-repeat;
+
+  &[data-shine="true"] {
+    animation: shine 0.9s ease-in-out both;
+  }
+}
+
+@keyframes shine {
+  from {
+    background-position: -140% 0, 0 0;
+  }
+  to {
+    background-position: 240% 0, 0 0;
+  }
 }

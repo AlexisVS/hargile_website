@@ -1,84 +1,38 @@
 import styled from 'styled-components';
 
-export const LanguageSelectorContainer = styled.div.attrs({
-    className: 'fluid-type-2-5'
-})`
-    position: relative;
-    display: inline-block;
-`;
-
-export const SelectedLanguage = styled.button.attrs({
-    className: 'fluid-type-1'
-})`
+export const LanguageSwitch = styled.div`
     display: flex;
     align-items: center;
-    color: var(--color-text-light);
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    span {
-        margin: 0 0.5rem;
-    }
-
-    svg {
-        transition: transform 0.2s ease;
-
-        &.rotated {
-            transform: rotate(180deg);
-        }
-    }
+    gap: 2px;
 `;
 
-export const FlagIcon = styled.span`
-    margin-right: 0.5rem;
-`;
-
-export const LanguageDropdown = styled.div`
-    position: absolute;
-    top: calc(100% + 0.5rem);
-    left: 0;
-    width: max-content;
-    border-radius: 0.375rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-    z-index: 100;
-    animation: fadeIn 0.2s ease;
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-`;
-
-export const LanguageOption = styled.button.attrs({
-    className: 'fluid-type-0'
-})`
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 0.75rem 1rem;
-    text-align: left;
-    background-color: ${props => props.$isactive ? 'rgba(150, 185, 249, 0.2)' : 'transparent'};
-    color: var(--color-text-light);
+export const LanguageCode = styled.button`
+    background: none;
     border: none;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    padding: 6px 7px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1;
+    color: ${({$active}) => ($active ? 'var(--color-accent-mihai)' : 'rgba(237, 237, 237, 0.45)')};
+    transition: color 0.2s ease, background 0.2s ease;
 
     &:hover {
-        background-color: rgba(150, 185, 249, 0.1);
+        color: ${({$active}) => ($active ? 'var(--color-accent-mihai)' : '#ededed')};
+        background: rgba(255, 255, 255, 0.06);
     }
 
-    span {
-        margin-left: 0.5rem;
-        word-break: keep-all;
-        width: max-content;
+    &:focus-visible {
+        outline: 2px solid rgba(150, 185, 249, 0.7);
+        outline-offset: 2px;
     }
+`;
+
+export const LanguageDivider = styled.span`
+    color: rgba(255, 255, 255, 0.18);
+    font-size: 12px;
+    user-select: none;
 `;

@@ -56,28 +56,26 @@ export const useNavigationVisibility = (isOpen) => {
                 window.scrollTo(0, parseInt(scrollY || '0') * -1);
             }
 
-            // Calculate timing based on actual number of menu items
-            const menuItems = document.querySelectorAll('.navbar__navigation__item');
-            const totalItems = menuItems.length;
-            const staggerDelay = 60;
-            const animationDuration = 300;
+            // Close choreography: the panel's opacity fade (0.55s, see
+            // NavbarNavigation) starts while the items are still staggering
+            // out, so everything melts away as one motion. The gradient
+            // background is NOT transitionable (gradient → transparent snaps),
+            // so it only gets removed once the panel is fully invisible —
+            // removing it earlier was the visible "awkward" pop.
+            const PANEL_FADE_START = 150;
+            const PANEL_FADE_DURATION = 550;
 
-            // Last item starts at (totalItems-1) * staggerDelay and takes animationDuration to complete
-            const totalMenuItemsAnimationTime = (totalItems - 1) * staggerDelay + animationDuration;
-
-            // Keep background colors/blur active until menu items are gone
-            const backgroundTimer = setTimeout(() => {
-                dispatch({type: 'HIDE_BACKGROUND'});
-            }, totalMenuItemsAnimationTime + 50);
-
-            // Then start fading the background opacity
             const visibilityTimer = setTimeout(() => {
                 dispatch({type: 'HIDE_NAVIGATION'});
-            }, totalMenuItemsAnimationTime + 100);
+            }, PANEL_FADE_START);
+
+            const backgroundTimer = setTimeout(() => {
+                dispatch({type: 'HIDE_BACKGROUND'});
+            }, PANEL_FADE_START + PANEL_FADE_DURATION + 100);
 
             const hideTimer = setTimeout(() => {
                 dispatch({type: 'HIDE_ITEMS'});
-            }, totalMenuItemsAnimationTime + 1000);
+            }, PANEL_FADE_START + PANEL_FADE_DURATION + 100);
 
             timers.current.push(backgroundTimer, visibilityTimer, hideTimer);
         }

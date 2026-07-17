@@ -1,81 +1,41 @@
 'use client';
 
-import {useEffect, useRef, useState} from 'react';
+import {Fragment} from 'react';
 import {useLocale} from 'next-intl';
-import {ChevronDown} from 'lucide-react';
-import getCountryFlagEmoji from 'country-flag-icons/unicode';
-import {
-    FlagIcon,
-    LanguageDropdown,
-    LanguageOption,
-    LanguageSelectorContainer,
-    SelectedLanguage
-} from './language-selector.styled';
 import {usePathname, useRouter} from "@/i18n/navigation";
+import {routing} from "@/i18n/routing";
+import {LanguageCode, LanguageDivider, LanguageSwitch} from './language-selector.styled';
 
-const LANGUAGES = [
-    {locale: 'en', label: 'English', country: 'GB'},
-    {locale: 'fr', label: 'Français', country: 'FR'},
-    // Add more languages as needed
-];
-
+/* Flagless segmented switch — with two locales a dropdown (and flags, which
+   conflate country and language) is more chrome than the choice deserves.
+   The locale list comes straight from the i18n routing config, so adding a
+   locale there is enough. */
 export default function LanguageSelector() {
     const currentLocale = useLocale();
-    const [isOpen, setIsOpen] = useState(false);
-    const dropdownRef = useRef(null);
-    const router = useRouter()
-    const pathname = usePathname()
-    // Find current language details
-    const currentLanguage = LANGUAGES.find(lang => lang.locale === currentLocale) || LANGUAGES[0];
+    const router = useRouter();
+    const pathname = usePathname();
 
-    // Handle click outside to close dropdown
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsOpen(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    // Handle language change using the provided setRequestLocale function
     const changeLanguage = (locale) => {
         if (locale !== currentLocale) {
-            // Use the basic setRequestLocale function
-            router.push(pathname, {
-                locale: locale,
-            });
+            router.push(pathname, {locale});
         }
-        setIsOpen(false);
     };
 
     return (
-        <LanguageSelectorContainer ref={dropdownRef}>
-            <SelectedLanguage onClick={() => setIsOpen(!isOpen)}>
-                <FlagIcon className={'fluid-type-2-5'}>{getCountryFlagEmoji(currentLanguage.country)}</FlagIcon>
-                {/*<span>{currentLanguage.label}</span>*/}
-                <ChevronDown size={16} className={isOpen ? 'rotated' : ''}/>
-            </SelectedLanguage>
-
-            {isOpen && (
-                <LanguageDropdown>
-                    {LANGUAGES.map((language) => (
-                        <LanguageOption
-                            key={language.locale}
-                            $isactive={`${language.locale === currentLocale}`}
-                            onClick={() => changeLanguage(language.locale)}
-                            data-locale={language.locale}
-                        >
-                            <FlagIcon className={'fluid-type-1-5'}>{getCountryFlagEmoji(language.country)}</FlagIcon>
-                            <span>{language.label}</span>
-                        </LanguageOption>
-                    ))}
-                </LanguageDropdown>
-            )}
-        </LanguageSelectorContainer>
+        <LanguageSwitch aria-label="Language">
+            {routing.locales.map((locale, i) => (
+                <Fragment key={locale}>
+                    {i > 0 && <LanguageDivider aria-hidden="true">/</LanguageDivider>}
+                    <LanguageCode
+                        type="button"
+                        $active={locale === currentLocale}
+                        aria-current={locale === currentLocale ? 'true' : undefined}
+                        onClick={() => changeLanguage(locale)}
+                    >
+                        {locale}
+                    </LanguageCode>
+                </Fragment>
+            ))}
+        </LanguageSwitch>
     );
 }

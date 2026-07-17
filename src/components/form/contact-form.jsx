@@ -2,7 +2,8 @@
 // (Adjust path as necessary for your project structure)
 
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -11,17 +12,44 @@ import { motion } from "motion/react";
 // Styled Components and Child Components (Ensure paths are correct)
 import { Header } from "@/components/header/mainHeader";
 import {
+  BendsBackdrop,
   FormContainer,
   FormGrid,
   PageWrapper,
   StatusMessageDisplay,
   SubmitButton,
 } from "@/components/pages/homepage/quote-request/quote-request-form.styled";
+
+// Client-only WebGL, kept out of the initial bundle — same vendored component
+// as the homepage hero, dialed way down via BendsBackdrop's opacity/mask.
+const ColorBends = dynamic(
+  () => import("@/components/vendor/color-bends/ColorBends"),
+  { ssr: false }
+);
+
+/* On phones the bands should sweep left→right across the screen rather than
+   stacking top→bottom — near-horizontal rotation lays them along the width,
+   the larger scale keeps fewer, broader bands in view (same treatment as the
+   homepage hero's portrait mode). */
+const useMobileBends = () => {
+  const [mobile, setMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    const sync = () => setMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  return mobile;
+};
 import { ContactSection } from "@/components/pages/homepage/quote-request/components/ContactSection";
 import { PrivacyFooter } from "@/components/pages/homepage/quote-request/components/PrivacyFooter";
 
 export default function ContactForm() {
   const t = useTranslations("components.contact-form");
+  const mobileBends = useMobileBends();
 
   // Define Zod Schema based on your form fields
   // Ensure field names match the 'name' prop used in register (e.g., 'description')
@@ -128,6 +156,21 @@ export default function ContactForm() {
 
   return (
     <PageWrapper>
+      <BendsBackdrop aria-hidden="true">
+        <ColorBends
+          colors={["#2563eb", "#96b9f9"]}
+          rotation={mobileBends ? 0 : 72}
+          scale={mobileBends ? 1.7 : 1}
+          speed={0.14}
+          frequency={1.0}
+          noise={0.02}
+          bandWidth={1.35}
+          iterations={1}
+          intensity={0.72}
+          mouseInfluence={0.3}
+          parallax={0.25}
+        />
+      </BendsBackdrop>
       <FormContainer>
         <Header // Assuming Header component exists
           title={t("title")}

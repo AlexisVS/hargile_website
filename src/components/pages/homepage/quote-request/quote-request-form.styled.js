@@ -10,6 +10,21 @@ export const PageWrapper = styled.div`
      .content-container's side padding (same trick as the v2 sections) so the
      inner container's gutters line up exactly with the homepage's. */
   margin-inline: calc(50% - 50vw);
+  /* Slide up under the fixed navbar so the bends reach the very top and the
+     navbar frosts the colour instead of sitting as a black band above it —
+     same move as the homepage hero. FormContainer re-adds the offset. */
+  margin-top: calc(-1 * var(--navbar-height, 68px));
+`;
+
+/* Full-bleed WebGL bends behind the form — darker than the hero's, but with
+   real colour presence, reaching the very top so the transparent navbar
+   frosts it like on the homepage. */
+export const BendsBackdrop = styled.div`
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.55;
 `;
 
 export const BackgroundBlur = styled.div`
@@ -32,6 +47,8 @@ export const FormContainer = styled.div`
   max-width: var(--container-max);
   margin: 0 auto;
   padding: clamp(28px, 3.5vw, 48px) var(--container-gutter);
+  /* The wrapper slides under the fixed navbar — keep the copy clear of it. */
+  padding-top: calc(clamp(28px, 3.5vw, 48px) + var(--navbar-height, 68px));
   position: relative;
   z-index: 10;
   width: 100%;
@@ -370,15 +387,18 @@ export const SubmitButton = styled.button.attrs({
   margin-top: auto; /* Pushes to bottom if in a flex column like ServiceTypesColumn */
   /* Ensure space above if content before it is dynamic */
 
-  /* v2 CTA — same treatment as the hero's primary button. */
+  /* v2 CTA — same treatment as the hero's primary button. Compact, not
+     full-width: it sits left-aligned like the homepage CTA row. */
   background: #96b9f9;
   color: #0a0a12;
   font-weight: 600;
-  padding: 0.85rem 2rem;
+  padding: 0.85rem 3rem;
   border-radius: 12px;
   border: none;
   cursor: pointer;
-  width: 100%;
+  width: fit-content;
+  min-width: 220px;
+  justify-self: start;
   text-align: center;
   transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
 
