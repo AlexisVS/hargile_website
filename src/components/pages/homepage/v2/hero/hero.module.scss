@@ -2,13 +2,22 @@
 
 .section {
   position: relative;
-  min-height: calc(100vh - var(--navbar-height, 68px));
+  min-height: 100vh;
   display: flex;
   align-items: center;
   overflow-x: clip;
   /* Break out of .content-container's 6vw side padding — the orb/dot-grid
      must reach the viewport edges (body has overflow-x: hidden). */
   margin-inline: calc(50% - 50vw);
+
+  /* Only the first hero slides up under the fixed navbar, so its WebGL backdrop
+     reaches the very top (the navbar is transparent at scroll 0 and frosts the
+     canvas rather than sitting as a black band above it). Stacked comparison
+     heroes keep their own box — a negative margin on each would pull them up
+     over the previous one. .container re-adds the offset as padding. */
+  &:first-child {
+    margin-top: calc(-1 * var(--navbar-height, 68px));
+  }
 
   /* Neutralize the legacy .content-container text-shadow (_earth.scss) —
      it bleeds through the transparent gradient headline. */
@@ -18,48 +27,103 @@
   }
 }
 
-/* Blurred primary orb, top-left */
+/* Ambient wash behind the copy.
+   Not a decorative blob: it sits under the headline — the side the WebGL backdrop
+   is masked away from — so the text reads against a soft lift instead of flat
+   black, and the left edge of the hero doesn't die while the right side glows. */
 .orb {
   position: absolute;
-  top: -220px;
-  left: -180px;
-  width: 760px;
-  height: 760px;
+  top: 50%;
+  left: -10%;
+  width: min(1100px, 85vw);
+  height: min(760px, 80vh);
+  transform: translateY(-50%);
   border-radius: 50%;
-  background: #2563eb;
-  opacity: 0.09;
-  filter: blur(160px);
+  /* Elliptical falloff rather than a hard circle — no visible edge against the canvas. */
+  background: radial-gradient(
+    ellipse at center,
+    rgba(37, 99, 235, 0.16) 0%,
+    rgba(37, 99, 235, 0.07) 45%,
+    transparent 72%
+  );
+  filter: blur(90px);
   pointer-events: none;
 }
 
-/* Faint dot grid, masked to an ellipse */
+/* Faint dot grid — masked toward the left so it textures the copy side and
+   leaves the right to the WebGL backdrop rather than cross-hatching it. */
 .dotGrid {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(237, 237, 237, 0.05) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(237, 237, 237, 0.04) 1px, transparent 1px);
   background-size: 36px 36px;
-  mask-image: radial-gradient(ellipse 70% 60% at 60% 40%, #000 0%, transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 60% 40%, #000 0%, transparent 75%);
+  mask-image: radial-gradient(ellipse 60% 70% at 28% 50%, #000 0%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 60% 70% at 28% 50%, #000 0%, transparent 78%);
   pointer-events: none;
 }
 
-/* WebGL backdrop canvas — behind the copy, above the orb/dot-grid */
+/* WebGL backdrop canvas — behind the copy, above the orb/dot-grid.
+   Fills the whole hero: a horizontal falloff (not a radial cutout) keeps the
+   canvas edge-to-edge while easing it back behind the headline, so the copy side
+   stays legible without leaving the top of the section flat black. */
 .backdrop {
   position: absolute;
   inset: 0;
   pointer-events: none;
   opacity: 0.85;
-  /* Strongest on the right, dissolved behind the headline so text stays legible. */
-  mask-image: radial-gradient(ellipse 78% 90% at 72% 50%, #000 0%, transparent 74%);
-  -webkit-mask-image: radial-gradient(ellipse 78% 90% at 72% 50%, #000 0%, transparent 74%);
+  mask-image: linear-gradient(
+    100deg,
+    rgba(0, 0, 0, 0.28) 0%,
+    rgba(0, 0, 0, 0.5) 32%,
+    #000 68%
+  );
+  -webkit-mask-image: linear-gradient(
+    100deg,
+    rgba(0, 0, 0, 0.28) 0%,
+    rgba(0, 0, 0, 0.5) 32%,
+    #000 68%
+  );
 
   canvas {
     display: block;
+    width: 100% !important;
+    height: 100% !important;
   }
 
   @media (max-width: 768px) {
-    opacity: 0.5;
+    opacity: 0.55;
   }
+}
+
+/* Crisp variants (cube grid): full opacity and a straight linear fade rather
+   than the soft wash the gradient backdrops want, so the geometry stays sharp. */
+.sectionSharp .backdrop {
+  opacity: 1;
+  mask-image: linear-gradient(100deg, transparent 0%, rgba(0, 0, 0, 0.55) 38%, #000 62%);
+  -webkit-mask-image: linear-gradient(100deg, transparent 0%, rgba(0, 0, 0, 0.55) 38%, #000 62%);
+
+  @media (max-width: 768px) {
+    opacity: 0.75;
+  }
+}
+
+/* Comparison label — only rendered while several hero variants are stacked. */
+.variantTag {
+  position: absolute;
+  top: calc(var(--navbar-height, 68px) + 18px);
+  right: 24px;
+  z-index: 2;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(150, 185, 249, 0.35);
+  background: rgba(10, 10, 18, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #96b9f9;
 }
 
 .container {
@@ -77,6 +141,16 @@
 
   @media (max-width: 640px) {
     padding: 56px 20px;
+  }
+
+  /* In the first hero the section sits under the navbar — keep the copy clear
+     of it without pushing the whole (vertically centred) row off balance. */
+  .section:first-child & {
+    padding-top: calc(80px + var(--navbar-height, 68px));
+
+    @media (max-width: 640px) {
+      padding-top: calc(56px + var(--navbar-height, 68px));
+    }
   }
 }
 
@@ -191,6 +265,66 @@
   }
 }
 
+/* --- Capability column (cube-grid variant) ---
+   Rules and numerals instead of floating glass: straight lines sit with the
+   grid rather than across it. */
+
+.capList {
+  flex: 1 1 340px;
+  max-width: 420px;
+  min-width: min(300px, 100%);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.capItem {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  padding: 22px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.3s, padding-left 0.3s;
+
+  &:hover {
+    background: rgba(150, 185, 249, 0.05);
+    padding-left: 12px;
+  }
+}
+
+.capNum {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: #96b9f9;
+  flex-shrink: 0;
+  width: 24px;
+}
+
+.capBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.capTitle {
+  font-family: var(--font-headings);
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  color: #ededed;
+}
+
+.capText {
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: rgba(237, 237, 237, 0.55);
+}
+
 /* --- Right-side orbital visual --- */
 
 .visual {
@@ -237,13 +371,17 @@
 .floatCard {
   position: absolute;
   width: 220px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  /* Heavy blur + saturate so the WebGL backdrop reads as frosted glass behind. */
+  backdrop-filter: blur(32px) saturate(160%);
+  -webkit-backdrop-filter: blur(32px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 18px;
   padding: 18px 20px;
   box-sizing: border-box;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
 
   @media (max-width: 560px) {
     width: 185px;

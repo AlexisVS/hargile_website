@@ -4,19 +4,22 @@ import dynamic from "next/dynamic";
 import styles from "../hero.module.scss";
 
 /* Hero backdrop switcher — lets us compare WebGL treatments without touching hero.jsx.
-   Set NEXT_PUBLIC_HERO_BACKDROP to one of the VARIANTS keys, or append
-   ?backdrop=<key> to the URL to preview a variant on the fly. */
+   Pass `variant`, or leave it out and it reads ?backdrop=<key> from the URL, then
+   NEXT_PUBLIC_HERO_BACKDROP, then falls back to DEFAULT_VARIANT. */
 
-export const VARIANTS = ["bends", "waves", "cubes", "particles", "none"];
+export const VARIANTS = ["bends", "cubes", "none"];
 
 const DEFAULT_VARIANT = "bends";
 
 // Three.js is client-only and ~150KB — keep every variant out of the initial bundle.
 const ColorBends = dynamic(() => import("@/components/vendor/color-bends/ColorBends"), {ssr: false});
-const WaveGrid = dynamic(() => import("./wave-grid"), {ssr: false});
+const CubeGrid = dynamic(() => import("./cube-grid"), {ssr: false});
 
-// Brand blues, dark → light, for the bend gradient.
-const BEND_COLORS = ["#0a0a12", "#1e3a8a", "#2563eb", "#96b9f9"];
+// The actual brand blues, dark → light: page background, then #2563eb (the hero
+// orb) and #96b9f9 (the accent used across the site). The first two stops sit
+// near the background so the bands stay dark overall and the brand blues land
+// where the light concentrates — on the crest of a band — rather than as a wash.
+const BEND_COLORS = ["#07070f", "#101c3a", "#2563eb", "#96b9f9"];
 
 const resolveVariant = () => {
     if (typeof window !== "undefined") {
@@ -27,28 +30,29 @@ const resolveVariant = () => {
     return VARIANTS.includes(env) ? env : DEFAULT_VARIANT;
 };
 
-const HeroBackdrop = () => {
-    const variant = resolveVariant();
+const HeroBackdrop = ({variant}) => {
+    const active = variant ?? resolveVariant();
 
-    if (variant === "none") return null;
+    if (active === "none") return null;
 
     return (
         <div className={styles.backdrop} aria-hidden="true">
-            {variant === "bends" && (
+            {active === "bends" && (
                 <ColorBends
+                    className=""
                     colors={BEND_COLORS}
                     rotation={72}
                     speed={0.18}
                     frequency={1.1}
-                    noise={0.12}
-                    bandWidth={0.5}
+                    noise={0.1}
+                    bandWidth={0.34}
                     iterations={1}
-                    intensity={1.25}
+                    intensity={1.05}
                     mouseInfluence={0.35}
                     parallax={0.3}
                 />
             )}
-            {variant === "waves" && <WaveGrid/>}
+            {active === "cubes" && <CubeGrid/>}
         </div>
     );
 };

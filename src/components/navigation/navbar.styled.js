@@ -11,11 +11,15 @@ export const StyledNavbar = styled.div`
     align-items: center;
     padding: 1rem 24px 1rem 9.5rem;
     z-index: 1002;
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    background: rgba(0, 0, 0, 0.3);
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    
+    /* At the top of the page the bar is fully transparent, so the hero backdrop
+       runs edge-to-edge with no seam under it. The blur/tint only fades in once
+       content starts scrolling beneath it. */
+    backdrop-filter: ${({$scrolled}) => ($scrolled ? 'blur(20px) saturate(180%)' : 'none')};
+    -webkit-backdrop-filter: ${({$scrolled}) => ($scrolled ? 'blur(20px) saturate(180%)' : 'none')};
+    background: ${({$scrolled}) => ($scrolled ? 'rgba(0, 0, 0, 0.3)' : 'transparent')};
+    transition: background 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                backdrop-filter 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
     @media (max-width: 768px) {
         padding: 1rem 24px 1rem 12px;
     }

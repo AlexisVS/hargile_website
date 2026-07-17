@@ -39,6 +39,7 @@ const Navbar = () => {
     const navbarRef = useRef(null);
     const brandRef = useRef(null);
     const [navbarHeight, setNavbarHeight] = useState(0);
+    const [scrolled, setScrolled] = useState(false);
     const t = useTranslations('components.menu');
     const isMounted = useIsClient();
 
@@ -62,6 +63,14 @@ const Navbar = () => {
         };
     }, []);
 
+    // Transparent while pinned at the top; tinted once content scrolls under it.
+    useEffect(() => {
+        const onScroll = () => setScrolled(window.scrollY > 8);
+        onScroll();
+        window.addEventListener('scroll', onScroll, {passive: true});
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
+
 
     const triggerHomeTransitionAnimation = useCallback((e) => {
         e.preventDefault();
@@ -76,7 +85,7 @@ const Navbar = () => {
 
     return (
         <>
-            <StyledNavbar ref={navbarRef}>
+            <StyledNavbar ref={navbarRef} $scrolled={scrolled || isOpen}>
                 <Brand
                     ref={brandRef}
                     as="a"

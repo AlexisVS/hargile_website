@@ -12,7 +12,7 @@ const CARDS = [
     {key: "marketing", className: "floatCardC"},
 ];
 
-const HeroV2 = () => {
+const HeroV2 = ({backdrop, label}) => {
     const t = useTranslations("pages.homepage.sections.hero.v2");
     const {setIsAuditModalOpen} = useSiteNavigation();
     const reducedMotion = useReducedMotion();
@@ -24,10 +24,13 @@ const HeroV2 = () => {
     });
 
     return (
-        <section className={styles.section}>
-            <div className={styles.orb} aria-hidden="true"/>
+        <section className={`${styles.section} ${backdrop === "cubes" ? styles.sectionSharp : ""}`}>
+            {/* The cube grid is a crisp, geometric backdrop — a blurred orb over it
+                just muddies the edges, so it only ships with the softer variants. */}
+            {backdrop !== "cubes" && <div className={styles.orb} aria-hidden="true"/>}
             <div className={styles.dotGrid} aria-hidden="true"/>
-            <HeroBackdrop/>
+            <HeroBackdrop variant={backdrop}/>
+            {label && <div className={styles.variantTag}>{label}</div>}
 
             <div className={styles.container}>
                 <div className={styles.copy}>
@@ -57,25 +60,53 @@ const HeroV2 = () => {
                     </motion.div>
                 </div>
 
-                <motion.div
-                    className={styles.visual}
-                    aria-hidden="true"
-                    initial={{opacity: 0}}
-                    animate={{opacity: 1}}
-                    transition={{duration: 0.8, ease: "easeOut", delay: 0.25}}
-                >
-                    <div className={styles.ringDashed}/>
-                    <div className={styles.ringSpin}/>
-                    <div className={styles.centerGlow}/>
+                {backdrop === "cubes" ? (
+                    /* Against the cube grid, the orbital cards fight the geometry.
+                       A numbered column echoes the grid's own alignment instead. */
+                    <motion.ul
+                        className={styles.capList}
+                        aria-hidden="true"
+                        initial={{opacity: 0}}
+                        animate={{opacity: 1}}
+                        transition={{duration: 0.8, ease: "easeOut", delay: 0.25}}
+                    >
+                        {CARDS.map((card, i) => (
+                            <motion.li
+                                key={card.key}
+                                className={styles.capItem}
+                                initial={reducedMotion ? {opacity: 0} : {opacity: 0, x: 18}}
+                                animate={{opacity: 1, x: 0}}
+                                transition={{duration: 0.5, ease: "easeOut", delay: 0.35 + i * 0.12}}
+                            >
+                                <span className={styles.capNum}>{String(i + 1).padStart(2, "0")}</span>
+                                <span className={styles.capBody}>
+                                    <span className={styles.capTitle}>{t(`cards.${card.key}.title`)}</span>
+                                    <span className={styles.capText}>{t(`cards.${card.key}.text`)}</span>
+                                </span>
+                            </motion.li>
+                        ))}
+                    </motion.ul>
+                ) : (
+                    <motion.div
+                        className={styles.visual}
+                        aria-hidden="true"
+                        initial={{opacity: 0}}
+                        animate={{opacity: 1}}
+                        transition={{duration: 0.8, ease: "easeOut", delay: 0.25}}
+                    >
+                        <div className={styles.ringDashed}/>
+                        <div className={styles.ringSpin}/>
+                        <div className={styles.centerGlow}/>
 
-                    {CARDS.map((card) => (
-                        <div key={card.key} className={`${styles.floatCard} ${styles[card.className]}`}>
-                            <div className={styles.cardDot}/>
-                            <div className={styles.cardTitle}>{t(`cards.${card.key}.title`)}</div>
-                            <div className={styles.cardText}>{t(`cards.${card.key}.text`)}</div>
-                        </div>
-                    ))}
-                </motion.div>
+                        {CARDS.map((card) => (
+                            <div key={card.key} className={`${styles.floatCard} ${styles[card.className]}`}>
+                                <div className={styles.cardDot}/>
+                                <div className={styles.cardTitle}>{t(`cards.${card.key}.title`)}</div>
+                                <div className={styles.cardText}>{t(`cards.${card.key}.text`)}</div>
+                            </div>
+                        ))}
+                    </motion.div>
+                )}
             </div>
         </section>
     );
