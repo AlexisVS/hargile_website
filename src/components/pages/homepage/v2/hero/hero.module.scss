@@ -170,8 +170,24 @@
   line-height: 1.06;
   margin: 0;
   max-width: 20ch;
+  /* background-clip: text maps the ramp across the element's box, not the glyphs.
+     At max-width the box runs wider than the longest line, so the tail of the ramp
+     falls in empty space to the right and the strongest blue never lands on a
+     letter. Shrink-wrapping the box puts the full range back on the text. */
+  width: fit-content;
   text-wrap: balance;
-  background: linear-gradient(135deg, #ffffff 30%, #96b9f9 100%);
+  /* The ramp has to travel further than it looks: over five lines of display type,
+     white to a pale blue reads as flat. It holds white through the first line, then
+     runs to the brand blue via a mid stop, and lands on the saturated #4d84f0 —
+     #96b9f9 alone is only a few steps off white at this size. The last line takes
+     the colour, which is where the eye lands before the CTAs. */
+  background: linear-gradient(
+    135deg,
+    #ffffff 12%,
+    #dce7fd 42%,
+    #96b9f9 72%,
+    #4d84f0 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -250,8 +266,12 @@
 }
 
 /* --- Capability column (cube-grid variant) ---
-   Rules and numerals instead of floating glass: straight lines sit with the
-   grid rather than across it. */
+   Rules rather than boxes: straight lines sit with the grid instead of across it,
+   and the grid stays visible through the column — a panel behind the copy would
+   read as a hole punched in the cubes.
+   Legibility therefore comes from the type itself: each row carries a tight dark
+   halo (see .capTitle / .capText) that darkens only the pixels around the glyphs.
+   The cubes keep moving right up to the letterforms. */
 
 .capList {
   flex: 1 1 340px;
@@ -260,31 +280,21 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
 }
 
+/* One child (.capBody) now that the marker is gone, so the row is just a block with
+   a rule under it — the flex/baseline setup existed to align a marker against the
+   title and has nothing left to align. */
 .capItem {
-  display: flex;
-  align-items: baseline;
-  gap: 18px;
-  padding: 22px 4px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 20px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
   transition: background 0.3s, padding-left 0.3s;
 
   &:hover {
     background: rgba(150, 185, 249, 0.05);
     padding-left: 12px;
   }
-}
-
-.capNum {
-  font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  color: #96b9f9;
-  flex-shrink: 0;
-  width: 24px;
 }
 
 .capBody {
@@ -294,19 +304,36 @@
   min-width: 0;
 }
 
+/* The halos are what make this readable over moving cubes — tight and dark, so they
+   sit right against the glyphs instead of fogging the grid. Two stacked shadows: a
+   near one for edge contrast, a wider one to knock back a bright cube crest passing
+   behind. .section's `text-shadow: none` only targets h1/p, so these spans keep it. */
+
 .capTitle {
   font-family: var(--font-headings);
   font-weight: 600;
-  font-size: 17px;
+  font-size: 18px;
   letter-spacing: -0.01em;
-  color: #ededed;
+  /* Brand blue rather than white — it ties the column to the dot and the eyebrow,
+     and it's the one spot of colour on this side. It carries less contrast against
+     the cubes than white did, so the halo below is a touch heavier than .capText's
+     to compensate. */
+  color: #96b9f9;
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 1),
+    0 2px 14px rgba(0, 0, 0, 0.85);
 }
 
 .capText {
-  font-size: 13px;
-  font-weight: 300;
-  line-height: 1.5;
-  color: rgba(237, 237, 237, 0.55);
+  font-size: 14px;
+  /* 300 was too fine to hold against the grid — it read as blurry rather than
+     light, which no amount of extra size fixes on its own. */
+  font-weight: 350;
+  line-height: 1.55;
+  color: rgba(237, 237, 237, 0.78);
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.95),
+    0 2px 10px rgba(0, 0, 0, 0.7);
 }
 
 /* --- Right-side capability cards --- */

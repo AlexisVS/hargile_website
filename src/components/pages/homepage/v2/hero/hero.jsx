@@ -57,8 +57,9 @@ const HeroV2 = ({backdrop, label}) => {
                 </div>
 
                 {backdrop === "cubes" ? (
-                    /* Against the cube grid, the orbital cards fight the geometry.
-                       A numbered column echoes the grid's own alignment instead. */
+                    /* Against the cube grid, the floating cards fight the geometry —
+                       a ruled column echoes the grid's own alignment instead, and
+                       stays transparent so the cubes read through it. */
                     <motion.ul
                         className={styles.capList}
                         aria-hidden="true"
@@ -74,7 +75,6 @@ const HeroV2 = ({backdrop, label}) => {
                                 animate={{opacity: 1, x: 0}}
                                 transition={{duration: 0.5, ease: "easeOut", delay: 0.35 + i * 0.12}}
                             >
-                                <span className={styles.capNum}>{String(i + 1).padStart(2, "0")}</span>
                                 <span className={styles.capBody}>
                                     <span className={styles.capTitle}>{t(`cards.${card.key}.title`)}</span>
                                     <span className={styles.capText}>{t(`cards.${card.key}.text`)}</span>
