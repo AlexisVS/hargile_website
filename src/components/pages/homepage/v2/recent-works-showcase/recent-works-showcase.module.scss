@@ -1,0 +1,224 @@
+/* Recent works — immersive showcase variation (design: Homepage v2)
+   Cinematic full-width stage: project image fills the frame, copy sits on a
+   scrim bottom-left, thumbnail rail below switches / auto-advances. */
+
+.stage {
+  position: relative;
+  margin-top: 64px;
+  height: clamp(420px, 46vw, 620px);
+  border-radius: 26px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  background: #0c0c14;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
+}
+
+.stageImage {
+  position: absolute;
+  inset: 0;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+/* Readability scrim — strongest bottom-left where the copy lives */
+.stageScrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(6, 6, 12, 0.92) 0%, rgba(6, 6, 12, 0.35) 45%, rgba(6, 6, 12, 0.08) 70%),
+    linear-gradient(105deg, rgba(6, 6, 12, 0.72) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.stageContent {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: clamp(24px, 4vw, 56px);
+  max-width: 640px;
+  box-sizing: border-box;
+}
+
+.stageIndex {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  color: #96b9f9;
+  margin-bottom: 14px;
+}
+
+.stageIndexTotal {
+  color: rgba(237, 237, 237, 0.4);
+  font-weight: 500;
+}
+
+.stageSub {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #96b9f9;
+  margin-bottom: 10px;
+}
+
+.stageTitle {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(30px, 3.6vw, 54px);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin: 0;
+  color: #ffffff;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.5);
+}
+
+.stageDesc {
+  font-size: clamp(14px, 1.1vw, 16px);
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.78);
+  line-height: 1.6;
+  margin: 14px 0 0;
+  max-width: 52ch;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.stageCtas {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.ctaPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #96b9f9;
+  color: #0a0a12;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 22px;
+  border-radius: 11px;
+  text-decoration: none;
+  transition: box-shadow 0.25s, background 0.25s, transform 0.15s;
+
+  &:hover {
+    box-shadow: 0 0 32px rgba(150, 185, 249, 0.4);
+    background: #b8cdfb;
+    color: #0a0a12;
+    transform: translateY(-1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(150, 185, 249, 0.7);
+    outline-offset: 2px;
+  }
+}
+
+.ctaGhost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(10, 10, 18, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #ededed;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 11px 21px;
+  border-radius: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  text-decoration: none;
+  transition: border-color 0.25s, background 0.25s;
+
+  &:hover {
+    border-color: rgba(150, 185, 249, 0.5);
+    background: rgba(150, 185, 249, 0.1);
+    color: #ededed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(150, 185, 249, 0.7);
+    outline-offset: 2px;
+  }
+}
+
+/* --- Thumbnail rail --- */
+
+.rail {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 18px;
+
+  @media (max-width: 720px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.thumb {
+  position: relative;
+  display: block;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+
+  &:focus-visible {
+    outline: 2px solid rgba(150, 185, 249, 0.7);
+    outline-offset: 2px;
+  }
+
+  &:hover .thumbImage {
+    opacity: 0.85;
+  }
+}
+
+.thumbImage {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0.55;
+  filter: saturate(0.7);
+  transition: opacity 0.3s, filter 0.3s, border-color 0.3s;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.thumbBar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  border-radius: 0 0 14px 14px;
+  background: rgba(150, 185, 249, 0);
+  transition: background 0.3s;
+}
+
+.thumbActive {
+  .thumbImage {
+    opacity: 1;
+    filter: none;
+    border-color: rgba(150, 185, 249, 0.55);
+  }
+
+  .thumbBar {
+    background: #96b9f9;
+    box-shadow: 0 0 12px rgba(150, 185, 249, 0.7);
+  }
+}

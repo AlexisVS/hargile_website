@@ -4,6 +4,7 @@ import {motion, useReducedMotion} from "motion/react";
 import {useTranslations} from "next-intl";
 import {useSiteNavigation} from "@/components/providers/site-navigation-provider";
 import styles from "./hero.module.scss";
+import HeroBackdrop from "./backdrops/hero-backdrop";
 
 const CARDS = [
     {key: "webdev", className: "floatCardA"},
@@ -26,18 +27,23 @@ const HeroV2 = () => {
         <section className={styles.section}>
             <div className={styles.orb} aria-hidden="true"/>
             <div className={styles.dotGrid} aria-hidden="true"/>
+            <HeroBackdrop/>
 
             <div className={styles.container}>
                 <div className={styles.copy}>
-                    <motion.h1 className={styles.headline} {...reveal(0)}>
+                    <motion.p className={styles.eyebrow} {...reveal(0)}>
+                        {t("eyebrow")}
+                    </motion.p>
+
+                    <motion.h1 className={styles.headline} {...reveal(1)}>
                         {t("headline")}
                     </motion.h1>
 
-                    <motion.p className={styles.paragraph} {...reveal(1)}>
+                    <motion.p className={styles.paragraph} {...reveal(2)}>
                         {t("paragraph")}
                     </motion.p>
 
-                    <motion.div className={styles.ctaRow} {...reveal(2)}>
+                    <motion.div className={styles.ctaRow} {...reveal(3)}>
                         <button
                             type="button"
                             className={styles.ctaPrimary}

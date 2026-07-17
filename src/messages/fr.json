@@ -84,11 +84,6 @@
         "line2": "1060 Saint-Gilles",
         "line3": "Belgique"
       },
-      "contact": {
-        "administration": "Administration",
-        "clients": "Contact clients",
-        "general": "Général"
-      },
       "copyright": "© {year} Hargile. Tous droits réservés",
       "links": {
         "aboutUs": "À propos de nous",
@@ -112,6 +107,7 @@
       "cookieSettings": "Paramètres des cookies",
       "customize": "Personnaliser",
       "description": "Nous utilisons des cookies pour améliorer votre expérience sur notre site, analyser notre trafic et personnaliser notre contenu. Vous pouvez choisir les cookies que vous acceptez et modifier vos préférences à tout moment.",
+      "short-description": "Nous utilisons des cookies pour améliorer votre expérience et analyser notre trafic.",
       "marketingCookies": {
         "description": "Ces cookies sont utilisés pour suivre les visiteurs sur les sites web. Ils sont conçus pour afficher des publicités pertinentes et engageantes pour l'utilisateur, en fonction de ses centres d'intérêt.",
         "title": "Cookies marketing"
@@ -138,7 +134,6 @@
       "contact": "Contact",
       "home": "Accueil",
       "i-go": "I go",
-      "multipass": "Multipass",
       "our-dna": "Notre ADN",
       "portfolio": "Portfolio",
       "services": "Services",
@@ -311,7 +306,7 @@
             "years": "Années d'expérience"
           },
           "subtitle": "Découvrez notre agence",
-          "who_description": "Chez HARGILE, nous façonnons notre développement comme on sculpte une œuvre : avec soin, intention et sens du détail.\n\nNotre ambition ? Créer des solutions numériques qui ont du sens, qui servent vos objectifs et qui évoluent avec vous.",
+          "who_description": "Chez HARGILE, nous façonnons notre développement comme on sculpte une œuvre : avec soin, intention et sens du détail.",
           "who_title": "Nos valeurs"
         },
         "digital-audit": {
@@ -394,10 +389,11 @@
           "paragraph": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
           "quote": "Se démarquer, grandir et prospérer dans un monde de plus en plus connecté.",
           "v2": {
-            "headline": "Des expériences digitales qui élèvent votre entreprise.",
-            "paragraph": "Nous sommes une agence digitale spécialisée en développement web, solutions IA et stratégies marketing — pour vous démarquer, grandir et prospérer dans un monde toujours plus connecté.",
-            "ctaAudit": "Auditer votre site web",
-            "ctaWork": "Voir nos réalisations",
+            "eyebrow": "Tech Studio",
+            "headline": "Nous développons des applications web sur mesure pour les PME.",
+            "paragraph": "HARGILE est le partenaire technique sur qui nos clients peuvent compter, avec la réactivité et l'expertise d'une équipe qui s'implique comme si c'était son propre projet.",
+            "ctaAudit": "Nous contacter",
+            "ctaWork": "Portoflio",
             "cards": {
               "webdev": {
                 "title": "Développement web",
@@ -408,8 +404,8 @@
                 "text": "L'intelligence intégrée à votre produit"
               },
               "marketing": {
-                "title": "Marketing",
-                "text": "Des stratégies qui vous rendent visible"
+                "title": "SEO",
+                "text": "Automatisés votre SEO"
               }
             }
           }
@@ -459,11 +455,6 @@
               "subtitle": "Une navigation GPS spécialisé",
               "title": "I GO"
             },
-            "multipass": {
-              "description": "Que vous soyez une startup ambitieuse ou une entreprise bien établie, Multipass vous offre une plateforme modulable et évolutive. Conçue pour s’adapter à tous les secteurs d’activité, notre solution vous permet de centraliser, gérer et optimiser vos relations clients avec une flexibilité inégalée.",
-              "subtitle": "La solution agile qui s’adapte à votre entreprise.",
-              "title": "Multipass"
-            },
             "your-project": {
               "description": "Derrière chaque projet, chaque personne, il y a une rencontre unique. Nous mettons la technologie au service d’une vision : la vôtre. Créer des expériences qui touchent, qui rassemblent, qui font grandir, durables et porteuses de sens est notre participation à votre succès.",
               "subtitle": "Facteur de croissance.",
@@ -483,15 +474,7 @@
             "i-go": {
               "description": "Développement mobile, IA",
               "title": "I GO"
-            },
-            "multipass": {
-              "description": "L'avenir du CRM",
-              "title": "Multipass"
             }
-          },
-          "deck": {
-            "next": "Projet suivant",
-            "show": "Afficher le projet"
           }
         },
         "services": {
@@ -541,18 +524,13 @@
           "title": "Ils nous font confiance"
         },
         "design-dev": {
-          "title": "Design & développement",
-          "lead": "Du premier croquis à la mise en production, nous concevons et développons vos produits digitaux de bout en bout — des interfaces agréables à utiliser, sur des bases techniques qui tiennent dans le temps.",
+          "title": "Développement & design",
+          "lead": "Du premier croquis à la mise en production, nous concevons et développons vos produits digitaux avec vous, pas pour vous — des interfaces agréables à utiliser, sur des bases techniques que nous continuons à faire vivre après la livraison. Et parce que vous restez propriétaire de votre code et de vos données, vous restez avec nous par choix, jamais par contrainte.",
           "offers": {
             "your-project": {
               "title": "Votre projet",
               "tagline": "Facteur de croissance.",
-              "description": "Derrière chaque projet, chaque personne, il y a une rencontre unique. Nous mettons la technologie au service d’une vision : la vôtre. Créer des expériences qui touchent, qui rassemblent, qui font grandir, durables et porteuses de sens est notre participation à votre succès."
-            },
-            "multipass": {
-              "title": "Multipass",
-              "tagline": "La solution agile qui s’adapte à votre entreprise.",
-              "description": "Que vous soyez une startup ambitieuse ou une entreprise bien établie, Multipass vous offre une plateforme modulable et évolutive. Conçue pour s’adapter à tous les secteurs d’activité, notre solution vous permet de centraliser, gérer et optimiser vos relations clients avec une flexibilité inégalée."
+              "description": "On écoute. On construit. On reste."
             }
           }
         }
@@ -618,6 +596,14 @@
         "hexidesigns": {
           "description": "HEXI DESIGNS présente les œuvres d'Hector Ducoux, étudiant en design de mode à Parsons, NYC.",
           "subtitle": "Artiste émergent"
+        },
+        "ecoledubonheur": {
+          "description": "Un WordPress générique transformé en expérience digitale à la hauteur d'une école qui méritait mieux.",
+          "subtitle": "Site Institutionnel · Éducation"
+        },
+        "marquisette": {
+          "description": "Gîte de caractère du XIXe siècle au cœur des Ardennes belges — site vitrine trilingue avec réservation intégrée.",
+          "subtitle": "Gîte de Caractère · Ardennes"
         },
         "itsabouttogo": {
           "description": "Un voyage à vélo en solo de 7 mois de Bruxelles au Togo à travers 14 pays, documentant des histoires via des reportages photos et vidéos tout en soutenant un orphelinat.",
@@ -951,42 +937,6 @@
         "subtitleHighlight": "mobilité urbaine",
         "subtitleRegular": "Réinventer la",
         "title": "I GO"
-      },
-      "multipass": {
-        "cta": "Découvrez Multipass en action",
-        "description": "Une solution numérique CRM polyvalente avec des options modulaires adaptables à tous les segments de marché.",
-        "features": {
-          "integration": {
-            "description": "interopérabilité native avec les systèmes d'information existants (ERP, outils de messagerie, bases de données, etc.).",
-            "title": "Intégration transparente"
-          },
-          "modules": {
-            "description": "architecture modulaire permettant d'activer uniquement les fonctionnalités pertinentes selon les besoins métiers spécifiques.",
-            "title": "Modules personnalisables"
-          },
-          "reporting": {
-            "description": "tableaux de bord dynamiques, indicateurs personnalisés, export et automatisation des rapports.",
-            "title": "Reporting & analytics avancés"
-          },
-          "scalable": {
-            "description": "infrastructure pensée pour accompagner la montée en charge et les évolutions organisationnelles.",
-            "title": "Architecture évolutive (scalable)"
-          },
-          "ui": {
-            "description": "UX/UI conçue pour maximiser la productivité et réduire le temps de prise en main.",
-            "title": "Interface utilisateur optimisée"
-          }
-        },
-        "highlights": [
-          "Modulaire : activez uniquement les fonctionnalités dont vous avez besoin",
-          "Polyvalente : convient à tous les types d'entreprises, de tous secteurs",
-          "Scalable : grandit avec vous, à votre rythme"
-        ],
-        "paragraph1": "Que vous soyez une startup ambitieuse ou une entreprise bien établie, Multipass vous offre une plateforme CRM modulable et évolutive. Conçue pour s'adapter à tous les secteurs d'activité, notre solution vous permet de centraliser, gérer et optimiser vos relations clients avec une flexibilité inégalée.",
-        "paragraph2": "Passez à une gestion client intelligente !",
-        "subtitleHighlight": "CRM",
-        "subtitleRegular": "L'avenir du",
-        "title": "Multipass"
       }
     }
   },
@@ -1103,16 +1053,6 @@
           },
           "schemaType": "MobileApplication",
           "title": "I GO | Application de Navigation pour Mobilité Électrique | HARGILE"
-        },
-        "multipass": {
-          "description": "Découvrez Multipass, la solution CRM adaptable conçue pour les entreprises de toutes tailles. Personnalisez votre gestion de relation client avec des fonctionnalités modulaires évolutives.",
-          "og": {
-            "description": "Révolutionnez vos relations clients avec Multipass. Notre CRM modulaire et évolutif s'adapte aux besoins de votre entreprise avec des interfaces intuitives et des analyses puissantes.",
-            "imageAlt": "Multipass par HARGILE",
-            "title": "Multipass | Plateforme CRM Flexible | HARGILE"
-          },
-          "schemaType": "SoftwareApplication",
-          "title": "Multipass | Plateforme CRM Flexible | HARGILE"
         }
       }
     }

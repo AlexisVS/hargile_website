@@ -2,15 +2,9 @@
 
 import {motion} from "motion/react";
 import {useTranslations} from "next-intl";
-import {Link} from "@/i18n/navigation";
 import section from "../v2-section.module.scss";
 import styles from "./design-dev.module.scss";
 import {useReveal} from "../useReveal";
-
-const OFFERS = [
-    {key: "your-project", href: "/services"},
-    {key: "multipass", href: "/solutions/multipass"},
-];
 
 const DesignDevV2 = () => {
     const t = useTranslations("pages.homepage.sections.design-dev");
@@ -26,20 +20,12 @@ const DesignDevV2 = () => {
                     {t("lead")}
                 </motion.p>
 
-                <div className={styles.list}>
-                    {OFFERS.map((offer, i) => (
-                        <motion.div key={offer.key} {...reveal(i)}>
-                            <Link href={offer.href} className={styles.row}>
-                                <div className={styles.rowHead}>
-                                    <h3 className={styles.rowTitle}>{t(`offers.${offer.key}.title`)}</h3>
-                                    <div className={styles.rowTagline}>{t(`offers.${offer.key}.tagline`)}</div>
-                                </div>
-                                <p className={styles.rowText}>{t(`offers.${offer.key}.description`)}</p>
-                                <div className={styles.arrow} aria-hidden="true">→</div>
-                            </Link>
-                        </motion.div>
-                    ))}
-                </div>
+                <motion.figure className={styles.quote} {...reveal(2)}>
+                    <div className={styles.quoteGlow} aria-hidden="true"/>
+                    <blockquote className={styles.quoteText}>
+                        {t("offers.your-project.description")}
+                    </blockquote>
+                </motion.figure>
             </div>
         </section>
     );

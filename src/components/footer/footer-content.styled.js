@@ -5,20 +5,13 @@ export const FooterContentStyled = styled.div`
     margin-bottom: 10px;
     display: grid;
     grid-template-columns: 1fr;
-    row-gap: 1.25rem;
-
-    @media (min-width: 400px) {
-        grid-template-columns: repeat(2, 1fr);
-        column-gap: 0.75rem;
-        row-gap: 1.6rem;
-    }
+    row-gap: 2rem;
 
     @media (min-width: 550px) {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2rem;
-    }
-
-    @media (min-width: 1024px) {
-        grid-template-columns: repeat(5, 1fr);
+        /* Brand column keeps the address readable; the two link columns
+           only take the width they need, so nothing stretches to the edge. */
+        grid-template-columns: minmax(240px, 1.2fr) max-content max-content;
+        column-gap: clamp(2rem, 7vw, 6rem);
+        row-gap: 2rem;
     }
 `;

@@ -1,4 +1,4 @@
-/* Our Values — statement + glass panel + value rows (design: Homepage v2) */
+/* Our Values — statement + value rows (design: Homepage v2) */
 
 .orb {
   position: absolute;
@@ -34,121 +34,10 @@
   margin: 20px 0 0;
 }
 
-.ctaWrap {
-  margin-top: 36px;
-}
-
-.cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #96b9f9;
-  color: #0a0a12;
-  font-size: 15px;
-  font-weight: 600;
-  padding: 13px 26px;
-  border-radius: 12px;
-  text-decoration: none;
-  transition: box-shadow 0.25s, background 0.25s;
-
-  &:hover {
-    box-shadow: 0 0 32px rgba(150, 185, 249, 0.35);
-    background: #b8cdfb;
-    color: #0a0a12;
-  }
-
-  &:focus-visible {
-    outline: 2px solid rgba(150, 185, 249, 0.7);
-    outline-offset: 2px;
-  }
-}
-
-/* --- Glass panel: opportunity block --- */
-
-.panel {
-  position: relative;
-  margin-top: 88px;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 24px;
-  padding: clamp(28px, 4vw, 56px);
-}
-
-.panelHighlight {
-  position: absolute;
-  top: 0;
-  left: 32px;
-  right: 32px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
-}
-
-.panelTitle {
-  font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: clamp(24px, 2.4vw, 34px);
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  margin: 0;
-  max-width: 26ch;
-  text-wrap: balance;
-  color: #ededed;
-}
-
-.panelIntro {
-  font-size: 15px;
-  font-weight: 300;
-  color: rgba(237, 237, 237, 0.65);
-  line-height: 1.6;
-  max-width: 60ch;
-  margin: 18px 0 0;
-}
-
-.offerGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 14px 28px;
-  margin-top: 28px;
-}
-
-.offerItem {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
-
-.offerDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #96b9f9;
-  margin-top: 8px;
-  flex-shrink: 0;
-}
-
-.offerText {
-  font-size: 14.5px;
-  font-weight: 300;
-  color: rgba(237, 237, 237, 0.7);
-  line-height: 1.55;
-  margin: 0;
-}
-
-.panelConclusion {
-  font-size: 14.5px;
-  font-weight: 300;
-  color: rgba(237, 237, 237, 0.6);
-  line-height: 1.6;
-  max-width: 62ch;
-  margin: 28px 0 0;
-}
-
 /* --- Value rows --- */
 
 .values {
-  margin-top: 88px;
+  margin-top: 64px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 

@@ -10,7 +10,7 @@ import {useNavigationVisibility} from "@/hooks/useNavigationVisibility";
 import {useIsClient} from "@/hooks/useIsClient";
 import {useTranslations} from "next-intl";
 import LanguageSelector from "@/app/[locale]/components/language-selector/language-selector";
-import {SiGithub, SiGooglemaps, SiInstagram, SiYoutube} from "@icons-pack/react-simple-icons";
+import {SiGithub, SiInstagram, SiYoutube} from "@icons-pack/react-simple-icons";
 import LinkedinIcon from "@/components/icons/LinkedinIcon";
 import {
     Brand,
@@ -30,7 +30,6 @@ import {
 } from "@/components/navigation/navbar.styled";
 const menuItems = [
     {path: '/', id: 'home'},
-    {path: '/about-us', id: 'our-dna'},
     {path: '/contact', id: 'contact'},
 ];
 
@@ -129,9 +128,6 @@ const Navbar = () => {
                         <ContactEmail href="mailto:contact@hargile.com">
                             contact@hargile.com
                         </ContactEmail>
-                        <ContactPhone href="mailto:charles.dl@hargile.com">
-                            charles.dl@hargile.com
-                        </ContactPhone>
                         <ContactPhone href="tel:+32477045080">
                             +32 477 04 50 80
                         </ContactPhone>
@@ -151,9 +147,6 @@ const Navbar = () => {
                         </SocialIcon>
                         <SocialIcon href="https://www.youtube.com/@HARGILEinnovativesolutions" target="_blank" aria-label="YouTube">
                             <SiYoutube size="22px" />
-                        </SocialIcon>
-                        <SocialIcon href="https://maps.app.goo.gl/RuYC96MNXGnuPrpM7" target="_blank" aria-label="Location">
-                            <SiGooglemaps size="22px" />
                         </SocialIcon>
                         <SocialIcon href="https://github.com/HARGILE-innovative-solutions" target="_blank" aria-label="GitHub">
                             <SiGithub size="22px" />

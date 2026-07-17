@@ -120,7 +120,7 @@ export default function GDPRManager({children}) {
                     <BannerContainer>
                         <BannerContent>
                             <BannerTitle id="cookie-consent-banner-title">{t('title')}</BannerTitle>
-                            <BannerDescription>{t('description')}</BannerDescription>
+                            <BannerDescription>{t('short-description')}</BannerDescription>
                         </BannerContent>
                         <ButtonGroup>
                             <TertiaryButton onClick={rejectAll}>

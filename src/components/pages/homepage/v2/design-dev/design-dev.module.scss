@@ -1,79 +1,34 @@
-/* Design & development — editorial offer rows (design: Homepage v2) */
+/* Design & development — statement quote framed by brackets (design: Homepage v2) */
 
-.list {
-  margin-top: 64px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+.quote {
+  position: relative;
+  margin: clamp(72px, 8vw, 120px) auto 0;
+  max-width: 1000px;
+  padding: clamp(16px, 2.5vw, 28px) 0;
+  text-align: center;
 }
 
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px 48px;
-  align-items: center;
-  padding: 44px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  color: inherit;
-  text-decoration: none;
-  transition: background 0.3s;
-
-  &:hover {
-    background: rgba(150, 185, 249, 0.04);
-
-    .arrow {
-      background: rgba(150, 185, 249, 0.12);
-      border-color: rgba(150, 185, 249, 0.4);
-      transform: translateX(3px);
-    }
-  }
-
-  &:focus-visible {
-    outline: 2px solid rgba(150, 185, 249, 0.7);
-    outline-offset: -2px;
-  }
+/* Soft blue radial glow behind the quote */
+.quoteGlow {
+  position: absolute;
+  inset: -60px -20px;
+  background: radial-gradient(ellipse 60% 70% at 50% 45%, rgba(37, 99, 235, 0.13), transparent 70%);
+  filter: blur(20px);
+  pointer-events: none;
 }
 
-.rowHead {
-  flex: 1 1 280px;
-  min-width: min(280px, 100%);
-}
-
-.rowTitle {
+.quoteText {
+  position: relative;
+  margin: 0;
   font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: clamp(26px, 2.6vw, 38px);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  margin: 0;
-  color: #ededed;
-}
-
-.rowTagline {
-  font-size: 15px;
   font-weight: 500;
-  color: #96b9f9;
-  margin-top: 8px;
-}
-
-.rowText {
-  flex: 2 1 360px;
-  font-size: 14.5px;
-  font-weight: 300;
-  color: rgba(237, 237, 237, 0.62);
-  line-height: 1.65;
-  margin: 0;
-  max-width: 64ch;
-}
-
-.arrow {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 19px;
-  color: #96b9f9;
-  flex-shrink: 0;
-  transition: background 0.3s, border-color 0.3s, transform 0.3s;
+  font-size: clamp(24px, 2.9vw, 42px);
+  line-height: 1.4;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+  background: linear-gradient(135deg, #ffffff 25%, #96b9f9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
 }

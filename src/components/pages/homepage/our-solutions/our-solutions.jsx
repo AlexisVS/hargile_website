@@ -17,14 +17,6 @@ const OurSolutions = () => {
             link: '/services',
             subtitle: t("solutions.your-project.subtitle"),
         },
-        {
-            id: 'multipass',
-            title: t("solutions.multipass.title"),
-            description: t('solutions.multipass.description'),
-            iconSrc: '',
-            link: '/solutions/multipass',
-            subtitle: t('solutions.multipass.subtitle'),
-        },
     ];
 
     return (

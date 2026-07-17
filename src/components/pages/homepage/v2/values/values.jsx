@@ -2,7 +2,6 @@
 
 import {motion} from "motion/react";
 import {useTranslations} from "next-intl";
-import {Link} from "@/i18n/navigation";
 import section from "../v2-section.module.scss";
 import styles from "./values.module.scss";
 import {useReveal} from "../useReveal";
@@ -12,7 +11,6 @@ const ValuesV2 = () => {
     const reveal = useReveal();
 
     // Arrays live in the message file; t.raw returns them untranslated-through
-    const ideas = t.raw("ideas") ?? [];
     const values = t.raw("our-values") ?? [];
 
     // who_description holds the statement + ambition split on the blank line
@@ -33,30 +31,6 @@ const ValuesV2 = () => {
                         {ambition}
                     </motion.p>
                 )}
-                <motion.div className={styles.ctaWrap} {...reveal(2)}>
-                    <Link href="/about-us" className={styles.cta}>
-                        {t("subtitle")}
-                    </Link>
-                </motion.div>
-
-                {/* Opportunity glass panel */}
-                <motion.div className={styles.panel} {...reveal(0)}>
-                    <div className={styles.panelHighlight} aria-hidden="true"/>
-                    <h3 className={styles.panelTitle}>
-                        {t("approach_title").split("\n\n").join(" ")}
-                    </h3>
-                    <p className={styles.panelIntro}>{t("approach_description")}</p>
-                    <div className={styles.offerGrid}>
-                        {ideas.map((idea, i) => (
-                            <div key={i} className={styles.offerItem}>
-                                <span className={styles.offerDot}/>
-                                <p className={styles.offerText}>{idea}</p>
-                            </div>
-                        ))}
-                    </div>
-                    <p className={styles.panelConclusion}>{t("conclusion")}</p>
-                </motion.div>
-
                 {/* Value rows */}
                 <div className={styles.values}>
                     {values.map((v, i) => (

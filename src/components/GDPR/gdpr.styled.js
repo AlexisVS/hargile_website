@@ -5,47 +5,60 @@ export const CookieBanner = styled.div`
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: rgba(17, 12, 41, 0.95);
-    backdrop-filter: blur(12px);
+    /* Near-black to match the site chrome — the old rgba(17, 12, 41) read as purple. */
+    background-color: rgba(10, 10, 18, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     color: var(--color-text-light);
     z-index: 100000;
-    border-top: 1px solid rgba(150, 185, 249, 0.2);
-    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.25);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.3);
 `;
 
 export const BannerContainer = styled.div`
-    max-width: 1400px;
+    max-width: 1360px;
     margin: 0 auto;
-    padding: 1.5rem;
+    padding: 0.85rem 1.25rem;
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 0.85rem;
 
     @media (min-width: 768px) {
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        gap: 2rem;
+        padding: 0.85rem 2rem;
     }
 `;
 
 export const BannerContent = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    min-width: 0;
 `;
 
-export const BannerTitle = styled.h2.attrs({
-    className: "fluid-type-1-5",
-})`
-    font-weight: 600;
-    color: var(--color-text-light);
+/* Kept in the DOM for aria-labelledby, hidden visually to keep the bar to one line. */
+export const BannerTitle = styled.h2`
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 `;
 
-export const BannerDescription = styled.p.attrs({
-    className: "fluid-type-0",
-})`
-    color: rgba(255, 255, 255, 0.7);
-    max-width: 70ch;
+export const BannerDescription = styled.p`
+    font-size: 13.5px;
+    font-weight: 300;
+    line-height: 1.5;
+    color: rgba(237, 237, 237, 0.7);
+    max-width: 68ch;
+    text-shadow: none;
+    margin: 0;
 `;
 
 export const ButtonGroup = styled.div`
@@ -55,49 +68,49 @@ export const ButtonGroup = styled.div`
 `;
 
 export const Button = styled.button`
-    padding: 0.75rem 1.25rem;
+    padding: 0.5rem 1rem;
     border-radius: 0.5rem;
+    font-size: 13px;
     font-weight: 500;
     transition: all 0.2s ease;
     white-space: nowrap;
+    border: 1px solid transparent;
 
     &:focus-visible {
-        outline: 2px solid var(--color-accent-mihai);
+        outline: 2px solid rgba(150, 185, 249, 0.7);
         outline-offset: 2px;
     }
 `;
 
 export const PrimaryButton = styled(Button)`
-    background: linear-gradient(135deg, var(--color-accent-mihai) 0%, color-mix(in srgb, var(--color-accent-mihai) 70%, #4f46e5) 100%);
-    color: var(--color-text-light);
-    box-shadow: 0 4px 12px rgba(150, 185, 249, 0.25);
+    background: #96b9f9;
+    color: #0a0a12;
+    font-weight: 600;
 
     &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(150, 185, 249, 0.3);
-    }
-
-    &:active {
-        transform: translateY(0);
+        background: #b8cdfb;
+        box-shadow: 0 0 24px rgba(150, 185, 249, 0.3);
     }
 `;
 
 export const SecondaryButton = styled(Button)`
-    background-color: rgba(75, 85, 99, 0.3);
+    background-color: transparent;
     color: var(--color-text-light);
-    border: 1px solid rgba(150, 185, 249, 0.2);
+    border-color: rgba(255, 255, 255, 0.16);
 
     &:hover {
-        background-color: rgba(75, 85, 99, 0.5);
+        border-color: rgba(150, 185, 249, 0.45);
+        background-color: rgba(255, 255, 255, 0.04);
     }
 `;
 
 export const TertiaryButton = styled(Button)`
-    background-color: rgba(55, 65, 81, 0.3);
-    color: var(--color-text-light);
+    background-color: transparent;
+    color: rgba(237, 237, 237, 0.65);
 
     &:hover {
-        background-color: rgba(55, 65, 81, 0.5);
+        color: var(--color-text-light);
+        background-color: rgba(255, 255, 255, 0.05);
     }
 `;
 

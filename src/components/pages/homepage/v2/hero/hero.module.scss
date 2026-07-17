@@ -43,16 +43,36 @@
   pointer-events: none;
 }
 
+/* WebGL backdrop canvas — behind the copy, above the orb/dot-grid */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.85;
+  /* Strongest on the right, dissolved behind the headline so text stays legible. */
+  mask-image: radial-gradient(ellipse 78% 90% at 72% 50%, #000 0%, transparent 74%);
+  -webkit-mask-image: radial-gradient(ellipse 78% 90% at 72% 50%, #000 0%, transparent 74%);
+
+  canvas {
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    opacity: 0.5;
+  }
+}
+
 .container {
   position: relative;
-  max-width: 1200px;
+  z-index: 1; /* above the backdrop canvas */
+  max-width: 1360px;
   margin: 0 auto;
-  padding: 80px 40px;
+  padding: 80px 48px;
   width: 100%;
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  gap: 56px;
+  gap: clamp(56px, 7vw, 112px);
   flex-wrap: wrap;
 
   @media (max-width: 640px) {
@@ -61,18 +81,37 @@
 }
 
 .copy {
-  flex: 1 1 480px;
-  min-width: min(480px, 100%);
+  flex: 1.35 1 600px;
+  min-width: min(600px, 100%);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #96b9f9;
+  margin: 0 0 18px;
+
+  &::before {
+    content: "";
+    width: 24px;
+    height: 1px;
+    background: rgba(150, 185, 249, 0.5);
+  }
 }
 
 .headline {
   font-family: var(--font-headings);
   font-weight: 700;
-  font-size: clamp(44px, 5.8vw, 84px);
+  font-size: clamp(40px, 5.2vw, 76px);
   letter-spacing: -0.03em;
-  line-height: 1.04;
+  line-height: 1.06;
   margin: 0;
-  max-width: 14ch;
+  max-width: 20ch;
   text-wrap: balance;
   background: linear-gradient(135deg, #ffffff 30%, #96b9f9 100%);
   -webkit-background-clip: text;
@@ -155,8 +194,8 @@
 /* --- Right-side orbital visual --- */
 
 .visual {
-  flex: 1 1 360px;
-  max-width: 460px;
+  flex: 1 1 340px;
+  max-width: 420px;
   min-width: 300px;
   position: relative;
   height: 440px;

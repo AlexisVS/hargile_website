@@ -4,17 +4,17 @@ import React from 'react';
 import {FooterLinkStyled} from "@/components/footer/footer-link.styled";
 import {ColumnStyled} from "@/components/footer/column.styled";
 import {HeadingStyled} from "@/components/footer/heading.styled";
-import {OptimizedImage} from "@/components/optimizedImage";
 import {FooterContainerStyled} from "@/components/footer/footer-container.styled";
 import {FooterContentStyled} from "@/components/footer/footer-content.styled";
 import {BottomBarStyled} from "@/components/footer/bottom-bar.styled";
 import {BottomLinksStyled} from "@/components/footer/bottom-links.styled";
+import {BrandStyled} from "@/components/footer/brand.styled";
 import {Link} from "@/i18n/navigation";
 import {useTranslations} from 'next-intl';
 import {Address} from "@/components/footer/Adress.styled";
 import {Copyright} from "@/components/footer/Copyright.styled";
 import {SocialLinkIcon} from "@/components/footer/social-medias.styled";
-import {SiGithub, SiGooglemaps, SiInstagram, SiYoutube} from "@icons-pack/react-simple-icons";
+import {SiGithub, SiInstagram, SiYoutube} from "@icons-pack/react-simple-icons";
 import LinkedinIcon from "@/components/icons/LinkedinIcon";
 
 
@@ -43,12 +43,6 @@ const Footer = () => {
             href: "https://www.youtube.com/@HARGILEinnovativesolutions"
         },
         {
-            id: "maps",
-            title: "Our Location",
-            icon: <SiGooglemaps size={iconSize}/>,
-            href: "https://maps.app.goo.gl/RuYC96MNXGnuPrpM7"
-        },
-        {
             id: "github",
             title: "HARGILE GitHub",
             icon: <SiGithub title={"hargile"} size={iconSize}/>,
@@ -61,47 +55,21 @@ const Footer = () => {
             <FooterContentStyled>
                 {/* Company info */}
                 <ColumnStyled>
-                    <OptimizedImage
-                        width={750}
-                        height={348}
-                        src="/images/brand/brand-large-white.png"
-                        alt="HARGILE"
-                        style={{width: "12rem", height: "auto", marginBottom: "1.5rem"}}
-                    />
+                    <BrandStyled as={Link} href="/">HARGILE</BrandStyled>
                     <Address>
                         {t('address.line1')}<br/>
                         {t('address.line2')}<br/>
                         {t('address.line3')}
                     </Address>
 
-                    <dl>
-                        <dd>{t('contact.general')}</dd>
-                        <dt>
-                            <FooterLinkStyled target={'_blank'} href="mailto:contact@hargile.com">
-                                contact@hargile.com
-                            </FooterLinkStyled>
-                        </dt>
-
-                        <dd>{t('contact.clients')}</dd>
-                        <dt>
-                            <FooterLinkStyled target={'_blank'} href="mailto:charles.dl@hargile.com">
-                                charles.dl@hargile.com
-                            </FooterLinkStyled>
-                        </dt>
-
-                        {/*<dd>{t('contact.administration')}</dd>*/}
-                        {/*<dt>*/}
-                        {/*    <FooterLinkStyled target={'_blank'} href="mailto:pascal.l@hargile.com">*/}
-                        {/*        pascal.l@hargile.com*/}
-                        {/*    </FooterLinkStyled>*/}
-                        {/*</dt>*/}
-                    </dl>
+                    <FooterLinkStyled target={'_blank'} href="mailto:contact@hargile.com">
+                        contact@hargile.com
+                    </FooterLinkStyled>
                 </ColumnStyled>
 
                 {/* Company */}
                 <ColumnStyled>
                     <HeadingStyled>{t('sections.company')}</HeadingStyled>
-                    <FooterLinkStyled as={Link} href="/about-us">{t('links.aboutUs')}</FooterLinkStyled>
                     <FooterLinkStyled as={Link} href="/contact">{t('links.contact')}</FooterLinkStyled>
                 </ColumnStyled>
 
