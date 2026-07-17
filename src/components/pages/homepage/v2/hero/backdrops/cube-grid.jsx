@@ -9,12 +9,23 @@ import * as THREE from "three";
    trail of recent pointer hits streamed to the GPU as a DataTexture. Each cube
    sums a gaussian ripple per trail point, so waves expand outward and decay.
 
+   On top of the trail, a cursor swell rides directly under the pointer: a soft
+   mound that lifts nearby cubes, smoothed on the CPU so it trails the mouse
+   like a hull through calm water. The trail ripples are its wake — slow,
+   small, long-lived.
+
    Simplified against the article: no shadows, no chromatic aberration — this is
    a backdrop behind copy, so it stays cheap and never fights the headline. */
 
 const GRID = 26;      // cubes per side
 const SPACING = 0.62;
 const TRAIL = 48;     // trail points held on the GPU
+
+/* Cursor swell — the "boat hull": a soft mound that rides directly under the
+   pointer, on top of the wake the trail ripples leave behind it. Vertical only —
+   a sideways push read as cubes fleeing the pointer rather than water rising. */
+const CURSOR_FALLOFF = 0.55; // gaussian k on squared distance; sigma ≈ 0.95 world units — a mound ~5 cubes wide
+const CURSOR_BULGE = 0.08;   // peak Y lift under the cursor — a low rise; ripple crests stack on top of it, so this stays modest
 
 const WAVE_CHUNK = /* glsl */ `
     uniform float uTime;
@@ -23,6 +34,8 @@ const WAVE_CHUNK = /* glsl */ `
     uniform float uWaveSpeed;
     uniform float uWaveFreq;
     uniform float uWaveAmp;
+    uniform vec2 uCursor;          // smoothed world xz of the pointer
+    uniform float uCursorStrength; // 0..1 enter/leave envelope, smoothed on the CPU
     varying float vWave;
 
     // trail texel: xy = world xz, z = spawn time, w = strength
@@ -35,19 +48,24 @@ const WAVE_CHUNK = /* glsl */ `
 
             vec4 p = texelFetch(uTrail, ivec2(i, 0), 0);
             float age = uTime - p.z;
-            if (age < 0.0 || age > 4.0) continue;
+            if (age < 0.0 || age > 3.5) continue;
 
             float dist = distance(cell, p.xy);
             // Distance from the expanding wavefront.
             float rel = dist - age * uWaveSpeed;
 
-            // Gaussian envelope centred on the front.
-            float env = exp(-rel * rel * 1.1);
-            // Fade with age, and with distance from the impact. The distance term sets
-            // how much of the grid one ripple reaches: at 0.16 it was still at ~0.28
-            // eight units out, so a single pass moved most of the board. Steeper keeps
-            // the disturbance local to the pointer.
-            float fade = exp(-age * 0.85) * exp(-dist * 0.42) * p.w;
+            // Gaussian envelope centred on the front — soft enough to read as a
+            // swell, narrow enough that only a ring of cubes moves at once.
+            float env = exp(-rel * rel * 0.7);
+            // Fade with age, and with distance from the impact. The distance term
+            // keeps each swell tight to the pointer — only nearby cubes move; the
+            // age term lets it die gently, like calm water, not snap off.
+            // The ramp is the anti-bounce: without it a ripple is born at full
+            // height, so slow hovering — which spawns one every few pixels —
+            // replays that pop over and over. Grown in over ~0.35s, consecutive
+            // spawns blend into one continuous surface instead.
+            float ramp = smoothstep(0.0, 0.35, age);
+            float fade = ramp * exp(-age * 0.9) * exp(-dist * 0.5) * p.w;
 
             total += env * fade * cos(uWaveFreq * rel);
             weightSum += env * fade;
@@ -115,13 +133,15 @@ const CubeGrid = () => {
             uTime: {value: 0},
             uTrail: {value: trailTex},
             uTrailCount: {value: 0},
-            // Slower front than the article's, so a pass reads as a swell rather than
-            // a snap. Freq and amp are left alone — amp especially: the colour lift in
-            // the fragment shader tests vWave against fixed heights, so lowering it
+            // Slow front and long wavelength: a pass should read as a swell rolling
+            // out, boat-wake pace. Amp is left alone — the colour lift in the
+            // fragment shader tests vWave against fixed heights, so lowering it
             // would quietly stop the cubes turning blue.
-            uWaveSpeed: {value: 2.1},
-            uWaveFreq: {value: 2.4},
+            uWaveSpeed: {value: 2.2},
+            uWaveFreq: {value: 1.6},
             uWaveAmp: {value: 1.15},
+            uCursor: {value: new THREE.Vector2()},
+            uCursorStrength: {value: 0},
         };
 
         // --- Instanced cubes ---
@@ -145,10 +165,18 @@ const CubeGrid = () => {
                     "#include <begin_vertex>",
                     `#include <begin_vertex>
                      // Instance origin in world space — the cell this cube stands on.
+                     // Instance matrices are translation-only, so local offsets to
+                     // 'transformed' below are world-space offsets.
                      vec2 cell = vec2(instanceMatrix[3][0], instanceMatrix[3][2]);
                      float w = waveAt(cell);
-                     vWave = w;
-                     transformed.y += w;`,
+
+                     // Cursor swell: a gaussian bulge, vertical only.
+                     vec2 cdiff = cell - uCursor;
+                     float cg = exp(-dot(cdiff, cdiff) * ${CURSOR_FALLOFF.toFixed(4)}) * uCursorStrength;
+                     float bulge = cg * ${CURSOR_BULGE.toFixed(4)};
+
+                     vWave = w + bulge;
+                     transformed.y += w + bulge;`,
                 );
 
             shader.fragmentShader = shader.fragmentShader
@@ -206,6 +234,12 @@ const CubeGrid = () => {
         let lastMove = 0;
         let lastRipple = 0;
 
+        // Cursor-swell targets, chased with smoothing in render() so the mound
+        // follows the pointer with a slight fluid lag instead of snapping.
+        const cursorTarget = new THREE.Vector2();
+        let cursorTargetStrength = 0;
+        let lastT = 0;
+
         const onPointerMove = (e) => {
             const r = mount.getBoundingClientRect();
             // Only react while the pointer is actually over the grid. The listener has
@@ -220,8 +254,9 @@ const CubeGrid = () => {
             ) {
                 // Drop the anchor on the way out, or re-entering somewhere else would
                 // measure the jump across the gap as one huge delta and fire a
-                // max-strength ripple.
+                // max-strength ripple. The swell eases out in render().
                 lastHit = null;
+                cursorTargetStrength = 0;
                 return;
             }
 
@@ -229,6 +264,17 @@ const CubeGrid = () => {
             ndc.y = -((e.clientY - r.top) / r.height) * 2 + 1;
             raycaster.setFromCamera(ndc, camera);
             if (!raycaster.ray.intersectPlane(plane, hit)) return;
+
+            // The swell tracks every in-bounds move — only the ripple pushes below
+            // are throttled. Touch has no hover, so the mound stays dormant there
+            // and ripples remain a touch drag's whole response.
+            if (e.pointerType !== "touch") {
+                cursorTarget.set(hit.x, hit.z);
+                cursorTargetStrength = 1;
+            }
+            // Set here rather than with the ripple push: hovering should suppress
+            // idle ripples even while the throttles are skipping pushes.
+            lastMove = clock.getElapsedTime();
 
             // Strength scales with pointer speed — slow drags ripple less.
             if (!lastHit) {
@@ -243,26 +289,33 @@ const CubeGrid = () => {
             const now = clock.getElapsedTime();
 
             const d = Math.hypot(hit.x - lastHit.x, hit.z - lastHit.z);
-            if (d < 0.3) return; // ignore jitter and small moves
+            if (d < 0.18) return; // ignore jitter and small moves
 
-            // The main calmer: at the old 0.12 spacing and no time limit, one sweep
-            // pushed a ripple every few pixels and the stacked fronts read as thrashing.
-            // Distance alone can't cap it — a fast sweep clears any spacing instantly.
-            if (now - lastRipple < 0.16) return;
+            // Dense enough that a sweep reads as one continuous wake — at wide
+            // spacing the throttled ripples showed up as separate blips. The low
+            // strength cap below is what keeps this from thrashing.
+            if (now - lastRipple < 0.1) return;
 
-            // Ceiling pulled in from 1.4 so a fast flick can't slam the grid. Kept a
-            // real range though: strength feeds p.w, which scales the crest height the
-            // colour lift is measured against — floor it and the blue goes with it.
-            const strength = Math.min(0.45 + d * 0.7, 1.0);
+            // Small, gentle crests — a fast flick still can't slam the grid. Kept a
+            // real range though: strength feeds p.w, which scales the crest height
+            // the colour lift is measured against — floor it and the blue goes too.
+            const strength = Math.min(0.22 + d * 0.35, 0.42);
 
             lastRipple = now;
             lastHit = {x: hit.x, z: hit.z};
-            lastMove = now;
             pushTrail(hit.x, hit.z, strength);
         };
         // The canvas is pointer-events:none, so this has to be on window rather than
         // the mount — onPointerMove bounds-checks against the mount to compensate.
         window.addEventListener("pointermove", onPointerMove);
+
+        // Leaving the viewport entirely never fires an out-of-bounds pointermove,
+        // so without this the swell would sit frozen at the exit point.
+        const onDocLeave = () => {
+            lastHit = null;
+            cursorTargetStrength = 0;
+        };
+        document.addEventListener("mouseleave", onDocLeave);
 
         // Idle: an occasional ripple so the grid isn't dead when untouched (this is
         // also all a touch device ever gets). Deliberately sparse and weak — at one
@@ -285,6 +338,21 @@ const CubeGrid = () => {
         const render = () => {
             const t = clock.getElapsedTime();
             uniforms.uTime.value = t;
+
+            // Frame-rate-independent damping toward the pointer. Clamp dt: the loop
+            // is gated by the IntersectionObserver, so the first frame after
+            // re-entry can carry a huge gap.
+            const dt = Math.min(t - lastT, 0.1);
+            lastT = t;
+
+            const s = uniforms.uCursorStrength.value;
+            // Position tracks the pointer directly — any smoothing here read as
+            // input lag. Only the strength envelope below is eased, so entering
+            // and leaving the grid still fade rather than pop.
+            uniforms.uCursor.value.copy(cursorTarget);
+            const k = cursorTargetStrength > s ? 7 : 3;
+            uniforms.uCursorStrength.value = s + (cursorTargetStrength - s) * (1 - Math.exp(-k * dt));
+
             idleTick(t);
             renderer.render(scene, camera);
         };
@@ -327,6 +395,7 @@ const CubeGrid = () => {
             observer.disconnect();
             window.removeEventListener("resize", onResize);
             window.removeEventListener("pointermove", onPointerMove);
+            document.removeEventListener("mouseleave", onDocLeave);
             geometry.dispose();
             material.dispose();
             trailTex.dispose();
