@@ -45,7 +45,7 @@ export default async function LocaleLayout({children, params}) {
             <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
             <link rel="manifest" href="/site.webmanifest"/>
         </head>
-        <body style={{overflowX: 'hidden', minHeight: '100vh'}} suppressHydrationWarning={true}>
+        <body style={{minHeight: '100vh'}} suppressHydrationWarning={true}>
         <StyledComponentsRegistry>
             <NextIntlClientProvider locale={locale} messages={messages}>
                 {children}

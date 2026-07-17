@@ -1,4 +1,4 @@
-/* Our Values — statement + value rows (design: Homepage v2) */
+/* Our Values — statement + spotlight value cards (design: Homepage v2) */
 
 .orb {
   position: absolute;
@@ -34,52 +34,75 @@
   margin: 20px 0 0;
 }
 
-/* --- Value rows --- */
+/* --- Spotlight cards: 3 + 2 layout via flex-wrap --- */
 
 .values {
   margin-top: 64px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.valueRow {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 40px;
-  align-items: baseline;
-  padding: 26px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  transition: background 0.3s;
+  gap: 20px;
+}
+
+.card {
+  position: relative;
+  flex: 1 1 calc(33.333% - 14px);
+  min-width: 240px;
+  padding: 28px 26px 30px;
+  box-sizing: border-box;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  overflow: hidden;
+  transition: border-color 0.35s ease, background 0.35s ease;
 
   &:hover {
-    background: rgba(150, 185, 249, 0.03);
+    border-color: rgba(150, 185, 249, 0.35);
+    background: rgba(255, 255, 255, 0.035);
+
+    .cardSpotlight {
+      opacity: 1;
+    }
   }
 }
 
-.valueNum {
-  width: 44px;
-  font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: 13px;
+/* Soft halo following the cursor inside the hovered card */
+.cardSpotlight {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), rgba(96, 143, 247, 0.14), transparent 70%);
+  pointer-events: none;
+}
+
+.valueIcon {
+  position: relative;
+  width: 26px;
+  height: 26px;
   color: #96b9f9;
-  flex-shrink: 0;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
 }
 
 .valueName {
+  position: relative;
   font-family: var(--font-headings);
   font-weight: 600;
   font-size: clamp(19px, 1.8vw, 24px);
   letter-spacing: -0.015em;
-  margin: 0;
-  width: 220px;
-  flex-shrink: 0;
+  margin: 14px 0 0;
   color: #ededed;
 }
 
 .valueDesc {
-  flex: 1 1 300px;
+  position: relative;
   font-size: 14px;
   font-weight: 300;
   color: rgba(237, 237, 237, 0.6);
   line-height: 1.55;
-  margin: 0;
+  margin: 10px 0 0;
 }

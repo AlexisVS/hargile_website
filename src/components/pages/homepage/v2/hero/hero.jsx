@@ -3,7 +3,7 @@
 import {useEffect, useState} from "react";
 import {motion, useReducedMotion} from "motion/react";
 import {useTranslations} from "next-intl";
-import {useSiteNavigation} from "@/components/providers/site-navigation-provider";
+import {Link} from "@/i18n/navigation";
 import styles from "./hero.module.scss";
 import HeroBackdrop, {VARIANTS} from "./backdrops/hero-backdrop";
 
@@ -41,7 +41,6 @@ const useHeroVariant = (override) => {
 
 const HeroV2 = ({backdrop, label}) => {
     const t = useTranslations("pages.homepage.sections.hero.v2");
-    const {setIsAuditModalOpen} = useSiteNavigation();
     const reducedMotion = useReducedMotion();
     const variant = useHeroVariant(backdrop);
 
@@ -71,13 +70,9 @@ const HeroV2 = ({backdrop, label}) => {
                     </motion.p>
 
                     <motion.div className={styles.ctaRow} {...reveal(3)}>
-                        <button
-                            type="button"
-                            className={styles.ctaPrimary}
-                            onClick={() => setIsAuditModalOpen(true)}
-                        >
+                        <Link href="/contact" className={styles.ctaPrimary}>
                             {t("ctaAudit")}
-                        </button>
+                        </Link>
                         <a href="#recent-works" className={styles.ctaGhost}>
                             {t("ctaWork")}
                         </a>

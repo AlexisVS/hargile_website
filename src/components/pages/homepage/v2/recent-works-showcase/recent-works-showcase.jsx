@@ -1,136 +1,142 @@
 "use client";
 
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import Image from "next/image";
-import {AnimatePresence, motion, useReducedMotion} from "motion/react";
 import {useTranslations} from "next-intl";
 import {usePortfolioData} from "@/hooks/usePortfolioData";
-import section from "../v2-section.module.scss";
 import styles from "./recent-works-showcase.module.scss";
-import {useReveal} from "../useReveal";
 
-const AUTO_ADVANCE_MS = 6000;
+const PIN_BREAKPOINT = 900;
 
 const RecentWorksShowcaseV2 = () => {
     const t = useTranslations("pages.homepage.sections.recent-works");
     const {getLatestProjects} = usePortfolioData();
     const projects = getLatestProjects(4);
-    const reveal = useReveal();
-    const reducedMotion = useReducedMotion();
+    const total = projects.length;
 
+    const outerRef = useRef(null);
+    const trackRef = useRef(null);
+    const wrapRef = useRef(null);
+    const pinnedRef = useRef(false);
     const [active, setActive] = useState(0);
-    const [paused, setPaused] = useState(false);
 
     useEffect(() => {
-        if (reducedMotion || paused) return;
-        const id = setInterval(
-            () => setActive((a) => (a + 1) % projects.length),
-            AUTO_ADVANCE_MS,
-        );
-        return () => clearInterval(id);
-    }, [reducedMotion, paused, projects.length]);
+        const outer = outerRef.current;
+        const track = trackRef.current;
+        const wrap = wrapRef.current;
+        if (!outer || !track || !wrap) return;
 
-    const project = projects[active];
+        const setProgress = (p) => {
+            setActive(Math.min(total - 1, Math.max(0, Math.round(p * (total - 1)))));
+        };
+
+        // Hauteur de la section = 100vh + distance horizontale à parcourir.
+        const layout = () => {
+            pinnedRef.current = window.innerWidth >= PIN_BREAKPOINT;
+            if (pinnedRef.current) {
+                const dist = Math.max(0, track.scrollWidth - window.innerWidth);
+                outer.style.height = `${window.innerHeight + dist}px`;
+            } else {
+                outer.style.height = "auto";
+                track.style.transform = "none";
+            }
+        };
+
+        // Le scroll vertical "consommé" par la section devient une translation X.
+        const onScroll = () => {
+            if (!pinnedRef.current) return;
+            const dist = outer.offsetHeight - window.innerHeight;
+            if (dist <= 0) return;
+            const y = Math.min(Math.max(-outer.getBoundingClientRect().top, 0), dist);
+            track.style.transform = `translateX(${-y}px)`;
+            setProgress(y / dist);
+        };
+
+        // Mobile : progression basée sur le balayage natif.
+        const onTrackScroll = () => {
+            if (pinnedRef.current) return;
+            const max = wrap.scrollWidth - wrap.clientWidth;
+            if (max > 0) setProgress(wrap.scrollLeft / max);
+        };
+
+        const onResize = () => {
+            layout();
+            onScroll();
+        };
+
+        window.addEventListener("scroll", onScroll, {passive: true});
+        window.addEventListener("resize", onResize);
+        wrap.addEventListener("scroll", onTrackScroll, {passive: true});
+
+        // Le rail change de largeur sans resize fenêtre (hot reload CSS,
+        // chargement de police/images) : on recale la distance d'épinglage.
+        const ro = new ResizeObserver(onResize);
+        ro.observe(track);
+
+        layout();
+        onScroll();
+
+        return () => {
+            window.removeEventListener("scroll", onScroll);
+            window.removeEventListener("resize", onResize);
+            wrap.removeEventListener("scroll", onTrackScroll);
+            ro.disconnect();
+            outer.style.height = "";
+        };
+    }, [total]);
 
     return (
-        <section id="recent-works" className={section.section}>
-            <div className={section.container}>
-                <motion.h2 className={section.heading} {...reveal(0)}>
-                    {t("title")}
-                </motion.h2>
-
-                <motion.div
-                    className={styles.stage}
-                    {...reveal(1)}
-                    onMouseEnter={() => setPaused(true)}
-                    onMouseLeave={() => setPaused(false)}
-                    onFocusCapture={() => setPaused(true)}
-                    onBlurCapture={() => setPaused(false)}
-                >
-                    <AnimatePresence mode="popLayout" initial={false}>
-                        <motion.div
-                            key={project.id}
-                            className={styles.stageImage}
-                            initial={{opacity: 0, scale: reducedMotion ? 1 : 1.04}}
-                            animate={{opacity: 1, scale: 1}}
-                            exit={{opacity: 0}}
-                            transition={{duration: 0.7, ease: "easeOut"}}
-                        >
-                            <Image
-                                src={project.image}
-                                alt={project.title}
-                                fill
-                                sizes="(max-width: 1200px) 100vw, 1120px"
-                                priority={active === 0}
-                            />
-                        </motion.div>
-                    </AnimatePresence>
-
-                    <div className={styles.stageScrim} aria-hidden="true"/>
-
-                    <div className={styles.stageContent}>
-                        <div className={styles.stageIndex}>
-                            {String(active + 1).padStart(2, "0")}
-                            <span className={styles.stageIndexTotal}>
-                                /{String(projects.length).padStart(2, "0")}
-                            </span>
-                        </div>
-                        <AnimatePresence mode="wait" initial={false}>
-                            <motion.div
-                                key={project.id}
-                                initial={{opacity: 0, y: reducedMotion ? 0 : 18}}
-                                animate={{opacity: 1, y: 0}}
-                                exit={{opacity: 0, y: reducedMotion ? 0 : -10}}
-                                transition={{duration: 0.45, ease: "easeOut"}}
-                            >
-                                <div className={styles.stageSub}>{project.subtitle}</div>
-                                <h3 className={styles.stageTitle}>{project.title}</h3>
-                                <p className={styles.stageDesc}>{project.description}</p>
-                                <div className={styles.stageCtas}>
+        <section id="recent-works" className={styles.work} ref={outerRef}>
+            <div className={styles.sticky}>
+                <div className={styles.head}>
+                    <h2 className={styles.heading}>{t("title")}</h2>
+                    <div className={styles.progress}>
+                        {String(active + 1).padStart(2, "0")}
+                        <span className={styles.progressTotal}>
+                            /{String(total).padStart(2, "0")}
+                        </span>
+                    </div>
+                </div>
+                <div className={styles.trackWrap} ref={wrapRef}>
+                    <div className={styles.track} ref={trackRef}>
+                        {projects.map((project, i) => (
+                            <article className={styles.card} key={project.id}>
+                                <div className={styles.cardMedia}>
+                                    <Image
+                                        src={project.image}
+                                        alt={project.title}
+                                        fill
+                                        sizes="(max-width: 899px) 100vw, 56vw"
+                                        priority={i === 0}
+                                    />
+                                </div>
+                                <div className={styles.cardBody}>
+                                    <div className={styles.eyebrow}>{project.subtitle}</div>
+                                    <h3 className={styles.title}>{project.title}</h3>
+                                    <p className={styles.desc}>{project.description}</p>
                                     <a
+                                        className={styles.more}
                                         href={project.actionUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className={styles.ctaPrimary}
                                     >
                                         {project.actionText} →
                                     </a>
-                                    <a
-                                        href="https://portfolio.hargile.be/"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className={styles.ctaGhost}
-                                    >
-                                        {t("view-all")} →
-                                    </a>
                                 </div>
-                            </motion.div>
-                        </AnimatePresence>
-                    </div>
-                </motion.div>
+                            </article>
+                        ))}
 
-                <motion.div className={styles.rail} {...reveal(2)}>
-                    {projects.map((p, i) => (
-                        <button
-                            key={p.id}
-                            type="button"
-                            className={`${styles.thumb} ${i === active ? styles.thumbActive : ""}`}
-                            onClick={() => setActive(i)}
-                            aria-pressed={i === active}
-                            aria-label={p.title}
-                        >
-                            <span className={styles.thumbImage}>
-                                <Image
-                                    src={p.image}
-                                    alt=""
-                                    fill
-                                    sizes="180px"
-                                />
-                            </span>
-                            <span className={styles.thumbBar} aria-hidden="true"/>
-                        </button>
-                    ))}
-                </motion.div>
+                        <div className={styles.end}>
+                            <a
+                                href="https://portfolio.hargile.be/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {t("view-all")} →
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     );

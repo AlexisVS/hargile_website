@@ -1,7 +1,15 @@
 /* MVP promo — timeline treatment (design: Homepage v2) */
 
+/* Same background-clip: text ramp as the hero headline, scoped to "1 mois".
+   Shorter run than the hero so it opens on the light blue rather than white and
+   lands on the saturated brand blue — the accent stays distinct from the white
+   lead-in of the title. */
 .accent {
-  color: #96b9f9;
+  background: linear-gradient(135deg, #dce7fd 0%, #96b9f9 45%, #4d84f0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-bottom: 0.06em;
 }
 
 .timeline {

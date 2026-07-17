@@ -1,224 +1,257 @@
-/* Recent works — immersive showcase variation (design: Homepage v2)
-   Cinematic full-width stage: project image fills the frame, copy sits on a
-   scrim bottom-left, thumbnail rail below switches / auto-advances. */
+/* Recent works — rail horizontal épinglé (design: realisations-section.html, dark)
+   Scroll horizontal piloté par le scroll vertical (desktop, >= 900px),
+   balayage natif avec scroll-snap sur mobile.
+   La hauteur de .work est calculée en JS : 100vh + (largeur du rail - viewport). */
 
-.stage {
+.work {
   position: relative;
-  margin-top: 64px;
-  height: clamp(420px, 46vw, 620px);
-  border-radius: 26px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.11);
-  background: #0c0c14;
-  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
-}
+  /* Full-bleed : annule le gutter du .content-container parent. */
+  margin-inline: calc(50% - 50vw);
+  /* Même respiration que les autres sections v2 (padding-top de v2-section).
+     Margin et non padding : le calcul d'épinglage (rect.top → translateX)
+     suppose que le sticky démarre au bord de la boîte. */
+  margin-top: clamp(112px, 10vw, 200px);
+  background: var(--color-background-dark);
 
-.stageImage {
-  position: absolute;
-  inset: 0;
-
-  img {
-    object-fit: cover;
+  h2,
+  h3,
+  p {
+    text-shadow: none;
   }
 }
 
-/* Readability scrim — strongest bottom-left where the copy lives */
-.stageScrim {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(to top, rgba(6, 6, 12, 0.92) 0%, rgba(6, 6, 12, 0.35) 45%, rgba(6, 6, 12, 0.08) 70%),
-    linear-gradient(105deg, rgba(6, 6, 12, 0.72) 0%, transparent 55%);
-  pointer-events: none;
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.stageContent {
-  position: absolute;
-  inset: auto 0 0 0;
-  padding: clamp(24px, 4vw, 56px);
-  max-width: 640px;
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  /* La section est full-bleed (le rail court bord à bord), mais le header doit
+     s'aligner sur le container comme le reste de la page : même bord gauche que
+     --container-max, même gutter. D'où la marge auto + max-width, plutôt qu'un
+     simple padding en 6vw qui décrochait du container. */
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
   box-sizing: border-box;
+  /* 112px en haut : la navbar (~80px, fond noir translucide) glisse
+     par-dessus la section épinglée — le compteur doit rester dessous. */
+  padding: 112px var(--container-gutter) 32px;
 }
 
-.stageIndex {
+.heading {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(34px, 3.6vw, 56px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+  color: #ededed;
+}
+
+.progress {
   font-family: var(--font-headings);
   font-weight: 700;
   font-size: 15px;
   letter-spacing: 0.08em;
   color: #96b9f9;
-  margin-bottom: 14px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
-.stageIndexTotal {
+.progressTotal {
   color: rgba(237, 237, 237, 0.4);
   font-weight: 500;
 }
 
-.stageSub {
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #96b9f9;
-  margin-bottom: 10px;
-}
-
-.stageTitle {
-  font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: clamp(30px, 3.6vw, 54px);
-  letter-spacing: -0.02em;
-  line-height: 1.05;
-  margin: 0;
-  color: #ffffff;
-  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.5);
-}
-
-.stageDesc {
-  font-size: clamp(14px, 1.1vw, 16px);
-  font-weight: 300;
-  color: rgba(237, 237, 237, 0.78);
-  line-height: 1.6;
-  margin: 14px 0 0;
-  max-width: 52ch;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.stageCtas {
+.trackWrap {
+  flex: 1;
+  min-height: 0;
   display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-top: 24px;
+  align-items: stretch;
 }
 
-.ctaPrimary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #96b9f9;
-  color: #0a0a12;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 12px 22px;
-  border-radius: 11px;
-  text-decoration: none;
-  transition: box-shadow 0.25s, background 0.25s, transform 0.15s;
-
-  &:hover {
-    box-shadow: 0 0 32px rgba(150, 185, 249, 0.4);
-    background: #b8cdfb;
-    color: #0a0a12;
-    transform: translateY(-1px);
-  }
-
-  &:focus-visible {
-    outline: 2px solid rgba(150, 185, 249, 0.7);
-    outline-offset: 2px;
-  }
+.track {
+  display: flex;
+  gap: 32px;
+  /* La première carte démarre au bord gauche du container (comme le titre) ;
+     à droite on garde une respiration full-bleed pour le rail. Ce bord gauche
+     reproduit celui de --container-max : gutter, ou moitié de la marge quand la
+     fenêtre dépasse la largeur max. */
+  padding: 0 max(var(--container-gutter), 6vw) 48px
+    calc(max(var(--container-gutter), (100vw - var(--container-max)) / 2));
+  align-items: stretch;
+  will-change: transform;
 }
 
-.ctaGhost {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(10, 10, 18, 0.4);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: #ededed;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 11px 21px;
-  border-radius: 11px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  text-decoration: none;
-  transition: border-color 0.25s, background 0.25s;
+/* --- Cartes projet ----------------------------------------- */
 
-  &:hover {
-    border-color: rgba(150, 185, 249, 0.5);
-    background: rgba(150, 185, 249, 0.1);
-    color: #ededed;
-  }
-
-  &:focus-visible {
-    outline: 2px solid rgba(150, 185, 249, 0.7);
-    outline-offset: 2px;
-  }
-}
-
-/* --- Thumbnail rail --- */
-
-.rail {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  margin-top: 18px;
-
-  @media (max-width: 720px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.thumb {
-  position: relative;
-  display: block;
-  padding: 0;
-  background: transparent;
-  border: none;
-  border-radius: 14px;
+.card {
+  flex: 0 0 auto;
+  width: min(56vw, 780px);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 24px;
   overflow: hidden;
-  cursor: pointer;
-  text-align: left;
-  font-family: inherit;
-
-  &:focus-visible {
-    outline: 2px solid rgba(150, 185, 249, 0.7);
-    outline-offset: 2px;
-  }
-
-  &:hover .thumbImage {
-    opacity: 0.85;
-  }
+  display: flex;
+  flex-direction: column;
+  background: #0c0c14;
 }
 
-.thumbImage {
+.cardMedia {
+  flex: 1;
+  min-height: 0;
   position: relative;
-  display: block;
-  aspect-ratio: 16 / 9;
-  border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  opacity: 0.55;
-  filter: saturate(0.7);
-  transition: opacity 0.3s, filter 0.3s, border-color 0.3s;
+  background: #101018;
 
   img {
     object-fit: cover;
   }
 }
 
-.thumbBar {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 3px;
-  border-radius: 0 0 14px 14px;
-  background: rgba(150, 185, 249, 0);
-  transition: background 0.3s;
+.cardBody {
+  padding: 28px 32px 30px;
 }
 
-.thumbActive {
-  .thumbImage {
-    opacity: 1;
-    filter: none;
-    border-color: rgba(150, 185, 249, 0.55);
+.eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #96b9f9;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-family: var(--font-headings);
+  font-weight: 600;
+  font-size: clamp(24px, 2.2vw, 32px);
+  letter-spacing: -0.02em;
+  margin: 0 0 10px;
+  color: #ffffff;
+}
+
+.desc {
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: rgba(237, 237, 237, 0.7);
+  max-width: 70ch;
+  margin: 0 0 14px;
+}
+
+.more {
+  font-size: 15px;
+  font-weight: 500;
+  color: #96b9f9;
+  text-decoration: none;
+  transition: color 0.25s;
+
+  &:hover {
+    color: #b8cdfb;
   }
 
-  .thumbBar {
-    background: #96b9f9;
-    box-shadow: 0 0 12px rgba(150, 185, 249, 0.7);
+  &:focus-visible {
+    outline: 2px solid rgba(150, 185, 249, 0.7);
+    outline-offset: 2px;
+  }
+}
+
+/* --- Fin du rail ------------------------------------------- */
+
+.end {
+  flex: 0 0 auto;
+  width: min(40vw, 480px);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 4vw;
+
+  a {
+    font-family: var(--font-headings);
+    font-size: clamp(18px, 1.8vw, 24px);
+    font-weight: 500;
+    color: #96b9f9;
+    text-decoration: none;
+    transition: color 0.25s;
+
+    &:hover {
+      color: #b8cdfb;
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba(150, 185, 249, 0.7);
+      outline-offset: 2px;
+    }
+  }
+}
+
+/* --- Mobile : pile verticale -------------------------------- */
+/* Sous 900px on abandonne le rail : cartes empilées pleine largeur,
+   média en ratio fixe, compteur masqué (sans objet en pile). */
+
+@media (max-width: 899px) {
+  .work {
+    height: auto !important;
+  }
+
+  .sticky {
+    position: static;
+    height: auto;
+    overflow: visible;
+  }
+
+  .head {
+    padding: 0 var(--container-gutter) 28px;
+  }
+
+  .progress {
+    display: none;
+  }
+
+  .trackWrap {
+    display: block;
+  }
+
+  .track {
+    transform: none !important;
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 var(--container-gutter);
+  }
+
+  .card {
+    width: 100%;
+  }
+
+  .cardMedia {
+    flex: none;
+    aspect-ratio: 16 / 10;
+  }
+
+  .cardBody {
+    padding: 20px 20px 22px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+
+  .end {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 10px 0 0;
+
+    a {
+      font-size: 17px;
+    }
   }
 }

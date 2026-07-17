@@ -7,6 +7,7 @@ import {OptimizedImage} from "@/components/optimizedImage";
 import {ContactButton} from "@/components/ContactButton";
 import Navbar from "@/components/navigation/navbar";
 import LenisProvider from "@/components/providers/lenis-provider";
+import ScrollToTop from "@/components/providers/scroll-to-top";
 import '../../styles/global.scss'
 
 
@@ -24,6 +25,7 @@ export default function ContextLayout({children}) {
     return (
         <>
             <LenisProvider>
+                <ScrollToTop/>
                 <div className={`loading-container ${!initialLoading ? 'fade-out' : ''}`}>
                     <svg
                         className="loading-svg"

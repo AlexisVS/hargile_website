@@ -96,7 +96,11 @@ body {
   color: var(--color-text);
   font-family: var(--font-primary), sans-serif;
   min-height: 100vh;
+  /* clip (pas hidden) : hidden crée un conteneur de scroll qui casse
+     position: sticky (rail des réalisations). Fallback hidden pour
+     les vieux navigateurs sans support de clip. */
   overflow-x: hidden;
+  overflow-x: clip;
 
   &::after {
     content: '';
@@ -167,6 +171,7 @@ img {
 
 html, body {
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .hero-section,
