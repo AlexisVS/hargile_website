@@ -393,19 +393,19 @@
             "headline": "Nous développons des applications web sur mesure pour les PME.",
             "paragraph": "HARGILE est le partenaire technique sur qui nos clients peuvent compter, avec la réactivité et l'expertise d'une équipe qui s'implique comme si c'était son propre projet.",
             "ctaAudit": "Nous contacter",
-            "ctaWork": "Portoflio",
+            "ctaWork": "Portfolio",
             "cards": {
               "webdev": {
                 "title": "Développement web",
-                "text": "Des produits Next.js, construits pour durer"
+                "text": "Conçu, codé et maintenu chez nous"
               },
               "ai": {
                 "title": "Solutions IA",
-                "text": "L'intelligence intégrée à votre produit"
+                "text": "Intégrée là où ça compte"
               },
               "marketing": {
                 "title": "SEO",
-                "text": "Automatisés votre SEO"
+                "text": "Votre visibilité, automatisée"
               }
             }
           }

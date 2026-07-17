@@ -27,42 +27,7 @@
   }
 }
 
-/* Ambient wash behind the copy.
-   Not a decorative blob: it sits under the headline — the side the WebGL backdrop
-   is masked away from — so the text reads against a soft lift instead of flat
-   black, and the left edge of the hero doesn't die while the right side glows. */
-.orb {
-  position: absolute;
-  top: 50%;
-  left: -10%;
-  width: min(1100px, 85vw);
-  height: min(760px, 80vh);
-  transform: translateY(-50%);
-  border-radius: 50%;
-  /* Elliptical falloff rather than a hard circle — no visible edge against the canvas. */
-  background: radial-gradient(
-    ellipse at center,
-    rgba(37, 99, 235, 0.16) 0%,
-    rgba(37, 99, 235, 0.07) 45%,
-    transparent 72%
-  );
-  filter: blur(90px);
-  pointer-events: none;
-}
-
-/* Faint dot grid — masked toward the left so it textures the copy side and
-   leaves the right to the WebGL backdrop rather than cross-hatching it. */
-.dotGrid {
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(rgba(237, 237, 237, 0.04) 1px, transparent 1px);
-  background-size: 36px 36px;
-  mask-image: radial-gradient(ellipse 60% 70% at 28% 50%, #000 0%, transparent 78%);
-  -webkit-mask-image: radial-gradient(ellipse 60% 70% at 28% 50%, #000 0%, transparent 78%);
-  pointer-events: none;
-}
-
-/* WebGL backdrop canvas — behind the copy, above the orb/dot-grid.
+/* WebGL backdrop canvas — the hero's only backdrop layer.
    Fills the whole hero: a horizontal falloff (not a radial cutout) keeps the
    canvas edge-to-edge while easing it back behind the headline, so the copy side
    stays legible without leaving the top of the section flat black. */
@@ -70,18 +35,28 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.85;
+  opacity: 1;
+  /* The canvas renders with alpha, so a band's trough is transparent, not black and
+     never bottoms out on its own. This is the floor the troughs actually land on —
+     it sets how deep the blacks can go, so it's near-pure black rather than the
+     page's slightly-lifted dark. */
+  background: #010104;
+  /* Holds the bands back behind the headline only. Since the orb and dot grid are
+     gone there's nothing underneath left to reveal, so this now fades in fast and
+     stays opaque across the whole band side — anywhere it sits mid-way, it thins
+     both the canvas and its black backing, which costs the bands the contrast the
+     shader just gained. */
   mask-image: linear-gradient(
     100deg,
-    rgba(0, 0, 0, 0.28) 0%,
-    rgba(0, 0, 0, 0.5) 32%,
-    #000 68%
+    rgba(0, 0, 0, 0.62) 0%,
+    rgba(0, 0, 0, 0.92) 30%,
+    #000 46%
   );
   -webkit-mask-image: linear-gradient(
     100deg,
-    rgba(0, 0, 0, 0.28) 0%,
-    rgba(0, 0, 0, 0.5) 32%,
-    #000 68%
+    rgba(0, 0, 0, 0.62) 0%,
+    rgba(0, 0, 0, 0.92) 30%,
+    #000 46%
   );
 
   canvas {
@@ -91,16 +66,30 @@
   }
 
   @media (max-width: 768px) {
-    opacity: 0.55;
+    /* Copy overlays the bands entirely at this width — hold it back further than
+       desktop, but not so far that the brand colour disappears again. */
+    opacity: 0.72;
   }
 }
 
 /* Crisp variants (cube grid): full opacity and a straight linear fade rather
-   than the soft wash the gradient backdrops want, so the geometry stays sharp. */
+   than the soft wash the gradient backdrops want, so the geometry stays sharp.
+
+   Two masks, intersected: the horizontal one holds the grid back behind the copy,
+   the vertical one dissolves it into the page at the top and bottom edges. Without
+   the second, the canvas — which is inset:0 inside the section — ends at full
+   opacity on a dead straight line, which reads as the grid being sliced off rather
+   than receding. mask-composite multiplies the two so each keeps its own axis. */
 .sectionSharp .backdrop {
   opacity: 1;
-  mask-image: linear-gradient(100deg, transparent 0%, rgba(0, 0, 0, 0.55) 38%, #000 62%);
-  -webkit-mask-image: linear-gradient(100deg, transparent 0%, rgba(0, 0, 0, 0.55) 38%, #000 62%);
+  mask-image:
+    linear-gradient(100deg, transparent 0%, rgba(0, 0, 0, 0.55) 38%, #000 62%),
+    linear-gradient(to bottom, transparent 0%, #000 18%, #000 62%, transparent 97%);
+  mask-composite: intersect;
+  -webkit-mask-image:
+    linear-gradient(100deg, transparent 0%, rgba(0, 0, 0, 0.55) 38%, #000 62%),
+    linear-gradient(to bottom, transparent 0%, #000 18%, #000 62%, transparent 97%);
+  -webkit-mask-composite: source-in;
 
   @media (max-width: 768px) {
     opacity: 0.75;
@@ -129,9 +118,12 @@
 .container {
   position: relative;
   z-index: 1; /* above the backdrop canvas */
-  max-width: 1360px;
+  /* Shared measure — the navbar and every v2 section use the same one, so the logo,
+     the headline and the sections below all start on the same line at any width.
+     Defined once in globals.scss; change it there, not here. */
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding: 80px 48px;
+  padding: 80px var(--container-gutter);
   width: 100%;
   box-sizing: border-box;
   display: flex;
@@ -139,8 +131,10 @@
   gap: clamp(56px, 7vw, 112px);
   flex-wrap: wrap;
 
+  /* Side padding comes from --container-gutter, which already steps down here. */
   @media (max-width: 640px) {
-    padding: 56px 20px;
+    padding-top: 56px;
+    padding-bottom: 56px;
   }
 
   /* In the first hero the section sits under the navbar — keep the copy clear
@@ -160,22 +154,12 @@
 }
 
 .eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 500;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #96b9f9;
-  margin: 0 0 18px;
-
-  &::before {
-    content: "";
-    width: 24px;
-    height: 1px;
-    background: rgba(150, 185, 249, 0.5);
-  }
+  margin: 0 0 20px;
 }
 
 .headline {
@@ -325,91 +309,121 @@
   color: rgba(237, 237, 237, 0.55);
 }
 
-/* --- Right-side orbital visual --- */
+/* --- Right-side capability cards --- */
 
 .visual {
   flex: 1 1 340px;
   max-width: 420px;
   min-width: 300px;
   position: relative;
-  height: 440px;
+  /* Tall enough that the three cards clear each other with even gaps — the offsets
+     below are tuned to this height, so they move together. */
+  height: 520px;
 
-  @media (max-width: 560px) {
-    height: 400px;
+  /* Below this the absolute offsets stop working: they're fixed px, but the cards
+     grow as their text wraps to more lines, so they end up overlapping. Drop out of
+     absolute positioning entirely and let a flex column own the spacing — it can't
+     collide regardless of copy length or locale. */
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: auto;
     min-width: min(300px, 100%);
+    max-width: 100%;
   }
-}
-
-.ringDashed {
-  position: absolute;
-  inset: 30px;
-  border-radius: 50%;
-  border: 1px dashed rgba(150, 185, 249, 0.14);
-}
-
-.ringSpin {
-  position: absolute;
-  inset: 70px;
-  border-radius: 50%;
-  border: 1px solid rgba(150, 185, 249, 0.08);
-  animation: ringSpin 60s linear infinite;
-}
-
-.centerGlow {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.22), transparent 70%);
-  filter: blur(30px);
-  pointer-events: none;
 }
 
 .floatCard {
   position: absolute;
-  width: 220px;
-  background: rgba(255, 255, 255, 0.06);
-  /* Heavy blur + saturate so the WebGL backdrop reads as frosted glass behind. */
-  backdrop-filter: blur(32px) saturate(160%);
-  -webkit-backdrop-filter: blur(32px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 18px;
-  padding: 18px 20px;
+  width: 232px;
   box-sizing: border-box;
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  padding: 20px 22px;
+  border-radius: 14px;
 
-  @media (max-width: 560px) {
-    width: 185px;
-    padding: 15px 17px;
+  /* Lit glass: bright enough to hold its own against the bands, still translucent.
+     The fill is a gradient rather than a flat tint — brighter at the top-left where
+     the border catches light, settling into the page's blue-black at the bottom, so
+     the card reads as a lit surface instead of a uniform panel.
+     Kept blue-tinted rather than white: a white scrim over the blue backdrop is what
+     made the earlier version read as grey plastic. */
+  background: linear-gradient(
+    155deg,
+    rgba(56, 74, 122, 0.5) 0%,
+    rgba(24, 33, 58, 0.62) 48%,
+    rgba(12, 17, 32, 0.72) 100%
+  );
+  /* Mild saturate this time — enough to keep the bands' colour alive through the
+     glass, well short of the 160% that pushed them to neon. */
+  backdrop-filter: blur(20px) saturate(115%);
+  -webkit-backdrop-filter: blur(20px) saturate(115%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+
+  /* Ambient shadow to seat it, plus a top inner highlight for the glass edge. */
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+
+  /* These drift continuously over a backdrop-filter, which is the expensive case —
+     promoting them keeps the blur from being recomposited against the canvas every
+     frame, which is what shows up as stutter. */
+  will-change: transform;
+
+  @media (max-width: 768px) {
+    /* The flex column above owns placement now — clear the absolute offsets the
+       variant classes set, or they'd still apply. */
+    position: static;
+    width: 100%;
+    inset: auto;
+    /* Nothing animates here — don't hold a compositing layer per card. */
+    will-change: auto;
   }
 }
 
+/* Offsets only — the shared look lives in .floatCard. Widths are deliberately equal
+   now; the staggered left/right offsets carry the composition, and three different
+   widths just read as unaligned.
+
+   Timing: a soft symmetric curve with no flat ends, so the drift never parks at an
+   extreme the way ease-in-out does. Long, coprime durations and offset delays mean
+   the three tracks don't line up on a beat you can follow.
+
+   Animations are cleared on mobile: in the flex column a translate would drift each
+   card out of its own gap. */
+
+/* Vertical rhythm: a two-line card runs ~130px tall at this width, and the drift
+   moves each one ±14px. Spacing them 200px apart keeps ~40px of clear air between
+   neighbours even when two drift toward each other. A third line of text would eat
+   that margin — if the copy grows, raise the 200px step and .visual's height
+   together. */
+
 .floatCardA {
-  top: 24px;
-  left: 8px;
-  animation: floatA 7s ease-in-out infinite;
+  top: 0;
+  left: 0;
+  animation: floatA 13s cubic-bezier(0.37, 0.15, 0.63, 0.85) infinite;
+
+  @media (max-width: 768px) {
+    animation: none;
+  }
 }
 
 .floatCardB {
-  top: 150px;
+  top: 200px;
   right: 0;
-  width: 210px;
-  animation: floatB 8s ease-in-out infinite 0.6s;
+  animation: floatB 17s cubic-bezier(0.37, 0.15, 0.63, 0.85) infinite -3.5s;
+
+  @media (max-width: 768px) {
+    animation: none;
+  }
 }
 
 .floatCardC {
-  bottom: 20px;
-  left: 56px;
-  width: 200px;
-  animation: floatA 9s ease-in-out infinite 1.2s;
+  top: 400px;
+  left: 40px;
+  animation: floatC 19s cubic-bezier(0.37, 0.15, 0.63, 0.85) infinite -7s;
 
-  @media (max-width: 560px) {
-    left: 24px;
+  @media (max-width: 768px) {
+    animation: none;
   }
 }
 
@@ -424,50 +438,87 @@
 .cardTitle {
   font-family: var(--font-headings);
   font-weight: 600;
-  font-size: 15px;
-  margin-top: 12px;
-  color: #ededed;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  margin-top: 14px;
+  color: #f2f4f8;
 }
 
 .cardText {
-  font-size: 12.5px;
-  font-weight: 300;
-  color: rgba(237, 237, 237, 0.55);
-  margin-top: 4px;
-  line-height: 1.5;
+  font-size: 13.5px;
+  /* 300 was too fine to hold up once the size went up — at this scale the thin
+     weight reads as blurry against the backdrop rather than light. */
+  font-weight: 350;
+  color: rgba(237, 237, 237, 0.66);
+  margin-top: 5px;
+  line-height: 1.55;
 }
 
-@keyframes ringSpin {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+/* One keyframe per card, each drifting on both axes with its steps at uneven
+   positions. The old pair of single-axis 0/50/100 tracks was what read as
+   mechanical: two cards shared a track, the turn landed on the same beat every
+   cycle, and ease-in-out came to a full stop at each end. Prime-ish durations
+   (13/17/19s) keep the three from resynchronising into a visible pattern. */
 
 @keyframes floatA {
-  0%,
-  100% {
-    transform: translateY(0);
+  0% {
+    transform: translate(0, 0);
   }
-  50% {
-    transform: translateY(-12px);
+  27% {
+    transform: translate(4px, -9px);
+  }
+  58% {
+    transform: translate(-3px, -14px);
+  }
+  81% {
+    transform: translate(-5px, -6px);
+  }
+  100% {
+    transform: translate(0, 0);
   }
 }
 
 @keyframes floatB {
-  0%,
-  100% {
-    transform: translateY(0);
+  0% {
+    transform: translate(0, 0);
   }
-  50% {
-    transform: translateY(10px);
+  31% {
+    transform: translate(-5px, 7px);
+  }
+  62% {
+    transform: translate(3px, 12px);
+  }
+  84% {
+    transform: translate(5px, 4px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes floatC {
+  0% {
+    transform: translate(0, 0);
+  }
+  23% {
+    transform: translate(-4px, -6px);
+  }
+  54% {
+    transform: translate(5px, -11px);
+  }
+  79% {
+    transform: translate(3px, 5px);
+  }
+  100% {
+    transform: translate(0, 0);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ringSpin,
+  .floatCard {
+    will-change: auto;
+  }
+
   .floatCardA,
   .floatCardB,
   .floatCardC {

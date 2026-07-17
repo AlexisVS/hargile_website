@@ -397,15 +397,15 @@
             "cards": {
               "webdev": {
                 "title": "Web development",
-                "text": "Next.js products, built to last"
+                "text": "Designed, built and maintained in-house"
               },
               "ai": {
                 "title": "AI solutions",
-                "text": "Intelligence woven into your product"
+                "text": "Built in where it matters"
               },
               "marketing": {
                 "title": "SEO",
-                "text": "Automate your SEO"
+                "text": "Your visibility, automated"
               }
             }
           }

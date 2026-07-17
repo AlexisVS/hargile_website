@@ -4,12 +4,16 @@ import {Link} from "@/i18n/navigation";
 export const StyledNavbar = styled.div`
     display: flex;
     position: fixed;
-    width: 100vw;
+    /* left/right rather than width: 100vw — 100vw includes the scrollbar gutter and
+       overflows by its width once the page scrolls. */
     top: 0;
     left: 0;
-    justify-content: space-between;
+    right: 0;
+    justify-content: center;
     align-items: center;
-    padding: 1rem 24px 1rem 9.5rem;
+    /* The bar itself stays full-bleed so its blur/tint spans the viewport; the inner
+       NavbarInner is what carries the measure. */
+    padding: 1rem 0;
     z-index: 1002;
     /* At the top of the page the bar is fully transparent, so the hero backdrop
        runs edge-to-edge with no seam under it. The blur/tint only fades in once
@@ -21,8 +25,20 @@ export const StyledNavbar = styled.div`
                 backdrop-filter 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
     @media (max-width: 768px) {
-        padding: 1rem 24px 1rem 12px;
+        padding: 1rem 0;
     }
+`;
+
+/* Carries the shared measure so the logo starts on the same line as the hero
+   headline and every section below — see --container-max in global.scss. */
+export const NavbarInner = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: var(--container-max);
+    padding: 0 var(--container-gutter);
+    box-sizing: border-box;
 `;
 
 export const Brand = styled.button`

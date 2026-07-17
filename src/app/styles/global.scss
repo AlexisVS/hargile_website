@@ -52,6 +52,20 @@
   --color-accent-amber: #{theme.$accent-amber};
 
   --transition-duration: 0ms;
+
+  /* Layout measure — the navbar and every page section align to this, so the logo,
+     the hero headline and the sections below all start on the same line. Fluid
+     rather than a fixed max: it tracks the viewport on mid-size screens and stops
+     at 1440px, past which a longer line just hurts readability. The gutter shrinks
+     on small screens via the override below. */
+  --container-max: min(1440px, 92vw);
+  --container-gutter: 40px;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --container-gutter: 20px;
+  }
 }
 
 

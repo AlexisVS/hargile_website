@@ -76,6 +76,15 @@ const CubeGrid = () => {
         mount.appendChild(renderer.domElement);
 
         const scene = new THREE.Scene();
+        /* Depth cue, and the thing that stops the grid from ending on a hard line:
+           far cubes dissolve into the page's black instead of staying crisp right up
+           to where the canvas is cropped. Phong respects fog natively, and the wave
+           chunk injected below leaves the fog chunks alone. Near/far are tuned to the
+           camera at z=12 — it starts biting just past the middle of the grid.
+           Matched to the page background ($background-dark) rather than a blue-black:
+           the renderer is alpha, so any mismatch shows as a halo where cubes fade. */
+        scene.fog = new THREE.Fog(0x000000, 14, 34);
+
         const camera = new THREE.PerspectiveCamera(
             34,
             mount.clientWidth / mount.clientHeight,
@@ -142,7 +151,14 @@ const CubeGrid = () => {
                     `#include <dithering_fragment>
                      // Crests glow toward the brand blue.
                      float lift = smoothstep(0.05, 0.9, vWave);
-                     gl_FragColor.rgb = mix(gl_FragColor.rgb, uHighlight, lift * 0.85);`,
+                     gl_FragColor.rgb = mix(gl_FragColor.rgb, uHighlight, lift * 0.85);
+
+                     // Fog alone only tints a distant cube toward the fog colour — on an
+                     // alpha renderer that leaves it a solid black silhouette over the
+                     // page rather than gone. Fade alpha on the same curve so far cubes
+                     // actually recede. Runs after <fog_fragment>, which is why the fog
+                     // colour is already applied above.
+                     gl_FragColor.a *= 1.0 - smoothstep(fogNear, fogFar, vFogDepth);`,
                 );
         };
 
@@ -184,33 +200,61 @@ const CubeGrid = () => {
 
         const onPointerMove = (e) => {
             const r = mount.getBoundingClientRect();
+            // Only react while the pointer is actually over the grid. The listener has
+            // to be on window (the canvas is pointer-events:none), so without this the
+            // grid ripples from mouse movement anywhere on the page — including well
+            // past it, where it reads as the cubes moving on their own.
+            if (
+                e.clientX < r.left ||
+                e.clientX > r.right ||
+                e.clientY < r.top ||
+                e.clientY > r.bottom
+            ) {
+                // Drop the anchor on the way out, or re-entering somewhere else would
+                // measure the jump across the gap as one huge delta and fire a
+                // max-strength ripple.
+                lastHit = null;
+                return;
+            }
+
             ndc.x = ((e.clientX - r.left) / r.width) * 2 - 1;
             ndc.y = -((e.clientY - r.top) / r.height) * 2 + 1;
             raycaster.setFromCamera(ndc, camera);
             if (!raycaster.ray.intersectPlane(plane, hit)) return;
 
             // Strength scales with pointer speed — slow drags ripple less.
-            let strength = 1;
-            if (lastHit) {
-                const d = Math.hypot(hit.x - lastHit.x, hit.z - lastHit.z);
-                if (d < 0.12) return; // ignore jitter
-                strength = Math.min(d * 1.6, 1.4);
+            if (!lastHit) {
+                // First sample after entering: no previous point to measure speed
+                // against, so just anchor here and let the next move do the work.
+                // Firing at full strength on entry made every pass over the section
+                // announce itself with a slam.
+                lastHit = {x: hit.x, z: hit.z};
+                return;
             }
+
+            const d = Math.hypot(hit.x - lastHit.x, hit.z - lastHit.z);
+            if (d < 0.12) return; // ignore jitter
+            const strength = Math.min(d * 1.6, 1.4);
+
             lastHit = {x: hit.x, z: hit.z};
             lastMove = clock.getElapsedTime();
             pushTrail(hit.x, hit.z, strength);
         };
-        // The canvas is pointer-events:none, so listen on the window.
+        // The canvas is pointer-events:none, so this has to be on window rather than
+        // the mount — onPointerMove bounds-checks against the mount to compensate.
         window.addEventListener("pointermove", onPointerMove);
 
-        // Idle: seed random ripples so the grid is never dead (also covers touch).
+        // Idle: an occasional ripple so the grid isn't dead when untouched (this is
+        // also all a touch device ever gets). Deliberately sparse and weak — at one
+        // full-strength hit every second or two it stopped reading as a response to
+        // the pointer and just became ambient noise competing with the copy.
         let nextIdle = 0;
         const idleTick = (t) => {
-            if (t - lastMove < 3) return;
+            if (t - lastMove < 8) return;
             if (t < nextIdle) return;
             const span = GRID * SPACING * 0.42;
-            pushTrail((Math.random() * 2 - 1) * span, (Math.random() * 2 - 1) * span, 1);
-            nextIdle = t + 0.9 + Math.random() * 1.4;
+            pushTrail((Math.random() * 2 - 1) * span, (Math.random() * 2 - 1) * span, 0.45);
+            nextIdle = t + 5 + Math.random() * 5;
         };
 
         let frame = null;

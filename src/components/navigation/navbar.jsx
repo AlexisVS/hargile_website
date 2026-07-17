@@ -19,6 +19,7 @@ import {
     Spacer,
     StyledLink,
     StyledNavbar,
+    NavbarInner,
     MenuItemsContainer,
     MenuLabel,
     ContactInfo,
@@ -86,29 +87,34 @@ const Navbar = () => {
     return (
         <>
             <StyledNavbar ref={navbarRef} $scrolled={scrolled || isOpen}>
-                <Brand
-                    ref={brandRef}
-                    as="a"
-                    href="/"
-                    onClick={triggerHomeTransitionAnimation}
-                >
-                    <OptimizedImage
-                        width={750}
-                        height={348}
-                        src="/images/brand/brand-large-white.png"
-                        alt="Brand Logo"
-                        style={{
-                            width: "16rem",
-                        }}
-                        priority={true}
-                        fetchpriority={'high'}
-                    />
-                </Brand>
+                {/* Only the bar's own row is measured — NavbarNavigation is the
+                    full-screen menu panel and stays outside, or it would be boxed
+                    into the container width. */}
+                <NavbarInner>
+                    <Brand
+                        ref={brandRef}
+                        as="a"
+                        href="/"
+                        onClick={triggerHomeTransitionAnimation}
+                    >
+                        <OptimizedImage
+                            width={750}
+                            height={348}
+                            src="/images/brand/brand-large-white.png"
+                            alt="Brand Logo"
+                            style={{
+                                width: "16rem",
+                            }}
+                            priority={true}
+                            fetchpriority={'high'}
+                        />
+                    </Brand>
 
-                <NavbarMenuButtons>
-                    <LanguageSelector/>
-                    <NavbarButton/>
-                </NavbarMenuButtons>
+                    <NavbarMenuButtons>
+                        <LanguageSelector/>
+                        <NavbarButton/>
+                    </NavbarMenuButtons>
+                </NavbarInner>
 
                 <NavbarNavigation
                     className="navbar-navigation"

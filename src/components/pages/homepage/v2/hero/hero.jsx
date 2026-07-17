@@ -25,10 +25,6 @@ const HeroV2 = ({backdrop, label}) => {
 
     return (
         <section className={`${styles.section} ${backdrop === "cubes" ? styles.sectionSharp : ""}`}>
-            {/* The cube grid is a crisp, geometric backdrop — a blurred orb over it
-                just muddies the edges, so it only ships with the softer variants. */}
-            {backdrop !== "cubes" && <div className={styles.orb} aria-hidden="true"/>}
-            <div className={styles.dotGrid} aria-hidden="true"/>
             <HeroBackdrop variant={backdrop}/>
             {label && <div className={styles.variantTag}>{label}</div>}
 
@@ -94,10 +90,6 @@ const HeroV2 = ({backdrop, label}) => {
                         animate={{opacity: 1}}
                         transition={{duration: 0.8, ease: "easeOut", delay: 0.25}}
                     >
-                        <div className={styles.ringDashed}/>
-                        <div className={styles.ringSpin}/>
-                        <div className={styles.centerGlow}/>
-
                         {CARDS.map((card) => (
                             <div key={card.key} className={`${styles.floatCard} ${styles[card.className]}`}>
                                 <div className={styles.cardDot}/>
