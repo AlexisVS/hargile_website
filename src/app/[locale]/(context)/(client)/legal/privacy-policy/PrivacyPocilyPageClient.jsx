@@ -21,8 +21,7 @@ import {
     Sidebar,
     SidebarTitle,
     SubSectionTitle,
-    Title,
-    TitleUnderline
+    Title
 } from "@/app/[locale]/(context)/(client)/legal/privacy-policy/PrivacyPocilyPageClient.styled";
 
 export default function PrivacyPolicyPageClient() {
@@ -46,7 +45,6 @@ export default function PrivacyPolicyPageClient() {
                 <Header>
                     <div>
                         <Title>{t("title")}</Title>
-                        <TitleUnderline/>
                         <LastUpdate>
                             {t("lastUpdate")}: {t("lastUpdateDate")}
                         </LastUpdate>

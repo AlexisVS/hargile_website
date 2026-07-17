@@ -1,10 +1,11 @@
 "use client";
 
+import {useEffect, useState} from "react";
 import {motion, useReducedMotion} from "motion/react";
 import {useTranslations} from "next-intl";
 import {useSiteNavigation} from "@/components/providers/site-navigation-provider";
 import styles from "./hero.module.scss";
-import HeroBackdrop from "./backdrops/hero-backdrop";
+import HeroBackdrop, {VARIANTS} from "./backdrops/hero-backdrop";
 
 const CARDS = [
     {key: "webdev", className: "floatCardA"},
@@ -12,10 +13,37 @@ const CARDS = [
     {key: "marketing", className: "floatCardC"},
 ];
 
+/* Cubes are a desktop treatment: they're pointer-driven (touch only ever sees
+   idle ripples) and the WebGL cost is real on phones. Below the breakpoint the
+   hero falls back to the color bends. Resolved in an effect so server and first
+   client render agree ("bends"), then corrected after mount — the backdrops are
+   ssr:false dynamic imports anyway, so nothing visible has loaded by then.
+   A `backdrop` prop or ?backdrop=<key> URL param still forces a variant. */
+const useHeroVariant = (override) => {
+    const [variant, setVariant] = useState(override ?? "bends");
+
+    useEffect(() => {
+        if (override) return;
+        const q = new URLSearchParams(window.location.search).get("backdrop");
+        if (q && VARIANTS.includes(q)) {
+            setVariant(q);
+            return;
+        }
+        const mq = window.matchMedia("(min-width: 1024px)");
+        const sync = () => setVariant(mq.matches ? "cubes" : "bends");
+        sync();
+        mq.addEventListener("change", sync);
+        return () => mq.removeEventListener("change", sync);
+    }, [override]);
+
+    return variant;
+};
+
 const HeroV2 = ({backdrop, label}) => {
     const t = useTranslations("pages.homepage.sections.hero.v2");
     const {setIsAuditModalOpen} = useSiteNavigation();
     const reducedMotion = useReducedMotion();
+    const variant = useHeroVariant(backdrop);
 
     const reveal = (index) => ({
         initial: reducedMotion ? {opacity: 0} : {opacity: 0, y: 16},
@@ -24,8 +52,8 @@ const HeroV2 = ({backdrop, label}) => {
     });
 
     return (
-        <section className={`${styles.section} ${backdrop === "cubes" ? styles.sectionSharp : ""}`}>
-            <HeroBackdrop variant={backdrop}/>
+        <section className={`${styles.section} ${variant === "cubes" ? styles.sectionSharp : ""}`}>
+            <HeroBackdrop variant={variant}/>
             {label && <div className={styles.variantTag}>{label}</div>}
 
             <div className={styles.container}>
@@ -56,7 +84,7 @@ const HeroV2 = ({backdrop, label}) => {
                     </motion.div>
                 </div>
 
-                {backdrop === "cubes" ? (
+                {variant === "cubes" ? (
                     /* Against the cube grid, the floating cards fight the geometry —
                        a ruled column echoes the grid's own alignment instead, and
                        stays transparent so the cubes read through it. */

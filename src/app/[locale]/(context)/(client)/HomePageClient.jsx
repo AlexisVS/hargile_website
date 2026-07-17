@@ -7,9 +7,9 @@ import ValuesV2 from "@/components/pages/homepage/v2/values/values";
 export default function HomePageClient() {
     return (
         <div className="homepage-container page-exit">
-            {/* Two hero backdrops stacked for comparison — keep one, drop the other. */}
-            <HeroV2 backdrop="bends" label="1 — Color Bends"/>
-            <HeroV2 backdrop="cubes" label="2 — Cubes"/>
+            {/* Backdrop resolves responsively inside the hero: cubes on desktop,
+                color bends below 1024px. Force one with ?backdrop=<key>. */}
+            <HeroV2/>
             <MvpPromoV2/>
             <DesignDevV2/>
             <RecentWorksShowcaseV2/>

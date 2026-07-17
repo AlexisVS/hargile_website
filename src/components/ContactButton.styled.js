@@ -15,15 +15,18 @@ export const ContactButtonStyled = styled(Link).attrs({
     border-radius: 999px;
     text-decoration: none;
     font-weight: 600;
-    color: #071022;
-    background: linear-gradient(90deg, var(--color-accent-blue-planet), #5B8DEF);
-    border: 1px solid rgba(150, 185, 249, 0.5);
-    box-shadow: 0 8px 24px rgba(91, 141, 239, 0.4);
+    /* Dark glass rather than the bright gradient — the corner pill shouldn't
+       compete with the hero CTAs for attention. */
+    color: #c8d8f8;
+    background: rgba(10, 14, 26, 0.72);
+    border: 1px solid rgba(150, 185, 249, 0.45);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     backdrop-filter: blur(6px);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 
     &:hover {
         transform: translateY(-3px);
-        box-shadow: 0 12px 32px rgba(91, 141, 239, 0.55);
+        border-color: rgba(150, 185, 249, 0.8);
+        box-shadow: 0 8px 22px rgba(91, 141, 239, 0.3);
     }
 `;

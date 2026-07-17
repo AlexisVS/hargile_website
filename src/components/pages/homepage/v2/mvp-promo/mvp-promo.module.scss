@@ -9,19 +9,48 @@
   margin-top: 80px;
 }
 
+/* Scroll-driven rail: .rail is the dim track, .railFill scales along it with
+   scroll progress (scaleX on desktop, scaleY on the stacked mobile column —
+   driven from mvp-promo.jsx). The dots ignite as the fill front reaches them. */
 .rail {
   position: absolute;
   left: 0;
   right: 0;
   top: 5px;
   height: 1px;
-  background: linear-gradient(90deg, rgba(150, 185, 249, 0.55), rgba(150, 185, 249, 0.15) 65%, transparent);
+  background: rgba(150, 185, 249, 0.14);
+}
+
+.railFill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #96b9f9, rgba(150, 185, 249, 0.45));
+  box-shadow: 0 0 12px rgba(150, 185, 249, 0.4);
 }
 
 .steps {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 40px;
+}
+
+/* Stacked steps: the horizontal rail would float uselessly across the top, so
+   it runs vertically through the dots instead (they sit at each step's left
+   edge; 5px centres the 1px line on the 11px dots). Breakpoint must match
+   useVerticalRail() in mvp-promo.jsx. */
+@media (max-width: 640px) {
+  .rail {
+    left: 5px;
+    right: auto;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    height: auto;
+  }
+
+  .railFill {
+    background: linear-gradient(180deg, #96b9f9, rgba(150, 185, 249, 0.45));
+  }
 }
 
 .step {

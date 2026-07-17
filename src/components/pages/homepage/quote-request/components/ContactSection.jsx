@@ -34,55 +34,61 @@ export function ContactSection({ t, register, errors, setValue, watch }) {
     <ContactInfoColumn>
       <SectionTitle>{t("contact.title")}</SectionTitle>
 
-      <FormGroup>
-        <InputLabel htmlFor="name">
-          {t("contact.name")} <RequiredMark>*</RequiredMark>
-        </InputLabel>
-        <Input
-          id="name"
-          type="text"
-          $hasError={!!errors.name}
-          {...register("name")}
-        />
-        <FieldErrorMessage message={errors.name?.message} />
-      </FormGroup>
+      {/* Paired rows keep the form short enough that the submit button sits
+          above the fold on desktop. */}
+      <div className="grid-cols-2">
+        <FormGroup>
+          <InputLabel htmlFor="name">
+            {t("contact.name")} <RequiredMark>*</RequiredMark>
+          </InputLabel>
+          <Input
+            id="name"
+            type="text"
+            $hasError={!!errors.name}
+            {...register("name")}
+          />
+          <FieldErrorMessage message={errors.name?.message} />
+        </FormGroup>
 
-      <FormGroup>
-        <InputLabel htmlFor="email">
-          {t("contact.email")} <RequiredMark>*</RequiredMark>
-        </InputLabel>
-        <Input
-          id="email"
-          type="email"
-          $hasError={!!errors.email}
-          {...register("email")}
-        />
-        <FieldErrorMessage message={errors.email?.message} />
-      </FormGroup>
+        <FormGroup>
+          <InputLabel htmlFor="email">
+            {t("contact.email")} <RequiredMark>*</RequiredMark>
+          </InputLabel>
+          <Input
+            id="email"
+            type="email"
+            $hasError={!!errors.email}
+            {...register("email")}
+          />
+          <FieldErrorMessage message={errors.email?.message} />
+        </FormGroup>
+      </div>
 
-      <FormGroup>
-        <InputLabel htmlFor="phone">{t("contact.phone")}</InputLabel>
-        <Input
-          id="phone"
-          type="tel"
-          $hasError={!!errors.phone}
-          {...register("phone")}
-        />
-        <FieldErrorMessage message={errors.phone?.message} />
-      </FormGroup>
+      <div className="grid-cols-2">
+        <FormGroup>
+          <InputLabel htmlFor="phone">{t("contact.phone")}</InputLabel>
+          <Input
+            id="phone"
+            type="tel"
+            $hasError={!!errors.phone}
+            {...register("phone")}
+          />
+          <FieldErrorMessage message={errors.phone?.message} />
+        </FormGroup>
 
-      <FormGroup>
-        <InputLabel htmlFor="object">
-          {t("contact.object")} <RequiredMark>*</RequiredMark>{" "}
-        </InputLabel>
-        <Input
-          id="object"
-          type="text"
-          $hasError={!!errors.object}
-          {...register("object")}
-        />
-        <FieldErrorMessage message={errors.object?.message} />
-      </FormGroup>
+        <FormGroup>
+          <InputLabel htmlFor="object">
+            {t("contact.object")} <RequiredMark>*</RequiredMark>{" "}
+          </InputLabel>
+          <Input
+            id="object"
+            type="text"
+            $hasError={!!errors.object}
+            {...register("object")}
+          />
+          <FieldErrorMessage message={errors.object?.message} />
+        </FormGroup>
+      </div>
 
       <FormGroup>
         <InputLabel htmlFor="description">
@@ -90,7 +96,7 @@ export function ContactSection({ t, register, errors, setValue, watch }) {
         </InputLabel>
         <TextArea
           id="description"
-          rows={5}
+          rows={3}
           $hasError={!!errors.description}
           {...register("description")}
         />

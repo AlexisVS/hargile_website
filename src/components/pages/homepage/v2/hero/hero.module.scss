@@ -69,6 +69,24 @@
     /* Copy overlays the bands entirely at this width — hold it back further than
        desktop, but not so far that the brand colour disappears again. */
     opacity: 0.72;
+    /* The desktop mask fades left→right because that's where the headline sits;
+       on a phone the headline is at the top, so a band could run straight across
+       it. Turn the fade vertical and hold it hard: the bands drift with shader
+       time and their load phase puts one right on the title, so the title zone
+       has to stay near-black at every phase — the colour only comes up to real
+       presence below the copy, around it rather than on top of it. */
+    mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.08) 0%,
+      rgba(0, 0, 0, 0.2) 40%,
+      #000 64%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.08) 0%,
+      rgba(0, 0, 0, 0.2) 40%,
+      #000 64%
+    );
   }
 }
 
@@ -82,13 +100,22 @@
    than receding. mask-composite multiplies the two so each keeps its own axis. */
 .sectionSharp .backdrop {
   opacity: 1;
+  /* Real margin, not a fade: the canvas shifts down as a whole (top and bottom
+     move together), keeping its original height — same camera framing, same
+     grid size. 40px is the balance point: the dense cube band rises up behind
+     the hero copy (text sits in the middle of the field), while the board's
+     fog-faded far edge still keeps clear daylight under the navbar. The
+     overhang past the section is fully transparent (the vertical mask ends at
+     97%) and pointer-events: none. */
+  top: 40px;
+  bottom: -40px;
   mask-image:
     linear-gradient(100deg, transparent 0%, rgba(0, 0, 0, 0.55) 38%, #000 62%),
-    linear-gradient(to bottom, transparent 0%, #000 18%, #000 62%, transparent 97%);
+    linear-gradient(to bottom, #000 0%, #000 62%, transparent 97%);
   mask-composite: intersect;
   -webkit-mask-image:
     linear-gradient(100deg, transparent 0%, rgba(0, 0, 0, 0.55) 38%, #000 62%),
-    linear-gradient(to bottom, transparent 0%, #000 18%, #000 62%, transparent 97%);
+    linear-gradient(to bottom, #000 0%, #000 62%, transparent 97%);
   -webkit-mask-composite: source-in;
 
   @media (max-width: 768px) {
@@ -266,11 +293,11 @@
 }
 
 /* --- Capability column (cube-grid variant) ---
-   Rules rather than boxes: straight lines sit with the grid instead of across it,
-   and the grid stays visible through the column — a panel behind the copy would
-   read as a hole punched in the cubes.
-   Legibility therefore comes from the type itself: each row carries a tight dark
-   halo (see .capTitle / .capText) that darkens only the pixels around the glyphs.
+   No rules, no bars, no boxes — anything drawn across the grid reads as
+   furniture on top of it. The rows are bare type over the moving cubes, with
+   just a soft wash and slide on hover.
+   Legibility comes from the type: each row carries a tight dark halo
+   (see .capTitle / .capText) that darkens only the pixels around the glyphs.
    The cubes keep moving right up to the letterforms. */
 
 .capList {
@@ -280,19 +307,18 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-/* One child (.capBody) now that the marker is gone, so the row is just a block with
-   a rule under it — the flex/baseline setup existed to align a marker against the
-   title and has nothing left to align. */
 .capItem {
-  padding: 20px 4px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 14px 4px;
+  border-radius: 10px;
   transition: background 0.3s, padding-left 0.3s;
 
   &:hover {
-    background: rgba(150, 185, 249, 0.05);
+    background: rgba(150, 185, 249, 0.06);
     padding-left: 12px;
   }
 }

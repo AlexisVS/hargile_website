@@ -2,20 +2,27 @@ import styled from "styled-components";
 
 export const PageContainer = styled.div`
     min-height: 100vh;
-    color: white;
+    color: #ededed;
     position: relative;
     overflow: hidden;
+    /* No own background — the body's black shows through, like the homepage.
+       A local one painted a visible column against the page edges. Break out
+       of .content-container's side padding so the inner container's gutters
+       line up exactly with the homepage's. */
+    margin-inline: calc(50% - 50vw);
 `;
 
 export const ContentWrapper = styled.div`
-    max-width: 1400px;
+    /* Same measure as the homepage v2 sections. */
+    max-width: var(--container-max);
     margin: 0 auto;
-    padding: 2rem 1rem;
+    padding: 2rem var(--container-gutter);
     position: relative;
     z-index: 10;
+    box-sizing: border-box;
 
     @media (min-width: 768px) {
-        padding: 3rem 2rem;
+        padding: 3rem var(--container-gutter);
         display: grid;
         grid-template-columns: 280px 1fr;
         gap: 2rem;
@@ -34,18 +41,29 @@ export const Header = styled.header`
     }
 `;
 
-export const Title = styled.h1.attrs({
-    className: "fluid-type-5",
-})`
-    font-weight: bold;
-    color: white;
+export const Title = styled.h1`
+    /* Exactly the homepage v2 section heading (.heading in
+       v2-section.module.scss): same size, same flat off-white. */
+    font-family: var(--font-headings);
+    font-size: clamp(34px, 3.6vw, 56px);
+    line-height: 1.1;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #ededed;
     margin: 0;
+
+    /* Doubled specificity: the legacy .content-container h1 rule out-ranks a
+       single styled-components class and re-applies its grey text-shadow. */
+    && {
+        text-shadow: none;
+    }
 `;
 
 export const TitleUnderline = styled.div`
-    width: 80%;
-    height: 4px;
-    background-color: var(--color-accent-mihai);
+    width: 140px;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #96b9f9, rgba(150, 185, 249, 0.05));
     margin-top: 0.75rem;
     margin-bottom: 1rem;
 `;
@@ -74,8 +92,9 @@ export const MenuButton = styled.button`
 `;
 
 export const Sidebar = styled.aside`
-    background-color: #0f0927;
-    border-radius: 0.75rem;
+    background: linear-gradient(155deg, rgba(56, 74, 122, 0.22), rgba(24, 33, 58, 0.35), rgba(12, 17, 32, 0.55));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
     padding: 1.5rem;
     margin-bottom: 2rem;
     display: ${(props) => (props.$menuOpen ? "block" : "none")};
@@ -107,7 +126,7 @@ export const NavItem = styled.a`
     transition: background-color 0.2s ease;
     background-color: ${(props) =>
             props["data-active"] === "true"
-                    ? "rgba(124, 58, 237, 0.2)"
+                    ? "rgba(150, 185, 249, 0.14)"
                     : "transparent"};
     border-left: ${(props) =>
             props["data-active"] === "true"
@@ -115,7 +134,7 @@ export const NavItem = styled.a`
                     : "3px solid transparent"};
 
     &:hover {
-        background-color: rgba(124, 58, 237, 0.1);
+        background-color: rgba(150, 185, 249, 0.07);
     }
 `;
 
@@ -123,8 +142,9 @@ export const NavItem = styled.a`
 export const MainContent = styled.main``;
 
 export const Section = styled.section`
-    background-color: #0f0927;
-    border-radius: 0.75rem;
+    background: linear-gradient(155deg, rgba(56, 74, 122, 0.22), rgba(24, 33, 58, 0.35), rgba(12, 17, 32, 0.55));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
     padding: 2rem;
     margin-bottom: 2rem;
 `;
@@ -139,7 +159,7 @@ export const SectionTitle = styled.h2.attrs({
 export const SubSectionTitle = styled.h3.attrs({
     className: "fluid-type-1",
 })`
-    color: #9d4edd;
+    color: #96b9f9;
     margin: 1.5rem 0 1rem 0;
 `;
 
@@ -189,12 +209,13 @@ export const ActionButton = styled.button`
     transition: all 0.2s ease;
 
     &:first-child {
-        background-color: #9d4edd;
-        color: white;
+        background-color: #96b9f9;
+        color: #0a0a12;
         border: none;
 
         &:hover {
-            background-color: #8e2de2;
+            background-color: #b8cdfb;
+            box-shadow: 0 0 24px rgba(150, 185, 249, 0.3);
         }
     }
 

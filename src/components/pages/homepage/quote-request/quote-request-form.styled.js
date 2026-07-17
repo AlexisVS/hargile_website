@@ -5,8 +5,11 @@ export const PageWrapper = styled.div`
   min-height: 100vh;
   position: relative;
   contain-content: true;
-  background-color: var(--color-background-section);
-
+  /* No own background: it painted a visible column against the pure-black
+     body. The page black comes from the body, like the homepage. Break out of
+     .content-container's side padding (same trick as the v2 sections) so the
+     inner container's gutters line up exactly with the homepage's. */
+  margin-inline: calc(50% - 50vw);
 `;
 
 export const BackgroundBlur = styled.div`
@@ -24,11 +27,15 @@ export const BackgroundBlur = styled.div`
 `;
 
 export const FormContainer = styled.div`
-  max-width: 1400px;
+  /* Same measure as the homepage v2 sections (.container in
+     v2-section.module.scss): shared max width and gutters. */
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: clamp(28px, 3.5vw, 48px) var(--container-gutter);
   position: relative;
   z-index: 10;
   width: 100%;
-
+  box-sizing: border-box;
 `;
 
 export const HeaderSection = styled.div`
@@ -82,30 +89,22 @@ export const Description = styled.p.attrs({
 export const FormGrid = styled.form`
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
-
-  @media (min-width: 1024px) {
-    grid-template-columns: 2fr 1fr;
-  }
+  gap: 1.25rem;
 `;
 
 export const ContactInfoColumn = styled.div`
-  background-color: rgba(17, 12, 41, 0.6);
-  border: 1px solid rgba(150, 185, 249, 0.2);
-  border-radius: 0.5rem;
-  padding: 2.5rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04);
-
-  @media (min-width: 768px) {
-    background-color: rgba(17, 12, 41, 0.6);
-  }
+  /* No card at all — the fields sit directly on the page black, underline
+     style. Spacing does the structuring instead of a surface. */
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
 
   .grid-cols-2 {
     @media (min-width: 768px) {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
+      gap: 2.5rem;
     }
   }
 
@@ -121,18 +120,16 @@ export const ContactInfoColumn = styled.div`
 `;
 
 export const ServiceTypesColumn = styled.div`
-  background-color: rgba(21, 16, 53, 0.8);
-  border: 1px solid rgba(150, 185, 249, 0.1);
-  border-radius: 0.5rem;
+  background: linear-gradient(155deg, rgba(56, 74, 122, 0.32), rgba(24, 33, 58, 0.45), rgba(12, 17, 32, 0.6));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
   padding: 2.5rem;
+  backdrop-filter: blur(20px) saturate(115%);
+  -webkit-backdrop-filter: blur(20px) saturate(115%);
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
-
-  @media (min-width: 768px) {
-    background-color: rgba(21, 16, 53, 0.6);
-  }
 
   .service-options {
     margin-top: 1.25rem;
@@ -153,16 +150,15 @@ export const SectionTitle = styled.h3.attrs({
 `;
 
 export const FormGroup = styled.div`
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 `;
 
 export const InputLabel = styled.label.attrs({
   className: "fluid-type-0",
 })`
   display: block;
-  color: white;
-  margin-bottom: 0.5rem;
-  padding-top: 1rem;
+  color: rgba(237, 237, 237, 0.65);
+  margin-bottom: 0.1rem;
 `;
 
 export const RequiredMark = styled.span`
@@ -170,32 +166,49 @@ export const RequiredMark = styled.span`
 `;
 
 export const Input = styled.input`
+  /* Underline style: transparent field, a single hairline below. The focus
+     accent is a box-shadow doubling the line so nothing shifts. */
   width: 100%;
-  background-color: #19103b;
-  color: white;
-  border-radius: 0.375rem;
-  padding: 1rem;
+  background: transparent;
+  color: #ededed;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid
+    ${(props) => (props.$hasError ? "#EF4444" : "rgba(255, 255, 255, 0.16)")};
+  padding: 0.85rem 2px;
   outline: none;
-  border: 1px solid
-    ${(props) => (props.$hasError ? "#EF4444" : "rgba(107, 33, 168, 0.1)")}; // Use $hasError
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+
+  &::placeholder {
+    color: rgba(237, 237, 237, 0.3);
+  }
 
   &:focus {
-    border-color: var(--color-accent-mihai);
+    border-bottom-color: var(--color-accent-mihai);
+    box-shadow: 0 1px 0 var(--color-accent-mihai);
   }
 `;
 
 export const TextArea = styled.textarea`
   width: 100%;
-  background-color: #19103b;
-  color: white;
-  border-radius: 0.375rem;
-  padding: 1rem;
+  background: transparent;
+  color: #ededed;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid
+    ${(props) => (props.$hasError ? "#EF4444" : "rgba(255, 255, 255, 0.16)")};
+  padding: 0.85rem 2px;
   outline: none;
-  border: 1px solid
-    ${(props) => (props.$hasError ? "#EF4444" : "rgba(107, 33, 168, 0.1)")}; // Use $hasError
+  resize: vertical;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+
+  &::placeholder {
+    color: rgba(237, 237, 237, 0.3);
+  }
 
   &:focus {
-    border-color: var(--color-accent-mihai);
+    border-bottom-color: var(--color-accent-mihai);
+    box-shadow: 0 1px 0 var(--color-accent-mihai);
   }
 `;
 
@@ -205,13 +218,13 @@ export const SelectButton = styled.button.attrs({
   position: relative;
   appearance: none;
   width: 100%;
-  background-color: #19103b;
-  color: white;
-  border-radius: 0.375rem;
-  padding: 1rem 2.5rem 1rem 1rem;
+  background: transparent;
+  color: #ededed;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid ${(props) => (props.$hasError ? "#EF4444" : "rgba(255, 255, 255, 0.16)")};
+  padding: 0.85rem 2.5rem 0.85rem 2px;
   outline: none;
-  /* FIXED: Added $ prefix to hasError prop */
-  border: 1px solid ${(props) => (props.$hasError ? "#EF4444" : "rgba(107, 33, 168, 0.1)")};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -252,12 +265,12 @@ export const DropdownContainer = styled.div`
   z-index: 10;
   margin-top: 0.25rem;
   width: 100%;
-  border-radius: 0.375rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  background-color: #19103b;
-  border: 1px solid rgba(107, 33, 168, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+  background-color: #0c1222;
+  border: 1px solid rgba(150, 185, 249, 0.25);
   outline: none;
+  overflow: hidden;
 `;
 
 export const DropdownItem = styled.button.attrs({
@@ -271,7 +284,7 @@ export const DropdownItem = styled.button.attrs({
   text-align: center;
 
   &:hover {
-    background-color: #7e22ce;
+    background-color: rgba(150, 185, 249, 0.16);
     color: white;
   }
 `;
@@ -316,19 +329,21 @@ export const Checkbox = styled.button.attrs((props) => {
   margin-right: 0.75rem;
 
   ${(props) => {
+    /* Keys are legacy names from ServicesSection's config; the values are all
+       remapped into the brand blue family so the form reads as one palette. */
     const colors = {
-      yellow: "#FCD34DFF",
-      blue: "#3B82F6",
-      purple: "#5B8DEF",
-      pink: "#F5C26B",
-      teal: "#14B8A6",
+      yellow: "#96b9f9",
+      blue: "#5B8DEF",
+      purple: "#2563eb",
+      pink: "#0EA5E9",
+      teal: "#4F46E5",
     };
 
     const color = colors[props.color] || colors.blue;
     const isChecked = props.checked;
 
     return `
-      background-color: ${isChecked ? color : "#190f3a"};
+      background-color: ${isChecked ? color : "rgba(8, 12, 24, 0.8)"};
       border: 1px solid ${isChecked ? color : color};
     `;
   }}
@@ -355,62 +370,37 @@ export const SubmitButton = styled.button.attrs({
   margin-top: auto; /* Pushes to bottom if in a flex column like ServiceTypesColumn */
   /* Ensure space above if content before it is dynamic */
 
-  /* Define accent color and its RGB components (fallback if CSS vars not set) */
-  --accent-color: var(
-      --color-accent-mihai,
-      #6366f1
-  ); /* Indigo-500 as a fallback */
-  --accent-color-rgb: var(--color-accent-mihai-rgb, 99, 102, 241);
-
-  background: linear-gradient(
-      135deg,
-      var(--accent-color) 0%,
-      color-mix(in srgb, var(--accent-color) 70%, #4f46e5) 100%
-  ); /* Gradient with a slightly darker shade */
-  color: white;
-  font-weight: 600; /* Bolder */
-  padding: 0.85rem 2rem; /* Slightly more padding */
-  border-radius: 0.5rem; /* Softer radius */
-  border: none; /* Remove default border */
+  /* v2 CTA — same treatment as the hero's primary button. */
+  background: #96b9f9;
+  color: #0a0a12;
+  font-weight: 600;
+  padding: 0.85rem 2rem;
+  border-radius: 12px;
+  border: none;
   cursor: pointer;
   width: 100%;
   text-align: center;
-
-  /* Smooth transitions for hover and active states */
-  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-
-  /* Subtle shadow for depth */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1),
-  0 2px 8px rgba(var(--accent-color-rgb), 0.2); /* Shadow with accent color tint */
+  transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
 
   &:hover:not(:disabled) {
-    transform: translateY(-2px) scale(1.01); /* Slight lift and scale */
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15),
-    0 4px 12px rgba(var(--accent-color-rgb), 0.3); /* Enhanced shadow */
-    /* You could also change the gradient slightly on hover if desired */
+    background: #b8cdfb;
+    transform: translateY(-2px);
+    box-shadow: 0 0 36px rgba(150, 185, 249, 0.35);
   }
 
   &:active:not(:disabled) {
-    transform: translateY(0px) scale(0.99); /* Press down effect */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1),
-    0 1px 6px rgba(var(--accent-color-rgb), 0.2);
+    transform: translateY(0);
+    box-shadow: 0 0 18px rgba(150, 185, 249, 0.25);
   }
 
   &:focus-visible {
-    /* Modern focus state for accessibility */
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(var(--accent-color-rgb), 0.4),
-      /* Outer ring */ 0 4px 15px rgba(0, 0, 0, 0.1),
-    0 2px 8px rgba(var(--accent-color-rgb), 0.2);
+    outline: 2px solid rgba(150, 185, 249, 0.7);
+    outline-offset: 2px;
   }
 
   &:disabled {
-    background: linear-gradient(
-        135deg,
-        #6b7280 0%,
-        #4b5563 100%
-    ); /* Tailwind Gray-500 to Gray-600 */
-    color: rgba(255, 255, 255, 0.5);
+    background: rgba(237, 237, 237, 0.18);
+    color: rgba(237, 237, 237, 0.45);
     cursor: not-allowed;
     box-shadow: none;
     transform: none;
@@ -426,8 +416,7 @@ export const PrivacyNote = styled.div.attrs({
 `;
 
 export const PrivacyLink = styled.a`
-  color: #60a5fa;
-
+  color: #96b9f9;
 `;
 
 export const RequiredNote = styled.p`

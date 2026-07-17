@@ -18,7 +18,7 @@ export const CookieBanner = styled.div`
 export const BannerContainer = styled.div`
     max-width: 1360px;
     margin: 0 auto;
-    padding: 0.85rem 1.25rem;
+    padding: 1.3rem 1.25rem;
     display: flex;
     flex-direction: column;
     gap: 0.85rem;
@@ -28,7 +28,10 @@ export const BannerContainer = styled.div`
         align-items: center;
         justify-content: space-between;
         gap: 2rem;
-        padding: 0.85rem 2rem;
+        /* Tall enough that the bar fully covers the floating contact button
+           (fixed bottom: 24px, ~45px tall) while it's open — the banner stacks
+           above it, so the button shouldn't peek out over the top edge. */
+        padding: 1.5rem 2rem;
     }
 `;
 

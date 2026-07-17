@@ -2,7 +2,7 @@
 // (Adjust path as necessary for your project structure)
 
 import { useTranslations } from "next-intl";
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -11,15 +11,13 @@ import { motion } from "motion/react";
 // Styled Components and Child Components (Ensure paths are correct)
 import { Header } from "@/components/header/mainHeader";
 import {
-  BackgroundBlur,
   FormContainer,
   FormGrid,
   PageWrapper,
-  // Import the new styled component for status messages
   StatusMessageDisplay,
+  SubmitButton,
 } from "@/components/pages/homepage/quote-request/quote-request-form.styled";
 import { ContactSection } from "@/components/pages/homepage/quote-request/components/ContactSection";
-import { ServicesSection } from "@/components/pages/homepage/quote-request/components/ServicesSection";
 import { PrivacyFooter } from "@/components/pages/homepage/quote-request/components/PrivacyFooter";
 
 export default function ContactForm() {
@@ -51,10 +49,6 @@ export default function ContactForm() {
           error: t("validation.messageRequired", { min: MIN_MESSAGE_CHARS }), // Using 'messageRequired' key for description
         })
       ),
-
-    services: z
-      .array(z.string())
-      .min(1, { error: t("validation.serviceRequired") }),
   });
 
   const {
@@ -76,42 +70,8 @@ export default function ContactForm() {
       phone: "",
       object: "",
       description: "", // Ensure this matches the field name in schema and register
-      services: [],
     },
   });
-
-  // --- Removed debugging useEffects for watch, errors, getValues ---
-
-  const initialServiceCheckboxesState = {
-    advice: false,
-    webDevelopment: false,
-    mobileApps: false,
-    ai: false,
-    cloud: false,
-  };
-  const [activeServiceCheckboxes, setActiveServiceCheckboxes] = useState(
-    initialServiceCheckboxesState
-  );
-  const serviceIds = Object.keys(initialServiceCheckboxesState);
-
-  const toggleService = useCallback(
-    (serviceId) => {
-      setActiveServiceCheckboxes((prev) => {
-        const newState = { ...prev, [serviceId]: !prev[serviceId] };
-        const selectedServiceIds = Object.entries(newState)
-          .filter(([_, isSelected]) => isSelected)
-          .map(([id, _]) => id);
-        // ShouldValidate triggers Zod resolver, shouldDirty/Touch mark field state
-        setValue("services", selectedServiceIds, {
-          shouldValidate: true,
-          shouldDirty: true,
-          shouldTouch: true,
-        });
-        return newState;
-      });
-    },
-    [setValue] // setValue is a stable function from RHF
-  );
 
   // State for the API submission status message
   const [submitStatus, setSubmitStatus] = useState({
@@ -143,7 +103,6 @@ export default function ContactForm() {
           message: t(result.messageKey),
         });
         reset(); // Reset form fields to defaultValues
-        setActiveServiceCheckboxes(initialServiceCheckboxesState); // Manually reset custom checkbox UI state
       } else {
         let errorMessage;
         // Check if API returned a message key for translation
@@ -169,17 +128,15 @@ export default function ContactForm() {
 
   return (
     <PageWrapper>
-      <BackgroundBlur />
       <FormContainer>
         <Header // Assuming Header component exists
           title={t("title")}
           titleAs={motion.h2} // Assuming motion h2
           description={t("description")}
-          showUnderline={true}
+          showUnderline={false}
           showBackgroundBlur={false}
         />
         <FormGrid onSubmit={handleSubmit(onSubmitForm)}>
-          {" "}
           <ContactSection
             t={t}
             register={register} // Pass RHF register
@@ -187,14 +144,9 @@ export default function ContactForm() {
             setValue={setValue}
             watch={watch}
           />
-          <ServicesSection
-            t={t}
-            serviceCheckboxesState={activeServiceCheckboxes} // Pass local UI state
-            toggleService={toggleService} // Pass function to update UI state and RHF
-            serviceIds={serviceIds} // Pass list of service IDs
-            errors={errors} // Pass RHF errors for services validation feedbacks
-            isSubmitting={isSubmittingAPI} // Pass API submission state to disable button
-          />
+          <SubmitButton type="submit" disabled={isSubmittingAPI}>
+            {isSubmittingAPI ? t("submitting") : t("submit")}
+          </SubmitButton>
         </FormGrid>
 
         <StatusMessageDisplay

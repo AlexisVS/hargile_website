@@ -78,7 +78,9 @@ export async function POST(req) {
         { status: 400 }
       ); // Pass values if key needs them
     }
-    if (!services || !Array.isArray(services) || services.length === 0) {
+    // Services are optional since the contact form dropped its service picker —
+    // the email templates below already render fine without them.
+    if (services !== undefined && !Array.isArray(services)) {
       return NextResponse.json(
         {
           success: false,
