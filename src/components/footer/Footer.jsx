@@ -93,7 +93,6 @@ const Footer = () => {
                 <BottomLinksStyled>
                     <FooterLinkStyled as={Link}
                                       href="/legal/privacy-policy">{t('links.privacyPolicy')}</FooterLinkStyled>
-                    <FooterLinkStyled as={Link} href="/sitemap">{t('links.siteMap')}</FooterLinkStyled>
                 </BottomLinksStyled>
             </BottomBarStyled>
         </FooterContainerStyled>

@@ -43,8 +43,11 @@ const WAVE_CHUNK = /* glsl */ `
 
             // Gaussian envelope centred on the front.
             float env = exp(-rel * rel * 1.1);
-            // Fade with age, and with distance from the impact.
-            float fade = exp(-age * 0.85) * exp(-dist * 0.16) * p.w;
+            // Fade with age, and with distance from the impact. The distance term sets
+            // how much of the grid one ripple reaches: at 0.16 it was still at ~0.28
+            // eight units out, so a single pass moved most of the board. Steeper keeps
+            // the disturbance local to the pointer.
+            float fade = exp(-age * 0.85) * exp(-dist * 0.42) * p.w;
 
             total += env * fade * cos(uWaveFreq * rel);
             weightSum += env * fade;
@@ -112,7 +115,11 @@ const CubeGrid = () => {
             uTime: {value: 0},
             uTrail: {value: trailTex},
             uTrailCount: {value: 0},
-            uWaveSpeed: {value: 3.2},
+            // Slower front than the article's, so a pass reads as a swell rather than
+            // a snap. Freq and amp are left alone — amp especially: the colour lift in
+            // the fragment shader tests vWave against fixed heights, so lowering it
+            // would quietly stop the cubes turning blue.
+            uWaveSpeed: {value: 2.1},
             uWaveFreq: {value: 2.4},
             uWaveAmp: {value: 1.15},
         };
@@ -197,6 +204,7 @@ const CubeGrid = () => {
         const hit = new THREE.Vector3();
         let lastHit = null;
         let lastMove = 0;
+        let lastRipple = 0;
 
         const onPointerMove = (e) => {
             const r = mount.getBoundingClientRect();
@@ -232,12 +240,24 @@ const CubeGrid = () => {
                 return;
             }
 
-            const d = Math.hypot(hit.x - lastHit.x, hit.z - lastHit.z);
-            if (d < 0.12) return; // ignore jitter
-            const strength = Math.min(d * 1.6, 1.4);
+            const now = clock.getElapsedTime();
 
+            const d = Math.hypot(hit.x - lastHit.x, hit.z - lastHit.z);
+            if (d < 0.3) return; // ignore jitter and small moves
+
+            // The main calmer: at the old 0.12 spacing and no time limit, one sweep
+            // pushed a ripple every few pixels and the stacked fronts read as thrashing.
+            // Distance alone can't cap it — a fast sweep clears any spacing instantly.
+            if (now - lastRipple < 0.16) return;
+
+            // Ceiling pulled in from 1.4 so a fast flick can't slam the grid. Kept a
+            // real range though: strength feeds p.w, which scales the crest height the
+            // colour lift is measured against — floor it and the blue goes with it.
+            const strength = Math.min(0.45 + d * 0.7, 1.0);
+
+            lastRipple = now;
             lastHit = {x: hit.x, z: hit.z};
-            lastMove = clock.getElapsedTime();
+            lastMove = now;
             pushTrail(hit.x, hit.z, strength);
         };
         // The canvas is pointer-events:none, so this has to be on window rather than
@@ -252,8 +272,11 @@ const CubeGrid = () => {
         const idleTick = (t) => {
             if (t - lastMove < 8) return;
             if (t < nextIdle) return;
+            // Strength compensates for the steeper distance falloff — these land away
+            // from centre, so at the old 0.45 they'd barely register now. Still well
+            // under a pointer ripple.
             const span = GRID * SPACING * 0.42;
-            pushTrail((Math.random() * 2 - 1) * span, (Math.random() * 2 - 1) * span, 0.45);
+            pushTrail((Math.random() * 2 - 1) * span, (Math.random() * 2 - 1) * span, 0.75);
             nextIdle = t + 5 + Math.random() * 5;
         };
 
