@@ -62,9 +62,10 @@ const WAVE_CHUNK = /* glsl */ `
             // age term lets it die gently, like calm water, not snap off.
             // The ramp is the anti-bounce: without it a ripple is born at full
             // height, so slow hovering — which spawns one every few pixels —
-            // replays that pop over and over. Grown in over ~0.35s, consecutive
-            // spawns blend into one continuous surface instead.
-            float ramp = smoothstep(0.0, 0.35, age);
+            // replays that pop over and over. Grown in over half a second,
+            // consecutive spawns blend into one continuous surface, and even a
+            // fast sweep blooms gradually instead of erupting.
+            float ramp = smoothstep(0.0, 0.5, age);
             float fade = ramp * exp(-age * 0.9) * exp(-dist * 0.5) * p.w;
 
             total += env * fade * cos(uWaveFreq * rel);
@@ -115,8 +116,12 @@ const CubeGrid = () => {
         camera.position.set(0, 9.5, 12);
         camera.lookAt(0, 0, 0);
 
-        scene.add(new THREE.AmbientLight(0x8098c0, 1.4));
-        const key = new THREE.DirectionalLight(0x96b9f9, 2.2);
+        // Mostly ambient: the grid should read as one even colour from every
+        // angle — a strong key light left the off-side faces near-black, which
+        // muted the hover colour on half the board. The faint directional that
+        // remains only keeps the cubes from going completely flat.
+        scene.add(new THREE.AmbientLight(0x7d9bd8, 2.1));
+        const key = new THREE.DirectionalLight(0x96b9f9, 0.6);
         key.position.set(4, 10, 6);
         scene.add(key);
 
@@ -137,7 +142,7 @@ const CubeGrid = () => {
             // out, boat-wake pace. Amp is left alone — the colour lift in the
             // fragment shader tests vWave against fixed heights, so lowering it
             // would quietly stop the cubes turning blue.
-            uWaveSpeed: {value: 2.2},
+            uWaveSpeed: {value: 1.7},
             uWaveFreq: {value: 1.6},
             uWaveAmp: {value: 1.15},
             uCursor: {value: new THREE.Vector2()},
@@ -147,7 +152,9 @@ const CubeGrid = () => {
         // --- Instanced cubes ---
         const geometry = new THREE.BoxGeometry(0.4, 0.4, 0.4);
         const material = new THREE.MeshPhongMaterial({
-            color: new THREE.Color("#16213e"),
+            // Bluer than the old #16213e, still dark enough that the headline
+            // and capability copy sit on it comfortably.
+            color: new THREE.Color("#1c2b58"),
             shininess: 60,
             specular: new THREE.Color("#2563eb"),
             transparent: true,
@@ -168,12 +175,18 @@ const CubeGrid = () => {
                      // Instance matrices are translation-only, so local offsets to
                      // 'transformed' below are world-space offsets.
                      vec2 cell = vec2(instanceMatrix[3][0], instanceMatrix[3][2]);
-                     float w = waveAt(cell);
 
                      // Cursor swell: a gaussian bulge, vertical only.
                      vec2 cdiff = cell - uCursor;
                      float cg = exp(-dot(cdiff, cdiff) * ${CURSOR_FALLOFF.toFixed(4)}) * uCursorStrength;
                      float bulge = cg * ${CURSOR_BULGE.toFixed(4)};
+
+                     // Ripples are masked out under the cursor: a spawn always
+                     // begins life at the pointer, and at slow hover that birth
+                     // frame replays under you as a visible re-bounce. Like water
+                     // under a hull — only the mound exists here; the wake fades
+                     // in as it travels clear of the cursor zone.
+                     float w = waveAt(cell) * (1.0 - 0.85 * cg);
 
                      vWave = w + bulge;
                      transformed.y += w + bulge;`,
@@ -184,8 +197,10 @@ const CubeGrid = () => {
                 .replace(
                     "#include <dithering_fragment>",
                     `#include <dithering_fragment>
-                     // Crests glow toward the brand blue.
-                     float lift = smoothstep(0.05, 0.9, vWave);
+                     // Crests glow toward the brand blue. The upper edge is tuned
+                     // to the current low crest heights — at the old 0.9 the small
+                     // waves never got past a faint tint.
+                     float lift = smoothstep(0.03, 0.45, vWave);
                      gl_FragColor.rgb = mix(gl_FragColor.rgb, uHighlight, lift * 0.85);
 
                      // Fog alone only tints a distant cube toward the fog colour — on an
@@ -289,17 +304,18 @@ const CubeGrid = () => {
             const now = clock.getElapsedTime();
 
             const d = Math.hypot(hit.x - lastHit.x, hit.z - lastHit.z);
-            if (d < 0.18) return; // ignore jitter and small moves
+            if (d < 0.3) return; // ignore jitter and slow drift — the mound covers it
 
             // Dense enough that a sweep reads as one continuous wake — at wide
             // spacing the throttled ripples showed up as separate blips. The low
             // strength cap below is what keeps this from thrashing.
             if (now - lastRipple < 0.1) return;
 
-            // Small, gentle crests — a fast flick still can't slam the grid. Kept a
-            // real range though: strength feeds p.w, which scales the crest height
-            // the colour lift is measured against — floor it and the blue goes too.
-            const strength = Math.min(0.22 + d * 0.35, 0.42);
+            // Strength is purely proportional to movement — no floor. A crawl
+            // produces near-nothing (the cursor mound is the slow-hover response;
+            // a floored ripple here is what kept re-bouncing under the pointer),
+            // and the cap keeps a fast flick from slamming the grid.
+            const strength = Math.min(d * 0.5, 0.42);
 
             lastRipple = now;
             lastHit = {x: hit.x, z: hit.z};
