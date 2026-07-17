@@ -219,6 +219,14 @@
   background-clip: text;
   -webkit-text-fill-color: transparent;
   padding-bottom: 0.08em;
+
+  /* On phones the clamp floor (40px) plus the longer French headline runs to
+     ~7 tall lines. Let the type scale down with the viewport and tighten the
+     leading so the block stays compact — desktop sizing above is untouched. */
+  @media (max-width: 640px) {
+    font-size: clamp(30px, 8.4vw, 40px);
+    line-height: 1.02;
+  }
 }
 
 .paragraph {

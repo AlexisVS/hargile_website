@@ -36,6 +36,32 @@ const nextConfig = {
     experimental: {
         turbopackFileSystemCacheForDev: true,
     },
+    async redirects() {
+        /* Pages removed in the site refresh (feature/site-refresh). Their URLs
+           are still indexed / bookmarked, so 301 them to the closest surviving
+           destination rather than 404. next-intl prefixes every route with the
+           locale, so each source is declared twice: `/:locale(en|fr)/path` for
+           the prefixed URLs, plus the bare `/path` that next-intl resolves to
+           the default locale. `permanent: true` = 301. */
+        const gone = [
+            // about-us may be restored later, so keep it temporary (307): a 301
+            // gets cached hard by browsers and would keep sending visitors to /
+            // even after the page comes back. The rest are gone for good (301).
+            {path: 'about-us', to: '/', permanent: false},
+            {path: 'services', to: '/', permanent: true},
+            {path: 'sitemap', to: '/', permanent: true},
+            {path: 'solutions/agves', to: '/', permanent: true},
+            {path: 'solutions/i-go', to: '/', permanent: true},
+            {path: 'solutions/multipass', to: '/', permanent: true},
+            // The portfolio now lives on its own subdomain — send visitors there.
+            {path: 'portfolio', to: 'https://portfolio.hargile.be/', permanent: true},
+        ];
+
+        return gone.flatMap(({path, to, permanent}) => [
+            {source: `/:locale(en|fr)/${path}`, destination: to, permanent},
+            {source: `/${path}`, destination: to, permanent},
+        ]);
+    },
 };
 
 export default withNextIntl(nextConfig);

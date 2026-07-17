@@ -2,8 +2,10 @@ import styled from "styled-components";
 
 export const ContentStyled = styled.div`
     padding: 0;
-    width: 22px;
-    height: 18px;
+    /* Slightly smaller icon. The .open translate below is half this height (8px),
+       so the two bars meet at centre to form the X — keep them in sync if resized. */
+    width: 20px;
+    height: 16px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,7 +22,7 @@ export const ContentStyled = styled.div`
     }
 
     .menu-bar-container.open .bar-top {
-        transform: translateY(9px) rotate(45deg);
+        transform: translateY(7px) rotate(45deg);
     }
 
     .menu-bar-container.open .bar-middle {
@@ -29,7 +31,7 @@ export const ContentStyled = styled.div`
     }
 
     .menu-bar-container.open .bar-bottom {
-        transform: translateY(-9px) rotate(-45deg);
+        transform: translateY(-7px) rotate(-45deg);
     }
 `;
 

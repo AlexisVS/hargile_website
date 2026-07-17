@@ -27,6 +27,32 @@
   line-height: 1.4;
   letter-spacing: -0.018em;
   text-shadow: none;
+
+  /* Bigger on phones — the quote is the section's punchline and reads small at
+     the clamp floor once each phrase is on its own line. */
+  @media (max-width: 640px) {
+    font-size: clamp(30px, 8vw, 40px);
+    line-height: 1.28;
+  }
+}
+
+/* Desktop: the three phrases flow together on one centred row (they're short —
+   no need to spend three lines of height on them). Each stays inline-block so
+   its words still animate and the closing phrase keeps its shine.
+   Mobile: each phrase drops onto its own centred line (a full-width block needs
+   its own text-align, or the inline words pile up at the left edge). */
+.line {
+  display: inline-block;
+
+  &:not(:last-child) {
+    margin-right: 0.35em;
+  }
+
+  @media (max-width: 640px) {
+    display: block;
+    text-align: center;
+    margin-right: 0;
+  }
 }
 
 .word,

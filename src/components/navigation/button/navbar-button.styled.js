@@ -2,26 +2,27 @@ import styled from "styled-components";
 
 export const BoxStyled = styled.button`
     position: relative;
-    width: 48px;
-    height: 48px;
+    /* Borderless, smaller hit area. Kept square and the icon flex-centered so the
+       bars sit dead-centre — no circle/backdrop to throw the optical centre off. */
+    width: 40px;
+    height: 40px;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     pointer-events: all;
     z-index: 1003;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
-    transition: all 0.15s ease;
-    
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+
     &:hover {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(255, 255, 255, 0.3);
+        opacity: 0.7;
     }
-    
+
     &:active {
-        transform: scale(0.98);
+        transform: scale(0.94);
     }
 `
