@@ -52,6 +52,21 @@ const HeroV2 = ({backdrop, label}) => {
 
     return (
         <section className={`${styles.section} ${variant === "cubes" ? styles.sectionSharp : ""}`}>
+            {/* TEMP CD latency benchmark marker — removed right after verification */}
+            <div
+                data-cd-test="cd-latency-154338"
+                style={{
+                    position: "relative",
+                    zIndex: 5,
+                    textAlign: "center",
+                    padding: "0.35rem",
+                    fontSize: "0.72rem",
+                    letterSpacing: "0.08em",
+                    opacity: 0.65,
+                }}
+            >
+                🟢 cd-latency-154338
+            </div>
             <HeroBackdrop variant={variant}/>
             {label && <div className={styles.variantTag}>{label}</div>}
 
