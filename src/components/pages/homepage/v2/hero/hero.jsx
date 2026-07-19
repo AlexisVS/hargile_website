@@ -52,21 +52,6 @@ const HeroV2 = ({backdrop, label}) => {
 
     return (
         <section className={`${styles.section} ${variant === "cubes" ? styles.sectionSharp : ""}`}>
-            {/* TEMP pipeline smoke-test marker — remove after CD verification (v0.5.3) */}
-            <div
-                data-pipeline-test="pipeline-20260719-143833"
-                style={{
-                    position: "relative",
-                    zIndex: 5,
-                    textAlign: "center",
-                    padding: "0.35rem",
-                    fontSize: "0.72rem",
-                    letterSpacing: "0.08em",
-                    opacity: 0.65,
-                }}
-            >
-                🟢 pipeline-20260719-143833
-            </div>
             <HeroBackdrop variant={variant}/>
             {label && <div className={styles.variantTag}>{label}</div>}
 
