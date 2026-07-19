@@ -36,6 +36,25 @@ const nextConfig = {
     experimental: {
         turbopackFileSystemCacheForDev: true,
     },
+    async headers() {
+        /* Next static pages ship `Cache-Control: s-maxage=31536000` (one year).
+           With no CDN in front today that's inert, but it's a trap: add a CDN
+           later and deploys stop propagating without a purge. Cap page freshness
+           to a few minutes and let the browser revalidate via ETag, while
+           `stale-while-revalidate` keeps perf. Assets under /_next/static stay
+           immutable — the matcher excludes them. */
+        return [
+            {
+                source: '/((?!_next/static|_next/image|api/).*)',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400',
+                    },
+                ],
+            },
+        ];
+    },
     async redirects() {
         /* Pages removed in the site refresh (feature/site-refresh). Their URLs
            are still indexed / bookmarked, so 301 them to the closest surviving
