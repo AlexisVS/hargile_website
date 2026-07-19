@@ -55,7 +55,11 @@ export default function GDPRManager({children}) {
     const [consents, setConsents] = useLocalStorageState('rgpd_consents', defaultConsents)
     const initialized = useIsClient();
     const hasStoredConsents = initialized && typeof window !== 'undefined' && window.localStorage.getItem('rgpd_consents') !== null;
-    const [modalState, setModalState] = useState(hasStoredConsents ? 'closed' : 'banner')
+    // useState initializers run during the hydration render, when useIsClient()
+    // is still false — deriving the default here instead of in useState keeps
+    // stored consents from being ignored. null = no explicit choice this session.
+    const [modalState, setModalState] = useState(null)
+    const currentModal = modalState ?? (hasStoredConsents ? 'closed' : 'banner')
 
     const updateConsent = (category, value) => {
         setConsents(prev => ({
@@ -115,7 +119,7 @@ export default function GDPRManager({children}) {
         <RGPDContext.Provider value={contextValue}>
             {children}
 
-            {modalState === 'banner' && (
+            {currentModal === 'banner' && (
                 <CookieBanner role="dialog" aria-labelledby="cookie-consent-banner-title">
                     <BannerContainer>
                         <BannerContent>
@@ -137,7 +141,7 @@ export default function GDPRManager({children}) {
                 </CookieBanner>
             )}
 
-            {modalState === 'preferences' && (
+            {currentModal === 'preferences' && (
                 <ModalOverlay role="dialog" aria-labelledby="cookie-preferences-title">
                     <ModalContainer>
                         <ModalContent>
@@ -220,7 +224,7 @@ export default function GDPRManager({children}) {
                 </ModalOverlay>
             )}
 
-            {modalState === 'closed' && (
+            {currentModal === 'closed' && (
                 <SettingsButton onClick={openPreferences} aria-label={t('cookieSettings')}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
