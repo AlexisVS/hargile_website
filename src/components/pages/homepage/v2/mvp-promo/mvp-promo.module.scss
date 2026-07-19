@@ -87,9 +87,16 @@
   user-select: none;
 }
 
+@media screen and (max-width: 607px) {
+  .ghostNum {
+    padding-left: 24px;
+  }
+}
+
 .stepBody {
   position: relative;
-  padding-top: 44px;
+  padding-top: 24px;
+  padding-left: 16px;
 }
 
 .week {

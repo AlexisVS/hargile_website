@@ -118,6 +118,8 @@ export const StepWeek = styled.span.attrs({className: 'fluid-type-0-5'})`
 
 export const StepBody = styled.div`
     min-width: 0;
+    
+    
 `;
 
 export const StepTitle = styled.p.attrs({className: 'fluid-type-1'})`
