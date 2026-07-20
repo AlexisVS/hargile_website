@@ -1,22 +1,36 @@
 // app/api/contact/route.js
 import { NextResponse } from "next/server";
-import sgMail from "@sendgrid/mail";
+import nodemailer from "nodemailer";
 
-// Initialize SendGrid
-if (process.env.SENDGRID_API_KEY) {
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// SMTP configuration — sends via the info@hargile.com mailbox.
+const SMTP_HOST = process.env.SMTP_HOST;
+const SMTP_PORT = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 587;
+const SMTP_USER = process.env.SMTP_USER;
+const SMTP_PASS = process.env.SMTP_PASS;
+
+// `secure` is true for port 465 (implicit TLS); false for 587 (STARTTLS).
+const SMTP_SECURE = SMTP_PORT === 465;
+
+let transporter = null;
+if (SMTP_HOST && SMTP_USER && SMTP_PASS) {
+  transporter = nodemailer.createTransport({
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: SMTP_SECURE,
+    auth: { user: SMTP_USER, pass: SMTP_PASS },
+  });
 } else {
   console.warn(
     // IMPORTANT: Keep this for server startup diagnostics
-    "CRITICAL WARNING (API /api/contact): SENDGRID_API_KEY is not set. Email sending WILL FAIL."
+    "CRITICAL WARNING (API /api/contact): SMTP_HOST/SMTP_USER/SMTP_PASS not set. Email sending WILL FAIL."
   );
 }
 
 export async function POST(req) {
-  if (!process.env.SENDGRID_API_KEY) {
+  if (!transporter) {
     console.error(
       // IMPORTANT: Keep for runtime diagnostics
-      "RUNTIME ERROR (API /api/contact): SendGrid API Key is not configured."
+      "RUNTIME ERROR (API /api/contact): SMTP credentials are not configured."
     );
     return NextResponse.json(
       { success: false, messageKey: "submitErrorServiceDown" }, // New key for service config issue
@@ -102,13 +116,15 @@ export async function POST(req) {
     }
     // --- End Server-Side Validation ---
 
-    const fromEmail = process.env.SENDGRID_FROM_EMAIL;
+    // Fall back to the authenticated SMTP user so the envelope-from is always
+    // a mailbox we own (many providers reject a mismatched From: header).
+    const fromEmail = process.env.CONTACT_FORM_FROM_EMAIL || SMTP_USER;
     const toEmail = process.env.CONTACT_FORM_TO_EMAIL;
 
     if (!fromEmail || !toEmail) {
       console.error(
         // IMPORTANT: Keep for runtime diagnostics
-        "CONFIGURATION ERROR (API /api/contact): SENDGRID_FROM_EMAIL or CONTACT_FORM_TO_EMAIL is not set."
+        "CONFIGURATION ERROR (API /api/contact): CONTACT_FORM_FROM_EMAIL/SMTP_USER or CONTACT_FORM_TO_EMAIL is not set."
       );
       return NextResponse.json(
         { success: false, messageKey: "submitErrorConfigMissing" }, // New key for this
@@ -188,7 +204,7 @@ Ce mail est envoyé depuis le formulaire de contact sur hargile.com. © ${new Da
     const emailData = {
       to: toEmail,
       from: {
-        email: fromEmail,
+        address: fromEmail,
         name: `Hargile Website (${name.replace(/["<>]/g, "")})`,
       },
       replyTo: email,
@@ -200,16 +216,16 @@ Ce mail est envoyé depuis le formulaire de contact sur hargile.com. © ${new Da
     };
 
     try {
-      await sgMail.send(emailData);
+      await transporter.sendMail(emailData);
       return NextResponse.json(
         { success: true, messageKey: "submitSuccess" }, // Send translation key
         { status: 200 }
       );
     } catch (error) {
       console.error(
-        // IMPORTANT: Keep for SendGrid specific issues
-        "[API /api/contact] SendGrid Error sending email:",
-        error.response ? error.response.body : error.message
+        // IMPORTANT: Keep for SMTP send issues
+        "[API /api/contact] SMTP error sending email:",
+        error.message
       );
       return NextResponse.json(
         { success: false, messageKey: "submitErrorProvider" }, // Key for email provider error
