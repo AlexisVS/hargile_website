@@ -16,15 +16,19 @@ export const PageWrapper = styled.div`
   margin-top: calc(-1 * var(--navbar-height, 68px));
 `;
 
-/* Full-bleed WebGL bends behind the form — darker than the hero's, but with
-   real colour presence, reaching the very top so the transparent navbar
-   frosts it like on the homepage. */
+/* Full-bleed WebGL bends behind the form — colour-matched to the homepage
+   hero, reaching the very top so the transparent navbar frosts it like on
+   the homepage. */
 export const BendsBackdrop = styled.div`
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.55;
+  /* Full opacity + the hero's near-black backing so the bands read at exactly
+     the same brightness as the homepage: the canvas renders with alpha, so the
+     troughs land on this floor rather than the page's slightly-lifted black. */
+  opacity: 1;
+  background: #010104;
 `;
 
 export const BackgroundBlur = styled.div`

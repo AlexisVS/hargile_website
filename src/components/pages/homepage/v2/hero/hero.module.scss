@@ -27,6 +27,13 @@
   }
 }
 
+/* Transparent ref host around the backdrop — lets the hero observe when the
+   WebGL canvas mounts (for the loader) without affecting layout, so the child
+   .backdrop still positions against the section. */
+.backdropHost {
+  display: contents;
+}
+
 /* WebGL backdrop canvas — the hero's only backdrop layer.
    Fills the whole hero: a horizontal falloff (not a radial cutout) keeps the
    canvas edge-to-edge while easing it back behind the headline, so the copy side

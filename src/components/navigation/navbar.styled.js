@@ -164,7 +164,11 @@ export const NavbarNavigation = styled.nav`
             "menu-items menu-label"
             "contact-info contact-info"
             "social-icons social-icons";
-        padding: 100px 20px 40px 20px;
+        /* Match the logo's line: same measure as NavbarInner —
+           (100% - container-max)/2 accounts for the 92vw container's centering
+           margin, + the gutter. A flat 20px ignored that margin, so items sat
+           ~4vw farther left than the logo. */
+        padding: 100px calc((100% - var(--container-max)) / 2 + var(--container-gutter)) 40px;
         text-align: left;
         transform-origin: top center;
         justify-content: start;

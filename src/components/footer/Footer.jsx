@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {FooterLinkStyled} from "@/components/footer/footer-link.styled";
 import {ColumnStyled} from "@/components/footer/column.styled";
 import {HeadingStyled} from "@/components/footer/heading.styled";
@@ -20,6 +20,16 @@ import LinkedinIcon from "@/components/icons/LinkedinIcon";
 
 const Footer = () => {
     const t = useTranslations('components.footer');
+
+    // Read the current year on the client only. Calling new Date() during render
+    // of a client component makes the output non-deterministic (server prerender
+    // vs. hydration can straddle a year boundary), which Next.js 16 flags. Seed
+    // with a stable base year so the prerendered markup matches first paint, then
+    // correct to the live year after mount.
+    const [year, setYear] = useState(2025);
+    useEffect(() => {
+        setYear(new Date().getFullYear());
+    }, []);
 
     const iconSize = '22px'
 
@@ -89,7 +99,7 @@ const Footer = () => {
 
             {/* Bottom bar */}
             <BottomBarStyled>
-                <Copyright>{t('copyright', {year: new Date().getFullYear()})}</Copyright>
+                <Copyright>{t('copyright', {year})}</Copyright>
                 <BottomLinksStyled>
                     <FooterLinkStyled as={Link}
                                       href="/legal/privacy-policy">{t('links.privacyPolicy')}</FooterLinkStyled>

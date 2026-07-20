@@ -1,3 +1,7 @@
+/* Full-screen brand loader — logo with a draw-on progress ring around it.
+   Dismisses when the homepage hero's WebGL backdrop has painted (see
+   hero-loading-provider.jsx), not on a fixed timer. */
+
 .loading-container {
   position: fixed;
   top: 0;
@@ -17,69 +21,27 @@
   pointer-events: none;
 }
 
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes dashArray {
-  0% {
-    stroke-dasharray: 15 85;
-  }
-  20% {
-    stroke-dasharray: 25 75;
-  }
-  40% {
-    stroke-dasharray: 35 65;
-  }
-  60% {
-    stroke-dasharray: 45 55;
-  }
-  80% {
-    stroke-dasharray: 35 65;
-  }
-  100% {
-    stroke-dasharray: 15 85;
-  }
-}
-
-@keyframes strokeWidth {
-  0% {
-    stroke-width: 1;
-  }
-  20% {
-    stroke-width: 2;
-  }
-  40% {
-    stroke-width: 3;
-  }
-  60% {
-    stroke-width: 3;
-  }
-  80% {
-    stroke-width: 2;
-  }
-  100% {
-    stroke-width: 1;
-  }
-}
-
 .loading-svg {
   width: 30vh;
   height: 30vh;
 }
 
+/* One-shot draw: the stroke traces itself once around the circle, then holds.
+   No infinite spin — the ring completing is the "loading" gesture, and the
+   overlay fades out once the hero is ready. */
 .loading-path {
   fill: none;
   stroke: #96b9fa;
-  stroke-width: 1;
+  stroke-width: 2;
   stroke-linecap: round;
-  animation: rotate 1.5s linear infinite,
-  dashArray 3s ease-in-out infinite,
-  strokeWidth 5s ease-in-out infinite;
-  transform-origin: center;
+  animation: loadingRingDraw 900ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes loadingRingDraw {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }

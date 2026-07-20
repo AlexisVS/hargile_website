@@ -1,11 +1,12 @@
 "use client";
 
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {motion, useReducedMotion} from "motion/react";
 import {useTranslations} from "next-intl";
 import {Link} from "@/i18n/navigation";
 import styles from "./hero.module.scss";
 import HeroBackdrop, {VARIANTS} from "./backdrops/hero-backdrop";
+import {useHeroLoading} from "@/components/providers/hero-loading-provider";
 
 const CARDS = [
     {key: "webdev", className: "floatCardA"},
@@ -39,10 +40,86 @@ const useHeroVariant = (override) => {
     return variant;
 };
 
+/* Signals when the hero's WebGL backdrop has actually painted, so the branded
+   loader can dismiss on "hero ready" rather than a fixed timer.
+
+   The backdrop variants (ColorBends / CubeGrid) are ssr:false dynamic imports
+   that append a <canvas> once their WebGL context is up and the first shader is
+   compiled. We watch the backdrop subtree for that canvas (MutationObserver),
+   then wait two animation frames to guarantee a painted frame before flagging
+   ready. Two backstops keep it honest: the "none" variant has no canvas so it's
+   ready at once, and a hard timeout dismisses the loader even if a device fails
+   to report a canvas — the loader must never outstay the content. */
+const useBackdropReady = (containerRef, variant) => {
+    const [ready, setReady] = useState(false);
+
+    useEffect(() => {
+        if (variant === "none") {
+            setReady(true);
+            return;
+        }
+
+        setReady(false);
+        const container = containerRef.current;
+        if (!container) return;
+
+        let raf1 = 0;
+        let raf2 = 0;
+        let done = false;
+
+        const markReady = () => {
+            if (done) return;
+            done = true;
+            // Two rAFs: the canvas exists in the DOM, now let it paint a frame.
+            raf1 = requestAnimationFrame(() => {
+                raf2 = requestAnimationFrame(() => setReady(true));
+            });
+        };
+
+        if (container.querySelector("canvas")) {
+            markReady();
+        }
+
+        const observer = new MutationObserver(() => {
+            if (container.querySelector("canvas")) {
+                observer.disconnect();
+                markReady();
+            }
+        });
+        observer.observe(container, {childList: true, subtree: true});
+
+        // Safety net: never let the loader hang past the point of usefulness.
+        const timeout = setTimeout(() => {
+            observer.disconnect();
+            setReady(true);
+        }, 3000);
+
+        return () => {
+            observer.disconnect();
+            clearTimeout(timeout);
+            if (raf1) cancelAnimationFrame(raf1);
+            if (raf2) cancelAnimationFrame(raf2);
+        };
+    }, [containerRef, variant]);
+
+    return ready;
+};
+
 const HeroV2 = ({backdrop, label}) => {
     const t = useTranslations("pages.homepage.sections.hero.v2");
     const reducedMotion = useReducedMotion();
     const variant = useHeroVariant(backdrop);
+    const backdropRef = useRef(null);
+    const backdropReady = useBackdropReady(backdropRef, variant);
+
+    // Tell the full-screen loader (layout level) the hero has painted, so it can
+    // draw its ring to completion and dismiss. On mobile the backdrop is the
+    // lighter color-bends canvas; useBackdropReady waits for whichever canvas the
+    // active variant mounts, so this fires correctly on both mobile and desktop.
+    const {markHeroReady} = useHeroLoading();
+    useEffect(() => {
+        if (backdropReady) markHeroReady();
+    }, [backdropReady, markHeroReady]);
 
     const reveal = (index) => ({
         initial: reducedMotion ? {opacity: 0} : {opacity: 0, y: 16},
@@ -52,7 +129,9 @@ const HeroV2 = ({backdrop, label}) => {
 
     return (
         <section className={`${styles.section} ${variant === "cubes" ? styles.sectionSharp : ""}`}>
-            <HeroBackdrop variant={variant}/>
+            <div ref={backdropRef} className={styles.backdropHost}>
+                <HeroBackdrop variant={variant}/>
+            </div>
             {label && <div className={styles.variantTag}>{label}</div>}
 
             <div className={styles.container}>

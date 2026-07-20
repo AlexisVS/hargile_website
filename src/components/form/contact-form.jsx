@@ -159,7 +159,7 @@ export default function ContactForm() {
       <BendsBackdrop aria-hidden="true">
         <ColorBends
           colors={["#2563eb", "#96b9f9"]}
-          rotation={mobileBends ? 0 : 72}
+          rotation={mobileBends ? 0 : 92}
           scale={mobileBends ? 1.7 : 1}
           speed={0.14}
           frequency={1.0}
