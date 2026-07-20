@@ -4,37 +4,20 @@ export const SocialContainer = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    gap: 1.5rem;
 `
 
-export const SocialLinkIcon = styled.a.attrs({
-    className: 'fluid-type--1-5'
-})`
-    text-decoration: none;
+/* Icon-only link: the name lives in aria-label/title, the icon is the whole
+   target, so the row stays compact next to the contact block. */
+export const SocialLinkIcon = styled.a`
     color: inherit;
     display: flex;
-    justify-content: flex-start;
     align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
-    cursor: pointer;
-    font-weight: 200;
-    word-break: break-word;
+    opacity: 0.75;
+    transition: opacity 160ms ease;
 
-    &:hover {
-        text-decoration: underline;
-    }
-    
-    @media (max-width: 399px) {
-        gap: 0.375rem;
-        margin-bottom: 0.25rem;
-        font-size: 0.8125rem;
-    }
-    
-    @media (min-width: 400px) and (max-width: 549px) {
-        gap: 0.5rem;
-        margin-bottom: 0.375rem;
-        font-size: 0.875rem;
+    &:hover,
+    &:focus-visible {
+        opacity: 1;
     }
 `
-

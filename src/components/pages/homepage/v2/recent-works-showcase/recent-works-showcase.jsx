@@ -11,7 +11,7 @@ const PIN_BREAKPOINT = 900;
 const RecentWorksShowcaseV2 = () => {
     const t = useTranslations("pages.homepage.sections.recent-works");
     const {getLatestProjects} = usePortfolioData();
-    const projects = getLatestProjects(4);
+    const projects = getLatestProjects(3);
     const total = projects.length;
 
     const outerRef = useRef(null);
@@ -106,7 +106,7 @@ const RecentWorksShowcaseV2 = () => {
                                         src={project.image}
                                         alt={project.title}
                                         fill
-                                        sizes="(max-width: 899px) 100vw, 56vw"
+                                        sizes="(max-width: 899px) 100vw, 46vw"
                                         priority={i === 0}
                                     />
                                 </div>

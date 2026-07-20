@@ -103,9 +103,9 @@ const CubeGrid = () => {
            to where the canvas is cropped. Phong respects fog natively, and the wave
            chunk injected below leaves the fog chunks alone. Near/far are tuned to the
            camera at z=12 — it starts biting just past the middle of the grid.
-           Matched to the page background ($background-dark) rather than a blue-black:
-           the renderer is alpha, so any mismatch shows as a halo where cubes fade. */
-        scene.fog = new THREE.Fog(0x000000, 14, 34);
+           Matched to the page background ($background-dark) — the renderer is
+           alpha, so any mismatch shows as a halo where cubes fade. */
+        scene.fog = new THREE.Fog(0x080c16, 14, 34);
 
         const camera = new THREE.PerspectiveCamera(
             34,

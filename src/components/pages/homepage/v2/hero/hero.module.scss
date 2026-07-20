@@ -44,10 +44,10 @@
   pointer-events: none;
   opacity: 1;
   /* The canvas renders with alpha, so a band's trough is transparent, not black and
-     never bottoms out on its own. This is the floor the troughs actually land on —
-     it sets how deep the blacks can go, so it's near-pure black rather than the
-     page's slightly-lifted dark. */
-  background: #010104;
+     never bottoms out on its own. This is the floor the troughs actually land on.
+     Matched to $background-dark: the masks thin this element over the copy side,
+     so anything but the page base bleeds through as a visible tint seam. */
+  background: #080c16;
   /* Holds the bands back behind the headline only. Since the orb and dot grid are
      gone there's nothing underneath left to reveal, so this now fades in fast and
      stays opaque across the whole band side — anywhere it sits mid-way, it thins

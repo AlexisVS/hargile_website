@@ -95,19 +95,35 @@
 
 /* --- Cartes projet ----------------------------------------- */
 
+/* Same lit-glass recipe as the hero/values cards (.floatCard in hero.module.scss)
+   so the three card families read as one system. The image owns the top of the
+   card, so the gradient lives on .cardBody — that's the visible glass surface,
+   with the bright light-catch corner emerging right under the media edge.
+   No backdrop-filter here: the rail scrolls on transform, and re-blurring every
+   frame is pure cost when there's nothing behind the card but the flat page. */
 .card {
   flex: 0 0 auto;
-  width: min(56vw, 780px);
-  border: 1px solid rgba(255, 255, 255, 0.11);
+  /* Narrower than the original 56vw/780px: less horizontal distance per card,
+     so the pinned rail scrolls through in fewer wheel-lengths. */
+  width: min(46vw, 640px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 24px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background: #0c0c14;
+  background: transparent;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
+/* Fixed 58/42 split instead of media { flex: 1 }: with flex:1 the image absorbed
+   whatever the text left over, so a card with a longer description got a shorter
+   image and the media/body seam jumped between neighbours. All cards stretch to
+   the same rail height, so a fixed basis puts every seam on the same line no
+   matter the copy length. */
 .cardMedia {
-  flex: 1;
+  flex: 0 0 68%;
   min-height: 0;
   position: relative;
   background: #101018;
@@ -118,7 +134,14 @@
 }
 
 .cardBody {
+  flex: 1;
   padding: 28px 32px 30px;
+  background: linear-gradient(
+    155deg,
+    rgba(56, 74, 122, 0.5) 0%,
+    rgba(24, 33, 58, 0.62) 48%,
+    rgba(12, 17, 32, 0.72) 100%
+  );
 }
 
 .eyebrow {
