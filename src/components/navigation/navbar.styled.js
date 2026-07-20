@@ -49,6 +49,15 @@ export const Brand = styled.button`
     position: relative;
     z-index: 1004;
 
+    img {
+        width: 16rem;
+        height: auto;
+
+        @media (max-width: 768px) {
+            width: 13rem;
+        }
+    }
+
     &:hover {
         box-shadow: none;
         transform: scale(1.02);

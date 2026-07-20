@@ -97,14 +97,15 @@ const Navbar = () => {
                         href="/"
                         onClick={triggerHomeTransitionAnimation}
                     >
+                        {/* Rendered width lives in Brand's img rule (16rem, 13rem
+                            on mobile) — sizes mirrors it so srcset picks a small
+                            variant instead of a viewport-width one. */}
                         <OptimizedImage
                             width={750}
                             height={348}
                             src="/images/brand/brand-large-white.png"
                             alt="Brand Logo"
-                            style={{
-                                width: "16rem",
-                            }}
+                            sizes="(max-width: 768px) 13rem, 16rem"
                             priority={true}
                             fetchpriority={'high'}
                         />

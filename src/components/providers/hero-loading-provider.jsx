@@ -97,6 +97,7 @@ export default function HeroLoadingProvider({children}) {
                         height={348}
                         src="/images/brand/brand-large-white.png"
                         alt="Brand Logo"
+                        sizes="20vh"
                         priority={true}
                         fetchpriority={"high"}
                     />
