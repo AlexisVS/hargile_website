@@ -270,34 +270,90 @@
 /* CTA buttons come from the shared CtaLink component (components/ui/cta-link). */
 
 /* --- Capability column (cube-grid variant) ---
-   No rules, no bars, no boxes — anything drawn across the grid reads as
-   furniture on top of it. The rows are bare type over the moving cubes, with
-   just a soft wash and slide on hover.
-   Legibility comes from the type: each row carries a tight dark halo
+   One composed object, not three rows: a labelled column where a vertical
+   light spine threads three luminous dots — the same marker the glass cards
+   use (.cardDot), so desktop and mobile share a signature. The spine draws on
+   once at load (motion handles the scaleY) and each node ignites as the line
+   reaches it. No boxes and no fills, so the cubes read through; no hover
+   states — these are statements, not links.
+   Legibility still comes from the type: each row carries a tight dark halo
    (see .capTitle / .capText) that darkens only the pixels around the glyphs.
    The cubes keep moving right up to the letterforms. */
 
-.capList {
+.rail {
   flex: 1 1 340px;
   max-width: 420px;
   min-width: min(300px, 100%);
+  /* Top-aligned against the copy (the container centres by default), then
+     dropped a step: the column label lands between the eyebrow and the
+     headline's first line, so the rail reads as answering the headline rather
+     than competing with the eyebrow. */
+  align-self: flex-start;
+  margin-top: 40px;
+}
+
+/* Column header — same technical-marker register as the eyebrow, one size
+   down, so the two label the hero's left and right halves as a pair. */
+.railLabel {
+  margin: 0 0 26px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #96b9f9;
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 1),
+    0 2px 14px rgba(0, 0, 0, 0.85);
+}
+
+.railBody {
+  position: relative;
+}
+
+/* The spine. Hairline, brand blue at the top where it leaves the label,
+   dissolving past the last node instead of ending on an edge. transform-origin
+   top so the draw-on reveal grows downward. */
+.railLine {
+  position: absolute;
+  left: 3.5px;
+  top: 7px;
+  bottom: 6px;
+  width: 1px;
+  transform-origin: top;
+  background: linear-gradient(
+    to bottom,
+    rgba(150, 185, 249, 0.7) 0%,
+    rgba(150, 185, 249, 0.35) 55%,
+    rgba(150, 185, 249, 0) 100%
+  );
+}
+
+.capList {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 30px;
 }
 
+/* Rows hang off the spine; the indent clears the dot + line. */
 .capItem {
-  padding: 14px 4px;
-  border-radius: 10px;
-  transition: background 0.3s, padding-left 0.3s;
+  position: relative;
+  padding-left: 32px;
+}
 
-  &:hover {
-    background: rgba(150, 185, 249, 0.06);
-    padding-left: 12px;
-  }
+/* Node on the spine — the glass cards' luminous marker, centred on the line
+   and on the title's first line of text. */
+.capDot {
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #96b9f9;
+  box-shadow: 0 0 12px rgba(150, 185, 249, 0.8);
 }
 
 .capBody {
@@ -317,11 +373,10 @@
   font-weight: 600;
   font-size: 18px;
   letter-spacing: -0.01em;
-  /* Brand blue rather than white — it ties the column to the dot and the eyebrow,
-     and it's the one spot of colour on this side. It carries less contrast against
-     the cubes than white did, so the halo below is a touch heavier than .capText's
-     to compensate. */
-  color: #96b9f9;
+  /* The index above carries the brand blue now — the title goes back to near-white
+     for contrast against the cubes. Halo stays a touch heavier than .capText's:
+     it's the largest type over the busiest part of the grid. */
+  color: #f2f4f8;
   text-shadow:
     0 1px 3px rgba(0, 0, 0, 1),
     0 2px 14px rgba(0, 0, 0, 0.85);

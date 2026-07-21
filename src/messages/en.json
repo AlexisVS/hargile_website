@@ -407,9 +407,10 @@
             "paragraph": "HARGILE is the technical partner our clients can count on, with the responsiveness and expertise of a team that is as committed to the project as if it were its own.",
             "ctaAudit": "Contact us",
             "ctaWork": "Portfolio",
+            "cardsLabel": "What we deliver",
             "cards": {
               "webdev": {
-                "title": "Web development",
+                "title": "Website creation",
                 "text": "Designed, built and maintained in-house"
               },
               "ai": {

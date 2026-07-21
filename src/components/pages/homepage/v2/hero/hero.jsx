@@ -159,31 +159,54 @@ const HeroV2 = ({backdrop, label}) => {
                 </div>
 
                 {variant === "cubes" ? (
-                    /* Against the cube grid, the floating cards fight the geometry —
-                       a ruled column echoes the grid's own alignment instead, and
-                       stays transparent so the cubes read through it. */
-                    <motion.ul
-                        className={styles.capList}
-                        aria-hidden="true"
+                    /* Against the cube grid, floating cards fight the geometry — so
+                       the services read as ONE object instead: a labelled column
+                       where a vertical light spine threads three luminous dots (the
+                       same marker as the glass cards' .cardDot). The spine draws on
+                       once at load and each node ignites with its row as the line
+                       reaches it — a single one-shot reveal, then stillness. The
+                       column stays transparent so the cubes read through it. Not
+                       links — it states what we provide, it doesn't navigate. */
+                    <motion.div
+                        className={styles.rail}
                         initial={{opacity: 0}}
                         animate={{opacity: 1}}
                         transition={{duration: 0.8, ease: "easeOut", delay: 0.25}}
                     >
-                        {CARDS.map((card, i) => (
-                            <motion.li
-                                key={card.key}
-                                className={styles.capItem}
-                                initial={reducedMotion ? {opacity: 0} : {opacity: 0, x: 18}}
-                                animate={{opacity: 1, x: 0}}
-                                transition={{duration: 0.5, ease: "easeOut", delay: 0.35 + i * 0.12}}
-                            >
-                                <span className={styles.capBody}>
-                                    <span className={styles.capTitle}>{t(`cards.${card.key}.title`)}</span>
-                                    <span className={styles.capText}>{t(`cards.${card.key}.text`)}</span>
-                                </span>
-                            </motion.li>
-                        ))}
-                    </motion.ul>
+                        <p className={styles.railLabel}>{t("cardsLabel")}</p>
+                        <div className={styles.railBody}>
+                            <motion.span
+                                className={styles.railLine}
+                                aria-hidden="true"
+                                initial={reducedMotion ? {opacity: 0} : {scaleY: 0}}
+                                animate={reducedMotion ? {opacity: 1} : {scaleY: 1}}
+                                transition={{duration: 0.9, ease: "easeInOut", delay: 0.45}}
+                            />
+                            <ul className={styles.capList}>
+                                {CARDS.map((card, i) => (
+                                    <motion.li
+                                        key={card.key}
+                                        className={styles.capItem}
+                                        initial={reducedMotion ? {opacity: 0} : {opacity: 0, x: 14}}
+                                        animate={{opacity: 1, x: 0}}
+                                        transition={{duration: 0.5, ease: "easeOut", delay: 0.55 + i * 0.22}}
+                                    >
+                                        <motion.span
+                                            className={styles.capDot}
+                                            aria-hidden="true"
+                                            initial={reducedMotion ? {opacity: 0} : {opacity: 0, scale: 0.4}}
+                                            animate={{opacity: 1, scale: 1}}
+                                            transition={{duration: 0.35, ease: "easeOut", delay: 0.55 + i * 0.22}}
+                                        />
+                                        <span className={styles.capBody}>
+                                            <span className={styles.capTitle}>{t(`cards.${card.key}.title`)}</span>
+                                            <span className={styles.capText}>{t(`cards.${card.key}.text`)}</span>
+                                        </span>
+                                    </motion.li>
+                                ))}
+                            </ul>
+                        </div>
+                    </motion.div>
                 ) : (
                     <motion.div
                         className={styles.visual}
