@@ -42,7 +42,7 @@ const Footer = () => {
         },
         {
             id: "linkedin",
-            title: "HARGILE - innovative solutions",
+            title: "HARGILE - Tech Studio",
             icon: <LinkedinIcon title={"hargile"} size={iconSize}/>,
             href: "https://www.linkedin.com/company/hargile"
         },

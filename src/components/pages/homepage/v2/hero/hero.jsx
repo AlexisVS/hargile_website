@@ -3,7 +3,7 @@
 import {useEffect, useRef, useState} from "react";
 import {motion, useReducedMotion} from "motion/react";
 import {useTranslations} from "next-intl";
-import {Link} from "@/i18n/navigation";
+import CtaLink from "@/components/ui/cta-link/cta-link";
 import styles from "./hero.module.scss";
 import HeroBackdrop, {VARIANTS} from "./backdrops/hero-backdrop";
 import {useHeroLoading} from "@/components/providers/hero-loading-provider";
@@ -149,12 +149,12 @@ const HeroV2 = ({backdrop, label}) => {
                     </motion.p>
 
                     <motion.div className={styles.ctaRow} {...reveal(3)}>
-                        <Link href="/contact" className={styles.ctaPrimary}>
+                        <CtaLink href="/contact" variant="primary">
                             {t("ctaAudit")}
-                        </Link>
-                        <a href="#recent-works" className={styles.ctaGhost}>
+                        </CtaLink>
+                        <CtaLink href="#recent-works" variant="ghost">
                             {t("ctaWork")}
-                        </a>
+                        </CtaLink>
                     </motion.div>
                 </div>
 

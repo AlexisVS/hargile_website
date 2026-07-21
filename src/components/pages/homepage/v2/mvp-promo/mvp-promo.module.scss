@@ -129,27 +129,4 @@
   margin-top: 44px;
 }
 
-.cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #96b9f9;
-  color: #0a0a12;
-  font-size: 15px;
-  font-weight: 600;
-  padding: 13px 26px;
-  border-radius: 12px;
-  text-decoration: none;
-  transition: box-shadow 0.25s, background 0.25s;
-
-  &:hover {
-    box-shadow: 0 0 32px rgba(150, 185, 249, 0.35);
-    background: #b8cdfb;
-    color: #0a0a12;
-  }
-
-  &:focus-visible {
-    outline: 2px solid rgba(150, 185, 249, 0.7);
-    outline-offset: 2px;
-  }
-}
+/* CTA button comes from the shared CtaLink component (components/ui/cta-link). */

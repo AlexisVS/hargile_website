@@ -4,6 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import Image from "next/image";
 import {useTranslations} from "next-intl";
 import {usePortfolioData} from "@/hooks/usePortfolioData";
+import CtaLink from "@/components/ui/cta-link/cta-link";
 import styles from "./recent-works-showcase.module.scss";
 
 const PIN_BREAKPOINT = 900;
@@ -114,26 +115,27 @@ const RecentWorksShowcaseV2 = () => {
                                     <div className={styles.eyebrow}>{project.subtitle}</div>
                                     <h3 className={styles.title}>{project.title}</h3>
                                     <p className={styles.desc}>{project.description}</p>
-                                    <a
-                                        className={styles.more}
+                                    <CtaLink
                                         href={project.actionUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
+                                        external
+                                        variant="ghost"
+                                        size="sm"
+                                        className={styles.more}
                                     >
-                                        {project.actionText} →
-                                    </a>
+                                        {project.actionText}
+                                    </CtaLink>
                                 </div>
                             </article>
                         ))}
 
                         <div className={styles.end}>
-                            <a
+                            <CtaLink
                                 href="https://portfolio.hargile.be/"
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                external
+                                variant="primary"
                             >
-                                {t("view-all")} →
-                            </a>
+                                {t("view-all")}
+                            </CtaLink>
                         </div>
                     </div>
                 </div>

@@ -3,7 +3,7 @@
 import {useEffect, useRef, useState} from "react";
 import {motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform} from "motion/react";
 import {useTranslations} from "next-intl";
-import {Link} from "@/i18n/navigation";
+import CtaLink from "@/components/ui/cta-link/cta-link";
 import section from "../v2-section.module.scss";
 import styles from "./mvp-promo.module.scss";
 import {useReveal} from "../useReveal";
@@ -104,9 +104,9 @@ const MvpPromoV2 = () => {
                 </div>
 
                 <motion.div className={styles.ctaWrap} {...reveal(3)}>
-                    <Link href="/contact" className={styles.cta}>
-                        {t("cta")} →
-                    </Link>
+                    <CtaLink href="/contact" variant="primary">
+                        {t("cta")}
+                    </CtaLink>
                 </motion.div>
             </div>
         </section>

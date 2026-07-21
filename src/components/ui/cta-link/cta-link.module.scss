@@ -1,0 +1,67 @@
+/* Site-wide CTA — the pill-outline treatment ("V8" from the button lab).
+   Hairline full-round border, transparent body, small chevron. Hierarchy:
+   primary carries the brand blue in border + text (still no fill), ghost is
+   a neutral hairline. Hover only brightens and adds a faint wash — no glow,
+   no lift; the chevron's 2px nudge is the single piece of motion. */
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 15px;
+  font-family: inherit;
+  font-weight: 500;
+  padding: 13px 26px;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  box-sizing: border-box;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+
+  &:focus-visible {
+    outline: 2px solid rgba(150, 185, 249, 0.7);
+    outline-offset: 2px;
+  }
+}
+
+.chevron {
+  width: 12px;
+  height: 12px;
+  flex: 0 0 auto;
+  transition: transform 0.2s ease;
+}
+
+.cta:hover .chevron {
+  transform: translateX(2px);
+}
+
+.primary {
+  color: #96b9f9;
+  font-weight: 600;
+  border: 1px solid rgba(150, 185, 249, 0.55);
+
+  &:hover {
+    color: #b8cdfb;
+    border-color: rgba(150, 185, 249, 0.85);
+    background: rgba(150, 185, 249, 0.07);
+  }
+}
+
+.ghost {
+  color: rgba(237, 237, 237, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+
+  &:hover {
+    color: #ededed;
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.04);
+  }
+}
+
+/* Compact step for in-card links (works rail). */
+.sm {
+  font-size: 14px;
+  padding: 9px 18px;
+}

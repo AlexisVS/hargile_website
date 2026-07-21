@@ -92,9 +92,10 @@ p {
 blockquote {
   @include fluid.element-typography('blockquote');
 
+  /* No padding-left: the indent skewed the centered pull-quote in the
+     design-dev section (the site's only blockquote) off its axis. */
   & {
     margin: 2em 0;
-    padding-left: 1.5em;
   }
 }
 

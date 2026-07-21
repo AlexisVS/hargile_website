@@ -385,36 +385,45 @@ export const CheckboxLabel = styled.label.attrs({
   margin-bottom: 0;
 `;
 
-export const SubmitButton = styled.button.attrs({
-  className: "fluid-type-0", // Keep your responsive font class
-})`
+export const SubmitButton = styled.button`
   margin-top: auto; /* Pushes to bottom if in a flex column like ServiceTypesColumn */
-  /* Ensure space above if content before it is dynamic */
 
-  /* v2 CTA — same treatment as the hero's primary button. Compact, not
-     full-width: it sits left-aligned like the homepage CTA row. */
-  background: #96b9f9;
-  color: #0a0a12;
+  /* Site CTA — the shared pill-outline treatment (see components/ui/cta-link):
+     hairline full-round border, no fill, blue as text + border only. Hover
+     just brightens and washes; the chevron's 2px nudge is the only motion. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: transparent;
+  color: #96b9f9;
+  font-size: 15px;
+  font-family: inherit;
   font-weight: 600;
-  padding: 0.85rem 3rem;
-  border-radius: 12px;
-  border: none;
+  padding: 13px 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(150, 185, 249, 0.55);
   cursor: pointer;
   width: fit-content;
   min-width: 220px;
   justify-self: start;
-  text-align: center;
-  transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
 
-  &:hover:not(:disabled) {
-    background: #b8cdfb;
-    transform: translateY(-2px);
-    box-shadow: 0 0 36px rgba(150, 185, 249, 0.35);
+  svg {
+    width: 12px;
+    height: 12px;
+    flex: 0 0 auto;
+    transition: transform 0.2s ease;
   }
 
-  &:active:not(:disabled) {
-    transform: translateY(0);
-    box-shadow: 0 0 18px rgba(150, 185, 249, 0.25);
+  &:hover:not(:disabled) {
+    color: #b8cdfb;
+    border-color: rgba(150, 185, 249, 0.85);
+    background: rgba(150, 185, 249, 0.07);
+
+    svg {
+      transform: translateX(2px);
+    }
   }
 
   &:focus-visible {
@@ -423,11 +432,10 @@ export const SubmitButton = styled.button.attrs({
   }
 
   &:disabled {
-    background: rgba(237, 237, 237, 0.18);
     color: rgba(237, 237, 237, 0.45);
+    border-color: rgba(237, 237, 237, 0.18);
+    background: transparent;
     cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
   }
 `;
 

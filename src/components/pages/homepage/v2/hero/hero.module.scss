@@ -190,7 +190,8 @@
 .eyebrow {
   font-size: 16px;
   font-weight: 500;
-  letter-spacing: 0.18em;
+  /* Wide tracking stretches the label into a technical marker. */
+  letter-spacing: 0.32em;
   text-transform: uppercase;
   color: #96b9f9;
   margin: 0 0 20px;
@@ -199,10 +200,13 @@
 .headline {
   font-family: var(--font-headings);
   font-weight: 700;
-  font-size: clamp(40px, 5.2vw, 76px);
+  /* Sized up a step for Outfit — it's a touch narrower than Montserrat was,
+     so it takes the extra size without the lines overrunning. */
+  font-size: clamp(42px, 5.5vw, 81px);
   letter-spacing: -0.03em;
   line-height: 1.06;
-  margin: 0;
+  /* Nudged down a touch from the eyebrow. */
+  margin: 8px 0 0;
   max-width: 20ch;
   /* background-clip: text maps the ramp across the element's box, not the glyphs.
      At max-width the box runs wider than the longest line, so the tail of the ramp
@@ -250,62 +254,20 @@
   gap: 16px;
   flex-wrap: wrap;
   margin-top: 38px;
-}
 
-.ctaPrimary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #96b9f9;
-  color: #0a0a12;
-  font-size: 15px;
-  font-weight: 600;
-  font-family: inherit;
-  padding: 14px 28px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: box-shadow 0.25s, background 0.25s, transform 0.15s;
+  /* Phones: keep both pills on one row instead of stacking. The tighter gap
+     and padding buy the room — both labels fit down to ~340px wide. */
+  @media (max-width: 640px) {
+    flex-wrap: nowrap;
+    gap: 12px;
 
-  &:hover {
-    box-shadow: 0 0 36px rgba(150, 185, 249, 0.35);
-    background: #b8cdfb;
-    color: #0a0a12;
-    transform: translateY(-1px);
-  }
-
-  &:focus-visible {
-    outline: 2px solid rgba(150, 185, 249, 0.7);
-    outline-offset: 2px;
+    a {
+      padding-inline: 20px;
+    }
   }
 }
 
-.ctaGhost {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: transparent;
-  color: #ededed;
-  font-size: 15px;
-  font-weight: 500;
-  padding: 13px 27px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  text-decoration: none;
-  transition: border-color 0.25s, background 0.25s;
-
-  &:hover {
-    border-color: rgba(150, 185, 249, 0.45);
-    background: rgba(255, 255, 255, 0.04);
-    color: #ededed;
-  }
-
-  &:focus-visible {
-    outline: 2px solid rgba(150, 185, 249, 0.7);
-    outline-offset: 2px;
-  }
-}
+/* CTA buttons come from the shared CtaLink component (components/ui/cta-link). */
 
 /* --- Capability column (cube-grid variant) ---
    No rules, no bars, no boxes — anything drawn across the grid reads as

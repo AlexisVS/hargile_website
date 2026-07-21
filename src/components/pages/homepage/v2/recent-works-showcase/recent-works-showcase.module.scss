@@ -123,7 +123,9 @@
    the same rail height, so a fixed basis puts every seam on the same line no
    matter the copy length. */
 .cardMedia {
-  flex: 0 0 68%;
+  /* 68% squeezed the body once the CTA became a pill (taller than the old
+     text link) — the button ended up against the card's bottom edge. */
+  flex: 0 0 62%;
   min-height: 0;
   position: relative;
   background: #101018;
@@ -135,7 +137,13 @@
 
 .cardBody {
   flex: 1;
-  padding: 28px 32px 30px;
+  /* Column layout so the CTA pill pins to the bottom with real clearance
+     (margin-top: auto on .more) instead of floating wherever the copy ends. */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 0;
+  padding: 24px 32px 26px;
   background: linear-gradient(
     155deg,
     rgba(56, 74, 122, 0.5) 0%,
@@ -169,27 +177,23 @@
   color: rgba(237, 237, 237, 0.7);
   max-width: 70ch;
   margin: 0 0 14px;
+  /* The card is fixed-height; a long description must truncate rather than
+     push the CTA into the card edge. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
+/* The link itself is the shared CtaLink pill; margin-top: auto pins it to the
+   bottom of the card body (flex column), .desc's margin guarantees the gap. */
 .more {
-  font-size: 15px;
-  font-weight: 500;
-  color: #96b9f9;
-  text-decoration: none;
-  transition: color 0.25s;
-
-  &:hover {
-    color: #b8cdfb;
-  }
-
-  &:focus-visible {
-    outline: 2px solid rgba(150, 185, 249, 0.7);
-    outline-offset: 2px;
-  }
+  margin-top: auto;
 }
 
 /* --- Fin du rail ------------------------------------------- */
 
+/* The link itself is the shared CtaLink pill; this box only positions it. */
 .end {
   flex: 0 0 auto;
   width: min(40vw, 480px);
@@ -197,24 +201,6 @@
   align-items: center;
   justify-content: flex-end;
   padding-right: 4vw;
-
-  a {
-    font-family: var(--font-headings);
-    font-size: clamp(18px, 1.8vw, 24px);
-    font-weight: 500;
-    color: #96b9f9;
-    text-decoration: none;
-    transition: color 0.25s;
-
-    &:hover {
-      color: #b8cdfb;
-    }
-
-    &:focus-visible {
-      outline: 2px solid rgba(150, 185, 249, 0.7);
-      outline-offset: 2px;
-    }
-  }
 }
 
 /* --- Mobile : pile verticale -------------------------------- */
@@ -272,9 +258,5 @@
     width: 100%;
     justify-content: flex-start;
     padding: 10px 0 0;
-
-    a {
-      font-size: 17px;
-    }
   }
 }
