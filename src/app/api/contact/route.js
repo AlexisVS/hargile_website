@@ -1,39 +1,35 @@
 // app/api/contact/route.js
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-// SMTP configuration — sends via the info@hargile.com mailbox.
-const SMTP_HOST = process.env.SMTP_HOST;
-const SMTP_PORT = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 587;
-const SMTP_USER = process.env.SMTP_USER;
-const SMTP_PASS = process.env.SMTP_PASS;
+// Resend configuration — sends via the verified hargile.com domain.
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
-// `secure` is true for port 465 (implicit TLS); false for 587 (STARTTLS).
-const SMTP_SECURE = SMTP_PORT === 465;
-
-let transporter = null;
-if (SMTP_HOST && SMTP_USER && SMTP_PASS) {
-  transporter = nodemailer.createTransport({
-    host: SMTP_HOST,
-    port: SMTP_PORT,
-    secure: SMTP_SECURE,
-    auth: { user: SMTP_USER, pass: SMTP_PASS },
-  });
+let resend = null;
+if (RESEND_API_KEY) {
+  resend = new Resend(RESEND_API_KEY);
 } else {
   console.warn(
     // IMPORTANT: Keep this for server startup diagnostics
-    "CRITICAL WARNING (API /api/contact): SMTP_HOST/SMTP_USER/SMTP_PASS not set. Email sending WILL FAIL."
+    "CRITICAL WARNING (API /api/contact): RESEND_API_KEY not set. Email sending WILL FAIL."
   );
 }
 
+const escapeHtml = (str) =>
+  String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
 export async function POST(req) {
-  if (!transporter) {
+  if (!resend) {
     console.error(
       // IMPORTANT: Keep for runtime diagnostics
-      "RUNTIME ERROR (API /api/contact): SMTP credentials are not configured."
+      "RUNTIME ERROR (API /api/contact): RESEND_API_KEY is not configured."
     );
     return NextResponse.json(
-      { success: false, messageKey: "submitErrorServiceDown" }, // New key for service config issue
+      { success: false, messageKey: "submitErrorServiceDown" },
       { status: 500 }
     );
   }
@@ -85,12 +81,12 @@ export async function POST(req) {
       return NextResponse.json(
         {
           success: false,
-          messageKey: "validation.messageRequired", // Assuming messageRequired is for description
+          messageKey: "validation.messageRequired",
           field: "description",
           values: { min: 10 },
         },
         { status: 400 }
-      ); // Pass values if key needs them
+      );
     }
     // Services are optional since the contact form dropped its service picker —
     // the email templates below already render fine without them.
@@ -112,22 +108,21 @@ export async function POST(req) {
           field: "phone",
         },
         { status: 400 }
-      ); // Add a key for this
+      );
     }
     // --- End Server-Side Validation ---
 
-    // Fall back to the authenticated SMTP user so the envelope-from is always
-    // a mailbox we own (many providers reject a mismatched From: header).
-    const fromEmail = process.env.CONTACT_FORM_FROM_EMAIL || SMTP_USER;
+    // The From: address must belong to the domain verified in Resend.
+    const fromEmail = process.env.CONTACT_FORM_FROM_EMAIL;
     const toEmail = process.env.CONTACT_FORM_TO_EMAIL;
 
     if (!fromEmail || !toEmail) {
       console.error(
         // IMPORTANT: Keep for runtime diagnostics
-        "CONFIGURATION ERROR (API /api/contact): CONTACT_FORM_FROM_EMAIL/SMTP_USER or CONTACT_FORM_TO_EMAIL is not set."
+        "CONFIGURATION ERROR (API /api/contact): CONTACT_FORM_FROM_EMAIL or CONTACT_FORM_TO_EMAIL is not set."
       );
       return NextResponse.json(
-        { success: false, messageKey: "submitErrorConfigMissing" }, // New key for this
+        { success: false, messageKey: "submitErrorConfigMissing" },
         { status: 500 }
       );
     }
@@ -145,41 +140,27 @@ export async function POST(req) {
           ul{list-style-type:none;padding-left:0}li{margin-bottom:8px}
           .footer{text-align:center;margin-top:30px;padding-top:20px;border-top:1px solid #eee;font-size:12px;color:#888}
           a{color:#3498db;text-decoration:none}a:hover{text-decoration:underline}
-      </style></head><body><div class="container"><div class="header"><>Nouveau message depuis le formulaire de contact</div>
-      <div class="content-section"><h2>From: ${name
-        .replace(/</g, "<")
-        .replace(/>/g, ">")}</h2><ul>
-      <li><strong>Name:</strong> ${name
-        .replace(/</g, "<")
-        .replace(/>/g, ">")}</li>
-      <li><strong>Email:</strong> <a href="mailto:${email}">${email
-      .replace(/</g, "<")
-      .replace(/>/g, ">")}</a></li>
-      ${
-        phone
-          ? `<li><strong>Phone:</strong> ${phone
-              .replace(/</g, "<")
-              .replace(/>/g, ">")}</li>`
-          : ""
-      }</ul></div>
+      </style></head><body><div class="container"><div class="header"><h1>Nouveau message depuis le formulaire de contact</h1></div>
+      <div class="content-section"><h2>From: ${escapeHtml(name)}</h2><ul>
+      <li><strong>Name:</strong> ${escapeHtml(name)}</li>
+      <li><strong>Email:</strong> <a href="mailto:${escapeHtml(
+        email
+      )}">${escapeHtml(email)}</a></li>
+      ${phone ? `<li><strong>Phone:</strong> ${escapeHtml(phone)}</li>` : ""}
+      </ul></div>
       <div class="content-section"><h2>Inquiry Details</h2><ul>
       <li><strong>Subject:</strong> ${
-        object ? object.replace(/</g, "<").replace(/>/g, ">") : "N/A"
+        object ? escapeHtml(object) : "N/A"
       }</li></ul></div>
       ${
         services && services.length > 0
           ? `<div class="content-section"><h2>Services Interested In</h2><ul>
-      ${services
-        .map(
-          (service) =>
-            `<li>${service.replace(/</g, "<").replace(/>/g, ">")}</li>`
-        )
-        .join("")}</ul></div>`
+      ${services.map((service) => `<li>${escapeHtml(service)}</li>`).join("")}</ul></div>`
           : ""
       }
-      <div class="content-section"><h2>Message</h2><div class="message-box"><p>${description
-        .replace(/</g, "<")
-        .replace(/>/g, ">")}</p></div></div>
+      <div class="content-section"><h2>Message</h2><div class="message-box"><p>${escapeHtml(
+        description
+      )}</p></div></div>
       <div class="footer"><p>Ce mail est envoyé depuis le formulaire de contact sur hargile.com</p>
       <p>© ${new Date().getFullYear()} Hargile. All rights reserved.</p></div></div></body></html>
     `;
@@ -201,37 +182,33 @@ MESSAGE: ${description}
 Ce mail est envoyé depuis le formulaire de contact sur hargile.com. © ${new Date().getFullYear()} Hargile.
     `;
 
-    const emailData = {
-      to: toEmail,
-      from: {
-        address: fromEmail,
-        name: `Hargile Website (${name.replace(/["<>]/g, "")})`,
-      },
+    const { error } = await resend.emails.send({
+      from: `Hargile Website (${name.replace(/["<>]/g, "")}) <${fromEmail}>`,
+      to: [toEmail],
       replyTo: email,
       subject: `Hargile Contact: ${
         object ? object.substring(0, 70).replace(/[\r\n]/g, " ") : "New Inquiry"
       } from ${name.substring(0, 50).replace(/[\r\n]/g, " ")}`,
       text: textEmailContent.trim(),
       html: htmlEmailContent,
-    };
+    });
 
-    try {
-      await transporter.sendMail(emailData);
-      return NextResponse.json(
-        { success: true, messageKey: "submitSuccess" }, // Send translation key
-        { status: 200 }
-      );
-    } catch (error) {
+    if (error) {
       console.error(
-        // IMPORTANT: Keep for SMTP send issues
-        "[API /api/contact] SMTP error sending email:",
-        error.message
+        // IMPORTANT: Keep for Resend send issues
+        "[API /api/contact] Resend error sending email:",
+        error
       );
       return NextResponse.json(
-        { success: false, messageKey: "submitErrorProvider" }, // Key for email provider error
+        { success: false, messageKey: "submitErrorProvider" },
         { status: 500 }
       );
     }
+
+    return NextResponse.json(
+      { success: true, messageKey: "submitSuccess" },
+      { status: 200 }
+    );
   } catch (error) {
     console.error(
       // IMPORTANT: Keep for general processing errors
@@ -239,7 +216,7 @@ Ce mail est envoyé depuis le formulaire de contact sur hargile.com. © ${new Da
       error
     );
     return NextResponse.json(
-      { success: false, messageKey: "submitErrorInternal" }, // Key for internal server error
+      { success: false, messageKey: "submitErrorInternal" },
       { status: 500 }
     );
   }
