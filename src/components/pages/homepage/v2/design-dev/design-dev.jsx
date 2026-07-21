@@ -1,36 +1,38 @@
 "use client";
 
 import {useRef} from "react";
-import {motion, useInView, useReducedMotion} from "motion/react";
+import {motion, useReducedMotion, useScroll} from "motion/react";
 import {useTranslations} from "next-intl";
 import section from "../v2-section.module.scss";
 import styles from "./design-dev.module.scss";
 import {useReveal} from "../useReveal";
+import ScrubWord from "./scrub-word";
+import VerbsQuote from "./verbs-quote";
 
-const WORD_STAGGER = 0.07;
-
+/**
+ * Design & development — the manifesto.
+ * Section title, then an editorial paragraph whose words scrub from dim to
+ * bright as they cross the viewport (scroll-linked, no loop). Accent segments
+ * (from the message file) take the blue gradient — the early "with you, not
+ * for you" and the closing promise. The three verbs land below as the
+ * signature.
+ */
 const DesignDevV2 = () => {
     const t = useTranslations("pages.homepage.sections.design-dev");
     const reveal = useReveal();
     const reducedMotion = useReducedMotion();
+    const manifestoRef = useRef(null);
+    const {scrollYProgress} = useScroll({
+        target: manifestoRef,
+        offset: ["start 0.85", "end 0.5"],
+    });
 
-    // "On écoute. On construit. On reste." — split into phrases (each rendered on
-    // its own line so they never wrap into each other), then into words. A running
-    // index across all words keeps the reveal stagger and shine timing continuous.
-    const quote = t("offers.your-project.description");
-    const phrases = quote.match(/[^.!?]+[.!?]*/g)?.map((p) => p.trim()) ?? [quote];
-    let wordIndex = 0;
-    const lines = phrases.map((phrase, pi) => ({
-        isAccent: pi === phrases.length - 1,
-        words: phrase.split(/\s+/).map((word) => ({word, i: wordIndex++})),
-    }));
-    const wordCount = wordIndex;
-    const firstAccentIndex = lines.find((l) => l.isAccent)?.words[0]?.i ?? 0;
-    // The shine starts once the last word has finished rising
-    const shineBaseDelay = wordCount * WORD_STAGGER + 0.6;
-
-    const quoteRef = useRef(null);
-    const inView = useInView(quoteRef, {once: true, amount: 0.5});
+    // Manifesto lives in the message file as [{text, accent?}] segments
+    const segments = t.raw("manifesto") ?? [];
+    const words = segments.flatMap((seg) =>
+        seg.text.split(/\s+/).filter(Boolean).map((w) => ({w, accent: !!seg.accent}))
+    );
+    const n = words.length;
 
     return (
         <section className={section.section}>
@@ -38,31 +40,24 @@ const DesignDevV2 = () => {
                 <motion.h2 className={`${section.heading} ${styles.centered}`} {...reveal(0)}>
                     {t("title")}
                 </motion.h2>
-                <motion.p className={`${section.lead} ${styles.lead}`} {...reveal(1)}>
-                    {t("lead")}
-                </motion.p>
 
-                <figure className={styles.quote}>
-                    <blockquote ref={quoteRef} className={styles.quoteText}>
-                        {lines.map((line, li) => (
-                            <span key={li} className={styles.line}>
-                                {line.words.map(({word, i}) => (
-                                    <motion.span
-                                        key={`${word}-${i}`}
-                                        className={line.isAccent ? styles.wordAccent : styles.word}
-                                        data-shine={line.isAccent && inView && !reducedMotion}
-                                        style={line.isAccent ? {animationDelay: `${shineBaseDelay + (i - firstAccentIndex) * 0.12}s`} : undefined}
-                                        initial={reducedMotion ? {opacity: 0} : {opacity: 0, y: "0.7em"}}
-                                        animate={inView ? {opacity: 1, y: 0} : undefined}
-                                        transition={{duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.15 + i * WORD_STAGGER}}
-                                    >
-                                        {word}
-                                    </motion.span>
-                                ))}
-                            </span>
-                        ))}
-                    </blockquote>
-                </figure>
+                <blockquote ref={manifestoRef} className={styles.manifesto}>
+                    {words.map(({w, accent}, i) => (
+                        <ScrubWord
+                            key={`${w}-${i}`}
+                            word={w}
+                            className={accent ? styles.mWordAccent : styles.mWord}
+                            progress={scrollYProgress}
+                            start={(i / n) * 0.85}
+                            end={(i / n) * 0.85 + 0.15}
+                            reduced={reducedMotion}
+                        />
+                    ))}
+                </blockquote>
+
+                <div className={styles.quoteAfterManifesto}>
+                    <VerbsQuote/>
+                </div>
             </div>
         </section>
     );

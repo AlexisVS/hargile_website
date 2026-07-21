@@ -539,7 +539,12 @@
         },
         "design-dev": {
           "title": "Development & design",
-          "lead": "From the first sketch to production, we design and develop your digital products with you, not for you — interfaces that are a pleasure to use, built on technical foundations that we continue to maintain after delivery. And because you retain ownership of your code and data, you stay with us by choice, never out of necessity.",
+          "manifesto": [
+            {"text": "We design and develop your digital products"},
+            {"text": "with you, not for you.", "accent": true},
+            {"text": "Interfaces people love to use, foundations we keep alive after delivery. Your code, your data:"},
+            {"text": "you stay by choice, never out of necessity.", "accent": true}
+          ],
           "offers": {
             "your-project": {
               "title": "Your project",

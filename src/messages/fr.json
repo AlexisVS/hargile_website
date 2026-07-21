@@ -539,7 +539,12 @@
         },
         "design-dev": {
           "title": "Développement & design",
-          "lead": "Du premier croquis à la mise en production, nous concevons et développons vos produits digitaux avec vous, pas pour vous — des interfaces agréables à utiliser, sur des bases techniques que nous continuons à faire vivre après la livraison. Et parce que vous restez propriétaire de votre code et de vos données, vous restez avec nous par choix, jamais par contrainte.",
+          "manifesto": [
+            {"text": "Nous concevons et développons vos produits digitaux"},
+            {"text": "avec vous, pas pour vous.", "accent": true},
+            {"text": "Des interfaces qu'on aime utiliser, des fondations qu'on continue de faire vivre après la livraison. Votre code, vos données :"},
+            {"text": "vous restez par choix, jamais par contrainte.", "accent": true}
+          ],
           "offers": {
             "your-project": {
               "title": "Votre projet",

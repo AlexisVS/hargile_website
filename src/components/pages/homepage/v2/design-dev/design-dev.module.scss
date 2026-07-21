@@ -1,14 +1,37 @@
-/* Design & development — SplitText word reveal, one-shot shine on the closing phrase (design: Homepage v2) */
+/* Design & development — editorial manifesto scrubbed at scroll, verbs quote
+   with word reveal + one-shot shine on the closing phrase (design: Homepage v2) */
 
 .centered {
   text-align: center;
 }
 
-.lead {
+/* Manifesto: editorial-sized text whose words brighten with scroll (see
+   ScrubWord); accent segments take the blue gradient */
+.manifesto {
+  margin: clamp(32px, 4vw, 56px) auto 0;
+  max-width: 900px;
   text-align: center;
-  max-width: 58ch;
-  margin-left: auto;
-  margin-right: auto;
+  font-family: var(--font-headings);
+  font-weight: 500;
+  font-size: clamp(24px, 3vw, 42px);
+  line-height: 1.42;
+  letter-spacing: -0.018em;
+}
+
+.mWord {
+  color: #ededed;
+}
+
+.mWordAccent {
+  background: linear-gradient(135deg, #b7cdfb 0%, #5f8ef7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* The verbs land quieter here — the manifesto already carries the message */
+.quoteAfterManifesto {
+  margin-top: clamp(40px, 6vw, 80px);
 }
 
 .quote {
