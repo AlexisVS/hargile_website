@@ -472,7 +472,7 @@ const proseType = css`
   font-family: var(--font-headings);
   font-weight: 300;
   font-size: clamp(1.5rem, 1.15rem + 1.8vw, 2.4rem);
-  line-height: 1.45;
+  line-height: 1.65;
 `;
 
 export const ProseBlock = styled.div`
@@ -486,7 +486,7 @@ export const ProseLine = styled.p`
   font-size: inherit;
   line-height: inherit;
   font-family: inherit;
-  margin: 0 0 0.15em;
+  margin: 0 0 0.4em;
 `;
 
 export const SlotInput = styled.input`
@@ -536,7 +536,7 @@ export const ProseTextArea = styled.textarea`
   min-height: 5.5rem;
   resize: vertical;
   font-family: var(--font-primary);
-  font-size: 1rem;
+  font-size: 1.15rem;
   line-height: 1.6;
   color: #edf1fa;
   padding: 1rem 1.25rem;
