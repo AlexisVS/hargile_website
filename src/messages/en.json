@@ -47,11 +47,24 @@
         },
         "title": "Contact Information"
       },
-      "description": "Our team of experts will analyze your needs and contact you within 48 hours.",
+      "description": "Tell us about your project — we'll get back to you within 48 hours.",
       "privacy": {
         "link": "privacy policy",
         "requiredFields": "Required fields",
         "text": "By submitting this form, you accept our"
+      },
+      "prose": {
+        "emailPlaceholder": "your@email.com",
+        "greeting": "Hi, my name is",
+        "messagePlaceholder": "The context, the goals, the timing — anything that helps us come prepared.",
+        "moreLabel": "Tell us a bit more",
+        "namePlaceholder": "your name",
+        "objectPlaceholder": "your project",
+        "optional": "optional",
+        "phonePlaceholder": "+32 4.. .. .. ..",
+        "reach": "You can reach me at",
+        "reachOr": "or on",
+        "subject": "and I'd like to talk about"
       },
       "services": {
         "advice": "Advice",

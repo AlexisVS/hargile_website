@@ -10,7 +10,7 @@ export function PrivacyFooter({ t }) {
     <PrivacyNote>
       <p>
         {t("privacy.text")}{" "}
-        <PrivacyLink href="#">{t("privacy.link")}</PrivacyLink>.
+        <PrivacyLink href="/legal/privacy-policy">{t("privacy.link")}</PrivacyLink>.
       </p>
       <RequiredNote>
         <RequiredMark>*</RequiredMark> {t("privacy.requiredFields")}

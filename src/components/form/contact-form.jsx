@@ -44,7 +44,7 @@ const useMobileBends = () => {
 
   return mobile;
 };
-import { ContactSection } from "@/components/pages/homepage/quote-request/components/ContactSection";
+import { ProseContactSection } from "@/components/pages/homepage/quote-request/components/ProseContactSection";
 import { PrivacyFooter } from "@/components/pages/homepage/quote-request/components/PrivacyFooter";
 
 export default function ContactForm() {
@@ -91,7 +91,9 @@ export default function ContactForm() {
     // dirtyFields, // Removed debugging formState
   } = useForm({
     resolver: zodResolver(contactFormSchema),
-    mode: "onBlur", // Validate on blur
+    // Errors only surface on submit; once shown, they clear live as the
+    // user fixes the field (default reValidateMode: onChange).
+    mode: "onSubmit",
     defaultValues: {
       name: "",
       email: "",
@@ -159,14 +161,16 @@ export default function ContactForm() {
       <BendsBackdrop aria-hidden="true">
         <ColorBends
           colors={["#2563eb", "#96b9f9"]}
-          rotation={mobileBends ? 0 : 92}
+          // Mobile matches the homepage hero's portrait treatment (bands laid
+          // toward horizontal at 20°) and steps back further so the form leads.
+          rotation={mobileBends ? 20 : 92}
           scale={mobileBends ? 1.7 : 1}
           speed={0.14}
           frequency={1.0}
           noise={0.02}
           bandWidth={1.35}
           iterations={1}
-          intensity={0.72}
+          intensity={mobileBends ? 0.5 : 0.72}
           mouseInfluence={0.3}
           parallax={0.25}
         />
@@ -180,13 +184,7 @@ export default function ContactForm() {
           showBackgroundBlur={false}
         />
         <FormGrid onSubmit={handleSubmit(onSubmitForm)}>
-          <ContactSection
-            t={t}
-            register={register} // Pass RHF register
-            errors={errors} // Pass RHF errors for field-level feedback
-            setValue={setValue}
-            watch={watch}
-          />
+          <ProseContactSection t={t} register={register} errors={errors} />
           <SubmitButton type="submit" disabled={isSubmittingAPI}>
             {isSubmittingAPI ? t("submitting") : t("submit")}
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">

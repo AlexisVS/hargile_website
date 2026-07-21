@@ -47,11 +47,24 @@
         },
         "title": "Informations de contact"
       },
-      "description": "Notre équipe d'experts analysera vos besoins et vous contactera dans les 48 heures.",
+      "description": "Parlez-nous de votre projet — nous vous recontactons sous 48 heures.",
       "privacy": {
         "link": "politique de confidentialité",
         "requiredFields": "Champs obligatoires",
         "text": "En soumettant ce formulaire, vous acceptez notre"
+      },
+      "prose": {
+        "emailPlaceholder": "votre@email.com",
+        "greeting": "Bonjour, je m'appelle",
+        "messagePlaceholder": "Le contexte, les objectifs, le timing — tout ce qui nous aide à bien nous préparer.",
+        "moreLabel": "Dites-nous en un peu plus",
+        "namePlaceholder": "votre nom",
+        "objectPlaceholder": "votre projet",
+        "optional": "facultatif",
+        "phonePlaceholder": "+32 4.. .. .. ..",
+        "reach": "Vous pouvez me joindre à",
+        "reachOr": "ou au",
+        "subject": "et j'aimerais vous parler de"
       },
       "services": {
         "advice": "Conseil",

@@ -1,5 +1,6 @@
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import React from "react";
+import { Link } from "@/i18n/navigation";
 
 export const PageWrapper = styled.div`
   min-height: 100vh;
@@ -50,9 +51,9 @@ export const FormContainer = styled.div`
      v2-section.module.scss): shared max width and gutters. */
   max-width: var(--container-max);
   margin: 0 auto;
-  padding: clamp(28px, 3.5vw, 48px) var(--container-gutter);
+  padding: clamp(20px, 2.5vw, 32px) var(--container-gutter);
   /* The wrapper slides under the fixed navbar — keep the copy clear of it. */
-  padding-top: calc(clamp(28px, 3.5vw, 48px) + var(--navbar-height, 68px));
+  padding-top: calc(clamp(20px, 2.5vw, 32px) + var(--navbar-height, 68px));
   position: relative;
   z-index: 10;
   width: 100%;
@@ -110,7 +111,13 @@ export const Description = styled.p.attrs({
 export const FormGrid = styled.form`
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.25rem;
+  gap: 1rem;
+
+  /* Grid items default to min-width:auto, letting a long value typed in an
+     auto-growing slot input widen the whole column past the viewport. */
+  > * {
+    min-width: 0;
+  }
 `;
 
 export const ContactInfoColumn = styled.div`
@@ -183,7 +190,7 @@ export const InputLabel = styled.label.attrs({
 `;
 
 export const RequiredMark = styled.span`
-  color: #f87171;
+  color: #96b9f9;
 `;
 
 export const Input = styled.input`
@@ -442,19 +449,170 @@ export const SubmitButton = styled.button`
 export const PrivacyNote = styled.div.attrs({
   className: "fluid-type-1",
 })`
-  margin-top: 1.5rem;
+  margin-top: 1.1rem;
   color: white;
   padding: 0 1rem;
 `;
 
-export const PrivacyLink = styled.a`
+export const PrivacyLink = styled(Link)`
   color: #96b9f9;
 `;
 
 export const RequiredNote = styled.p`
-  margin-top: 0.75rem;
+  margin-top: 0.4rem;
 `;
 
+/* ─── Conversational prose form ──────────────────────────────────────────────
+   The form reads as a sentence you complete; inputs are inline slots inside
+   large Outfit type, underlined like the site's hairline language. */
+
+/* One shared scale for every conversational element — the global fluid-type
+   rules on p/label would otherwise fragment the sizes. */
+const proseType = css`
+  font-family: var(--font-headings);
+  font-weight: 300;
+  font-size: clamp(1.5rem, 1.15rem + 1.8vw, 2.4rem);
+  line-height: 1.45;
+`;
+
+export const ProseBlock = styled.div`
+  ${proseType};
+  color: rgba(237, 241, 250, 0.92);
+  max-width: 52ch;
+`;
+
+export const ProseLine = styled.p`
+  /* Explicit inherit: the global p rule would otherwise reset the size. */
+  font-size: inherit;
+  line-height: inherit;
+  font-family: inherit;
+  margin: 0 0 0.15em;
+`;
+
+export const SlotInput = styled.input`
+  display: inline-block;
+  font: inherit;
+  color: #dbe7ff;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid
+    ${(props) =>
+      props.$hasError
+        ? "rgba(248, 137, 141, 0.75)"
+        : "rgba(150, 185, 249, 0.35)"};
+  border-radius: 0;
+  padding: 0 0.15em 0.05em;
+  margin: 0 0.1em;
+  min-width: ${(props) => props.$minCh || 8}ch;
+  max-width: 100%;
+  /* Auto-grow with the typed text where supported; the ch min-width is the
+     fallback everywhere else. */
+  field-sizing: content;
+  transition: border-color 0.2s ease;
+
+  &::placeholder {
+    color: rgba(237, 241, 250, 0.32);
+  }
+
+  &:focus {
+    outline: none;
+    border-bottom-color: rgba(150, 185, 249, 0.9);
+  }
+`;
+
+export const ProseMessage = styled.div`
+  margin-top: 1.1rem;
+
+  label {
+    display: block;
+    ${proseType};
+    color: rgba(237, 241, 250, 0.92);
+    margin-bottom: 0.5rem;
+  }
+`;
+
+export const ProseTextArea = styled.textarea`
+  width: 100%;
+  min-height: 5.5rem;
+  resize: vertical;
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #edf1fa;
+  padding: 1rem 1.25rem;
+  background: rgba(10, 14, 26, 0.5);
+  border: 1px solid
+    ${(props) =>
+      props.$hasError
+        ? "rgba(248, 137, 141, 0.6)"
+        : "rgba(150, 185, 249, 0.28)"};
+  border-radius: 0.75rem;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: border-color 0.2s ease;
+
+  &::placeholder {
+    color: rgba(237, 241, 250, 0.32);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: rgba(150, 185, 249, 0.8);
+  }
+`;
+
+/* Blue accent star after each required slot — visible even once the
+   placeholder (and its hint) is gone. */
+export const SlotRequiredMark = styled.sup`
+  color: #96b9f9;
+  font-size: 0.55em;
+  margin-left: 0.1em;
+  user-select: none;
+`;
+
+export const ProseErrorList = styled.ul`
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0.75rem 1.25rem;
+  width: fit-content;
+
+  /* Same glass recipe as the error status banner — one visual system. */
+  background: rgba(24, 13, 18, 0.72);
+  border: 1px solid rgba(248, 137, 141, 0.4);
+  border-radius: 0.75rem;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(255, 202, 205, 0.95);
+
+  li {
+    margin: 0.15rem 0;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5em;
+
+    &::before {
+      content: "·";
+      color: rgba(248, 137, 141, 0.8);
+      font-weight: 700;
+    }
+  }
+`;
+
+
+const statusReveal = keyframes`
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+`;
 
 export const StatusMessageDisplay = styled.div`
     margin-top: 1.5rem;
@@ -492,9 +650,9 @@ export const StatusMessageDisplay = styled.div`
 
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-    opacity: ${(props) => (props.$show ? 1 : 0)};
-    transform: ${(props) => (props.$show ? "translateY(0)" : "translateY(-10px)")};
-    visibility: ${(props) => (props.$show ? "visible" : "hidden")};
+    /* display:none (not visibility) so the empty banner reserves no space
+       between the submit button and the privacy note. */
+    display: ${(props) => (props.$show ? "block" : "none")};
+    animation: ${statusReveal} 0.3s ease-out;
 `;
 
