@@ -457,42 +457,44 @@ export const RequiredNote = styled.p`
 
 
 export const StatusMessageDisplay = styled.div`
-    margin-top: 1.5rem; /* Space above the message */
-    padding: 1rem 1.5rem; /* Padding inside */
-    border-radius: 0.75rem; /* Rounded corners */
+    margin-top: 1.5rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: 0.75rem;
     text-align: center;
     font-size: 0.95rem;
     font-weight: 500;
-    color: white; /* Default text color */
 
-    /* Glassmorphism effect */
-    background-color: ${(props) =>
+    /* Same dark glass body as the site chrome (ContactButton); the state only
+       tints the hairline border and text, never fills the card. */
+    background: ${(props) =>
             props.$success === true
-                    ? "rgba(40, 167, 69, 0.65)" /* Greenish glass for success */
+                    ? "rgba(13, 20, 34, 0.72)"
                     : props.$success === false
-                            ? "rgba(220, 53, 69, 0.65)" /* Reddish glass for error */
-                            : "rgba(50, 50, 80, 0.65)"}; /* Neutral/blueish glass for other states */
+                            ? "rgba(24, 13, 18, 0.72)"
+                            : "rgba(10, 14, 26, 0.72)"};
 
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px); /* Safari support */
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 
-    /* FIXED: Added $ prefix to success props */
     border: 1px solid ${(props) =>
             props.$success === true
-                    ? "rgba(40, 167, 69, 0.8)"
+                    ? "rgba(150, 185, 249, 0.45)"
                     : props.$success === false
-                            ? "rgba(220, 53, 69, 0.8)"
-                            : "rgba(100, 100, 150, 0.5)"};
+                            ? "rgba(248, 137, 141, 0.4)"
+                            : "rgba(148, 163, 184, 0.3)"};
 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    color: ${(props) =>
+            props.$success === true
+                    ? "rgba(203, 222, 255, 0.95)"
+                    : props.$success === false
+                            ? "rgba(255, 202, 205, 0.95)"
+                            : "rgba(226, 232, 240, 0.9)"};
 
-    /* Animation for appearing (optional) */
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
     opacity: ${(props) => (props.$show ? 1 : 0)};
     transform: ${(props) => (props.$show ? "translateY(0)" : "translateY(-10px)")};
-    visibility: ${(props) =>
-            props.$show
-                    ? "visible"
-                    : "hidden"}; /* Ensure it's not interactable when hidden */
+    visibility: ${(props) => (props.$show ? "visible" : "hidden")};
 `;
 

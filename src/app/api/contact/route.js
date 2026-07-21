@@ -115,6 +115,11 @@ export async function POST(req) {
     // The From: address must belong to the domain verified in Resend.
     const fromEmail = process.env.CONTACT_FORM_FROM_EMAIL;
     const toEmail = process.env.CONTACT_FORM_TO_EMAIL;
+    // Optional comma-separated BCC copies (backup inboxes).
+    const bccEmails = (process.env.CONTACT_FORM_BCC_EMAILS || "")
+      .split(",")
+      .map((addr) => addr.trim())
+      .filter(Boolean);
 
     if (!fromEmail || !toEmail) {
       console.error(
@@ -185,6 +190,7 @@ Ce mail est envoyé depuis le formulaire de contact sur hargile.com. © ${new Da
     const { error } = await resend.emails.send({
       from: `Hargile Website (${name.replace(/["<>]/g, "")}) <${fromEmail}>`,
       to: [toEmail],
+      ...(bccEmails.length > 0 && { bcc: bccEmails }),
       replyTo: email,
       subject: `Hargile Contact: ${
         object ? object.substring(0, 70).replace(/[\r\n]/g, " ") : "New Inquiry"
