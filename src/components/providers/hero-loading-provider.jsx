@@ -9,11 +9,12 @@ import {usePathname} from "@/i18n/navigation";
    markHeroReady() once its WebGL canvas paints; the loader then draws its ring
    to completion and fades out.
 
-   The loader only exists on the homepage — that's the only route with a hero to
-   wait on. usePathname() from next-intl is locale-stripped, so the homepage is
-   "/" for every locale. Elsewhere the loader never mounts, so other pages render
-   with no overlay at all. A safety timeout still guarantees dismissal on the
-   homepage even if a device never reports a canvas. */
+   The loader exists on the routes with a WebGL backdrop to wait on — the
+   homepage hero and the contact page's bends. usePathname() from next-intl is
+   locale-stripped, so those are "/" and "/contact" for every locale. Elsewhere
+   the loader never mounts, so other pages render with no overlay at all. A
+   safety timeout still guarantees dismissal even if a device never reports a
+   canvas. */
 
 const HeroLoadingContext = createContext({markHeroReady: () => {}});
 
@@ -29,19 +30,20 @@ const FADE_MS = 500;
 
 export default function HeroLoadingProvider({children}) {
     const pathname = usePathname();
-    const isHome = pathname === "/";
+    // Routes whose page reports markHeroReady() once its WebGL canvas paints.
+    const isCovered = pathname === "/" || pathname === "/contact";
 
     const [heroReady, setHeroReady] = useState(false);
     const [gone, setGone] = useState(false);
 
     const markHeroReady = useCallback(() => setHeroReady(true), []);
 
-    // Backstop so the loader always dismisses on the homepage.
+    // Backstop so the loader always dismisses on covered routes.
     useEffect(() => {
-        if (!isHome) return;
+        if (!isCovered) return;
         const t = setTimeout(() => setHeroReady(true), SAFETY_MS);
         return () => clearTimeout(t);
-    }, [isHome]);
+    }, [isCovered]);
 
     // Once ready, let the ring finish, then fade, then unmount.
     const dismissing = heroReady;
@@ -53,8 +55,8 @@ export default function HeroLoadingProvider({children}) {
 
     const value = useMemo(() => ({markHeroReady}), [markHeroReady]);
 
-    // Only the homepage shows the loader; other routes render instantly.
-    const showLoader = isHome && !gone;
+    // Only routes with a WebGL backdrop show the loader; others render instantly.
+    const showLoader = isCovered && !gone;
 
     return (
         <HeroLoadingContext.Provider value={value}>

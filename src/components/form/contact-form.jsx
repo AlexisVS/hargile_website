@@ -2,7 +2,7 @@
 // (Adjust path as necessary for your project structure)
 
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -46,10 +46,46 @@ const useMobileBends = () => {
 };
 import { ProseContactSection } from "@/components/pages/homepage/quote-request/components/ProseContactSection";
 import { PrivacyFooter } from "@/components/pages/homepage/quote-request/components/PrivacyFooter";
+import { useHeroLoading } from "@/components/providers/hero-loading-provider";
 
 export default function ContactForm() {
   const t = useTranslations("components.contact-form");
   const mobileBends = useMobileBends();
+
+  // Same contract as the homepage hero: tell the layout-level loader once the
+  // bends canvas has painted (canvas appears → two rAFs → ready), so the page
+  // is revealed in its final layout with the backdrop already in place.
+  const { markHeroReady } = useHeroLoading();
+  const backdropRef = useRef(null);
+  useEffect(() => {
+    const container = backdropRef.current;
+    if (!container) return;
+
+    let raf1 = 0;
+    let raf2 = 0;
+    let done = false;
+
+    const markReady = () => {
+      if (done) return;
+      done = true;
+      raf1 = requestAnimationFrame(() => {
+        raf2 = requestAnimationFrame(() => markHeroReady());
+      });
+    };
+
+    if (container.querySelector("canvas")) markReady();
+
+    const observer = new MutationObserver(() => {
+      if (container.querySelector("canvas")) markReady();
+    });
+    observer.observe(container, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+      if (raf1) cancelAnimationFrame(raf1);
+      if (raf2) cancelAnimationFrame(raf2);
+    };
+  }, [markHeroReady]);
 
   // Define Zod Schema based on your form fields
   // Ensure field names match the 'name' prop used in register (e.g., 'description')
@@ -158,7 +194,7 @@ export default function ContactForm() {
 
   return (
     <PageWrapper>
-      <BendsBackdrop aria-hidden="true">
+      <BendsBackdrop aria-hidden="true" ref={backdropRef}>
         <ColorBends
           colors={["#2563eb", "#96b9f9"]}
           // Mobile matches the homepage hero's portrait treatment (bands laid

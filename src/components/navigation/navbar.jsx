@@ -39,7 +39,6 @@ const Navbar = () => {
     const router = useRouter();
     const navbarRef = useRef(null);
     const brandRef = useRef(null);
-    const [navbarHeight, setNavbarHeight] = useState(0);
     const [scrolled, setScrolled] = useState(false);
     const t = useTranslations('components.menu');
     const isMounted = useIsClient();
@@ -51,7 +50,6 @@ const Navbar = () => {
         const updateNavbarHeight = () => {
             if (navbarRef.current) {
                 const height = navbarRef.current.offsetHeight;
-                setNavbarHeight(height);
                 document.documentElement.style.setProperty('--navbar-height', `${height}px`);
             }
         };
@@ -171,7 +169,10 @@ const Navbar = () => {
                 </NavbarNavigation>
             </StyledNavbar>
 
-            {navbarHeight > 0 && <Spacer style={{height: `${navbarHeight}px`}}/>}
+            {/* Always rendered, sized by the same CSS var the measuring effect
+                keeps up to date — the SSR paint then already reserves the
+                navbar's space instead of the page jumping down on hydration. */}
+            <Spacer style={{height: "var(--navbar-height, 68px)"}}/>
         </>
     );
 };
