@@ -20,6 +20,9 @@
 # production
 /build
 
+# raw screenshot drops for scripts/optimize-portfolio-images.mjs
+/raw-screenshots/
+
 # misc
 .DS_Store
 *.pem

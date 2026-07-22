@@ -89,7 +89,11 @@
      fenêtre dépasse la largeur max. */
   padding: 0 max(var(--container-gutter), 6vw) 48px
     calc(max(var(--container-gutter), (100vw - var(--container-max)) / 2));
-  align-items: stretch;
+  /* Center et non stretch : la carte fait sa hauteur de contenu (ratio du
+     média + bloc texte) et flotte au centre du rail. L'espace excédentaire
+     des grands écrans reste autour de la carte — pas de vide interne sous le
+     bouton, mêmes proportions à toute hauteur de viewport. */
+  align-items: center;
   will-change: transform;
 }
 
@@ -106,6 +110,11 @@
   /* Narrower than the original 56vw/780px: less horizontal distance per card,
      so the pinned rail scrolls through in fewer wheel-lengths. */
   width: min(46vw, 640px);
+  /* Garde-fou viewport bas : la carte ne dépasse jamais le rail. Le média
+     (seul enfant compressible) absorbe le manque — cover rogne alors un peu
+     haut/bas — et le bloc texte garde sa hauteur, donc le bouton ne déborde
+     plus. */
+  max-height: 100%;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 24px;
   overflow: hidden;
@@ -117,32 +126,90 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
-/* Fixed 58/42 split instead of media { flex: 1 }: with flex:1 the image absorbed
-   whatever the text left over, so a card with a longer description got a shorter
-   image and the media/body seam jumped between neighbours. All cards stretch to
-   the same rail height, so a fixed basis puts every seam on the same line no
-   matter the copy length. */
+/* Étiquette domaine : chip verre hairline posé sur le coin de la capture —
+   domaine réel du client en mono. Pas de backdrop-filter (le rail défile en
+   transform, re-flouter chaque frame coûte cher) : fond translucide simple.
+   z-index 1 : au-dessus du voile teinté (::after) pour ne pas être re-teinté. */
+.domainChip {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 1;
+  padding: 5px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(10, 12, 22, 0.97);
+  font-family: ui-monospace, "Cascadia Code", "SF Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: rgba(150, 185, 249, 0.9);
+}
+
+/* Les visuels sont des captures de sites normalisées (~1500×905 via
+   scripts/optimize-portfolio-images.mjs). La boîte média reprend leur ratio :
+   la capture s'affiche entière, sans recadrage ni bandes. Les jointures
+   média/texte restent alignées entre cartes (même largeur → même hauteur) —
+   c'est ce que garantissait l'ancien split fixe 62%. flex-shrink 1 : sur un
+   viewport bas, la boîte se comprime plutôt que déborder (cover rogne alors
+   légèrement). */
 .cardMedia {
-  /* 68% squeezed the body once the CTA became a pill (taller than the old
-     text link) — the button ended up against the card's bottom edge. */
-  flex: 0 0 62%;
+  flex: 0 1 auto;
+  aspect-ratio: 1500 / 905;
   min-height: 0;
   position: relative;
   background: #101018;
+  /* Assied la capture (souvent claire) sur le corps sombre : couture nette
+     plutôt que bord flottant. */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  /* Chaque visuel arrive dans la palette de son client (magnolia rose, pelouse,
+     robe fuchsia) et jure avec le système sombre/bleu du site. On désature puis
+     on re-teinte vers le bleu des cartes : un seul cadran, --media-desat
+     (0 = couleurs d'origine, 1 = monochrome bleuté complet). */
+  --media-desat: 0.85;
 
   img {
     object-fit: cover;
+    filter: grayscale(var(--media-desat)) contrast(1.05) brightness(0.92);
+    transition: filter 0.45s ease;
+  }
+
+  /* Re-teinte le résidu monochrome vers le bleu du .cardBody (blend "color" :
+     garde la luminance de l'image, remplace sa teinte). Suit --media-desat pour
+     que le cadran pilote les deux couches à la fois. */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #384a7a;
+    mix-blend-mode: color;
+    opacity: calc(var(--media-desat) * 0.45);
+    pointer-events: none;
+    transition: opacity 0.45s ease;
+  }
+}
+
+/* Révélation au survol : la capture retrouve ses couleurs réelles tant que le
+   curseur est sur la carte — aller-retour piloté par l'intention, rien ne
+   boucle. Gaté hover:hover : au tactile l'état resterait collé après le tap. */
+@media (hover: hover) {
+  .card:hover .cardMedia img {
+    filter: grayscale(0) contrast(1) brightness(1);
+  }
+
+  .card:hover .cardMedia::after {
+    opacity: 0;
   }
 }
 
 .cardBody {
-  flex: 1;
-  /* Column layout so the CTA pill pins to the bottom with real clearance
-     (margin-top: auto on .more) instead of floating wherever the copy ends. */
+  /* flex none (et plus flex: 1) : le bloc texte fait exactement sa hauteur de
+     contenu, quelle que soit la hauteur du viewport — c'est la carte entière
+     qui est centrée dans le rail, pas le texte qui s'étire. */
+  flex: none;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  min-height: 0;
   padding: 24px 32px 26px;
   background: linear-gradient(
     155deg,
@@ -177,19 +244,18 @@
   color: rgba(237, 237, 237, 0.7);
   max-width: 70ch;
   margin: 0 0 14px;
-  /* The card is fixed-height; a long description must truncate rather than
-     push the CTA into the card edge. */
+  /* Clamp haut (3 lignes max) ET plancher (min-height 3 lignes) : les cartes
+     étant dimensionnées par leur contenu, c'est ce qui garantit la même
+     hauteur de carte quelle que soit la longueur de la description. */
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  min-height: calc(3 * 1.5em);
 }
 
-/* The link itself is the shared CtaLink pill; margin-top: auto pins it to the
-   bottom of the card body (flex column), .desc's margin guarantees the gap. */
-.more {
-  margin-top: auto;
-}
+/* Le lien est le CtaLink partagé ; l'écart au-dessus vient du margin de .desc
+   (le body est à hauteur de contenu, plus rien à épingler). */
 
 /* --- Fin du rail ------------------------------------------- */
 
@@ -239,11 +305,6 @@
 
   .card {
     width: 100%;
-  }
-
-  .cardMedia {
-    flex: none;
-    aspect-ratio: 16 / 10;
   }
 
   .cardBody {

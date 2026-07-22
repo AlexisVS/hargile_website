@@ -9,6 +9,9 @@ import styles from "./recent-works-showcase.module.scss";
 
 const PIN_BREAKPOINT = 900;
 
+// Domaine nu pour la barre de navigateur factice des cartes.
+const hostnameOf = (url) => new URL(url).hostname.replace(/^www\./, "");
+
 const RecentWorksShowcaseV2 = () => {
     const t = useTranslations("pages.homepage.sections.recent-works");
     const {getLatestProjects} = usePortfolioData();
@@ -110,6 +113,9 @@ const RecentWorksShowcaseV2 = () => {
                                         sizes="(max-width: 899px) 100vw, 46vw"
                                         priority={i === 0}
                                     />
+                                    <span className={styles.domainChip} aria-hidden="true">
+                                        {hostnameOf(project.actionUrl)}
+                                    </span>
                                 </div>
                                 <div className={styles.cardBody}>
                                     <div className={styles.eyebrow}>{project.subtitle}</div>
