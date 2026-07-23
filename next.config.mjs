@@ -2,7 +2,7 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin();
 
-const siteHostname = (process.env.NEXT_PUBLIC_SITE_URL || 'hargile.be')
+const siteHostname = (process.env.NEXT_PUBLIC_SITE_URL || 'hargile.com')
     .replace(/^https?:\/\//, '')
     .replace(/\/.*$/, '');
 
@@ -73,7 +73,7 @@ const nextConfig = {
             {path: 'solutions/i-go', to: '/', permanent: true},
             {path: 'solutions/multipass', to: '/', permanent: true},
             // The portfolio now lives on its own subdomain — send visitors there.
-            {path: 'portfolio', to: 'https://portfolio.hargile.be/', permanent: true},
+            {path: 'portfolio', to: 'https://portfolio.hargile.com/', permanent: true},
         ];
 
         return gone.flatMap(({path, to, permanent}) => [

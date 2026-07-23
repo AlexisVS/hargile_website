@@ -128,7 +128,7 @@ const RecentWorksShowcaseV2 = () => {
 
                         <div className={styles.end}>
                             <a
-                                href="https://portfolio.hargile.be/"
+                                href="https://portfolio.hargile.com/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
