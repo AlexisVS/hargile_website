@@ -26,7 +26,7 @@ export async function generatePageMetadata({params, pagePath}) {
             namespace: `seo.pages.${pagePath}`
         });
 
-        // Base URL configuration (unified on SITE_URL — hargile.be)
+        // Base URL configuration (unified on SITE_URL — hargile.com)
         const pathSuffix = pagePath === 'home' ? '' : `/${pagePath.replace('.', '/')}`;
         const baseUrl = `${SITE_URL}/${locale}${pathSuffix}`;
         const imageUrl = `${SITE_URL}/images/brand/brand_large.png`;

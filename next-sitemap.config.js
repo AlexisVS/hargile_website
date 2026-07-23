@@ -1,4 +1,4 @@
-const RAW_SITE = process.env.NEXT_PUBLIC_SITE_URL || 'hargile.be';
+const RAW_SITE = process.env.NEXT_PUBLIC_SITE_URL || 'hargile.com';
 const SITE_URL = /^https?:\/\//.test(RAW_SITE) ? RAW_SITE : `https://${RAW_SITE}`;
 
 /** @type {import('next-sitemap').IConfig} */

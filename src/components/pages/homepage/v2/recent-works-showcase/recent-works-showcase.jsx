@@ -136,7 +136,7 @@ const RecentWorksShowcaseV2 = () => {
 
                         <div className={styles.end}>
                             <CtaLink
-                                href="https://portfolio.hargile.be/"
+                                href="https://portfolio.hargile.com/"
                                 external
                                 variant="primary"
                             >
