@@ -1,204 +1,100 @@
-# Email Architecture — Scaleway TEM + Dedicated Worker + Postgres on Kubernetes
+# Email Architecture — Resend, two isolated streams
 
-> Planning doc. Decisions locked; no code written yet. Two email streams kept
-> deliberately separate so a bulk-send reputation hit can never poison real
-> business mail (`info@` / `charles@hargile.be`).
+> Reflects the **live** state as of 2026-07-24 (rewritten from the original
+> Scaleway/`.be` planning draft, which was superseded).
+>
+> Two email streams are kept deliberately separate so a bulk-send reputation
+> hit can never poison real business mail (`charles@hargile.com`).
 
-## Context (as of writing)
+## Provider: Resend (single account)
 
-- **Site:** `hargile.be`, Next.js 15 (`output: standalone`), runs as Docker image on a **Kubernetes cluster**.
-- **Secrets:** injected as runtime env vars (Dockerfile bakes nothing but the public `NEXT_PUBLIC_SITE_URL` build arg). Production config comes from a **K8s Secret**, not an `.env` file.
-- **Existing subdomains:** e.g. `portfolio.hargile.be` — subdomain pattern already in use.
-- **Current contact form:** `src/app/api/contact/route.js`, currently on Gmail SMTP (nodemailer) as a stopgap after SendGrid ran out of credits.
-- **Vendor choice:** **Scaleway TEM** (Paris / `fr-par`, RGPD-native) — chosen over Resend/SES for EU data residency.
+- **Vendor: Resend** — chosen over Scaleway/SES (see HARG-12). One account holds
+  both the site key and the SEO-workspace key.
+- The earlier plan (Scaleway TEM, `fr-par`) is **abandoned**. The two-domain
+  split and the DNS work below are provider-agnostic and stay valid.
+- DNS for `hargile.com` is at **Hostinger** (`ns1/2.dns-parking.com`), managed
+  manually in the hPanel. No registrar change needed.
 
 ## The core principle: two separate streams
 
 Never mix these on the same domain reputation.
 
-| Stream | Purpose | Sending domain | Volume |
-|--------|---------|----------------|--------|
-| **Transactional** | Contact-form replies, receipts, real 1:1 mail | `hargile.be` (or `tx.hargile.be`) | Low, trusted |
-| **AI-agent bulk** | Agent-generated outreach at scale | **`send.hargile.be`** (separate verified domain) | Thousands |
+| Stream | Purpose | Sending domain | Volume | Status |
+|--------|---------|----------------|--------|--------|
+| **Transactional** | Contact-form replies, real 1:1 mail | `hargile.com` | Low, trusted | ✅ **Live** |
+| **Bulk prospection** | AI-agent outreach at scale (Workflow Audit) | **`send.hargile.com`** | High | ⏳ Blocked on HARG-71 |
 
-Isolating bulk on `send.hargile.be` means a reputation hit there **cannot** affect deliverability of `info@` / `charles@hargile.be`. This isolation matters more than the vendor choice.
+Isolating bulk on `send.hargile.com` means a reputation hit there **cannot**
+affect deliverability of `charles@hargile.com`.
 
-## System diagram
+## Stream 1 — Transactional (contact form) ✅ LIVE
 
-```
-┌─────────────────────┐     Transactional (contact form)
-│  Next.js web pods   │────────────────────────────────────►  Scaleway TEM
-│  (N replicas)       │                                        (from info@hargile.be)
-│                     │
-│  AI agents ─────────┼──► enqueue job ──► ┌──────────────┐
-└─────────────────────┘                    │   Queue      │
-                                           │ (Redis/NATS) │
-                                           └──────┬───────┘
-                                                  │ pull
-                                    ┌─────────────▼──────────────┐
-                                    │  Bulk worker Deployment    │
-                                    │  (controlled replicas)     │──► Scaleway TEM
-                                    │  • rate limiter            │    (from agent@send.hargile.be)
-                                    │  • suppression check       │
-                                    │  • retry / bounce handling │
-                                    └─────────────┬──────────────┘
-                                                  │
-                                    ┌─────────────▼──────────────┐
-                                    │  PostgreSQL (fr-par)       │
-                                    │  • suppression_list        │
-                                    │  • consent_records (RGPD)  │
-                                    │  • email_jobs / send_log   │
-                                    │  • rate_limit_state        │
-                                    └────────────────────────────┘
-```
+The public contact form sends via Resend on the verified `hargile.com` domain.
 
-## Why each piece
+- **Code**: `src/app/api/contact/route.js` — uses the `resend` SDK
+  (`resend.emails.send({ from, to, replyTo })`).
+- **Package**: `resend@^6.17.2` (no SendGrid, no nodemailer).
+- **Env vars** (injected at runtime from a K8s Secret, not baked into the image):
 
-- **Web pods only enqueue** bulk jobs — never send them. This avoids the replicated-pod rate-limit problem entirely (3 replicas each thinking they can send 100/min = 300/min actual, blowing the limit).
-- **Worker is a separate Deployment** with its own replica count (**start at 1**, scale deliberately). It owns the rate limiter, so total send rate is controlled regardless of how the web app scales.
-- **Postgres is the source of truth** for suppression + consent (RGPD-mandatory durable audit) and the job log — so a pod restart resumes exactly where it left off (at-least-once delivery with a dedup key).
+  ```
+  RESEND_API_KEY           # Resend account API key
+  CONTACT_FORM_FROM_EMAIL  # must belong to a Resend-verified domain (hargile.com)
+  CONTACT_FORM_TO_EMAIL    # inbox that receives submissions (charles.dl@hargile.com)
+  ```
 
-## Kubernetes specifics
+- **Secret location**: `hargile-website-secrets` SealedSecret in the
+  `hargile-infra` repo (`apps/hargile-website/sealed-secret.yaml`), injected via
+  `envFrom: secretRef`. Domain `hargile.com` is already verified in Resend
+  (DKIM posted), so this flow is fully operational.
 
-### Secrets: K8s Secret → env vars
+> History: contact form was SendGrid → Gmail SMTP (stopgap after SendGrid
+> credits ran out) → **Resend** (current). The infra secret's old `SENDGRID_*`
+> keys have been replaced by the three `RESEND_*`/`CONTACT_FORM_*` keys above.
 
-Dockerfile already reads everything from runtime env, so **no image change needed**. Secret lives in the **infra/deploy repo**, not the app repo.
+## Stream 2 — Bulk prospection ⏳ (blocked — HARG-71)
 
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: hargile-email
-  namespace: <your-ns>
-type: Opaque
-stringData:
-  SCW_TEM_API_KEY: "<IAM key, TEM-scoped>"
-  SCW_TEM_PROJECT_ID: "<project id>"
-  CONTACT_FORM_FROM_EMAIL: "info@hargile.be"
-  CONTACT_FORM_TO_EMAIL: "charles@hargile.be"
-  BULK_FROM_EMAIL: "agent@send.hargile.be"
-```
+Bulk outreach is driven by the **Workflow Audit** pipeline (HARG-8): leads →
+ChatSEO audit → personalised email via Resend. Sending must use the **separate**
+`send.hargile.com` domain to protect the transactional reputation.
 
-Reference it in the Deployment:
+**Blocker (HARG-71, Urgent):** Resend **free plan allows only 1 verified domain**,
+already used by `hargile.com`. To add `send.hargile.com`, a decision is needed:
 
-```yaml
-    envFrom:
-      - secretRef:
-          name: hargile-email
-```
+1. **Upgrade Resend Pro (~$20/mo)** — multiple domains + higher quota (50k/mo).
+2. **2nd free Resend account** dedicated to prospection (100/day, 3k/mo).
 
-> ⚠️ **Don't commit the Secret with real values.** Use **Sealed Secrets** or **External Secrets Operator** (pulling from Scaleway Secret Manager or Vault) so the encrypted form is safe in git. Pick whichever is already in the cluster.
+Once decided, the Resend MCP (`https://mcp.resend.com/mcp`) creates the domain
+and emits the exact DNS records to post.
 
-### Shared state must be external
+### DNS to post for `send.hargile.com` (in Hostinger)
 
-Pods are replicated and ephemeral, so rate-limit counters, suppression list, and send log **cannot live in pod memory** — they live in Postgres (see schema).
+Resend generates these per domain (DKIM key is account-specific):
 
-## Scaleway TEM setup
+- **DKIM**: CNAME record(s) provided by Resend
+- **Return-Path / MAIL FROM**: MX + TXT (SPF) on the `send` subdomain
+- **DMARC**: `v=DMARC1; p=none; rua=mailto:dmarc@hargile.com` — tighten to
+  `p=quarantine` after ~1 week of clean reports
 
-1. Console → **Transactional Email** → add `hargile.be` **and** `send.hargile.be` as **two separate verified domains**.
-2. Add the DNS records Scaleway generates (per domain), at the DNS host for hargile.be:
-   - **SPF:** `v=spf1 include:_spf.tem.scaleway.com ~all`
-   - **DKIM:** the unique TXT key Scaleway generates per domain
-   - **DMARC:** start soft — `v=DMARC1; p=none; rua=mailto:dmarc@hargile.be` — tighten to `p=quarantine` after ~1 week of clean reports
-   - **MX:** their verification record
-3. Generate an **IAM API key scoped to TEM only** (not a full-account key).
+The apex `*.hargile.com` wildcard A record (→ KS-5 cluster) does **not** interfere
+— Resend only uses TXT/CNAME/MX on the `send.` subdomain. Propagation: a few hours.
 
-DNS verification can take a few hours to propagate.
-
-## Postgres schema (RGPD-critical)
-
-Provision **Scaleway Managed PostgreSQL** in `fr-par`.
-
-```sql
--- Every address you may NOT email. Checked before every single send.
-CREATE TABLE suppression_list (
-  email        TEXT PRIMARY KEY,
-  reason       TEXT NOT NULL,        -- 'unsubscribe' | 'bounce' | 'complaint' | 'manual'
-  created_at   TIMESTAMPTZ DEFAULT now()
-);
-
--- Lawful-basis record per recipient (RGPD Art. 6).
-CREATE TABLE consent_records (
-  email        TEXT NOT NULL,
-  basis        TEXT NOT NULL,        -- 'consent' | 'legitimate_interest'
-  source       TEXT,                 -- where/how obtained
-  captured_at  TIMESTAMPTZ NOT NULL,
-  PRIMARY KEY (email, captured_at)
-);
-
--- Job queue mirror + audit log. Dedup key makes retries idempotent.
-CREATE TABLE email_jobs (
-  id           UUID PRIMARY KEY,
-  dedup_key    TEXT UNIQUE NOT NULL,
-  to_email     TEXT NOT NULL,
-  status       TEXT NOT NULL DEFAULT 'pending', -- pending|sent|failed|suppressed
-  attempts     INT  DEFAULT 0,
-  tem_msg_id   TEXT,
-  created_at   TIMESTAMPTZ DEFAULT now(),
-  sent_at      TIMESTAMPTZ
-);
-```
-
-## Repo layout
-
-**This repo (`hargile_website`):**
-```
-src/lib/email/
-  client.js         # Scaleway TEM fetch wrapper (shared)
-  transactional.js  # sendTransactional() — used by contact route
-  enqueue.js        # AI agents call this to queue bulk jobs
-src/app/api/contact/route.js   # swap nodemailer → sendTransactional()
-```
-
-**Separate worker (own image/deploy — its own repo or a `/worker` dir):**
-```
-worker/
-  index.js          # queue consumer loop
-  rate-limiter.js   # token bucket, backed by DB/Redis
-  suppression.js    # check + record
-  bounce-webhook.js # Scaleway TEM bounce/complaint callbacks → suppression_list
-```
-
-**Infra/deploy repo:** K8s Secret (sealed), worker Deployment, queue, Postgres connection config.
-
-## Env vars (replaces the current SMTP block)
-
-```
-SCW_TEM_API_KEY=...            # IAM key, TEM-scoped
-SCW_TEM_PROJECT_ID=...
-CONTACT_FORM_FROM_EMAIL=info@hargile.be
-CONTACT_FORM_TO_EMAIL=charles@hargile.be
-BULK_FROM_EMAIL=agent@send.hargile.be
-```
+Then set `RESEND_FROM` (e.g. `charles@send.hargile.com`) and **warm up** ~50/day
+over 2–3 weeks before full volume.
 
 ## RGPD obligations for the bulk stream (non-optional)
 
-- **Lawful basis** per recipient (consent or legitimate interest), documented in `consent_records`.
-- **One-click unsubscribe** header + link on every bulk email.
-- **Suppression list** honored before every send.
-- Keep all data in EU region (`fr-par`).
+- **Lawful basis** per recipient — B2B prospection to professional addresses is
+  opt-out in Belgium (see HARG-73). Documented per lead.
+- **One-click unsubscribe** header + link on every bulk email (HARG-72).
+- **Suppression list** honoured before every send.
+- **Max 2 relances** per lead (HARG-75).
+- Keep prospection data in EU region.
 
-## Rollout order (each step independently shippable)
+## References
 
-1. **Scaleway TEM: verify `hargile.be`** + DNS → **swap contact form to `sendTransactional()`.** Small, low-risk, proves the pipeline. *Only step touching this repo's existing code.*
-   - Keep Gmail SMTP live until TEM domain verification passes, then flip → zero downtime.
-2. **Provision Postgres** (Scaleway Managed, fr-par) + create schema.
-3. **Verify `send.hargile.be`** as a separate TEM domain + DNS.
-4. **Build the worker** + queue, wire `enqueue.js` into agents.
-5. **Warm up** `send.hargile.be`: ~50/day ramping over 2–3 weeks before full volume. Cold-blasting thousands day one gets you blocked.
-
-## Open questions to resolve before coding
-
-- **Sealed Secrets vs. External Secrets Operator** — which is in the cluster already?
-- **Queue tech** — Redis / NATS / Scaleway Messaging (SQS-compatible)?
-- **Who controls DNS for hargile.be** (to apply SPF/DKIM/DMARC)?
-- **Confirm** keeping Gmail live until TEM verification passes (recommended).
-
-## Vendor comparison (for reference)
-
-| | Resend | **Scaleway TEM** (chosen) | Amazon SES |
-|---|---|---|---|
-| DX / setup | Best-in-class | Basic API, functional | Powerful but clunky |
-| Cost | 3k/mo free, then $20/mo/50k | ~€0.25/1k | ~$0.10/1k at scale |
-| EU residency (RGPD) | US co. (EU options) | **French/EU-native** ✅ | AWS EU regions |
-| Best for | Transactional + moderate vol | EU-first bulk | Massive scale, self-tuned |
+- **HARG-8** — Workflow Audit (prospection pipeline)
+- **HARG-71** — Verify `send.hargile.com` in Resend (+ DNS) — *this blocker*
+- **HARG-72** — One-click unsubscribe endpoint (RGPD)
+- **HARG-73** — RGPD framework for prospection
+- **HARG-12** — Resend vs Scaleway decision (→ Resend)
+- Contact-form secret wiring: `hargile-infra` PR #118 (later migrated to Resend keys)
