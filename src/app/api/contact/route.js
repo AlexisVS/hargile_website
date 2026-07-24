@@ -162,11 +162,11 @@ export async function POST(req) {
         description
       )}</p></div></div>
       <div class="footer"><p>Ce mail est envoyé depuis le formulaire de contact sur hargile.com</p>
-      <p>© ${new Date().getFullYear()} Hargile. All rights reserved.</p></div></div></body></html>
+      <p>© ${new Date().getFullYear()} HARGILE. All rights reserved.</p></div></div></body></html>
     `;
 
     const textEmailContent = `
-Nouveau message depuis le formulaire de contact Hargile
+Nouveau message depuis le formulaire de contact HARGILE
 -------------------------------------------------
 FROM: Name: ${name} Email: ${email} ${phone ? `Phone: ${phone}` : ""}
 INQUIRY DETAILS: Subject: ${object || "N/A"}
@@ -179,14 +179,14 @@ ${
 }
 MESSAGE: ${description}
 -------------------------------------------------
-Ce mail est envoyé depuis le formulaire de contact sur hargile.com. © ${new Date().getFullYear()} Hargile.
+Ce mail est envoyé depuis le formulaire de contact sur hargile.com. © ${new Date().getFullYear()} HARGILE.
     `;
 
     const { error } = await resend.emails.send({
-      from: `Hargile Website (${name.replace(/["<>]/g, "")}) <${fromEmail}>`,
+      from: `HARGILE Website (${name.replace(/["<>]/g, "")}) <${fromEmail}>`,
       to: [toEmail],
       replyTo: email,
-      subject: `Hargile Contact: ${
+      subject: `HARGILE Contact: ${
         object ? object.substring(0, 70).replace(/[\r\n]/g, " ") : "New Inquiry"
       } from ${name.substring(0, 50).replace(/[\r\n]/g, " ")}`,
       text: textEmailContent.trim(),

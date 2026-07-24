@@ -97,7 +97,7 @@
         "line2": "1060 Saint-Gilles",
         "line3": "Belgique"
       },
-      "copyright": "© {year} Hargile. Tous droits réservés",
+      "copyright": "© {year} HARGILE. Tous droits réservés",
       "links": {
         "aboutUs": "À propos de nous",
         "contact": "Contact",
@@ -207,7 +207,7 @@
         },
         "our-story": {
           "getInTouch": "Nous contacter",
-          "paragraph1": "Chez Hargile, nous ne construisons pas une entreprise numérique comme les autres. Nous cultivons une équipe aux talents complémentaires, où l’exigence technologique rencontre une vraie intelligence business.\n\nIci, l’innovation ne se fait pas pour briller, mais pour servir concrètement la croissance de nos partenaires.",
+          "paragraph1": "Chez HARGILE, nous ne construisons pas une entreprise numérique comme les autres. Nous cultivons une équipe aux talents complémentaires, où l’exigence technologique rencontre une vraie intelligence business.\n\nIci, l’innovation ne se fait pas pour briller, mais pour servir concrètement la croissance de nos partenaires.",
           "paragraph2": "Notre ambition va au-delà des produits : \n\n Nous créons des alliances durables, ancrées dans la confiance, la co-construction, et le succès partagé.\n\n Chaque solution que nous développons est pensée pour évoluer avec votre entreprise, répondre à vos enjeux réels, et anticiper les défis de demain.",
           "paragraph3": "Pour nous, accompagner votre croissance, c’est bien plus qu’un service, c’est une responsabilité, et une fierté.",
           "subtitle": "Une vision pour demain",
@@ -674,15 +674,15 @@
       "downloadPDF": "Télécharger en PDF",
       "inThisPage": "Dans cette page",
       "lastUpdate": "Dernière mise à jour",
-      "lastUpdateDate": "18 mars 2025",
+      "lastUpdateDate": "24 juillet 2026",
       "print": "Imprimer",
       "sections": {
         "contactSupport": {
-          "content": "Pour toute question ou préoccupation concernant cette politique de confidentialité, veuillez contacter notre délégué à la protection des données à dpo@hargile.com.",
+          "content": "Délégué à la protection des données : HARGILE exerçant son activité via SMART (Productions Associées ASBL), le traitement de vos données relève du DPO de SMART, joignable à dpo@smart.coop — Smart, Délégué à la protection des données, Rue Coenraets 72, 1060 Bruxelles.",
           "title": "Contactez-nous"
         },
         "contactUs": {
-          "content": "Si vous avez des questions sur notre politique de confidentialité ou nos pratiques, veuillez nous contacter via notre site web ou par email à privacy@hargile.com.",
+          "content": "Responsable du traitement : HARGILE (activité menée via SMART) — Productions Associées ASBL, Rue Coenraets 72, 1060 Bruxelles · BCE 0896.755.397. Pour toute question sur cette politique ou l'exercice de vos droits : charles@hargile.com.",
           "title": "Nous contacter"
         },
         "cookies": {
@@ -701,12 +701,28 @@
           }
         },
         "international": {
-          "content": "Vos informations peuvent être transférées et maintenues sur des ordinateurs situés en dehors de votre état, province, pays ou autre juridiction gouvernementale où les lois sur la protection des données peuvent différer de celles de votre juridiction.",
+          "content": "Pour l'envoi de nos emails, nous faisons appel à Resend (Resend, Inc., États-Unis) en tant que sous-traitant. Ce transfert de données hors de l'Espace économique européen est encadré par les Clauses Contractuelles Types de la Commission européenne et l'adhésion du prestataire au EU-U.S. Data Privacy Framework.",
           "title": "Transferts Internationaux de données"
         },
-        "other": {
-          "content": "Cette section contient des informations supplémentaires sur nos pratiques et politiques de confidentialité.",
-          "title": "Etc."
+        "prospection": {
+          "title": "Prospection commerciale (B2B)",
+          "introduction": "Lorsque nous vous contactons dans le cadre de notre prospection commerciale, nous traitons certaines de vos données professionnelles que nous n'avons pas collectées directement auprès de vous.",
+          "source": {
+            "title": "Source des données",
+            "content": "Nous collectons ces données à partir de sites web professionnels accessibles publiquement (votre site et les informations de contact qui y figurent). Les données concernées sont : l'adresse email professionnelle, l'URL / le nom de domaine de l'entreprise, le nom de contact publiquement affiché et les indicateurs SEO publics de votre site."
+          },
+          "legalBasis": {
+            "title": "Base légale",
+            "content": "Ce traitement repose sur notre intérêt légitime (art. 6.1.f RGPD) à proposer nos services de référencement à des professionnels dont le site présente un potentiel d'amélioration. Un test de mise en balance (LIA) documente cet intérêt légitime et est revu annuellement."
+          },
+          "optOut": {
+            "title": "Droit d'opposition",
+            "content": "Vous pouvez vous opposer à tout moment à ce traitement : chaque email contient un lien de désinscription en un clic, à effet immédiat. Une fois désinscrit, votre adresse ne sera plus jamais contactée."
+          },
+          "retention": {
+            "title": "Durée de conservation",
+            "content": "Vos données de prospection sont conservées jusqu'à votre opposition, et au maximum un an après notre dernier contact. Si vous vous désinscrivez, votre adresse est conservée de manière durable dans notre liste d'opposition, à seule fin de ne plus jamais vous contacter."
+          }
         },
         "privacyPolicy": {
           "dataCollection": {
@@ -727,15 +743,15 @@
         },
         "termsConditions": {
           "intellectualProperty": {
-            "content": "Tous les contenus présents sur ce site, y compris, mais sans s'y limiter, les textes, graphiques, logos, icônes, images, clips audio, téléchargements numériques et compilations de logiciels sont la propriété d'Hargile ou de ses fournisseurs de contenu et sont protégés par les lois françaises et internationales sur le droit d'auteur.",
+            "content": "Tous les contenus présents sur ce site, y compris, mais sans s'y limiter, les textes, graphiques, logos, icônes, images, clips audio, téléchargements numériques et compilations de logiciels sont la propriété de HARGILE ou de ses fournisseurs de contenu et sont protégés par les lois belges et internationales sur le droit d'auteur.",
             "title": "Propriété intellectuelle"
           },
           "liability": {
-            "content": "Les informations sur ce site sont fournies \"telles quelles\", sans garantie d'aucune sorte, expresse ou implicite. Hargile n'assume aucune responsabilité quant à l'utilisation de ce site ou de son contenu. En aucun cas, Hargile ne sera responsable des dommages directs, indirects, accessoires, spéciaux ou consécutifs.",
+            "content": "Les informations sur ce site sont fournies \"telles quelles\", sans garantie d'aucune sorte, expresse ou implicite. HARGILE n'assume aucune responsabilité quant à l'utilisation de ce site ou de son contenu. En aucun cas, HARGILE ne sera responsable des dommages directs, indirects, accessoires, spéciaux ou consécutifs.",
             "title": "Limitation de responsabilité"
           },
           "title": "Termes et Conditions",
-          "welcome": "Bienvenue sur le site web d'Hargile. En accédant à ce site, vous acceptez d'être lié par ces conditions d'utilisation, toutes les lois et réglementations applicables. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser ce site."
+          "welcome": "Bienvenue sur le site web de HARGILE. En accédant à ce site, vous acceptez d'être lié par ces conditions d'utilisation, toutes les lois et réglementations applicables. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser ce site."
         },
         "userRights": {
           "introduction": "Conformément au RGPD, vous disposez des droits suivants concernant vos données :",
@@ -745,7 +761,8 @@
             "objection": "Droit d'opposition : Vous pouvez vous opposer au traitement de vos données",
             "portability": "Droit à la portabilité : Vous pouvez demander le transfert de vos données",
             "rectification": "Droit de rectification : Vous pouvez demander la correction de vos données inexactes",
-            "restriction": "Droit à la limitation du traitement : Vous pouvez demander de limiter le traitement"
+            "restriction": "Droit à la limitation du traitement : Vous pouvez demander de limiter le traitement",
+            "complaint": "Droit de réclamation : Vous pouvez introduire une réclamation auprès de l'Autorité de protection des données (APD/GBA, Belgique)"
           },
           "title": "Droits des Utilisateurs"
         }

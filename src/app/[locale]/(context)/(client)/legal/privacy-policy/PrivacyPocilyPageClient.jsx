@@ -103,14 +103,14 @@ export default function PrivacyPolicyPageClient() {
                     </NavItem>
 
                     <NavItem
-                        href="#other"
-                        data-active={(activeSection === "other").toString()}
+                        href="#prospection"
+                        data-active={(activeSection === "prospection").toString()}
                         onClick={(e) => {
                             e.preventDefault();
-                            handleNavClick("other");
+                            handleNavClick("prospection");
                         }}
                     >
-                        5. {t("sections.other.title")}
+                        5. {t("sections.prospection.title")}
                     </NavItem>
 
                     <NavItem
@@ -254,14 +254,37 @@ export default function PrivacyPolicyPageClient() {
                                 <BulletItem>
                                     {t("sections.userRights.rights.objection")}
                                 </BulletItem>
+                                <BulletItem>
+                                    {t("sections.userRights.rights.complaint")}
+                                </BulletItem>
                             </BulletList>
                         </Section>
                     )}
 
-                    {activeSection === "other" && (
-                        <Section id="other">
-                            <SectionTitle>5. {t("sections.other.title")}</SectionTitle>
-                            <Paragraph>{t("sections.other.content")}</Paragraph>
+                    {activeSection === "prospection" && (
+                        <Section id="prospection">
+                            <SectionTitle>5. {t("sections.prospection.title")}</SectionTitle>
+                            <Paragraph>{t("sections.prospection.introduction")}</Paragraph>
+
+                            <SubSectionTitle>
+                                5.1 {t("sections.prospection.source.title")}
+                            </SubSectionTitle>
+                            <Paragraph>{t("sections.prospection.source.content")}</Paragraph>
+
+                            <SubSectionTitle>
+                                5.2 {t("sections.prospection.legalBasis.title")}
+                            </SubSectionTitle>
+                            <Paragraph>{t("sections.prospection.legalBasis.content")}</Paragraph>
+
+                            <SubSectionTitle>
+                                5.3 {t("sections.prospection.optOut.title")}
+                            </SubSectionTitle>
+                            <Paragraph>{t("sections.prospection.optOut.content")}</Paragraph>
+
+                            <SubSectionTitle>
+                                5.4 {t("sections.prospection.retention.title")}
+                            </SubSectionTitle>
+                            <Paragraph>{t("sections.prospection.retention.content")}</Paragraph>
                         </Section>
                     )}
 

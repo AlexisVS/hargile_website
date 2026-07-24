@@ -97,7 +97,7 @@
         "line2": "1060 Saint-Gilles",
         "line3": "Belgium"
       },
-      "copyright": "© {year} Hargile. All Rights Reserved",
+      "copyright": "© {year} HARGILE. All Rights Reserved",
       "links": {
         "aboutUs": "About Us",
         "contact": "Contact",
@@ -207,7 +207,7 @@
         },
         "our-story": {
           "getInTouch": "Get in Touch",
-          "paragraph1": "At Hargile, we're not building a digital company like others. We cultivate a team with complementary talents, where technological excellence meets real business intelligence.\n\nHere, innovation is not done to shine, but to concretely serve the growth of our partners.",
+          "paragraph1": "At HARGILE, we're not building a digital company like others. We cultivate a team with complementary talents, where technological excellence meets real business intelligence.\n\nHere, innovation is not done to shine, but to concretely serve the growth of our partners.",
           "paragraph2": "Our ambition goes beyond products: \n\nWe create lasting alliances, based on trust, co-construction, and shared success.\n\n Each solution we develop is designed to evolve with your company, address your real challenges, and anticipate tomorrow's challenges.",
           "paragraph3": "For us, supporting your growth is much more than a service, it's a responsibility, and a source of pride.",
           "subtitle": "A vision for tomorrow",
@@ -674,15 +674,15 @@
       "downloadPDF": "Download as PDF",
       "inThisPage": "In this page",
       "lastUpdate": "Last updated",
-      "lastUpdateDate": "March 18, 2025",
+      "lastUpdateDate": "July 24, 2026",
       "print": "Print",
       "sections": {
         "contactSupport": {
-          "content": "For any questions or concerns regarding this privacy policy, please contact our data protection officer at dpo@hargile.com.",
+          "content": "Data protection officer: as HARGILE operates through SMART (Productions Associées ASBL), the processing of your data falls under SMART's DPO, reachable at dpo@smart.coop — Smart, Data Protection Officer, Rue Coenraets 72, 1060 Brussels.",
           "title": "Contact Support"
         },
         "contactUs": {
-          "content": "If you have any questions about our privacy policy or practices, please contact us through our website or by email at privacy@hargile.com.",
+          "content": "Data controller: HARGILE (operating through SMART) — Productions Associées ASBL, Rue Coenraets 72, 1060 Brussels · BCE 0896.755.397. For any question about this policy or to exercise your rights: charles@hargile.com.",
           "title": "Contact Us"
         },
         "cookies": {
@@ -701,12 +701,28 @@
           }
         },
         "international": {
-          "content": "Your information may be transferred to — and maintained on — computers located outside of your state, province, country or other governmental jurisdiction where the data protection laws may differ from those in your jurisdiction.",
+          "content": "To send our emails we use Resend (Resend, Inc., United States) as a processor. This transfer of data outside the European Economic Area is governed by the European Commission's Standard Contractual Clauses and the provider's certification under the EU-U.S. Data Privacy Framework.",
           "title": "International Transfers"
         },
-        "other": {
-          "content": "This section contains additional information about our privacy practices and policies.",
-          "title": "Other"
+        "prospection": {
+          "title": "Commercial prospecting (B2B)",
+          "introduction": "When we contact you as part of our commercial prospecting, we process certain professional data that we did not collect directly from you.",
+          "source": {
+            "title": "Source of the data",
+            "content": "We collect this data from publicly accessible professional websites (your site and the contact information published on it). The data concerned is: the professional email address, the company URL / domain name, the publicly displayed contact name and your site's public SEO metrics."
+          },
+          "legalBasis": {
+            "title": "Legal basis",
+            "content": "This processing relies on our legitimate interest (art. 6.1.f GDPR) in offering our SEO services to professionals whose website shows room for improvement. A legitimate interest assessment (LIA) documents this legitimate interest and is reviewed annually."
+          },
+          "optOut": {
+            "title": "Right to object",
+            "content": "You can object to this processing at any time: every email contains a one-click unsubscribe link with immediate effect. Once unsubscribed, your address will never be contacted again."
+          },
+          "retention": {
+            "title": "Retention period",
+            "content": "Your prospecting data is kept until you object, and for no longer than one year after our last contact. If you unsubscribe, your address is kept durably in our suppression list for the sole purpose of never contacting you again."
+          }
         },
         "privacyPolicy": {
           "dataCollection": {
@@ -727,15 +743,15 @@
         },
         "termsConditions": {
           "intellectualProperty": {
-            "content": "All content present on this site, including but not limited to texts, graphics, logos, icons, images, audio clips, digital downloads and software compilations are the property of Hargile or its content suppliers and are protected by French and international copyright laws.",
+            "content": "All content present on this site, including but not limited to texts, graphics, logos, icons, images, audio clips, digital downloads and software compilations are the property of HARGILE or its content suppliers and are protected by Belgian and international copyright laws.",
             "title": "Intellectual Property"
           },
           "liability": {
-            "content": "The information on this site is provided 'as is', without warranty of any kind, express or implied. Hargile assumes no responsibility for the use of this site or its content. Under no circumstances shall Hargile be liable for any direct, indirect, incidental, special or consequential damages.",
+            "content": "The information on this site is provided 'as is', without warranty of any kind, express or implied. HARGILE assumes no responsibility for the use of this site or its content. Under no circumstances shall HARGILE be liable for any direct, indirect, incidental, special or consequential damages.",
             "title": "Limitation of Liability"
           },
           "title": "Terms and Conditions",
-          "welcome": "Welcome to Hargile's website. By accessing this site, you agree to be bound by these terms of use, all applicable laws and regulations. If you do not accept these conditions, please do not use this site."
+          "welcome": "Welcome to HARGILE's website. By accessing this site, you agree to be bound by these terms of use, all applicable laws and regulations. If you do not accept these conditions, please do not use this site."
         },
         "userRights": {
           "introduction": "In accordance with the GDPR, you have the following rights regarding your data:",
@@ -745,7 +761,8 @@
             "objection": "Right to object: You can object to the processing of your data",
             "portability": "Right to data portability: You can request the transfer of your data",
             "rectification": "Right to rectification: You can request correction of your inaccurate data",
-            "restriction": "Right to restriction of processing: You can request to limit the processing"
+            "restriction": "Right to restriction of processing: You can request to limit the processing",
+            "complaint": "Right to lodge a complaint: You can lodge a complaint with the Data Protection Authority (APD/GBA, Belgium)"
           },
           "title": "User Rights"
         }

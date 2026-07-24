@@ -1,8 +1,8 @@
 export default function manifest() {
     return {
-        name: 'Hargile presentation site',
-        short_name: 'Hargile presentation site',
-        description: 'Hargile presentation site',
+        name: 'HARGILE presentation site',
+        short_name: 'HARGILE presentation site',
+        description: 'HARGILE presentation site',
         start_url: '/',
         display: 'standalone',
         background_color: '#fff',
