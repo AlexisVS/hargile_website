@@ -1008,7 +1008,7 @@
         }
       },
       "contact": {
-        "description": "Ready to elevate your digital presence? Connect with HARGILE's team of experts today. Get a personalized consultation and discover how our solutions can transform your business.",
+        "description": "Get in touch with HARGILE for a free consultation. Custom web development, AI integration and digital marketing – let's talk.",
         "og": {
           "description": "Start your digital transformation journey with HARGILE. Reach out to our team for a personalized consultation and discover tailored solutions for your unique business needs.",
           "imageAlt": "HARGILE Contact",
@@ -1018,18 +1018,18 @@
         "title": "Contact HARGILE | Expert Digital Solutions Team"
       },
       "home": {
-        "description": "Partner with HARGILE for transformative digital solutions. We deliver custom web development, AI integration, and strategic marketing that drives growth and maximizes your online potential.",
+        "description": "Custom web development, AI integration & digital marketing for SMEs. Grow your business online with HARGILE.",
         "og": {
           "description": "Unlock your business potential with HARGILE's custom digital solutions. From web development to AI integration, we deliver results-driven strategies for today's digital marketplace.",
           "imageAlt": "HARGILE - Digital Agency",
-          "title": "HARGILE - Digital Innovation for Your Business Success"
+          "title": "HARGILE – Tech studio: custom web development & AI"
         },
         "schemaType": "WebSite",
-        "title": "HARGILE - Digital Innovation for Your Business Success"
+        "title": "HARGILE – Tech studio: custom web development & AI"
       },
       "legal": {
         "privacy": {
-          "description": "Review HARGILE's privacy policy and legal information. Learn how we protect your data, our terms of service, and our commitment to maintaining your privacy and security.",
+          "description": "HARGILE's privacy policy: how we collect, use and protect your personal data in compliance with applicable regulations.",
           "og": {
             "description": "Understand how HARGILE handles your information with our comprehensive privacy policy. Learn about our data protection measures and your rights as a user.",
             "imageAlt": "HARGILE Legal Notices",
