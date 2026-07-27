@@ -23,6 +23,16 @@
 # raw screenshot drops for scripts/optimize-portfolio-images.mjs
 /raw-screenshots/
 
+# reference screenshots for the banner studios (src/app/[locale]/banner*)
+/banner/
+
+# Banner studios — local-only tooling for generating marketing/MVP banner art.
+# They are real App Router segments, so committing them would publish
+# /banner and /banner-mvp on the production site. Keep them untracked.
+# (brackets escaped: an unescaped [locale] is a gitignore character class)
+src/app/\[locale\]/banner/
+src/app/\[locale\]/banner-mvp/
+
 # misc
 .DS_Store
 *.pem
