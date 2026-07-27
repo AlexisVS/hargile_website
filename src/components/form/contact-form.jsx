@@ -212,9 +212,12 @@ export default function ContactForm() {
         />
       </BendsBackdrop>
       <FormContainer>
-        <Header // Assuming Header component exists
+        {/* titleAs is h1, not h2: this is the page's main heading and /contact
+            had no h1 at all. Styling comes from PageTitle's `as` prop, so the
+            tag change is invisible. */}
+        <Header
           title={t("title")}
-          titleAs={motion.h2} // Assuming motion h2
+          titleAs={motion.h1}
           description={t("description")}
           showUnderline={false}
           showBackgroundBlur={false}

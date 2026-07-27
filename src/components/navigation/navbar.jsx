@@ -162,7 +162,7 @@ const Navbar = () => {
                         <SocialIcon href="https://www.youtube.com/@HARGILEinnovativesolutions" target="_blank" aria-label="YouTube">
                             <SiYoutube size="22px" />
                         </SocialIcon>
-                        <SocialIcon href="https://github.com/HARGILE-innovative-solutions" target="_blank" aria-label="GitHub">
+                        <SocialIcon href="https://github.com/HARGILE-tech-studio" target="_blank" aria-label="GitHub">
                             <SiGithub size="22px" />
                         </SocialIcon>
                     </SocialIcons>

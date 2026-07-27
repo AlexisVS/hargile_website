@@ -56,7 +56,7 @@ const Footer = () => {
             id: "github",
             title: "HARGILE GitHub",
             icon: <SiGithub title={"hargile"} size={iconSize}/>,
-            href: "https://github.com/HARGILE-innovative-solutions"
+            href: "https://github.com/HARGILE-tech-studio"
         }
     ]
 

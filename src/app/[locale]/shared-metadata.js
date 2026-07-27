@@ -13,10 +13,12 @@ export function generateSharedMetadata(params, translations) {
 
     return {
         metadataBase: new URL(SITE_URL),
+        /* No `template` here. It appended ' | HARGILE - Innovation digitale' (+32
+           chars) to page titles that already contain HARGILE, pushing every page
+           past the ~60 chars Google displays — /fr/contact rendered at 91 chars.
+           Page titles in seo.pages.* are self-sufficient; `default` still covers
+           any page that ships without one. */
         title: {
-            template: isDefault
-                ? '%s | HARGILE - Innovation digitale'
-                : '%s | HARGILE - Digital Innovation',
             default: isDefault
                 ? 'HARGILE - Innovation digitale au service de votre entreprise'
                 : 'HARGILE - Digital Innovation for Your Business',

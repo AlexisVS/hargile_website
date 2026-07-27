@@ -1,5 +1,6 @@
 import {getTranslations} from 'next-intl/server';
 import {SITE_URL} from '@/lib/site-url';
+import {NOINDEX_PAGES, ROUTES} from '@/seo/routes';
 
 /**
  * Generate metadata for specific page with optimized SEO descriptions
@@ -27,9 +28,10 @@ export async function generatePageMetadata({params, pagePath}) {
         });
 
         // Base URL configuration (unified on SITE_URL — hargile.com)
-        const pathSuffix = pagePath === 'home' ? '' : `/${pagePath.replace('.', '/')}`;
+        const pathSuffix = ROUTES[pagePath] ?? `/${pagePath.replaceAll('.', '/')}`;
         const baseUrl = `${SITE_URL}/${locale}${pathSuffix}`;
         const imageUrl = `${SITE_URL}/images/brand/brand_large.png`;
+        const indexable = !NOINDEX_PAGES.has(pagePath);
 
         return {
             metadataBase: new URL(SITE_URL),
@@ -42,6 +44,8 @@ export async function generatePageMetadata({params, pagePath}) {
                 languages: {
                     'fr': `${SITE_URL}/fr${pathSuffix}`,
                     'en': `${SITE_URL}/en${pathSuffix}`,
+                    // French is the default locale, so it doubles as x-default.
+                    'x-default': `${SITE_URL}/fr${pathSuffix}`,
                 },
             },
 
@@ -72,11 +76,11 @@ export async function generatePageMetadata({params, pagePath}) {
             },
 
             robots: {
-                index: true,
+                index: indexable,
                 follow: true,
                 nocache: false,
                 googleBot: {
-                    index: true,
+                    index: indexable,
                     follow: true,
                     'max-image-preview': 'large',
                     'max-snippet': -1,

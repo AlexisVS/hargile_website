@@ -4,7 +4,6 @@ import {notFound} from 'next/navigation';
 import {routing} from '@/i18n/routing';
 import {getMessages, setRequestLocale} from 'next-intl/server';
 import {generateSharedMetadata} from './shared-metadata';
-import {SITE_URL} from '@/lib/site-url';
 import StyledComponentsRegistry from "@/components/StyledComponentsRegistry";
 import ClientGDPRWrapper from "@/components/GDPR/ClientGDPRWrapper";
 
@@ -35,15 +34,13 @@ export default async function LocaleLayout({children, params}) {
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <meta name="theme-color" content="#000000"/>
             <link rel="icon" href="/favicon.ico" sizes="any"/>
-            <link rel="apple-touch-icon" href="/logo192.png"/>
-            <meta name="robots" content="index, follow"/>
-            <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}/fr`}/>
-            <link rel="alternate" hrefLang="fr" href={`${SITE_URL}/fr`}/>
-            <link rel="alternate" hrefLang="en" href={`${SITE_URL}/en`}/>
-            <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
             <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
             <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
-            <link rel="manifest" href="/site.webmanifest"/>
+            {/* No hreflang, robots or manifest tags here. They were page-agnostic:
+                every page advertised the homepage as its fr/en/x-default alternate,
+                contradicting the correct per-page ones from generate-page-metadata.
+                robots + manifest are emitted by Next's metadata system instead
+                (shared-metadata.js / app/manifest.js). */}
         </head>
         <body style={{minHeight: '100vh'}} suppressHydrationWarning={true}>
         <StyledComponentsRegistry>
