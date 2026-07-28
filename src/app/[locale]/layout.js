@@ -1,4 +1,5 @@
 import "@/app/styles/global.scss";
+import pick from 'lodash/pick';
 import {hasLocale, NextIntlClientProvider} from 'next-intl';
 import {notFound} from 'next/navigation';
 import {routing} from '@/i18n/routing';
@@ -6,6 +7,24 @@ import {getMessages, setRequestLocale} from 'next-intl/server';
 import {generateSharedMetadata} from './shared-metadata';
 import StyledComponentsRegistry from "@/components/StyledComponentsRegistry";
 import ClientGDPRWrapper from "@/components/GDPR/ClientGDPRWrapper";
+
+/* Namespaces réellement consommés par des composants client (useTranslations) —
+   le fichier de locale complet (58-65 KB) partait sinon en entier dans le HTML
+   de chaque page via NextIntlClientProvider. Les getTranslations serveur ne
+   passent pas par le provider et ne sont pas concernés. Attention : une string
+   absente est SILENCIEUSE en prod (MISSING_MESSAGE seulement en dev) — après
+   tout ajout de namespace client, re-vérifier cette liste par grep de
+   useTranslations( et cliquer toutes les routes en dev. Les namespaces
+   pages.services / pages.about-us sont volontairement absents : leurs
+   composants ne sont routés nulle part (301 vers /). */
+const CLIENT_NAMESPACES = [
+    'components',
+    'pages.homepage',
+    'pages.portfolio',
+    'pages.contact',
+    'pages.audit-results',
+    'pages.privacy-policy',
+];
 
 export function generateStaticParams() {
     return routing.locales.map((locale) => ({locale}));
@@ -28,8 +47,14 @@ export default async function LocaleLayout({children, params}) {
 
     return (
 
-        <html lang={locale}>
+        <html lang={locale} suppressHydrationWarning={true}>
         <head>
+            {/* Pré-paint : masque le bandeau GDPR SSR (via global.scss) quand un
+                consentement est déjà stocké, pour éviter son flash avant que
+                l'hydration ne le retire. Synchrone et minuscule à dessein. */}
+            <script dangerouslySetInnerHTML={{
+                __html: "try{localStorage.getItem('rgpd_consents')&&document.documentElement.setAttribute('data-gdpr-stored','')}catch(e){}"
+            }}/>
             <meta charSet="utf-8"/>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <meta name="theme-color" content="#000000"/>
@@ -53,7 +78,7 @@ export default async function LocaleLayout({children, params}) {
         </head>
         <body style={{minHeight: '100vh'}} suppressHydrationWarning={true}>
         <StyledComponentsRegistry>
-            <NextIntlClientProvider locale={locale} messages={messages}>
+            <NextIntlClientProvider locale={locale} messages={pick(messages, CLIENT_NAMESPACES)}>
                 {children}
                 <ClientGDPRWrapper/>
             </NextIntlClientProvider>

@@ -34,26 +34,31 @@ const RecentWorksShowcaseV2 = () => {
             setActive(Math.min(total - 1, Math.max(0, Math.round(p * (total - 1)))));
         };
 
+        // Géométrie cachée par layout() : lire offsetHeight/getBoundingClientRect
+        // dans onScroll forçait deux reflows par frame de scroll.
+        let pinDist = 0;
+        let outerTop = 0;
+
         // Hauteur de la section = 100vh + distance horizontale à parcourir.
         const layout = () => {
             pinnedRef.current = window.innerWidth >= PIN_BREAKPOINT;
             if (pinnedRef.current) {
-                const dist = Math.max(0, track.scrollWidth - window.innerWidth);
-                outer.style.height = `${window.innerHeight + dist}px`;
+                pinDist = Math.max(0, track.scrollWidth - window.innerWidth);
+                outer.style.height = `${window.innerHeight + pinDist}px`;
             } else {
+                pinDist = 0;
                 outer.style.height = "auto";
                 track.style.transform = "none";
             }
+            outerTop = outer.getBoundingClientRect().top + window.scrollY;
         };
 
         // Le scroll vertical "consommé" par la section devient une translation X.
         const onScroll = () => {
-            if (!pinnedRef.current) return;
-            const dist = outer.offsetHeight - window.innerHeight;
-            if (dist <= 0) return;
-            const y = Math.min(Math.max(-outer.getBoundingClientRect().top, 0), dist);
+            if (!pinnedRef.current || pinDist <= 0) return;
+            const y = Math.min(Math.max(window.scrollY - outerTop, 0), pinDist);
             track.style.transform = `translateX(${-y}px)`;
-            setProgress(y / dist);
+            setProgress(y / pinDist);
         };
 
         // Mobile : progression basée sur le balayage natif.
@@ -74,8 +79,11 @@ const RecentWorksShowcaseV2 = () => {
 
         // Le rail change de largeur sans resize fenêtre (hot reload CSS,
         // chargement de police/images) : on recale la distance d'épinglage.
+        // body aussi : outerTop est caché, donc tout changement de hauteur du
+        // contenu au-dessus de la section doit déclencher un re-layout.
         const ro = new ResizeObserver(onResize);
         ro.observe(track);
+        ro.observe(document.body);
 
         layout();
         onScroll();
@@ -127,6 +135,7 @@ const RecentWorksShowcaseV2 = () => {
                                         variant="ghost"
                                         size="sm"
                                         className={styles.more}
+                                        aria-label={project.title}
                                     >
                                         {project.actionText}
                                     </CtaLink>

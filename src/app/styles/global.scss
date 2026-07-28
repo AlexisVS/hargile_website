@@ -130,7 +130,11 @@ body {
     border-radius: 50%;
     z-index: 10000;
     opacity: 0;
+    /* paused par défaut : sinon le spinner anime en continu à opacity:0
+       pendant toute la session (style/paint recalculés pour rien). Les états
+       .exiting/.entering le relancent quand il devient visible. */
     animation: spin 1s linear infinite;
+    animation-play-state: paused;
     transition: opacity var(--transition-duration) ease;
     pointer-events: none;
   }
@@ -146,6 +150,7 @@ body {
 
   &.exiting::before {
     opacity: 1;
+    animation-play-state: running;
   }
 
   &.entering::after {
@@ -155,6 +160,7 @@ body {
 
   &.entering::before {
     opacity: 1;
+    animation-play-state: running;
   }
 }
 
@@ -172,6 +178,14 @@ img {
 html, body {
   overflow-x: hidden;
   overflow-x: clip;
+}
+
+/* Bandeau GDPR rendu en SSR (voir GDPRManager.jsx) : quand un consentement est
+   déjà en localStorage, le script inline du layout pose cet attribut avant le
+   premier paint pour éviter le flash du bandeau chez les visiteurs de retour.
+   L'hydration le démonte ensuite pour de bon. */
+html[data-gdpr-stored] .gdpr-banner {
+  display: none;
 }
 
 .hero-section,
