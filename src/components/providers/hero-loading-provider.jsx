@@ -1,6 +1,6 @@
 "use client";
 
-import {createContext, useCallback, useContext, useEffect, useMemo, useState} from "react";
+import {createContext, useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
 import {OptimizedImage} from "@/components/optimizedImage";
 import {usePathname} from "@/i18n/navigation";
 
@@ -20,13 +20,15 @@ const HeroLoadingContext = createContext({markHeroReady: () => {}});
 
 export const useHeroLoading = () => useContext(HeroLoadingContext);
 
-// Homepage backstop: dismiss even if no canvas ever reports in. Generous, since
-// the hero on a cold load can legitimately take a moment.
-const SAFETY_MS = 4000;
+// Homepage backstop: dismiss even if no canvas ever reports in. Long enough
+// for a legitimate cold load now that the backdrop chunk is warmed at module
+// evaluation (hero-backdrop.jsx) — past that, the overlay is just in the way.
+const SAFETY_MS = 2500;
 // Let the draw-on ring complete before the overlay fades, so it never cuts off
 // mid-draw on a fast load. Matches the ring animation duration in loading.scss.
 const RING_MS = 900;
-const FADE_MS = 500;
+// Matches the .loading-container transition in loading.scss.
+const FADE_MS = 300;
 
 export default function HeroLoadingProvider({children}) {
     const pathname = usePathname();
@@ -38,6 +40,16 @@ export default function HeroLoadingProvider({children}) {
 
     const markHeroReady = useCallback(() => setHeroReady(true), []);
 
+    // When the ring started drawing — the CSS animation runs from the overlay's
+    // first paint, so the moment heroReady fires most (or all) of RING_MS has
+    // usually already elapsed. Recorded on mount to credit that time below.
+    const ringStartRef = useRef(null);
+    useEffect(() => {
+        if (isCovered && ringStartRef.current === null) {
+            ringStartRef.current = performance.now();
+        }
+    }, [isCovered]);
+
     // Backstop so the loader always dismisses on covered routes.
     useEffect(() => {
         if (!isCovered) return;
@@ -45,11 +57,16 @@ export default function HeroLoadingProvider({children}) {
         return () => clearTimeout(t);
     }, [isCovered]);
 
-    // Once ready, let the ring finish, then fade, then unmount.
+    // Once ready, let the ring finish — only the part it hasn't drawn yet —
+    // then fade, then unmount. On any load slower than RING_MS the ring is
+    // already complete and the overlay goes straight to its fade.
     const dismissing = heroReady;
     useEffect(() => {
         if (!dismissing) return;
-        const t = setTimeout(() => setGone(true), RING_MS + FADE_MS);
+        const elapsed = ringStartRef.current === null
+            ? 0
+            : performance.now() - ringStartRef.current;
+        const t = setTimeout(() => setGone(true), Math.max(0, RING_MS - elapsed) + FADE_MS);
         return () => clearTimeout(t);
     }, [dismissing]);
 

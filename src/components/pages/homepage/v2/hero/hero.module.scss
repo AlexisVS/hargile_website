@@ -187,6 +187,64 @@
   min-width: min(600px, 100%);
 }
 
+/* One-shot copy reveals — CSS, not Framer Motion, so they start at first style
+   resolution instead of after hydration, and the SSR HTML never carries an
+   inline `opacity: 0` (which blocked the h1 from ever being an LCP candidate
+   and hid the headline from non-JS crawlers). All four elements share the
+   keyframe with a 0.09 s stagger; converting only the h1 would have let it
+   animate at t≈0 while its siblings waited for nothing — same rhythm as the
+   old reveal() helper in hero.jsx.
+
+   The 0.01 floor is load-bearing: Chrome never records an LCP candidate for
+   an element painted at opacity 0, and the fade-in itself runs on the
+   compositor so it produces no later paint record either — from 0 the h1
+   simply vanishes from LCP and the metric falls to whatever hydration paints
+   last (measured: the GDPR banner at ~6.5 s). At 0.01 the first paint counts,
+   and LCP lands one frame after FCP. Visually indistinguishable from 0. */
+@keyframes heroReveal {
+  from {
+    opacity: 0.01;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Reduced motion: opacity only — replicates the old reducedMotion branch. */
+@keyframes heroRevealFade {
+  from {
+    opacity: 0.01;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.eyebrow,
+.headline,
+.paragraph,
+.ctaRow {
+  animation: heroReveal 0.5s ease-out both;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation-name: heroRevealFade;
+  }
+}
+
+.headline {
+  animation-delay: 0.09s;
+}
+
+.paragraph {
+  animation-delay: 0.18s;
+}
+
+.ctaRow {
+  animation-delay: 0.27s;
+}
+
 .eyebrow {
   font-size: 16px;
   font-weight: 500;

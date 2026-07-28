@@ -16,6 +16,19 @@ const DEFAULT_VARIANT = "bends";
 const ColorBends = dynamic(() => import("@/components/vendor/color-bends/ColorBends"), {ssr: false});
 const CubeGrid = dynamic(() => import("./cube-grid"), {ssr: false});
 
+/* Desktop only: warm the cube-grid chunk at module evaluation rather than
+   after mount + the useHeroVariant effect — the three.js download is what the
+   branded loader spends most of its life waiting on, and Turbopack dedupes
+   this against the dynamic() load above. Deliberately NOT done for the mobile
+   ColorBends variant: under a throttled CPU the earlier fetch pulls the
+   three.js parse/execute forward into the hydration window, which measured as
+   +1.7 s of mobile TBT — the lazy mount path keeps that work after TTI.
+   (A ?backdrop= override can still load the other variant later; that's the
+   debug path, not the cold-load path.) */
+if (typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches) {
+    import("./cube-grid");
+}
+
 // The shader SUMS the stops (sumCol += uColors[i] * w) rather than interpolating
 // between them, so every stop adds light on every band. A near-black stop just
 // burns a slot; two brand blues is what reads as blue instead of washing toward

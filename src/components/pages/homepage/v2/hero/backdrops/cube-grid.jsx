@@ -2,6 +2,7 @@
 
 import {useEffect, useRef} from "react";
 import * as THREE from "three";
+import {isSoftwareRenderer} from "@/lib/webgl";
 
 /* Cube grid with wave propagation on pointer move.
    After the Codrops article "Building an Interactive Wave Propagation Cube Grid
@@ -93,7 +94,14 @@ const CubeGrid = () => {
             return; // No WebGL — the CSS orb/dot-grid backdrop still stands on its own.
         }
 
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        /* Software GL (Lighthouse, VMs, blocklisted drivers) renders this grid on
+           the CPU every frame — the whole desktop TBT problem. Same treatment as
+           prefers-reduced-motion: one static frame, no loop, no pointer feed.
+           DPR 1 in that mode so the single software frame is cheap; 1.5 otherwise —
+           visually negligible on 0.4-unit cubes, ~44 % fewer fragments than 2. */
+        const staticOnly = reduced || isSoftwareRenderer(renderer.getContext());
+
+        renderer.setPixelRatio(staticOnly ? 1 : Math.min(window.devicePixelRatio, 1.5));
         renderer.setSize(mount.clientWidth, mount.clientHeight);
         mount.appendChild(renderer.domElement);
 
@@ -321,17 +329,21 @@ const CubeGrid = () => {
             lastHit = {x: hit.x, z: hit.z};
             pushTrail(hit.x, hit.z, strength);
         };
-        // The canvas is pointer-events:none, so this has to be on window rather than
-        // the mount — onPointerMove bounds-checks against the mount to compensate.
-        window.addEventListener("pointermove", onPointerMove);
-
         // Leaving the viewport entirely never fires an out-of-bounds pointermove,
         // so without this the swell would sit frozen at the exit point.
         const onDocLeave = () => {
             lastHit = null;
             cursorTargetStrength = 0;
         };
-        document.addEventListener("mouseleave", onDocLeave);
+
+        // The pointer listeners exist only to feed the render loop — with a
+        // static frame they'd do work nothing ever draws.
+        if (!staticOnly) {
+            // The canvas is pointer-events:none, so this has to be on window rather
+            // than the mount — onPointerMove bounds-checks against the mount.
+            window.addEventListener("pointermove", onPointerMove);
+            document.addEventListener("mouseleave", onDocLeave);
+        }
 
         // Idle: an occasional ripple so the grid isn't dead when untouched (this is
         // also all a touch device ever gets). Deliberately sparse and weak — at one
@@ -369,7 +381,7 @@ const CubeGrid = () => {
             const k = cursorTargetStrength > s ? 7 : 3;
             uniforms.uCursorStrength.value = s + (cursorTargetStrength - s) * (1 - Math.exp(-k * dt));
 
-            idleTick(t);
+            if (!staticOnly) idleTick(t);
             renderer.render(scene, camera);
         };
 
@@ -378,7 +390,7 @@ const CubeGrid = () => {
             frame = requestAnimationFrame(loop);
         };
 
-        if (reduced) {
+        if (staticOnly) {
             render(); // Static grid — the shape without the motion.
         } else {
             loop();
@@ -392,23 +404,38 @@ const CubeGrid = () => {
         };
         window.addEventListener("resize", onResize);
 
+        /* Two gates over one loop: run only while the section intersects the
+           viewport AND the tab is visible. Either alone leaks frames — a hidden
+           tab keeps intersecting, a backgrounded section keeps a visible tab. */
+        let intersecting = true;
+        const syncRunning = () => {
+            if (staticOnly) return;
+            const shouldRun = intersecting && !document.hidden;
+            if (shouldRun && !frame) {
+                loop();
+            } else if (!shouldRun && frame) {
+                cancelAnimationFrame(frame);
+                frame = null;
+            }
+        };
+
         const observer = new IntersectionObserver(
             ([entry]) => {
-                if (reduced) return;
-                if (entry.isIntersecting && !frame) {
-                    loop();
-                } else if (!entry.isIntersecting && frame) {
-                    cancelAnimationFrame(frame);
-                    frame = null;
-                }
+                if (staticOnly) return;
+                intersecting = entry.isIntersecting;
+                syncRunning();
             },
             {threshold: 0},
         );
         observer.observe(mount);
 
+        const onVisibility = () => syncRunning();
+        document.addEventListener("visibilitychange", onVisibility);
+
         return () => {
             if (frame) cancelAnimationFrame(frame);
             observer.disconnect();
+            document.removeEventListener("visibilitychange", onVisibility);
             window.removeEventListener("resize", onResize);
             window.removeEventListener("pointermove", onPointerMove);
             document.removeEventListener("mouseleave", onDocLeave);

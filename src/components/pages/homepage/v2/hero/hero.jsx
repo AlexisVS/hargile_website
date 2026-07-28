@@ -92,7 +92,7 @@ const useBackdropReady = (containerRef, variant) => {
         const timeout = setTimeout(() => {
             observer.disconnect();
             setReady(true);
-        }, 3000);
+        }, 2000);
 
         return () => {
             observer.disconnect();
@@ -121,12 +121,6 @@ const HeroV2 = ({backdrop, label}) => {
         if (backdropReady) markHeroReady();
     }, [backdropReady, markHeroReady]);
 
-    const reveal = (index) => ({
-        initial: reducedMotion ? {opacity: 0} : {opacity: 0, y: 16},
-        animate: reducedMotion ? {opacity: 1} : {opacity: 1, y: 0},
-        transition: {duration: 0.5, ease: "easeOut", delay: index * 0.09},
-    });
-
     return (
         <section className={`${styles.section} ${variant === "cubes" ? styles.sectionSharp : ""}`}>
             <div ref={backdropRef} className={styles.backdropHost}>
@@ -135,27 +129,32 @@ const HeroV2 = ({backdrop, label}) => {
             {label && <div className={styles.variantTag}>{label}</div>}
 
             <div className={styles.container}>
+                {/* The copy reveals are CSS keyframes (hero.module.scss), not
+                    motion.*: a serialized `opacity:0` initial state kept the h1
+                    out of the SSR HTML's paint until hydration — LCP waited on
+                    the whole JS chain, and AI crawlers read a transparent
+                    headline. CSS starts at first style resolution instead. */}
                 <div className={styles.copy}>
-                    <motion.p className={styles.eyebrow} {...reveal(0)}>
+                    <p className={styles.eyebrow}>
                         {t("eyebrow")}
-                    </motion.p>
+                    </p>
 
-                    <motion.h1 className={styles.headline} {...reveal(1)}>
+                    <h1 className={styles.headline}>
                         {t("headline")}
-                    </motion.h1>
+                    </h1>
 
-                    <motion.p className={styles.paragraph} {...reveal(2)}>
+                    <p className={styles.paragraph}>
                         {t("paragraph")}
-                    </motion.p>
+                    </p>
 
-                    <motion.div className={styles.ctaRow} {...reveal(3)}>
+                    <div className={styles.ctaRow}>
                         <CtaLink href="/contact" variant="primary">
                             {t("ctaAudit")}
                         </CtaLink>
                         <CtaLink href="#recent-works" variant="ghost">
                             {t("ctaWork")}
                         </CtaLink>
-                    </motion.div>
+                    </div>
                 </div>
 
                 {variant === "cubes" ? (

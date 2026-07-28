@@ -13,7 +13,8 @@
   justify-content: center;
   align-items: center;
   z-index: 10000;
-  transition: opacity 0.5s ease;
+  /* Duration mirrored by FADE_MS in hero-loading-provider.jsx. */
+  transition: opacity 0.3s ease;
 }
 
 .loading-container.fade-out {

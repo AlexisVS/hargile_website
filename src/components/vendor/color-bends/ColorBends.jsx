@@ -3,11 +3,22 @@
 /* ColorBends — vendored from React Bits (https://reactbits.dev)
    Copyright (c) 2026 David Haz — MIT + Commons Clause.
    Upstream: DavidHDev/react-bits src/content/Backgrounds/ColorBends/
-   Kept unmodified apart from this header and the "use client" directive so it
-   can be re-synced from upstream; configure it via props at the call site. */
+   Diverges from upstream — re-sync by hand, carrying these over:
+   - "use client" directive.
+   - Static-frame gate: on a software rasterizer (src/lib/webgl.js) or under
+     prefers-reduced-motion, renders a single frame at DPR 1 and never starts
+     the loop.
+   - Render loop capped at 30 fps (imperceptible on an ambient gradient).
+   - IntersectionObserver + visibilitychange pause/resume the loop.
+   - Mount-effect dependency array narrowed to [] — every prop listed upstream
+     is already synced by the uniform-only effect, and recreating the WebGL
+     context when e.g. portrait detection flips `scale` after mount meant a
+     second context + shader compile mid-hydration.
+   Configure it via props at the call site. */
 
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { isSoftwareRenderer } from '@/lib/webgl';
 import './ColorBends.css';
 
 const MAX_COLORS = 8;
@@ -143,6 +154,9 @@ export default function ColorBends({
   const pointerTargetRef = useRef(new THREE.Vector2(0, 0));
   const pointerCurrentRef = useRef(new THREE.Vector2(0, 0));
   const pointerSmoothRef = useRef(8);
+  // Non-null only in static mode — repaints the single frame after a prop or
+  // size change, since no loop is running to pick it up.
+  const redrawStaticRef = useRef(null);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -187,8 +201,12 @@ export default function ColorBends({
       alpha: true
     });
     rendererRef.current = renderer;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const staticOnly = reduced || isSoftwareRenderer(renderer.getContext());
+
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(staticOnly ? 1 : Math.min(window.devicePixelRatio || 1, 2));
     renderer.setClearColor(0x000000, transparent ? 0 : 1);
     renderer.domElement.style.width = '100%';
     renderer.domElement.style.height = '100%';
@@ -202,6 +220,8 @@ export default function ColorBends({
       const h = container.clientHeight || 1;
       renderer.setSize(w, h, false);
       material.uniforms.uCanvas.value.set(w, h);
+      // In static mode repaint the one frame instead of leaving it stretched.
+      if (redrawStaticRef.current) redrawStaticRef.current();
     };
 
     handleResize();
@@ -214,8 +234,7 @@ export default function ColorBends({
       window.addEventListener('resize', handleResize);
     }
 
-    const loop = () => {
-      const dt = clock.getDelta();
+    const drawFrame = (dt) => {
       const elapsed = clock.elapsedTime;
       material.uniforms.uTime.value = elapsed;
 
@@ -231,12 +250,65 @@ export default function ColorBends({
       cur.lerp(tgt, amt);
       material.uniforms.uPointer.value.copy(cur);
       renderer.render(scene, camera);
-      rafRef.current = requestAnimationFrame(loop);
     };
-    rafRef.current = requestAnimationFrame(loop);
+
+    // 30 fps is plenty for an ambient gradient at speed ~0.2 — accumulate the
+    // delta and skip render until a full budget has elapsed.
+    const FRAME_MIN = 1 / 30;
+    let acc = 0;
+
+    const loop = () => {
+      rafRef.current = requestAnimationFrame(loop);
+      acc += clock.getDelta();
+      if (acc < FRAME_MIN) return;
+      const dt = acc;
+      acc = 0;
+      drawFrame(dt);
+    };
+
+    if (staticOnly) {
+      drawFrame(0);
+      redrawStaticRef.current = () => drawFrame(0);
+    } else {
+      rafRef.current = requestAnimationFrame(loop);
+    }
+
+    /* Pause while offscreen or in a hidden tab; both gates must open to run.
+       Skipped entirely in static mode — there is no loop to pause. */
+    let intersecting = true;
+    const syncRunning = () => {
+      if (staticOnly) return;
+      const shouldRun = intersecting && !document.hidden;
+      if (shouldRun && rafRef.current === null) {
+        clock.getDelta(); // swallow the paused gap — one giant dt is not a frame
+        rafRef.current = requestAnimationFrame(loop);
+      } else if (!shouldRun && rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+    };
+
+    const io =
+      'IntersectionObserver' in window
+        ? new IntersectionObserver(
+            ([entry]) => {
+              intersecting = entry.isIntersecting;
+              syncRunning();
+            },
+            { threshold: 0 }
+          )
+        : null;
+    if (io) io.observe(container);
+
+    const onVisibility = () => syncRunning();
+    document.addEventListener('visibilitychange', onVisibility);
 
     return () => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+      redrawStaticRef.current = null;
+      if (io) io.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
       if (resizeObserverRef.current) resizeObserverRef.current.disconnect();
       else window.removeEventListener('resize', handleResize);
       geometry.dispose();
@@ -247,7 +319,10 @@ export default function ColorBends({
         container.removeChild(renderer.domElement);
       }
     };
-  }, [bandWidth, frequency, intensity, iterations, mouseInfluence, noise, parallax, scale, speed, transparent, warpStrength]);
+    // Every prop above is synced by the uniform-only effect below; rebuilding
+    // the WebGL context on a prop flip is exactly the bug this avoids.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const material = materialRef.current;
@@ -286,6 +361,9 @@ export default function ColorBends({
 
     material.uniforms.uTransparent.value = transparent ? 1 : 0;
     if (renderer) renderer.setClearColor(0x000000, transparent ? 0 : 1);
+
+    // Static mode has no loop to pick these up — repaint the single frame.
+    if (redrawStaticRef.current) redrawStaticRef.current();
   }, [
     rotation,
     autoRotate,
