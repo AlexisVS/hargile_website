@@ -6,8 +6,7 @@ import {ROUTES} from "@/seo/routes";
    Kept in sync with the footer / navbar links. */
 const SAME_AS = [
     "https://www.linkedin.com/company/hargile",
-    "https://www.instagram.com/hargile_is/",
-    "https://www.youtube.com/@HARGILEinnovativesolutions",
+    "https://www.instagram.com/hargile_tech_studio/",
     "https://github.com/HARGILE-tech-studio",
 ];
 

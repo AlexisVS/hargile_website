@@ -12,7 +12,7 @@ import {useTranslations} from 'next-intl';
 import {Address} from "@/components/footer/Adress.styled";
 import {Copyright} from "@/components/footer/Copyright.styled";
 import {SocialContainer, SocialLinkIcon} from "@/components/footer/social-medias.styled";
-import {SiGithub, SiInstagram, SiYoutube} from "@icons-pack/react-simple-icons";
+import {SiGithub, SiInstagram} from "@icons-pack/react-simple-icons";
 import LinkedinIcon from "@/components/icons/LinkedinIcon";
 
 
@@ -36,21 +36,15 @@ const Footer = () => {
     const socials = [
         {
             id: "instagram",
-            title: "@hargile_is",
+            title: "@hargile_tech_studio",
             icon: <SiInstagram title={"hargile"} size={iconSize}/>,
-            href: "https://www.instagram.com/hargile_is/"
+            href: "https://www.instagram.com/hargile_tech_studio/"
         },
         {
             id: "linkedin",
             title: "HARGILE - Tech Studio",
             icon: <LinkedinIcon title={"hargile"} size={iconSize}/>,
             href: "https://www.linkedin.com/company/hargile"
-        },
-        {
-            id: "youtube",
-            title: "@HARGILEinnovativesolutions",
-            icon: <SiYoutube title={"hargile"} size={iconSize}/>,
-            href: "https://www.youtube.com/@HARGILEinnovativesolutions"
         },
         {
             id: "github",

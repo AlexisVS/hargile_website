@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Facebook, Linkedin, Instagram, Github, Youtube } from "lucide-react";
+import { Linkedin, Instagram, Github } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 const SocialMediaContainer = styled.div`
@@ -62,7 +62,7 @@ export function SocialMedia() {
     {
       name: "Instagram",
       icon: <Instagram size={20} />,
-      url: "https://www.instagram.com/hargile_is/",
+      url: "https://www.instagram.com/hargile_tech_studio/",
       bgcolor: "rgba(193, 53, 132, 0.8)",
       bordercolor: "#C13584",
     },

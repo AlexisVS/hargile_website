@@ -10,7 +10,7 @@ import {useNavigationVisibility} from "@/hooks/useNavigationVisibility";
 import {useIsClient} from "@/hooks/useIsClient";
 import {useTranslations} from "next-intl";
 import LanguageSelector from "@/app/[locale]/components/language-selector/language-selector";
-import {SiGithub, SiInstagram, SiYoutube} from "@icons-pack/react-simple-icons";
+import {SiGithub, SiInstagram} from "@icons-pack/react-simple-icons";
 import LinkedinIcon from "@/components/icons/LinkedinIcon";
 import {
     Brand,
@@ -153,14 +153,11 @@ const Navbar = () => {
                     </ContactInfo>
                     
                     <SocialIcons>
-                        <SocialIcon href="https://www.instagram.com/hargile_is/" target="_blank" aria-label="Instagram">
+                        <SocialIcon href="https://www.instagram.com/hargile_tech_studio/" target="_blank" aria-label="Instagram">
                             <SiInstagram size="22px" />
                         </SocialIcon>
                         <SocialIcon href="https://www.linkedin.com/company/hargile" target="_blank" aria-label="LinkedIn">
                             <LinkedinIcon size="22px" />
-                        </SocialIcon>
-                        <SocialIcon href="https://www.youtube.com/@HARGILEinnovativesolutions" target="_blank" aria-label="YouTube">
-                            <SiYoutube size="22px" />
                         </SocialIcon>
                         <SocialIcon href="https://github.com/HARGILE-tech-studio" target="_blank" aria-label="GitHub">
                             <SiGithub size="22px" />
