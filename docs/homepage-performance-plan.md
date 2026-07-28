@@ -1,10 +1,20 @@
 # Homepage performance plan — desktop Lighthouse 61 → 90+
 
 > Written 2026-07-28 from a PageSpeed Insights run on `hargile.com/en`.
-> Not yet implemented — this is the execution plan for a later session.
->
 > Baseline: **desktop Performance 61** (FCP 0.3 s, LCP 0.6 s, **TBT 13,900 ms**,
 > CLS 0.044, **SI 3.6 s**) vs **mobile 95** (LCP render delay 6,290 ms).
+>
+> **STATUS (2026-07-28): fully implemented.** Phase 1 shipped in v0.17.0
+> (`f92df2a`). Phases 2–3 implemented on `feat/perf-phase2-3` the same day —
+> per-item notes below are marked ✅ DONE with deviations where reality
+> disagreed with the plan (notably: GaugeChart was *not* dead, and the GDPR
+> banner turned out to be the mobile LCP element — see 2.5). Local medians
+> after Phases 2–3, `/fr`, 3 clean runs per form factor:
+> **desktop 98** (TBT 48 ms, SI 1.06 s, LCP 1.0 s, CLS 0.045) and
+> **mobile 49** on the much-harsher local bench (TBT 1.4 s, CLS 0.009), with
+> the LCP element back to the **h1 on both form factors**. Two items remain
+> open as explicit design decisions: the 769–1023 px band and the manifesto
+> contrast floor (Phase 3).
 
 ## Why desktop scores worse than mobile
 
@@ -175,7 +185,10 @@ would download bytes the page never paints. The fonts are same-origin, so
 
 ## Phase 2 — payload and jank
 
-- **2.1 Scope the i18n client payload.** `src/app/[locale]/layout.js:27` calls
+*(all items ✅ DONE on `feat/perf-phase2-3`, plus a new 2.5 discovered at
+measurement time)*
+
+- **2.1 Scope the i18n client payload.** ✅ DONE — `src/app/[locale]/layout.js:27` calls
   `getMessages()` and line 47 hands the **entire** locale file (en 58 KB /
   fr 65 KB, 618 strings for every page on the site) to
   `NextIntlClientProvider` — roughly a third of the 147 KB homepage HTML. Both
@@ -189,39 +202,83 @@ would download bytes the page never paints. The fonts are same-origin, so
   click through every route in dev, where next-intl throws loud `MISSING_MESSAGE`
   errors. The failure mode in prod is a silently missing string, which is why
   this is Phase 2 rather than Phase 1.
-- **2.2 Kill the forced reflow in the pinned rail.**
+  *Outcome:* `CLIENT_NAMESPACES` in the root layout holds exactly the six
+  namespaces listed above — the re-grep confirmed no bare `useTranslations()`
+  and that `pages.services` / `pages.about-us` components are unrouted dead
+  code, so they are deliberately excluded. All routes clicked in dev, both
+  locales: zero `MISSING_MESSAGE` (browser console and SSR log). HTML
+  −12 KB `/fr`, −11 KB `/en` *despite* 2.5 adding the SSR'd banner markup.
+- **2.2 Kill the forced reflow in the pinned rail.** ✅ DONE —
   `recent-works-showcase.jsx:50-57` reads `outer.offsetHeight` **and**
   `outer.getBoundingClientRect()` on every scroll event — two forced layouts per
   frame, the 38 ms the report attributes to "Forced reflow". Cache `offsetTop`
   and `offsetHeight` in the existing `layout()` / ResizeObserver path and derive
   progress from `window.scrollY`.
-- **2.3 Delete the duplicate global stylesheet import** at
+  *Outcome:* geometry (`pinDist`, `outerTop`) cached in `layout()`; `onScroll`
+  does zero layout reads. One addition beyond the plan: the ResizeObserver now
+  also observes `document.body`, because the cached `outerTop` goes stale when
+  content above the section changes height (image loads) — the old
+  read-per-frame code was immune to that by construction.
+- **2.3 Delete the duplicate global stylesheet import** ✅ DONE — at
   `src/app/[locale]/(context)/layout.jsx:11` — `global.scss` is already imported
   by the root layout at line 1.
-- **2.4 Stop the invisible spinner.** `src/app/styles/global.scss:120-141` runs
-  `body::before { animation: spin 1s linear infinite }` at `opacity: 0` on every
-  page for the whole session. Gate the animation to the visible state, or default
-  it to `animation-play-state: paused`.
+- **2.4 Stop the invisible spinner.** ✅ DONE — `src/app/styles/global.scss:120-141`
+  runs `body::before { animation: spin 1s linear infinite }` at `opacity: 0` on
+  every page for the whole session. Gate the animation to the visible state, or
+  default it to `animation-play-state: paused`.
+  *Outcome:* `animation-play-state: paused` by default, set back to `running`
+  by the `.exiting` / `.entering` visible states.
+- **2.5 (NEW — found at measurement) SSR the GDPR banner.** ✅ DONE — once the
+  hero reveals became CSS-driven, the consent banner (`ClientGDPRWrapper`,
+  styled-components, previously gated behind `useIsClient`) was the biggest
+  post-hydration paint and became the **mobile LCP element**. Deferring it
+  further would have made LCP *worse* (a late-painting largest element defines
+  LCP in a no-input lab run), so the fix is the opposite: render it in the SSR
+  HTML so it paints at FCP. Returning visitors get no flash: a tiny synchronous
+  inline script in the root layout `<head>` reads
+  `localStorage.rgpd_consents` pre-paint and sets `html[data-gdpr-stored]`,
+  which a `global.scss` rule uses to hide `.gdpr-banner` until hydration
+  unmounts it for good. The banner is `position: fixed`, so zero CLS (measured
+  0.009 mobile). Verified both ways in-browser; LCP element is the h1 again on
+  both form factors. Side benefit: the cookie notice text is now in the raw
+  HTML (GEO guardrail likes this).
 
 ---
 
 ## Phase 3 — optional, decide before doing
 
-- Drop unused dependencies: `recharts` (only the dead `GaugeChart` imports it),
-  `@next/third-parties` and `@plaiceholder/next` (installed, never imported);
-  move `@tailwindcss/oxide` and `babel-plugin-react-compiler` to devDependencies.
-- Accessibility and SEO items from the same report: pass
-  `aria-label={project.title}` to the three identical "Learn More" links
-  (`recent-works-showcase.jsx:124-132` — `CtaLink` spreads `...rest`, so this
-  needs no component change), and change the `h4` at `values.jsx:44` to `h3`
-  (document order is currently h2, h3, h2, h4; `.valueName` styles the class, not
-  the tag, so it is a pure markup fix). The manifesto words shipping at
-  `opacity: 0.16` are the contrast failure — raising the floor changes the scroll
-  scrub design, so that is a separate decision.
-- The 769–1023 px band gets the worst of both worlds: the ColorBends shader plus
-  three infinitely-floating cards with `backdrop-filter: blur(20px)` compositing
-  over the live canvas (`hero.module.scss:443-513`). Candidate for a cheaper
-  treatment at that width, with a visible tradeoff.
+- Drop unused dependencies. ✅ DONE, with one correction to the plan:
+  `recharts` was **not** only imported by dead code — `GaugeChart` is alive and
+  rendered on `/audit/result` (4 gauges). It was rewritten as pure SVG arcs
+  (same geometry as the recharts `PieChart`: radii 80/86, 50/40/10 segments,
+  3° padding; the motion needle untouched), which made removing recharts safe.
+  Verified visually with injected localStorage audit data. `@next/third-parties`
+  and `@plaiceholder/next` removed (never imported); `@tailwindcss/oxide` and
+  `babel-plugin-react-compiler` moved to devDependencies (the Dockerfile's
+  `npm ci` installs devDeps, so the image build is unaffected — verified with a
+  full build). Lockfile regenerated from a clean HEAD state so the pre-existing
+  uncommitted in-range drift was not smuggled in.
+- Accessibility and SEO items. ✅ DONE — `aria-label={project.title}` passed to
+  the three "Learn More" links (`CtaLink` spreads `...rest`, no component
+  change), and the `h4` at `values.jsx:44` is now an `h3` (`.valueName` styles
+  the class, not the tag — pure markup fix).
+- **OPEN DECISION — manifesto contrast.** The manifesto words shipping at
+  `opacity: 0.16` (`scrub-word.jsx`, scrubbed 0.16 → 1 on scroll) are the
+  contrast failure. Options on the table: (a) keep the design — `aria-hidden`
+  on the scrubbed words plus an `sr-only` copy of the full text (screen readers
+  actually gain: whole sentences instead of scattered words; the contrast audit
+  no longer applies; zero visual change) — recommended; or (b) raise the floor
+  to ~0.45–0.5, which passes contrast for real but visibly flattens the reveal.
+- **OPEN DECISION — the 769–1023 px band** gets the worst of both worlds: the
+  ColorBends shader plus three infinitely-floating cards with
+  `backdrop-filter: blur(20px)` compositing over the live canvas
+  (`hero.module.scss:443-513`). Note the cost driver is **not** the card drift:
+  the blur recomposites every frame because the *backdrop* (live canvas)
+  changes every frame, so freezing the drift alone buys little. Options:
+  (a) in that band only, swap `backdrop-filter` for the same gradient fill at
+  higher opacity (~0.72/0.82/0.9) — cards become tinted panels instead of
+  frosted glass, subtle over a moving gradient — recommended; (b) static
+  ColorBends frame in that band (zero cost, inert background).
 
 ---
 
@@ -234,6 +291,32 @@ would download bytes the page never paints. The fonts are same-origin, so
 3. Expect after Phase 1: desktop TBT under 600 ms, SI around 2.2 s, Performance
    90–95; mobile LCP render delay under 500 ms, Performance ~98. In the trace,
    confirm no long tasks recur after the single static-frame render.
+
+   **Measured after Phases 2–3** (local, `/fr`, medians of 3 clean runs,
+   reports in `..\lh-reports\p23-*.json`): desktop **98** — TBT 48 ms,
+   SI 1.06 s, LCP 1.0 s, CLS 0.045; mobile **49** — TBT 1.4 s, CLS 0.009.
+   LCP element = the h1 on both form factors. The mobile absolute number is a
+   local-bench artifact (the loader overlay's late dismissal lands the h1
+   render delay at ~5.7 s locally; PSI on production does not behave this way)
+   — compare trends, not absolutes.
+
+   **Measurement pitfalls (all hit for real):**
+   - Kill stale `next start` processes first — a leftover server on :3000
+     serves the *old* build and silently invalidates every check against it.
+   - Close any QA browser (agent-browser etc.) before running Lighthouse: an
+     open tab with a live WebGL canvas costs ~5 desktop points of TBT noise
+     (measured 93 contaminated vs 98 clean, same build).
+   - Compare at constant locale — `/fr` HTML is ~7 KB heavier than `/en`.
+   - The SwiftShader verdict exists **only** on PSI after deploying: local
+     headless Chrome uses the real GPU, and `--disable-gpu` kills WebGL
+     instead of simulating software rendering.
+   - Dev-only: the first cold compile after a prod build can transiently 404
+     every `(context)` route (Turbopack cache artifact) — restart/recompile
+     before concluding anything is broken.
+   - GEO guardrail §1.5 after each change: `curl` the raw HTML of `/fr` and
+     `/en` — h1 + copy present without JS, no new inline `opacity:0` on copy.
+     (7 pre-existing occurrences remain: menu CSS, `aria-hidden` hero visual,
+     below-the-fold `whileInView` reveals — text is still in the HTML.)
 4. Manual QA:
    - Real-GPU Chrome (`chrome://gpu` reports hardware acceleration) still shows
      the animated cube grid and the animated bends.
