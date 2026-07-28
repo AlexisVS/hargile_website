@@ -12,9 +12,9 @@
 > after Phases 2–3, `/fr`, 3 clean runs per form factor:
 > **desktop 98** (TBT 48 ms, SI 1.06 s, LCP 1.0 s, CLS 0.045) and
 > **mobile 49** on the much-harsher local bench (TBT 1.4 s, CLS 0.009), with
-> the LCP element back to the **h1 on both form factors**. Two items remain
-> open as explicit design decisions: the 769–1023 px band and the manifesto
-> contrast floor (Phase 3).
+> the LCP element back to the **h1 on both form factors**. The two design
+> decisions (769–1023 px band, manifesto contrast floor) were resolved the
+> same day — see Phase 3.
 
 ## Why desktop scores worse than mobile
 
@@ -262,23 +262,28 @@ measurement time)*
   the three "Learn More" links (`CtaLink` spreads `...rest`, no component
   change), and the `h4` at `values.jsx:44` is now an `h3` (`.valueName` styles
   the class, not the tag — pure markup fix).
-- **OPEN DECISION — manifesto contrast.** The manifesto words shipping at
-  `opacity: 0.16` (`scrub-word.jsx`, scrubbed 0.16 → 1 on scroll) are the
-  contrast failure. Options on the table: (a) keep the design — `aria-hidden`
-  on the scrubbed words plus an `sr-only` copy of the full text (screen readers
-  actually gain: whole sentences instead of scattered words; the contrast audit
-  no longer applies; zero visual change) — recommended; or (b) raise the floor
-  to ~0.45–0.5, which passes contrast for real but visibly flattens the reveal.
-- **OPEN DECISION — the 769–1023 px band** gets the worst of both worlds: the
-  ColorBends shader plus three infinitely-floating cards with
+- Manifesto contrast. ✅ DONE (decision 2026-07-28: keep the design) — the
+  manifesto words shipping at `opacity: 0.16` (`scrub-word.jsx`, scrubbed
+  0.16 → 1 on scroll) were the contrast failure. Resolution: the scrubbed
+  words are wrapped in `aria-hidden="true"` and the blockquote carries an
+  `sr-only` copy of the full text. Screen readers actually gain (whole
+  sentences instead of scattered dim words), the contrast audit no longer
+  applies to decorative text, the copy stays in the raw HTML for crawlers,
+  and the visual design is untouched. The rejected alternative — raising the
+  floor to ~0.45–0.5 — passed contrast "for real" but visibly flattened the
+  reveal.
+- The 769–1023 px band. ✅ DONE (decision 2026-07-28) — it got the worst of
+  both worlds: the ColorBends shader plus three infinitely-floating cards with
   `backdrop-filter: blur(20px)` compositing over the live canvas
-  (`hero.module.scss:443-513`). Note the cost driver is **not** the card drift:
-  the blur recomposites every frame because the *backdrop* (live canvas)
-  changes every frame, so freezing the drift alone buys little. Options:
-  (a) in that band only, swap `backdrop-filter` for the same gradient fill at
-  higher opacity (~0.72/0.82/0.9) — cards become tinted panels instead of
-  frosted glass, subtle over a moving gradient — recommended; (b) static
-  ColorBends frame in that band (zero cost, inert background).
+  (`hero.module.scss` `.floatCard`). The cost driver is **not** the card
+  drift: the blur recomposites every frame because the *backdrop* (live
+  canvas) changes every frame, so freezing the drift alone buys nothing.
+  Resolution: in that band only, `backdrop-filter: none` and the same
+  gradient fill raised to ~0.72/0.82/0.9 opacity — tinted panels instead of
+  frosted glass, a subtle difference over a moving gradient (verified at
+  900 px). Mobile (≤768) keeps the glass: cards there are static in-flow and
+  were not the jank driver. The rejected alternative was a static ColorBends
+  frame in the band (zero cost but an inert background).
 
 ---
 

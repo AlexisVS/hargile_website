@@ -512,6 +512,24 @@
      frame, which is what shows up as stutter. */
   will-change: transform;
 
+  /* 769-1023 : ColorBends anime sous les trois cartes, et un backdrop-filter
+     dont le fond change à chaque frame se recompose à chaque frame — geler le
+     drift des cartes n'y changerait rien, c'est le canvas qui invalide le blur.
+     Dans cette bande on passe en panneau teinté : même gradient, opacité
+     montée pour compenser l'absence de verre. Au-dessus d'un gradient mouvant
+     la différence est discrète ; le tradeoff est documenté dans
+     docs/homepage-performance-plan.md (phase 3). */
+  @media (min-width: 769px) and (max-width: 1023px) {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: linear-gradient(
+      155deg,
+      rgba(56, 74, 122, 0.72) 0%,
+      rgba(24, 33, 58, 0.82) 48%,
+      rgba(12, 17, 32, 0.9) 100%
+    );
+  }
+
   @media (max-width: 768px) {
     /* The flex column above owns placement now — clear the absolute offsets the
        variant classes set, or they'd still apply. */
