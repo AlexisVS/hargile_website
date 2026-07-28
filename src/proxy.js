@@ -19,9 +19,10 @@ export async function proxy(req) {
         ? preferredLocale
         : routing.defaultLocale;
 
-    // Root path - redirect to the locale
+    // Root path - redirect to the locale, keeping the query string
+    // (?backdrop=… debug overrides were silently dropped before).
     if (req.nextUrl.pathname === '/') {
-        return NextResponse.redirect(new URL(`/${locale}`, req.url));
+        return NextResponse.redirect(new URL(`/${locale}${req.nextUrl.search}`, req.url));
     }
 
     // Check for locale confusion - e.g., /en/fr or /en/nl

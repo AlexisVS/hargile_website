@@ -12,7 +12,7 @@ import {NOINDEX_PAGES, ROUTES} from '@/seo/routes';
  * @returns {Object} - Metadata object for Next.js
  */
 export async function generatePageMetadata({params, pagePath}) {
-    const {locale} = await params || {locale: 'en'};
+    const {locale} = await params || {locale: 'fr'};
 
     try {
         // Load global translations
