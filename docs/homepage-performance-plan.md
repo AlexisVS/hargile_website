@@ -331,3 +331,61 @@ measurement time)*
    - `prefers-reduced-motion` yields static frames on both variants.
    - On throttled "Slow 4G" the ring never visibly cuts off mid-draw.
    - `/contact` still loads and dismisses its loader correctly.
+
+---
+
+## Prompt de reprise — prochaine session (copier-coller)
+
+> Session : reprise du travail perf homepage depuis un autre poste, déploiement
+> v0.18.0 et vérification PSI. Lire EN PREMIER docs/homepage-performance-plan.md
+> (ce fichier — statut réel du plan, résultats, pièges de mesure) et
+> docs/geo-plan.md §1.5 (guardrail : le copy doit rester dans le premier HTML).
+>
+> ÉTAT AU DÉPART :
+> - Prod = v0.17.0 = main `e12eff8` (Phase 1 seulement). TOUT le reste est sur
+>   la branche **`feat/perf-phase2-3`** poussée sur origin, tête `a59c5c4`,
+>   arbre propre, rien mergé, rien taggé.
+> - La branche contient : Phase 2 complète (i18n scopé via `CLIENT_NAMESPACES`
+>   dans le root layout — toute string client ajoutée doit rejoindre cette
+>   liste ; reflow rail ; spinner paused ; import dupliqué), l'item 2.5
+>   découvert à la mesure (bandeau GDPR SSR + script inline anti-flash —
+>   c'était l'élément LCP mobile), Phase 3 complète (recharts retiré, la jauge
+>   de /audit/result réécrite en SVG pur — elle n'était PAS morte ; deps
+>   nettoyées ; lock régénéré proprement ; aria-labels ; h4→h3), les deux
+>   décisions design tranchées (769-1023 px : panneaux teintés sans
+>   backdrop-filter ; manifesto : aria-hidden + copie sr-only), et les docs à
+>   jour. Le commit `1205928` (docs/homepage-code-review-plan.md, plan de
+>   code-review de la page v2, pas encore exécuté) est aussi sur cette branche.
+> - Médianes locales validées avant push : desktop 98 (TBT 48 ms, SI 1,06 s),
+>   mobile /fr 49 (banc local volontairement dur), LCP = h1 partout,
+>   CLS mobile 0.009.
+> - Absents de ce poste si différent : `src/app/[locale]/banner-mvp/`
+>   (gitignoré, outil local) et `..\lh-reports\` (rapports hors repo).
+>
+> TÂCHES :
+> 1. `git fetch && git checkout feat/perf-phase2-3 && npm ci`, puis
+>    `npm run build && npm run start` et re-QA rapide (routes des 2 locales,
+>    ?backdrop=cubes / ?backdrop=bends dismissent le loader, /contact,
+>    portrait 390x844 = 1 canvas, cartes teintées à ~900 px).
+> 2. Merger dans main + tag **v0.18.0** (le workflow Docker build sur main ET
+>    sur tags v* ; le serveur suit les releases).
+> 3. Après déploiement : PSI production sur /fr et /en, 3-4 runs par form
+>    factor, MÉDIANES (PSI est instable sur cette page : 95/81/40 le même jour
+>    sur le même code). C'est LÀ que le verdict SwiftShader existe — le banc
+>    local ne le voit pas. Attendu : desktop 90+ (baseline 61), mobile ~95-98.
+>    Vérifier que l'élément LCP est bien le h1 (plus le bandeau GDPR).
+> 4. Guardrail GEO §1.5 post-deploy : curl du HTML de prod /fr et /en → h1,
+>    copy et texte cookies présents sans JS.
+> 5. Ensuite, au choix : exécuter docs/homepage-code-review-plan.md, ou
+>    attaquer le GEO plan Phase 1 (docs/geo-plan.md).
+>
+> PIÈGES (tous vécus, détail dans la section Verification ci-dessus) : tuer
+> les vieux `next start` avant toute mesure ; fermer le navigateur QA pendant
+> Lighthouse ; comparer à locale constante ; `npm run dev -- -p X` avale le
+> flag (utiliser `npx next dev -p X`) ; en dev le premier démarrage à froid
+> peut 404 transitoirement toutes les routes (context) — recompiler avant de
+> conclure ; une string i18n manquante est SILENCIEUSE en prod, bruyante en
+> dev seulement.
+>
+> RÈGLES : mesurer avant de proposer quoi que ce soit ; ne rien pousser ni
+> merger sans mon accord explicite.
