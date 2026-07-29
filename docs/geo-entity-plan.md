@@ -125,26 +125,29 @@ temptation is obvious.)
 
 *Optional:* the Google Maps place URL is a legitimate `sameAs` entry.
 
-### Q3 — Is `@hargile_agency` alive? — **evidence says no**
+### ✅ Q3 — X handle — **RESOLVED & SHIPPED 2026-07-29: removed**
 
-Traced 2026-07-29. Introduced in `a1acc40` (2025-05-06, AlexisVS, "Add SEO
-metadata and dependency updates") — a generic SEO scaffold, and the account was
-seemingly never created. Both `x.com/hargile_agency` and
-`twitter.com/hargile_agency` return **404**. (Caveat: X blocks non-browser user
-agents, so 404 is strong evidence rather than proof — confirm in a browser.)
+Confirmed with Mihai: there is no X account. Removed in `bc5fa84`.
 
-It ships live today in `twitter:site` and `twitter:creator`, and it lives in
-**two** places: `seo.global.twitterHandle` in both message files, and a
-hardcoded `'@hargile_agency'` in `shared-metadata.js:69-70`.
+Origin: introduced in `a1acc40` (2025-05-06, AlexisVS, "Add SEO metadata and
+dependency updates") as part of a generic SEO scaffold. `x.com/hargile_agency`
+and `twitter.com/hargile_agency` both return **404**.
 
-**Done** — confirmed by Mihai that there is no X account, and both sources are
-deleted. Verified on  and : no , no ,
-zero occurrences of the handle; /// and
-every  tag intact, so link previews are unaffected. Original reasoning: a
-published social handle resolving to nothing is a claim that fails
-verification — the opposite of what corroboration is for. Keep `twitter:card`,
-`twitter:title` and `twitter:description`: those drive link previews and are
-doing real work. If the handle is later claimed, it also goes into `SAME_AS`.
+It had drifted into **two** sources — `seo.global.twitterHandle` in each message
+file, and a hardcoded literal in `shared-metadata.js:69-70` — and both had to go
+together: deleting the message key while a `globalT('twitterHandle')` call
+remained would have been silent in production and noisy only in dev.
+
+Kept `twitter:card`, `twitter:title`, `twitter:description` and `twitter:image`.
+Those drive link previews and claim nothing about an account existing.
+
+Verified on `/fr` and `/en`: no `twitter:site`, no `twitter:creator`, zero
+occurrences of the handle, `og:` tags untouched.
+
+Why it mattered: for ordinary SEO a dangling handle is harmless, but the GEO
+thesis is that engines cross-check independent sources before naming a brand —
+so a published handle resolving to nothing is a claim that fails verification.
+If the handle is ever claimed, it goes into `SAME_AS` too.
 
 ### Q4 — `foundingDate`?
 
