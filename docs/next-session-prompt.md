@@ -48,7 +48,12 @@ Lire EN PREMIER, dans cet ordre :
   SwiftShader / coût d'hydratation), et une **phase 0 de mesure avant toute
   modification de code**. Le point clé : TBT va de 40 ms à 1 530 ms sur les
   mêmes octets, tout le reste est stable. **Commencer par regarder les données
-  terrain CrUX** : si elles sont vertes, la bonne décision est de s'arrêter là.
+  terrain CrUX**. **Vérifié le 2026-07-29 : CrUX ne renvoie AUCUNE donnée** pour
+  hargile.com — trop peu de visiteurs Chrome réels pour que Google publie des
+  métriques terrain. Donc les Core Web Vitals **ne peuvent pas** peser sur le
+  référencement, et le score labo n'est que du diagnostic. Le plan conclut
+  explicitement : **ne pas l'exécuter pour l'instant**, la contrainte de ce site
+  est le trafic, pas les millisecondes. Priorité à  phase 1.
 - ℹ️ **PSI teste `hargile.com`, pas `hargile.com/fr`** : l'apex fait un 307 vers
   `/fr` (+44 ms sur le chemin critique, et `/fr` apparaît deux fois dans l'arbre
   de dépendances). `/fr` en direct ne redirige pas. C'est la « contradiction de

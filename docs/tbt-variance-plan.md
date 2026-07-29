@@ -160,17 +160,35 @@ Not "the score is 99". The target is **reproducibility**:
 If that proves unreachable because the residual is H3, the plan ends by saying
 so in writing rather than by chasing it further.
 
-## What actually matters, and should be checked first
+## ⛔ RECOMMENDATION: do not execute this plan yet
 
-**Lighthouse lab scores are not what Google ranks on.** Ranking uses Core Web
-Vitals *field data* — real Chrome users, 28-day rolling, on real hardware with
-real GPUs. That is the "Discover what your real users are experiencing" panel at
-the top of the PSI report.
+**Checked 2026-07-29: CrUX reports NO DATA for hargile.com.**
 
-**Check it before spending a day here.** If the field data is green, the lab
-number swinging between 65 and 97 is a diagnostic curiosity, and the correct
-decision is to stop. Real visitors have GPUs and never touch the SwiftShader
-path that dominates these traces.
+That is the answer to the only question that mattered, and it says stop.
+
+- **Core Web Vitals cannot be affecting rankings.** Google's page-experience
+  signal runs on field data. No field data, no signal. Every number in this
+  document is diagnostic only.
+- **No CrUX data means too few real Chrome users** — the dataset needs a few
+  hundred distinct visitors over 28 days to publish an origin. The site is below
+  that threshold.
+- **Real visitors are already fast.** FCP 0.3 s, LCP 0.5 s, CLS 0.017 on every
+  run, good and bad alike. Visitors have GPUs; they never execute the
+  SwiftShader path that produces every bad trace here.
+
+So the honest reading is that the constraint on this site is **traffic, not
+milliseconds**. A day spent stabilising a lab metric for a site with too few
+visitors to register in CrUX is a day not spent on being found — which is what
+`docs/geo-plan.md` is for, and its phase 1 was unblocked on 2026-07-29 when the
+`opacity:0` work shipped.
+
+**Revisit this plan when** either: CrUX starts reporting data (traffic has grown
+enough that field metrics exist and can be judged), or a change needs to be
+evaluated on performance grounds and the noise makes that impossible. Until
+then, record the median, ignore individual runs, and leave it.
+
+Phase 0 below is still cheap (mostly waiting) if the variance is blocking a
+decision. It is not worth doing out of curiosity.
 
 ## Wrong turns taken (recorded so they are not repeated)
 
