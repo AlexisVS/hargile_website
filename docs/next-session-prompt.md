@@ -3,7 +3,7 @@
 > Fichier à copier-coller tel quel en ouverture de session. C'est **la** source
 > unique : les sections « Prompt de reprise » de `homepage-performance-plan.md`
 > et `homepage-code-review-plan.md` renvoient ici pour éviter la dérive.
-> Dernière mise à jour : 2026-07-29, après le tag **v0.19.1** (déployé).
+> Dernière mise à jour : 2026-07-29, après le tag **v0.19.2**. Prochaine session : **GEO phase 1**.
 
 ---
 
@@ -163,7 +163,73 @@ demandées, et un scroll réel pour le pin. Deux pièges rencontrés :
 scroll down N`), et `querySelector("[class*=track]")` attrape `trackWrap` avant
 `track`, ce qui fait passer un pin fonctionnel pour cassé.
 
-## Ce qui reste — proposition de périmètre, à valider
+## 🎯 PROCHAINE SESSION : GEO phase 1 — ordre d'exécution
+
+Décidé le 2026-07-29. La perf est finie et **CrUX ne renvoie aucune donnée**
+pour hargile.com : la contrainte de ce site est d'être trouvé, pas d'être
+rapide. Tout ce qui suit sert ENG-74 (Urgent, assigné à Mihai) et ses
+milestones M1–M5.
+
+### 1. `docs/geo-entity-plan.md` — entité Organization (~½ journée)
+
+**Le plan est écrit et prêt à exécuter.** Q1 (adresse), Q2 (BCE) et Q3 (handle
+X) sont tranchées ; Q3 est déjà livrée en v0.19.2. Restent deux réponses d'une
+ligne qui ne bloquent pas le démarrage : **Q4 `foundingDate`** (l'année suffit,
+omettre si incertain) et **Q5 `areaServed`** (BE / Benelux / UE).
+
+Contenu : `@type` → `["Organization","ProfessionalService"]`, `address`,
+`telephone`, `email`, `contactPoint`, `areaServed`, `knowsAbout`,
+`alternateName: "HARGILE Tech Studio"` (le GBP, GitHub et Instagram disent tous
+« Tech Studio », le schéma est le seul à dire « HARGILE » tout court), plus un
+module NAP unique pour que l'adresse cesse d'avoir trois sources.
+
+**Garde-fous non négociables** : `@id` inchangé (sinon Google lit une seconde
+entité), **aucun** `identifier`/`vatID` (le BCE appartient à Productions
+Associées ASBL, pas à HARGILE), **aucun** `aggregateRating` auto-déclaré.
+
+### 2. Bing Webmaster Tools + IndexNow (§1.3, ~30 min, pas de code)
+
+**Plus important que sa taille le suggère** : ChatGPT Search interroge l'index
+**Bing**. Une page que Bing n'a pas indexée ne peut pas apparaître dans une
+réponse ChatGPT, quel que soit le classement Google. Personne n'a vérifié le
+statut Bing. Import en un clic depuis Search Console, soumettre `sitemap.xml`,
+inspecter les 6 URLs. C'est le seul item qui peut débloquer une source entière.
+
+### 3. `llms.txt` (§1.4, ~30 min)
+
+Faible valeur assumée (l'étude SE Ranking sur 300 k domaines ne trouve aucune
+corrélation), mais trivial. À faire en dernier de la phase 1, jamais en premier.
+
+### 4. §1.2 locale par défaut — **à scoper, pas à exécuter à l'aveugle**
+
+`localePrefix: 'as-needed'` ferait servir le français à la racine et
+supprimerait le 307 de l'apex. Mais c'est une **migration d'URL** : toutes les
+URLs FR changent, `next-sitemap.config.js` construit `/${locale}${path}` et
+sortirait des URLs fausses, hreflang/x-default à reprendre dans le même
+déploiement. Écrire un plan avant de toucher quoi que ce soit.
+
+### Puis la vraie contrainte — phase 2
+
+Le site n'a que **3 pages réelles** (`/fr`, `/fr/contact`,
+`/fr/legal/privacy-policy`). `/fr/services` → 308, `/fr/about-us` → 307. Le plan
+GEO est catégorique : « AI engines cite specific pages that answer specific
+questions; a one-page site can only ever be cited for one thing. **This is the
+dominant gap — everything else is tuning.** » La phase 1 rend l'entité
+correctement décrite ; la phase 2 la rend citable. C'est du contenu, pas du
+code, et ça mérite sa propre session.
+
+Utile en parallèle : **ENG-82 « Lister 20 prompts cibles GEO »** (Backlog) —
+sans ces prompts, la FAQ et les pages services de la phase 2 s ecrivent à
+l'aveugle.
+
+### Hors repo, mais c'est le levier
+
+Le GBP existe (HARGILE Tech Studio, Rue Sterckx 5, 4,8★, 18 avis). Les moteurs
+vérifient **l'accord entre sources indépendantes** : GBP, annuaires (Sortlist,
+Clutch), profils sociaux. Aucun JSON-LD ne remplace ça. Vérifier que le GBP et
+les annuaires affichent la même adresse et le même nom que le schéma.
+
+## Ce qui reste côté code — proposition de périmètre, à valider
 
 **Recommandation : `geo-plan.md` phase 1.** C'était bloqué par l'item 1.1, qui
 est maintenant livré. C'est ~1 jour, c'est la seule chose de la liste qui a une
