@@ -1,0 +1,108 @@
+import {NAP, napCityLine} from "@/lib/nap";
+import {SAME_AS} from "@/seo/same-as";
+import {SITE_URL} from "@/lib/site-url";
+
+/* /llms.txt — a plain-Markdown index of the site for LLM crawlers.
+ *
+ * Honest expectations: the evidence for llms.txt is weak. SE Ranking's study
+ * of 300 k domains found no correlation with AI citations, only one of the 50
+ * most-cited domains publishes one, and Google has said publicly it does not
+ * use it. We ship it because it costs nothing and a few smaller crawlers do
+ * read it — not because it is expected to move anything. Do not spend more
+ * time on this file than it is worth.
+ *
+ * It is a route rather than a file in public/ so the NAP and the profile list
+ * stay single-sourced (@/lib/nap, @/seo/same-as). A hardcoded address here
+ * would recreate exactly the divergence those modules exist to prevent — and
+ * an address that disagrees with the footer is worse than no address at all,
+ * since cross-source agreement is the whole mechanism.
+ *
+ * The prose below is a summary, not translated copy: llms.txt has no locale
+ * dimension, so it is written once in English and links to both locales. When
+ * the homepage changes what it sells, change this too — a claim the site does
+ * not support is the thing engines discount.
+ */
+
+/* No `export const dynamic` here: cacheComponents rejects the route segment
+   config outright. The handler reads nothing request-scoped, so Next prerenders
+   it anyway. */
+
+const page = (path) => `${SITE_URL}${path}`;
+
+function body() {
+    return `# HARGILE
+
+> HARGILE (also HARGILE Tech Studio) is an independent web and software studio
+> based in Saint-Gilles, Brussels, Belgium, founded in 2025. It designs, builds
+> and maintains custom web applications for small and medium-sized businesses,
+> integrates AI where it earns its place, and automates SEO. Work is done
+> in-house; clients keep ownership of their code and data.
+
+The site is published in French and English. French is the default: ${page("/")}
+redirects to ${page("/fr")}. Each page exists at /fr and /en and the two are
+cross-linked with hreflang; neither is a translation proxy of the other.
+
+The full copy of every page is present in the first HTML response — no
+JavaScript execution is required to read this site.
+
+## Pages
+
+- [Home — FR](${page("/fr")}): what the studio does, the four offers, three
+  recent projects, and the studio's values.
+- [Home — EN](${page("/en")}): English version of the above.
+- [Contact — FR](${page("/fr/contact")}): contact form, email, phone and address.
+- [Contact — EN](${page("/en/contact")}): English version of the above.
+- [Privacy policy — FR](${page("/fr/legal/privacy-policy")}): how personal data
+  is collected, used and protected.
+- [Privacy policy — EN](${page("/en/legal/privacy-policy")}): English version of
+  the above.
+
+## What HARGILE does
+
+- **Website and web application creation** — custom applications for SMEs,
+  designed, built and maintained in-house.
+- **AI solutions** — AI integrated into a product where it changes the outcome,
+  not as a feature for its own sake.
+- **SEO** — search visibility, automated.
+- **MVP in 30 days** — an idea turned into a real, user-ready product in one
+  month at a fixed price: week 1 scope and design, weeks 2–3 development,
+  week 4 test and launch.
+
+## Selected work
+
+- **Ecole du Bonheur** (ecoledubonheur.eu) — institutional site for a school;
+  a generic WordPress rebuilt as a digital experience.
+- **La Marquisette** (lamarquisette.be) — trilingual showcase site with
+  integrated booking for a 19th-century character cottage in the Belgian Ardennes.
+- **VENIZI** (venizi.com) — Venetian-inspired jewellery, sold online and across
+  a network of 50 boutiques in Belgium and France.
+
+More at https://portfolio.hargile.com/
+
+## Contact
+
+- Email: ${NAP.email}
+- Phone: ${NAP.phoneDisplay}
+- Address: ${NAP.street}, ${napCityLine}, Belgium
+- Languages: French, English
+
+## Elsewhere
+
+${SAME_AS.map((u) => `- ${u}`).join("\n")}
+
+## Machine-readable data
+
+- Structured data (schema.org Organization + ProfessionalService) is embedded
+  as JSON-LD on every page; the entity's stable identifier is ${SITE_URL}/#organization
+- Sitemap: ${page("/sitemap.xml")}
+`;
+}
+
+export async function GET() {
+    return new Response(body(), {
+        headers: {
+            "content-type": "text/plain; charset=utf-8",
+            "cache-control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
+        },
+    });
+}
