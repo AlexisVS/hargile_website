@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "images:portfolio": "node scripts/optimize-portfolio-images.mjs",
+    "seo:jsonld": "node scripts/validate-json-ld.mjs",
     "postbuild": "next-sitemap"
   },
   "browserslist": [

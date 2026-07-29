@@ -50,6 +50,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# scripts/validate-json-ld.mjs caches the 1.5 MB schema.org vocabulary here
+/.cache/
+
 # next-sitemap generated artifacts (regenerated each build)
 /public/robots.txt
 /public/sitemap.xml
