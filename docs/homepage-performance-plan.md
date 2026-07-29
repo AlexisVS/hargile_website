@@ -4,6 +4,12 @@
 > Baseline: **desktop Performance 61** (FCP 0.3 s, LCP 0.6 s, **TBT 13,900 ms**,
 > CLS 0.044, **SI 3.6 s**) vs **mobile 95** (LCP render delay 6,290 ms).
 >
+> **RÉSULTAT PROD (2026-07-29, PSI sur v0.18.0 déployée) : desktop 91
+> (baseline 61 — objectif 90+ atteint), mobile 94 (baseline 95, plat), SEO
+> 92 → 100.** L'écart avec le banc local (desktop 98) est attendu : PSI tourne
+> sans GPU, donc le backdrop passe en rendu logiciel — c'est précisément le
+> verdict SwiftShader que le banc local ne peut pas voir.
+>
 > **STATUS (2026-07-29): fully implemented and merged to `main`, tagged
 > v0.18.0.** Phase 1 shipped in v0.17.0 (`f92df2a`). Phases 2–3 were built on
 > `feat/perf-phase2-3` on 2026-07-28 and merged on 2026-07-29 — the branch is

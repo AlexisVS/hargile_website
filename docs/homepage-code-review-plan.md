@@ -223,20 +223,24 @@ Skip this item entirely if v2 isn't considered final yet.
 > - main = `4c6db15`, taggé **v0.18.0**, poussé et déployé. Phases 1-3 du plan
 >   perf toutes livrées. Item 1.2 de ce plan fait (preload below-the-fold
 >   retiré). Feature audit supprimée (`f883d1c`) — ne pas la chercher.
-> - Médianes **locales** avant release : desktop 98, mobile 49 (banc local
->   volontairement dur), LCP = h1 sur les deux form factors. Les chiffres
->   **prod** (PSI) sont à récupérer auprès de Mihai — c'est le seul endroit où
->   le verdict SwiftShader existe. Ne rien conclure du banc local seul.
+> - **PSI prod sur v0.18.0 : desktop 91 (baseline 61), mobile 94 (baseline 95),
+>   SEO 100 (baseline 92).** Objectif desktop 90+ atteint. Médianes locales pour
+>   mémoire : desktop 98, mobile 49 (banc local volontairement dur). L'écart
+>   98 → 91 est normal : PSI tourne sans GPU (rendu logiciel du backdrop), le
+>   banc local ne voit jamais ça.
 > - Reste non fait dans ce plan : 1.1, 1.3, 2.1, 2.2, 2.3, et tout le tier 3.
 >
 > ORDRE RECOMMANDÉ : 2.1 (+ 2.3 dans la foulée) d'abord — c'est le seul
 > défaut **visible** par un visiteur → 1.3 (one-liner, zéro risque) → 1.1 (le
 > gros morceau). Un commit par item.
 >
-> VÉRIF PRÉALABLE (30 s) : confirmer d'abord quelle version tourne en prod.
-> `curl -s -o /dev/null -w '%{http_code}' https://hargile.com/fr/audit/result`
-> → **404 = v0.18.0**, 200 = encore v0.17.0. Les chiffres PSI ne veulent rien
-> dire tant que ce n'est pas 404.
+> VÉRIF PRÉALABLE : confirmer quelle version tourne en prod —
+> `https://hargile.com/fr/audit/result` doit donner **404** (200 = build
+> antérieur à v0.18.0). **À vérifier dans un navigateur, pas en curl depuis
+> l'agent** : le 2026-07-29, curl depuis la session a servi pendant 20 min une
+> copie cachée identique au byte près (même etag, 4 hostnames, cache-busters
+> ignorés) alors que la v0.18.0 était bien déployée. Conclusion : ne jamais
+> conclure « pas déployé » depuis curl seul — demander confirmation.
 >
 > **1.3 — `hostnameOf` peut blanchir la homepage.**
 > `recent-works-showcase.jsx` ~ligne 13 : `new URL(url).hostname` non gardé,
