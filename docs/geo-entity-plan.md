@@ -7,9 +7,9 @@
 > calls M3 "meilleur rapport effet/coût"), it is self-contained in this repo,
 > and the data mostly already exists on the site — it just isn't in the schema.
 >
-> **Q1 and Q2 are resolved** (2026-07-29). Three small answers remain — Q3
-> (is the X handle alive), Q4 (foundingDate) and Q5 (areaServed) — none of
-> which block starting.
+> **Q1, Q2 and Q3 are resolved** (2026-07-29), and the Google Business Profile
+> confirms the address from outside the repo. Two one-line answers remain — Q4
+> (foundingDate) and Q5 (areaServed) — neither of which blocks starting.
 
 ## What ships today — verified in production 2026-07-29
 
@@ -82,7 +82,65 @@ is not one. A simple entity beats a clever one.
 controller for the site's data — it depends on who determines purposes and
 means. Worth confirming with SMART's legal support, who exist for this.
 
-### Q3 — Is `@hargile_agency` alive?
+### ✅ Q1b — Google Business Profile — **CONFIRMED 2026-07-29**
+
+The GBP exists and is an independent source agreeing with the footer:
+
+> **HARGILE Tech Studio** — Développeur de logiciels à Saint-Gilles
+> Rue Sterckx 5, 1060 Saint-Gilles · 4,8 ★ · 18 avis
+
+This settles Q1 from outside the repo, which is the point: cross-source
+agreement is what engines check. But it exposes two mismatches to fix **in the
+schema**, not on GBP.
+
+**1. The name — the important one.** Schema publishes `name: "HARGILE"`. GBP
+says **HARGILE Tech Studio**, and so do the GitHub org (`HARGILE-tech-studio`)
+and Instagram (`hargile_tech_studio`). The bare "HARGILE" is the outlier across
+your own properties, and the name is the primary key entities are matched on.
+
+Fix — keep the site's brand as the primary and declare the variant:
+
+```js
+name: globalT("siteName"),          // "HARGILE"
+alternateName: "HARGILE Tech Studio",
+```
+
+That is precisely what `alternateName` is for; both strings then resolve to one
+entity instead of competing.
+
+**2. The box number.** Footer says "Rue Sterckx 5, **bt. 28**"; GBP says "Rue
+Sterckx 5". Minor — Google normalises box numbers — but pick one and use it in
+both. Adding "bt. 28" to the GBP address line is the easier direction, since the
+footer and schema should stay identical to each other.
+
+**Also useful from GBP:** the category "Développeur de logiciels" corroborates
+the `ProfessionalService` type and feeds `knowsAbout`.
+
+⚠️ **The 18 reviews are real corroboration — and must never be copied into the
+schema.** Self-asserted `aggregateRating` on your own Organization is exactly
+the pattern Google penalises. Reviews count because they live on GBP, not
+because you restate them. (Already in "out of scope"; restated because the
+temptation is obvious.)
+
+*Optional:* the Google Maps place URL is a legitimate `sameAs` entry.
+
+### Q3 — Is `@hargile_agency` alive? — **evidence says no**
+
+Traced 2026-07-29. Introduced in `a1acc40` (2025-05-06, AlexisVS, "Add SEO
+metadata and dependency updates") — a generic SEO scaffold, and the account was
+seemingly never created. Both `x.com/hargile_agency` and
+`twitter.com/hargile_agency` return **404**. (Caveat: X blocks non-browser user
+agents, so 404 is strong evidence rather than proof — confirm in a browser.)
+
+It ships live today in `twitter:site` and `twitter:creator`, and it lives in
+**two** places: `seo.global.twitterHandle` in both message files, and a
+hardcoded `'@hargile_agency'` in `shared-metadata.js:69-70`.
+
+**Recommendation: delete from both**, unless someone claims the handle. A
+published social handle resolving to nothing is a claim that fails
+verification — the opposite of what corroboration is for. Keep `twitter:card`,
+`twitter:title` and `twitter:description`: those drive link previews and are
+doing real work. If the handle is later claimed, it also goes into `SAME_AS`.
 
 `seo.global.twitterHandle` ships `@hargile_agency` in both locales, but X is not
 in `SAME_AS`. Either it is live and belongs in `sameAs`, or it is dead and the
@@ -126,6 +184,7 @@ const organization = {
   "@type": ["Organization", "ProfessionalService"],  // LocalBusiness subtype
   "@id": `${SITE_URL}/#organization`,                // UNCHANGED
   name, url, logo, sameAs,                           // as today
+  alternateName: "HARGILE Tech Studio",              // matches GBP/GitHub/Instagram
   description: globalT("defaultDescription"),        // already translated
   address: {
     "@type": "PostalAddress",
