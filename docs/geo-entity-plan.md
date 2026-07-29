@@ -147,7 +147,7 @@ const organization = {
   areaServed: /* Q5 */,
   // NO identifier/vatID — see Q2. HARGILE has no company number of its own.
   knowsAbout: [/* from the hero capability cards — keep them in sync */],
-  // foundingDate: Q4 · identifier/vatID: only if Q2 says HARGILE has its own
+  // foundingDate: Q4
 };
 ```
 
@@ -172,10 +172,16 @@ justify them exist.
 4. **NAP consistency check** — the address, phone and email in the rendered
    footer/navbar must match the schema character for character. That is the
    whole point; a mismatch here is a worse outcome than not shipping.
-5. Whatever Q1 resolves to, make the privacy-policy address stop reading as a
-   second HARGILE address — even a clarifying clause ("entité juridique :
-   Productions Associées ASBL") is enough. Two addresses on one page is the
-   defect.
+5. Confirm the schema carries **no** `identifier`/`vatID`/`taxID` — see Q2.
+   Grep the built HTML for `0896` and expect zero hits inside the JSON-LD.
+6. **No privacy-policy change.** An earlier draft asked for one; Q1 established
+   that the policy already attributes Rue Coenraets to Productions Associées
+   ASBL, so it is a correct legal disclosure. Leave it alone.
+
+The follow-on that actually matters is off-site, not here: Google Business
+Profile and any directory listing must show **Rue Sterckx**, matching the schema
+and the footer. Cross-source agreement is what engines check, and it belongs to
+M3 / phase 3.
 
 ## Out of scope, deliberately
 
@@ -187,5 +193,5 @@ justify them exist.
 
 ## Effort
 
-Half a day once Q1–Q5 are answered, including the NAP module and verification.
-The answers are the long pole, not the code.
+Half a day. Q1 and Q2 are settled; Q3–Q5 are one-line answers that do not block
+starting. Includes the NAP module and verification.
