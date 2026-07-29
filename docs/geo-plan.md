@@ -97,6 +97,14 @@ Three findings adopted from ENG-74, folded into the phases below:
 
 ### 1.1 Enrich the Organization entity · `src/seo/build-json-ld.js`
 
+> 📄 **Execution plan: `docs/geo-entity-plan.md`** (written 2026-07-29) — scoped
+> to one session, with the exact diff shape and verification. It is **blocked on
+> five answers**, two of which this section did not anticipate: the site
+> publishes **two different addresses** (footer = Rue Sterckx 5, Saint-Gilles;
+> privacy policy = Rue Coenraets 72, Bruxelles, "via SMART"), both in the same
+> HTML; and **BCE 0896.755.397 belongs to Productions Associées ASBL, not to
+> HARGILE** — it must not be attached to this entity as an identifier.
+
 Extend the existing `#organization` node (keep the `@id` stable):
 
 - `@type: ["Organization", "ProfessionalService"]` — the second type is a
