@@ -3,7 +3,8 @@
 > Fichier à copier-coller tel quel en ouverture de session. C'est **la** source
 > unique : les sections « Prompt de reprise » de `homepage-performance-plan.md`
 > et `homepage-code-review-plan.md` renvoient ici pour éviter la dérive.
-> Dernière mise à jour : 2026-07-29, après le tag **v0.19.2**. Prochaine session : **GEO phase 1**.
+> Dernière mise à jour : 2026-07-29, après le tag **v0.20.0**. Prochaine session :
+> **GEO phase 1, items 2 à 4** — l'item 1 (entité Organization) est livré.
 
 ---
 
@@ -17,12 +18,19 @@ Lire EN PREMIER, dans cet ordre :
 
 ## État au départ (vérifié le 2026-07-29)
 
-- **v0.19.2 est taguée et publiée** (retrait du handle X mort). **v0.19.1 est
-  déployée et vérifiée en prod** : 14 marqueurs `data-reveal-index`, **0
+- **v0.20.0 est taguée** (entité Organization + module NAP). Marqueur de
+  déploiement : `curl -s https://hargile.com/fr | grep -c '"alternateName":"HARGILE Tech Studio"'`
+  → **> 0 = v0.20.0 est en prod**. Vérifier avant toute autre chose.
+- **v0.19.2 est déployée et vérifiée en prod** (retrait du handle X mort) :
+  plus aucune balise `twitter:site` / `twitter:creator`. Attention, au début de
+  la session du 29/07 elle ne l'était **pas encore** — le bump infra venait de
+  merger 3 min plus tôt. Un marqueur négatif juste après un tag veut souvent
+  dire « en vol », pas « bloqué » : regarder l'heure du merge dans
+  `hargile-infra` avant de conclure.
+- **v0.19.1 vérifiée en prod** : 14 marqueurs `data-reveal-index`, **0
   `opacity:0` inline sur la copie** sur `/fr` et `/en`, `/fr/audit/result` →
   404, et **aucun fichier de police `-ext` demandé** (fix d'ordre
-  `@font-face`). Vérifier que v0.19.2 a bien roulé — marqueur : plus aucune
-  balise `twitter:site` / `twitter:creator` dans le HTML.
+  `@font-face`).
 - ✅ **PSI production, 8 runs sur v0.19.1 : médiane desktop 89, médiane
   mobile 94.** Baseline desktop 61. Objectif 90+ atteint, le plan perf est
   livré. **Il n'y a plus rien à gratter côté score** : les items restants
@@ -172,30 +180,56 @@ pour hargile.com : la contrainte de ce site est d'être trouvé, pas d'être
 rapide. Tout ce qui suit sert ENG-74 (Urgent, assigné à Mihai) et ses
 milestones M1–M5.
 
-### 1. `docs/geo-entity-plan.md` — entité Organization (~½ journée)
+### ✅ 1. `docs/geo-entity-plan.md` — entité Organization — **LIVRÉ en v0.20.0**
 
-**Le plan est écrit et prêt à exécuter.** Q1 (adresse), Q2 (BCE) et Q3 (handle
-X) sont tranchées ; Q3 est déjà livrée en v0.19.2. Restent deux réponses d'une
-ligne qui ne bloquent pas le démarrage : **Q4 `foundingDate`** (l'année suffit,
-omettre si incertain) et **Q5 `areaServed`** (BE / Benelux / UE).
+Ne pas ré-auditer. Q4 tranchée (`foundingDate: "2025"`, année seule — Mihai a
+répondu « environ un an et demi, genre février 2025 », donc l'année seule
+absorbe l'incertitude ; corroboré par le premier commit du dépôt, 2025-03-09) et
+Q5 tranchée (`areaServed` = Belgique).
 
-Contenu : `@type` → `["Organization","ProfessionalService"]`, `address`,
-`telephone`, `email`, `contactPoint`, `areaServed`, `knowsAbout`,
-`alternateName: "HARGILE Tech Studio"` (le GBP, GitHub et Instagram disent tous
-« Tech Studio », le schéma est le seul à dire « HARGILE » tout court), plus un
-module NAP unique pour que l'adresse cesse d'avoir trois sources.
+Ce qui a changé, et qui compte pour la suite :
 
-**Garde-fous non négociables** : `@id` inchangé (sinon Google lit une seconde
-entité), **aucun** `identifier`/`vatID` (le BCE appartient à Productions
-Associées ASBL, pas à HARGILE), **aucun** `aggregateRating` auto-déclaré.
+- **`src/lib/nap.js` est désormais la source unique** de l'adresse, du téléphone
+  et de l'email. Footer, navbar et `build-json-ld.js` la consomment. **Toute
+  nouvelle mention de l'adresse passe par là** — un littéral en dur réintroduit
+  exactement le problème que l'item existait pour régler.
+- Les clés `components.footer.address.line1` / `line2` **n'existent plus** ;
+  `line3` est devenue `address.country` (seule partie traduite).
+- La navbar codait « Belgium » en dur : le menu FR l'affichait en anglais. Corrigé.
+- `priceRange` reste **volontairement absent**, donc le Rich Results Test sort
+  **1 avertissement facultatif — c'est l'état voulu, pas un reste à faire**. Le
+  site ne publie aucun prix ; inventer un « €€ » serait une affirmation que la
+  copie ne soutient pas. Même logique que pour `identifier`/`aggregateRating`.
+- Cet avertissement n'apparaît **que parce que** `@type` inclut
+  `ProfessionalService` (sous-type de `LocalBusiness`). C'est le coût assumé du
+  type, qui corrobore la catégorie GBP.
 
-### 2. Bing Webmaster Tools + IndexNow (§1.3, ~30 min, pas de code)
+**Une divergence relevée et NON corrigée**, à traiter un jour : le `@type` de
+page est `WebSite` et non `WebPage` (il vient de la clé `schemaType` des
+fichiers de messages), ce qui imbrique un `WebSite` dans un autre via
+`isPartOf`. Le plan interdisait de toucher `schemaType` dans cet item, donc
+c'est resté. C'est une vraie erreur de modélisation, petite, isolée.
+
+**Outil réutilisable** : un validateur JSON-LD hors ligne a été écrit (il
+contrôle chaque `@type` et chaque propriété contre le vocabulaire schema.org
+réel, et a été testé par contrôle négatif). Il vit dans le scratchpad de la
+session, donc **il est perdu** — le réécrire si besoin, ou le sortir du
+scratchpad cette fois. Résultat sur v0.20.0 : 37 propriétés, 0 erreur,
+0 avertissement, sur les 6 pages et les 2 locales.
+
+### 2. Bing Webmaster Tools + IndexNow — **COMMENCER PAR LÀ** (§1.3, ~30 min, pas de code)
 
 **Plus important que sa taille le suggère** : ChatGPT Search interroge l'index
 **Bing**. Une page que Bing n'a pas indexée ne peut pas apparaître dans une
 réponse ChatGPT, quel que soit le classement Google. Personne n'a vérifié le
 statut Bing. Import en un clic depuis Search Console, soumettre `sitemap.xml`,
 inspecter les 6 URLs. C'est le seul item qui peut débloquer une source entière.
+
+C'est **ENG-87** dans Linear (« Sitemap, Bing Webmaster Tools, Search Console et
+IndexNow », milestone M2). ⚠️ **Ça se fait dans un navigateur, pas dans ce
+dépôt** : l'agent ne peut pas créer les comptes ni valider la propriété du
+domaine. Le rôle de la session est de préparer (URLs du sitemap, méthode de
+vérification, clé IndexNow) et de guider — l'exécution est manuelle.
 
 ### 3. `llms.txt` (§1.4, ~30 min)
 
@@ -233,11 +267,10 @@ les annuaires affichent la même adresse et le même nom que le schéma.
 
 ## Ce qui reste côté code — proposition de périmètre, à valider
 
-**Recommandation : `geo-plan.md` phase 1.** C'était bloqué par l'item 1.1, qui
-est maintenant livré. C'est ~1 jour, c'est la seule chose de la liste qui a une
-valeur business directe (visibilité dans les moteurs de réponse IA), et le
-reste est du polish. Contenu : entité Organization enrichie, contradiction de
-locale par défaut, Bing/IndexNow, `llms.txt`.
+**Recommandation : finir `geo-plan.md` phase 1** — il ne reste que Bing/IndexNow,
+`llms.txt` et le scoping de la locale par défaut. L'entité Organization est
+livrée en v0.20.0. C'est la seule chose de la liste qui a une valeur business
+directe (visibilité dans les moteurs de réponse IA) ; le reste est du polish.
 
 **Si tu préfères finir le code-review d'abord**, l'ordre qui a du sens :
 
@@ -285,7 +318,26 @@ locale par défaut, Bing/IndexNow, `llms.txt`.
   le nouveau `next start` meurt en `EADDRINUSE` et on mesure sans le savoir
   l'ANCIEN build. `Get-NetTCPConnection -LocalPort 3000` puis tuer par PID.
   (Arrivé encore le 2026-07-29 : un `next start` de la session précédente
-  servait toujours le build v0.18.0.)
+  servait toujours le build v0.18.0. **Puis DEUX fois de plus dans la session
+  v0.20.0.** C'est le piège le plus récurrent du dépôt : purger le port est la
+  première commande, pas une vérification après coup.)
+- **`grep -P` ne marche pas dans ce shell** — il sort
+  « `-P supports only unibyte and UTF-8 locales` » sur stderr, ne matche rien,
+  et `wc -l` renvoie donc **0**. Un faux « tout va bien », exactement sur le
+  garde-fou GEO `opacity:0`. Le 2026-07-29 ce 0 a d'abord été pris pour un
+  succès. Utiliser node pour toute regex avec lookahead :
+  `node -e "…(d.match(/style=\"[^\"]*\"/g)||[]).filter(s=>/opacity:0(?![.\d])/.test(s))…"`.
+  Règle générale : **une commande de vérification qui échoue doit être bruyante**
+  — vérifier le code de sortie, pas seulement le nombre affiché.
+- **Un validateur qui renvoie « 0 erreur » ne vaut rien sans contrôle négatif.**
+  Lui donner un document volontairement cassé et confirmer qu'il gueule. Fait
+  pour le validateur JSON-LD ; sans ça, « 0 erreur » peut juste vouloir dire
+  « le script ne teste rien ».
+- **`validator.schema.org` et le Rich Results Test n'ont pas d'API publique
+  utilisable** : le POST sort `numObjects: 0`. Les deux acceptent en revanche un
+  **snippet collé** (onglet « Code » / « Code snippet »), donc aucun déploiement
+  n'est nécessaire pour valider — récupérer le JSON-LD depuis `localhost:3000` et
+  le coller.
 - **« Taguée » ≠ « déployée ».** Voir la section déploiement plus haut. Le
   2026-07-29, v0.18.0 est restée non déployée pendant ~1 h sans que rien ne
   paraisse cassé. Toujours faire le check à 30 s après une release.
