@@ -201,3 +201,89 @@ Skip this item entirely if v2 isn't considered final yet.
 - Full-page smoke test after each priority tier: hero loader dismisses,
   cubes/bends switch at 1024 px, recent-works pin + progress counter, values
   render in fr/en/nl locales.
+
+---
+
+## Prompt de reprise — session 1.1 / 2.1 / 1.3 (copier-coller)
+
+> Session : suite du code-review homepage. Objectif = items **1.1** (bloqueur
+> GEO), **2.1** (chunk ColorBends inutile sur desktop) et **1.3** (crash
+> potentiel). Lire EN PREMIER ce fichier (docs/homepage-code-review-plan.md),
+> puis docs/homepage-performance-plan.md (résultats + pièges de mesure) et
+> docs/geo-plan.md §1.5 (guardrail : le copy doit être dans le premier HTML).
+>
+> ÉTAT AU DÉPART (après v0.18.0, 2026-07-29) :
+> - main = `4c6db15`, taggé **v0.18.0**, poussé et déployé. Phases 1-3 du plan
+>   perf toutes livrées. Item 1.2 de ce plan fait (preload below-the-fold
+>   retiré). Feature audit supprimée (`f883d1c`) — ne pas la chercher.
+> - Médianes **locales** avant release : desktop 98, mobile 49 (banc local
+>   volontairement dur), LCP = h1 sur les deux form factors. Les chiffres
+>   **prod** (PSI) sont à récupérer auprès de Mihai — c'est le seul endroit où
+>   le verdict SwiftShader existe. Ne rien conclure du banc local seul.
+> - Reste non fait dans ce plan : 1.1, 1.3, 2.1, 2.2, 2.3, et tout le tier 3.
+>
+> ORDRE RECOMMANDÉ : 1.3 (one-liner, zéro risque) → 2.1 (+ 2.3 dans la foulée)
+> → 1.1 (le gros morceau). Un commit par item.
+>
+> **1.3 — `hostnameOf` peut blanchir la homepage.**
+> `recent-works-showcase.jsx` ~ligne 13 : `new URL(url).hostname` non gardé,
+> exécuté pendant le render. Toutes les `actionUrl` de
+> `src/data/portfolio-data.js` sont absolues aujourd'hui, donc c'est latent :
+> une URL relative ou vide ajoutée plus tard throw pendant le render → page
+> blanche. Fix : try/catch → `""`, et ne rendre la puce `domainChip` que si
+> non vide.
+>
+> **2.1 — MESURER AVANT DE TOUCHER.** L'hypothèse : `useHeroVariant`
+> (`hero.jsx` ~23-41) démarre à `"bends"` et corrige en effet après mount,
+> donc le premier render client monte `<ColorBends>` et déclenche le fetch de
+> son chunk avant le flip. Non vérifié — DevTools Network sur un viewport
+> ≥1024 px, hard reload, chercher un chunk `color-bends`. **Si absent, l'item
+> est caduc : le noter ici et passer.** Si présent : état initial `null`
+> (= non résolu) et `HeroBackdrop` rend `null` tant que non résolu. La
+> résolution doit rester dans un effet (accord SSR / premier render client —
+> sinon mismatch d'hydratation sur la classe `sectionSharp` et le markup du
+> rail). ATTENTION `useBackdropReady` (`hero.jsx` ~53-106) : chemin rapide
+> `"none"` + timeout 2 s — vérifier qu'un variant `null` ne marque pas ready
+> trop tôt ni ne bloque le loader. Enchaîner **2.3** (supprimer
+> `resolveVariant` mort dans `hero-backdrop.jsx` ~59-66) : même zone, même
+> commit logique.
+>
+> **1.1 — le bloqueur GEO.** Le hero est déjà corrigé (reveals en keyframes
+> CSS, cf. commentaire dans `hero.jsx` ~132 et `hero.module.scss`) : c'est LE
+> patron à répliquer. Restent : `useReveal()`
+> (`src/components/pages/homepage/v2/useReveal.js`) qui renvoie
+> `initial: {opacity: 0, …}` consommé par `mvp-promo.jsx`, `design-dev.jsx`
+> et `values.jsx`, plus `verbs-quote.jsx` (~45) mot par mot. Réécrire
+> `useReveal` en reveal par classe CSS + IntersectionObserver : un seul
+> changement couvre tous les consommateurs. `scrub-word.jsx` (0.16 par mot)
+> est à part et **déjà traité** côté a11y/GEO (aria-hidden + copie sr-only
+> sur le blockquote) — ne pas y retoucher sans raison.
+> Garder impérativement un équivalent `prefers-reduced-motion` : aujourd'hui
+> les reveals s'effondrent en fondu via `useReducedMotion()`.
+> Mesure de référence : `/fr` contient **76** occurrences de `opacity:0`
+> inline avant l'item (compté sur le build v0.18.0). Objectif : plus aucune
+> sur du copy (h2/p/step/card). Il en restera légitimement quelques-unes
+> (CSS du menu, visuel hero `aria-hidden`) — les lister plutôt que viser 0
+> aveuglément.
+>
+> VÉRIFICATION (à chaque item) : `npm run build && npm run start`, puis
+> `curl -s http://localhost:3000/fr | grep -c 'opacity:0'` et un clic complet
+> sur les 2 locales. Full smoke test : loader dismissé, bascule cubes/bends à
+> 1024 px, pin recent-works + compteur, values en fr/en.
+>
+> PIÈGES (tous vécus) :
+> - Tuer les vieux serveurs AVANT de mesurer, et vérifier le port : `TaskStop`
+>   / Ctrl-C tue le wrapper npm mais **laisse le process node enfant** tenir
+>   le port 3000 ; le nouveau `next start` échoue en EADDRINUSE et on mesure
+>   sans le savoir l'ANCIEN build. Vérifier `Get-NetTCPConnection -LocalPort
+>   3000` et tuer par PID.
+> - `next start` râle (`output: standalone`) mais sert correctement ; la prod
+>   tourne `node .next/standalone/server.js`.
+> - Fermer le navigateur QA pendant Lighthouse (~5 pts de TBT de bruit).
+> - Comparer à locale constante (`/fr` ≈ 4 KB de plus que `/en`).
+> - Une string i18n manquante est SILENCIEUSE en prod, bruyante en dev
+>   seulement ; toute string client ajoutée doit rejoindre `CLIENT_NAMESPACES`
+>   dans `src/app/[locale]/layout.js`.
+>
+> RÈGLES : mesurer avant de proposer quoi que ce soit ; ne rien pousser ni
+> merger ni tagger sans mon accord explicite.
