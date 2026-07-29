@@ -41,12 +41,14 @@ Lire EN PREMIER, dans cet ordre :
   déplaisaient et levée pour celui-là. Ne pas s'en resservir comme baseline.
   **Ce qui compte vraiment, ce sont les données terrain (CrUX)** en haut du
   rapport PSI, pas le score labo : de vrais utilisateurs, avec de vrais GPU.
-- 💡 **Piste si l'amplitude devient gênante** (non faite, non chiffrée) :
-  détecter le rendu logiciel via `gl.getParameter(gl.RENDERER)` (retourne
-  « SwiftShader » / « llvmpipe ») et router ces clients vers **l'image fixe que
-  `prefers-reduced-motion` produit déjà**. Ce n'est pas tricher : c'est ne pas
-  faire tourner une animation GPU coûteuse sur une machine sans GPU, ce qui
-  profite aussi aux vraies machines bas de gamme.
+- 📄 **Un plan dédié existe : `docs/tbt-variance-plan.md`.** Tout le détail y
+  est — les mesures, ce qui est **déjà écarté** (ne pas ré-enquêter : la boucle
+  d'animation WebGL est déjà gatée depuis la phase 1.1, le conteneur froid, les
+  polices, v0.19.1), les deux hypothèses restantes (compilation des shaders sous
+  SwiftShader / coût d'hydratation), et une **phase 0 de mesure avant toute
+  modification de code**. Le point clé : TBT va de 40 ms à 1 530 ms sur les
+  mêmes octets, tout le reste est stable. **Commencer par regarder les données
+  terrain CrUX** : si elles sont vertes, la bonne décision est de s'arrêter là.
 - ℹ️ **PSI teste `hargile.com`, pas `hargile.com/fr`** : l'apex fait un 307 vers
   `/fr` (+44 ms sur le chemin critique, et `/fr` apparaît deux fois dans l'arbre
   de dépendances). `/fr` en direct ne redirige pas. C'est la « contradiction de
