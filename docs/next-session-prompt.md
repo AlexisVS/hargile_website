@@ -99,6 +99,45 @@ fusionne à la main avec `gh pr merge <n> -R HARGILE-tech-studio/hargile-infra
   `"cubes"`. `HeroBackdrop` ne rend rien tant que c'est `null` — c'est le fix
   2.1, pas une négligence.
 
+## À FAIRE EN PREMIER — branche `fix/font-subset-order` (non vérifiée)
+
+Deux correctifs sont commités sur la branche **`fix/font-subset-order`**
+(commit `1ad8c9d`), **hors de `main` parce qu'ils n'ont jamais été ouverts dans
+un navigateur**. Ils compilent et le raisonnement tient, rien de plus. Les
+vérifier, puis merger ou jeter.
+
+1. **Ordre des `@font-face`** (`src/app/styles/sass/_font-family.scss`) — les
+   sous-ensembles se recouvrent : `U+0100-02BA` (latin-ext) avale
+   `U+0152-0153` (Œ œ) que latin déclare aussi, et d'après CSS Fonts §4.5 la
+   **dernière** règle qui matche gagne. latin-ext étant déclaré en second, le
+   seul « œ » de « sculpte une œuvre » tirait les deux fichiers `-ext` sur
+   toutes les pages FR (~31 KB, découverts tard via le CSS, en queue de chemin
+   critique : 406 ms et 494 ms sur le PSI mobile). Le fix inverse les blocs.
+   **Vérifié seulement dans le CSS compilé** — l'ordre sort bien inversé. Jamais
+   observé côté requêtes réseau.
+2. **Reflow forcé** (`recent-works-showcase.jsx`, `layout()`) — écrivait
+   `outer.style.height` puis lisait `outer.getBoundingClientRect()` à la ligne
+   suivante ; en plus le ResizeObserver écoute `document.body`, donc chaque
+   écriture de hauteur rappelait `layout()`. Les lectures passent avant les
+   écritures. **Le plus risqué des deux** : si `outerTop` n'est pas indépendant
+   de la hauteur de la section comme supposé, le scroll horizontal épinglé se
+   cale au mauvais offset. Rien n'a été scrollé pour le vérifier.
+
+**Comment vérifier** (`agent-browser` est installé) :
+
+- charger `/fr`, lire `performance.getEntriesByType('resource')` et confirmer
+  qu'**aucun** `-ext.woff2` n'apparaît. `/en` sert de témoin : pas de « œ »,
+  donc il ne devait déjà charger que `latin`.
+- scroller la section recent-works au-dessus **et** en dessous de 900 px :
+  le `translateX` du rail doit suivre le scroll et le compteur `01/03`
+  progresser. C'est le test qui décide du sort du correctif 2.
+
+Si le pin casse, jeter le correctif 2 et ne garder que le 1 — c'est celui qui
+a un vrai argument derrière lui.
+
+Aucun des deux ne bougera un score : on est à 99/99. Le premier économise des
+octets réels sur les pages FR, le second retire un antipattern.
+
 ## Ce qui reste — proposition de périmètre, à valider
 
 **Recommandation : `geo-plan.md` phase 1.** C'était bloqué par l'item 1.1, qui
