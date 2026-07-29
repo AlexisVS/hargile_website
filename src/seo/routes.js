@@ -9,9 +9,9 @@ export const ROUTES = {
     'home': '',
     'contact': '/contact',
     'legal.privacy': '/legal/privacy-policy',
-    'audit.result': '/audit/result',
 };
 
-/* Pages that must stay out of the index: one result page per prospect is thin,
-   duplicated content and has no business ranking. */
-export const NOINDEX_PAGES = new Set(['audit.result']);
+/* Pages that must stay out of the index. Empty since the audit result page was
+   removed, but generate-page-metadata still consults it — add a pagePath here
+   rather than hand-writing a robots directive on the page. */
+export const NOINDEX_PAGES = new Set();

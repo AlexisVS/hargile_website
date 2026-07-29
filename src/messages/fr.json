@@ -1,33 +1,7 @@
 {
   "components": {
-    "audit-button": {
-      "description": "",
-      "title": "Auditer votre site web"
-    },
     "contact-button": {
       "title": "Contactez-nous"
-    },
-    "audit-modal": {
-      "analysis-complete": "Analyse terminée ! Remplissez vos informations pour consulter les résultats.",
-      "analyzing": "Analyse de votre site en cours... Vous pouvez remplir le formulaire pendant ce temps.",
-      "back-url": "Retour à l’audit",
-      "company": "Est-ce pour votre entreprise ?",
-      "contact": "Formulaire de Contact",
-      "error": "Erreur lors de l'audit. Il se pourrait que l'URL que vous avez indiquée soit mauvaise. Veuillez réessayer.",
-      "first-name": "Prénom",
-      "incomplete": "Veuillez remplir tous les champs obligatoires marqués d’un *",
-      "industry": "Secteur d’activité",
-      "last-name": "Nom",
-      "modal-description": "Entrez l’URL de votre site ci-dessous pour lancer un audit complet de ses performances.",
-      "modal-title": "Audit de votre site",
-      "modal-url-placeholder": "votresite.com",
-      "no": "Non",
-      "processing": "Traitement en cours...",
-      "select": "Veuillez sélectionner",
-      "start-audit": "Lancer l’audit",
-      "view-results": "Voir les résultats de l’audit",
-      "wait": "Veuillez patienter jusqu’à la fin de l’audit avant d’accéder aux résultats.",
-      "yes": "Oui"
     },
     "contact-form": {
       "contact": {
@@ -229,56 +203,6 @@
         }
       }
     },
-    "audit-results": {
-      "sections": {
-        "audit-results": {
-          "Accessibility": "Accessibilité",
-          "Best Practices": "Bonnes pratiques",
-          "Performance": "Performance",
-          "SEO": "SEO",
-          "access-average": "50-89 (Moyen) : Certains éléments sont inaccessibles (ex : étiquettes manquantes, faible contraste, etc.).",
-          "access-good": "90-100 (Bon) : Conforme aux directives WCAG, navigation au clavier fonctionnelle, contraste des couleurs adéquat.",
-          "access-poor": "0-49 (Médiocre) : Problèmes majeurs empêchant l’utilisation par des personnes en situation de handicap. Risques de non-conformité légale.",
-          "average": "Moyen",
-          "best-average": "50-89 (Moyen) : Certaines méthodes obsolètes, chargement inefficace des ressources, petits problèmes de sécurité.",
-          "best-good": "90-100 (Bon) : HTTPS bien configuré, aucune API obsolète, bonnes pratiques de codage.",
-          "best-poor": "0-49 (Médiocre) : Utilisation de bibliothèques non sécurisées, code non optimisé ou requêtes non sûres.",
-          "book": "Réservez un rendez-vous avec notre équipe",
-          "company": "Pour l'entreprise",
-          "contact": "Prendre rendez-vous",
-          "description-accessibility": "L'accessibilité garantit que votre site peut être utilisé par les personnes en situation de handicap. Cela augmente votre portée, démontre votre engagement pour l’inclusion, et peut être une obligation légale dans certaines régions.",
-          "description-bestpractices": "Les bonnes pratiques font référence aux techniques modernes de développement web qui garantissent la fiabilité et la sécurité de votre site. Cela inclut l’évitement des API obsolètes, l’utilisation de HTTPS, le respect des proportions d’image, etc.",
-          "description-performance": "Un score de performance élevé signifie que votre site se charge rapidement et efficacement. Cela améliore l’expérience utilisateur, réduit le taux de rebond et a un impact positif sur votre classement SEO.",
-          "description-seo": "Un bon score SEO garantit que votre site est bien structuré pour les moteurs de recherche. Cela signifie que vos pages sont explorables, adaptées aux mobiles et suivent les bonnes pratiques.",
-          "experts": "Nos experts peuvent vous aider à optimiser votre impact digital",
-          "good": "Bon",
-          "improve": "Vous souhaitez améliorer vos performances :",
-          "industry": "Secteur d'activité",
-          "informations": "Vos Informations",
-          "may-look": "% peut sembler correct, mais il indique tout de même",
-          "may-look-access": " que votre site n’est pas accessible à tous. Cela pourrait exclure une partie de votre audience et poser des problèmes de conformité.",
-          "may-look-best": " un manque de standards modernes et sécurisés en développement web, ce qui peut exposer votre site à des vulnérabilités et nuire à la confiance des utilisateurs.",
-          "may-look-performances": " des temps de chargement ou une utilisation des ressources sous-optimale. Sur des connexions lentes ou mobiles, cela peut faire fuir les utilisateurs avant que la page ne s’affiche.",
-          "may-look-seo": " moins de pages indexées et une perte de trafic face à vos concurrents.",
-          "name": "Nom",
-          "performances-average": "50-89 (Moyen) : Des améliorations sont possibles sur l’exécution des scripts, l’optimisation des images ou les ressources bloquant le rendu.",
-          "performances-good": "90-100 (Bon) : Votre site se charge très rapidement, avec des ressources optimisées, peu de travail sur le thread principal et un temps interactif réduit.",
-          "performances-poor": "0-49 (Médiocre) : Les utilisateurs rencontrent probablement de longs temps de chargement, des saccades ou des pages non réactives — surtout sur mobile.",
-          "poor": "Médiocre",
-          "score-breakdown": "Détail des scores :",
-          "score-like": "Un score de",
-          "seo-average": "50-89 (Moyen) : Petits problèmes comme des balises meta manquantes ou des défauts d’ergonomie mobile.",
-          "seo-good": "90-100 (Bon) : HTML bien structuré, design mobile-friendly, balises meta bien utilisées, bonne explorabilité.",
-          "seo-poor": "0-49 (Médiocre) : Problèmes majeurs comme titres manquants, liens cassés ou mauvaise optimisation mobile.",
-          "title": "Résultats de l’Audit",
-          "warning-accessibility": "Votre score d’accessibilité nécessite des améliorations. Nous pouvons vous aider à rendre votre site plus inclusif et conforme.",
-          "warning-bestpractices": "Votre site ne suit pas toutes les bonnes pratiques. Corrigeons ensemble le code obsolète, les points d’accès non sécurisés ou les petites failles d’implémentation.",
-          "warning-performance": "Votre score de performance peut être amélioré. Laissez-nous vous aider à optimiser la vitesse de chargement, les scripts et les ressources.",
-          "warning-seo": "Votre score SEO peut être amélioré. Nous pouvons vous aider à améliorer votre visibilité et à augmenter votre trafic.",
-          "website": "Site web"
-        }
-      }
-    },
     "homepage": {
       "sections": {
         "about-us": {
@@ -321,73 +245,6 @@
           "subtitle": "Découvrez notre agence",
           "who_description": "Chez HARGILE, nous façonnons notre développement comme on sculpte une œuvre : avec soin, intention et sens du détail.",
           "who_title": "Nos valeurs"
-        },
-        "digital-audit": {
-          "description": "Votre site génère-t-il assez de trafic ? Convertit-il bien vos visiteurs en clients ? Votre visibilité est-elle optimisée ?<br/><br/><strong>HARGILE a développé un outil d'analyse de performance en ligne. En entrant simplement l'URL d'un site web, vous obtenez en quelques secondes un diagnostic précis</strong> :",
-          "details": {
-            "accessibility": {
-              "text": "Un site accessible garantit que tout le monde, y compris les personnes en situation de handicap, peut naviguer et interagir avec votre contenu. Au-delà de l'aspect éthique, cela élargit votre audience potentielle et renforce votre conformité aux normes d'accessibilité.",
-              "title": "Accessibilité"
-            },
-            "bestPractices": {
-              "text": "Respecter les meilleures pratiques techniques recommandées assure que votre site est robuste, performant et sécurisé. L'audit identifie les erreurs courantes telles que des ressources obsolètes, du JavaScript ou CSS mal optimisé, des bibliothèques non sécurisées, ainsi que les mauvaises configurations qui peuvent affecter l'expérience utilisateur et le référencement naturel. Un bon score en Best Practices garantit un site à jour, fiable et conforme aux standards modernes du web.",
-              "title": "Bonnes pratiques techniques (Best Practices)"
-            },
-            "mobile": {
-              "text": "Actuellement, plus de 50 % du trafic web provient des appareils mobiles. Un site non adapté aux mobiles offre une expérience médiocre et subit des pénalités de la part des moteurs de recherche. L'audit évalue la compatibilité mobile pour garantir une navigation fluide sur tous les écrans.",
-              "title": "Optimisation mobile"
-            },
-            "performance": {
-              "text": "Un site lent augmente le taux de rebond et génère de la frustration chez les utilisateurs. Cela impacte également négativement votre référencement naturel. À l'inverse, un site rapide offre une meilleure expérience utilisateur et améliore les conversions.",
-              "title": "Performance"
-            },
-            "security": {
-              "text": "Un site non sécurisé est exposé aux cyberattaques et peut rapidement perdre la confiance des utilisateurs, notamment dans le cadre du e-commerce. L'audit vérifie la présence de certificats SSL, d'en-têtes sécurisés et de mécanismes de protection essentiels.",
-              "title": "Sécurité"
-            },
-            "seo": {
-              "text": "Une structure de site bien optimisée facilite le travail des moteurs de recherche pour explorer et indexer votre contenu. Résultat : un meilleur positionnement et une augmentation du trafic qualifié vers votre site.",
-              "title": "Visibilité (SEO)"
-            }
-          },
-          "features": {
-            "security": "✅ <strong>Sécurité et fiabilité</strong> – Votre site est-il bien protégé ?",
-            "seo": "✅ <strong>Référencement SEO</strong> – Êtes-vous visible ?",
-            "speed": "✅ <strong>Vitesse de chargement</strong> – Un site lent fait fuir les visiteurs !",
-            "ux": "✅ <strong>Expérience utilisateur (UX)</strong> – Navigation fluide et responsive ?"
-          },
-          "form": {
-            "loading": "Analyse en cours...",
-            "placeholder": "votresite.com",
-            "submit": "Lancer l'audit"
-          },
-          "moreInfo": {
-            "description": "Notre outil d'audit digital permet d'identifier les faiblesses de votre site web et de définir une feuille de route claire pour améliorer sa performance technique, son accessibilité, sa sécurité ainsi que son optimisation pour les moteurs de recherche (SEO).",
-            "title": "L'audit digital"
-          },
-          "results": {
-            "accessibility": "Accessibilité",
-            "accessibilityLabel": "Accessibilité",
-            "bestPractices": "Bonnes pratiques",
-            "bestPracticesLabel": "Pratiques",
-            "contactUs": "Nous contacter",
-            "detailedReport": "Voir le rapport détaillé",
-            "mobile": "Mobile",
-            "mobileLabel": "Mobile",
-            "performance": "Performance",
-            "performanceLabel": "Performance",
-            "security": "Sécurité",
-            "securityLabel": "Sécurité",
-            "seo": "SEO",
-            "seoLabel": "SEO",
-            "title": "Résultats de l'audit"
-          },
-          "title": "Un site web performant, c'est bien plus qu'un ",
-          "titleAccent": "beau design.",
-          "whyImportant": {
-            "text": "parce que de bons indices de performances créent plus de trafic, plus d'engagement et plus de conversions.",
-            "title": "Pourquoi est-ce important ?"
-          }
         },
         "hero": {
           "arrowAlt": "Flèche",
@@ -994,18 +851,6 @@
         },
         "schemaType": "AboutPage",
         "title": "À Propos d'HARGILE - Notre Histoire & Mission | Agence d'Innovation Digitale"
-      },
-      "audit": {
-        "result": {
-          "description": "Consultez les résultats complets de l'audit de votre site web par HARGILE. Obtenez des insights pratiques sur les performances, le SEO, l'accessibilité et les meilleures pratiques.",
-          "og": {
-            "description": "Libérez tout le potentiel de votre site web avec l'audit détaillé d'HARGILE. Découvrez des opportunités d'amélioration de la vitesse, du SEO, de l'accessibilité et de l'expérience utilisateur.",
-            "imageAlt": "Audit de Site Web HARGILE",
-            "title": "Résultats d'Audit de Site Web | Analyse de Performance | HARGILE"
-          },
-          "schemaType": "WebPage",
-          "title": "Résultats d'Audit de Site Web | Analyse de Performance | HARGILE"
-        }
       },
       "contact": {
         "description": "Contactez l'équipe HARGILE pour une consultation gratuite. Développement web, IA et marketing digital – parlons de votre projet.",

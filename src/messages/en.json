@@ -1,33 +1,7 @@
 {
   "components": {
-    "audit-button": {
-      "description": "",
-      "title": "Audit your website"
-    },
     "contact-button": {
       "title": "Contact us"
-    },
-    "audit-modal": {
-      "analysis-complete": "Analysis complete! Fill in your details to view the results.",
-      "analyzing": "Analyzing your website... You can complete the form while we work.",
-      "back-url": "Go back",
-      "company": "Is this for your company?",
-      "contact": "Contact Information",
-      "error": "Error during the audit. The URL you entered might be incorrect. Please try again.",
-      "first-name": "First Name",
-      "incomplete": "Please complete all required fields marked with *",
-      "industry": "Industry",
-      "last-name": "Last Name",
-      "modal-description": "Enter your website URL below to start a comprehensive performance audit of your site.",
-      "modal-title": "Website Audit",
-      "modal-url-placeholder": "yourwebiste.com",
-      "no": "No",
-      "processing": "Processing...",
-      "select": "Please Select",
-      "start-audit": "Start Audit",
-      "view-results": "View Audit Results",
-      "wait": "Please wait for the audit to complete before accessing results.",
-      "yes": "Yes"
     },
     "contact-form": {
       "contact": {
@@ -229,56 +203,6 @@
         }
       }
     },
-    "audit-results": {
-      "sections": {
-        "audit-results": {
-          "Accessibility": "Accessibility",
-          "Best Practices": "Best Practices",
-          "Performance": "Performance",
-          "SEO": "SEO",
-          "access-average": "50-89 (Average): Some elements are inaccessible (e.g. missing labels, poor contrast, etc.).",
-          "access-good": "90-100 (Good): Complies with WCAG guidelines, keyboard navigation works, color contrast is appropriate.",
-          "access-poor": "0-49 (Poor): Major issues preventing use by people with disabilities. Legal compliance risks.",
-          "average": "Average",
-          "best-average": "50-89 (Average): Some deprecated methods, inefficient resource loading, minor security flags.",
-          "best-good": "90-100 (Good): Secure HTTPS setup, no deprecated APIs, good coding practices.",
-          "best-poor": "0-49 (Poor): Usage of insecure libraries, unoptimized code, or unsafe requests.",
-          "book": "Book a meeting with our team",
-          "company": "For Company",
-          "contact": "Make an appointment",
-          "description-accessibility": "Accessibility ensures that your website can be used by people with disabilities. This not only improves your reach but also shows commitment to inclusion and can be legally important in some regions.",
-          "description-bestpractices": "Best Practices refer to modern web development techniques that ensure your site runs reliably and securely. This includes avoiding deprecated APIs, using HTTPS, ensuring correct image aspect ratios, and more.",
-          "description-performance": "A high performance score means your website loads quickly and efficiently. This improves user experience, reduces bounce rates, and positively impacts your SEO ranking.",
-          "description-seo": "A strong SEO score ensures your website is well structured for search engines. It means your pages are crawlable, mobile-friendly, and follow best practices.",
-          "experts": "Our experts can help you optimize your digital impact",
-          "good": "Good",
-          "improve": "Want to improve your performance :",
-          "industry": "Industry",
-          "informations": "Your Informations",
-          "may-look": "% may look okay, but it still indicates ",
-          "may-look-access": " your site isn't accessible to everyone. This could be excluding part of your audience and pose compliance risks.",
-          "may-look-best": " a lack of secure and modern web development standards, which can expose your site to vulnerabilities and harm user trust.",
-          "may-look-performances": "suboptimal load times or resource usage. On slower connections or mobile devices, this could mean users leave before the page loads.",
-          "may-look-seo": " fewer pages indexed and lost traffic to competitors.",
-          "name": "Name",
-          "performances-average": "50-89 (Average): Room for improvement in script execution time, image optimization, or render-blocking resources.",
-          "performances-good": "90-100 (Good): Your site loads extremely fast, with optimized assets, minimal main-thread work, and reduced TTI.",
-          "performances-poor": "0-49 (Poor): Users likely face long load times, jank, or unresponsive pages — especially on mobile.",
-          "poor": "Poor",
-          "score-breakdown": "Score Breakdown:",
-          "score-like": "A score like",
-          "seo-average": "50-89 (Average): Minor issues like missing meta tags or some mobile usability flaws.",
-          "seo-good": "90-100 (Good): Well-structured HTML, mobile-friendly design, meta tags correctly used, good crawlability.",
-          "seo-poor": "0-49 (Poor): Major problems like missing titles, broken links, or poor mobile optimization.",
-          "title": "Audit Results",
-          "warning-accessibility": "Your accessibility score needs work. We can help make your website more inclusive and compliant.",
-          "warning-bestpractices": "Your site doesn't follow all best practices. Let's address outdated code, insecure endpoints, or minor implementation flaws.",
-          "warning-performance": "Your performance score could be improved. Let us help you optimize your loading speed, scripts, and assets.",
-          "warning-seo": "Your SEO score can be improved. We can help enhance your visibility and boost your traffic.",
-          "website": "Website"
-        }
-      }
-    },
     "homepage": {
       "sections": {
         "about-us": {
@@ -321,73 +245,6 @@
           "subtitle": "Get to know our agency",
           "who_description": "At HARGILE, we shape our development like sculpting a work of art: with care, intention, and attention to detail.\n\nOur ambition? To create digital solutions that make sense, serve your objectives, and evolve with you.",
           "who_title": "Our Values"
-        },
-        "digital-audit": {
-          "description": "Is your website generating enough traffic? Does it effectively convert visitors into customers? Is your visibility optimized?<br/><br/><strong>HARGILE has developed an online performance analysis tool. By simply entering a website URL, you get a precise diagnosis in seconds</strong>:",
-          "details": {
-            "accessibility": {
-              "text": "An accessible website ensures that everyone, including people with disabilities, can navigate and interact with your content. Beyond the ethical aspect, this expands your potential audience and strengthens your compliance with accessibility standards.",
-              "title": "Accessibility"
-            },
-            "bestPractices": {
-              "text": "Following the best technical practices ensures that your site is robust, performant, and secure. The audit identifies common errors such as obsolete resources, poorly optimized JavaScript or CSS, insecure libraries, and misconfigurations that can affect user experience and organic ranking. A good Best Practices score guarantees an up-to-date, reliable site that complies with modern web standards.",
-              "title": "Technical Best Practices"
-            },
-            "mobile": {
-              "text": "Currently, more than 50% of web traffic comes from mobile devices. A site not adapted to mobile offers a poor experience and suffers penalties from search engines. The audit evaluates mobile compatibility to ensure smooth navigation on all screens.",
-              "title": "Mobile Optimization"
-            },
-            "performance": {
-              "text": "A slow website increases bounce rate and generates frustration among users. It also negatively impacts your organic search ranking. Conversely, a fast site offers a better user experience and improves conversions.",
-              "title": "Performance"
-            },
-            "security": {
-              "text": "An unsecured site is exposed to cyber attacks and can quickly lose user trust, especially in e-commerce. The audit verifies the presence of SSL certificates, secure headers, and essential protection mechanisms.",
-              "title": "Security"
-            },
-            "seo": {
-              "text": "A well-optimized site structure makes it easier for search engines to crawl and index your content. The result: better positioning and increased traffic to your site.",
-              "title": "Visibility (SEO)"
-            }
-          },
-          "features": {
-            "security": "✅ <strong>Security & Reliability</strong> – Is your site well protected?",
-            "seo": "✅ <strong>SEO Ranking</strong> – Are you visible ?",
-            "speed": "✅ <strong>Loading Speed</strong> – A slow site drives visitors away!",
-            "ux": "✅ <strong>User Experience (UX)</strong> – Smooth and responsive navigation?"
-          },
-          "form": {
-            "loading": "Analyzing...",
-            "placeholder": "yourwebsite.com",
-            "submit": "Start Audit"
-          },
-          "moreInfo": {
-            "description": "Our digital audit tool helps identify your website's weaknesses and define a clear roadmap to improve its technical performance, accessibility, security, and search engine optimization (SEO).",
-            "title": "The Digital Audit"
-          },
-          "results": {
-            "accessibility": "Accessibility",
-            "accessibilityLabel": "Accessibility",
-            "bestPractices": "Best Practices",
-            "bestPracticesLabel": "Practices",
-            "contactUs": "Contact Us",
-            "detailedReport": "View Detailed Report",
-            "mobile": "Mobile",
-            "mobileLabel": "Mobile",
-            "performance": "Performance",
-            "performanceLabel": "Performance",
-            "security": "Security",
-            "securityLabel": "Security",
-            "seo": "SEO",
-            "seoLabel": "SEO",
-            "title": "Audit Results"
-          },
-          "title": "A performing website is much more than ",
-          "titleAccent": "beautiful design.",
-          "whyImportant": {
-            "text": "because good performance indicators create more traffic, more engagement, and more conversions.",
-            "title": "Why is this important?"
-          }
         },
         "hero": {
           "arrowAlt": "Arrow",
@@ -994,18 +851,6 @@
         },
         "schemaType": "AboutPage",
         "title": "About HARGILE - Our Story & Mission | Digital Innovation Agency"
-      },
-      "audit": {
-        "result": {
-          "description": "Review your comprehensive website audit results from HARGILE. Get actionable insights on performance, SEO, accessibility, and best practices to improve your digital presence.",
-          "og": {
-            "description": "Unlock your website's full potential with HARGILE's detailed performance audit. Discover opportunities to enhance speed, SEO, accessibility, and user experience.",
-            "imageAlt": "HARGILE Website Audit",
-            "title": "Website Audit Results | Performance Analysis | HARGILE"
-          },
-          "schemaType": "WebPage",
-          "title": "Website Audit Results | Performance Analysis | HARGILE"
-        }
       },
       "contact": {
         "description": "Get in touch with HARGILE for a free consultation. Custom web development, AI integration and digital marketing – let's talk.",

@@ -22,7 +22,6 @@ const CLIENT_NAMESPACES = [
     'pages.homepage',
     'pages.portfolio',
     'pages.contact',
-    'pages.audit-results',
     'pages.privacy-policy',
 ];
 

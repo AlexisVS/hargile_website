@@ -7,11 +7,6 @@ const SiteNavigationContext = createContext(null);
 export const SiteNavigationProvider = ({children}) => {
     const [currentSection, setCurrentSection] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
-    const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
-
-    const toggleAuditModal = useCallback(() => {
-        setIsAuditModalOpen(prevState => !prevState);
-    }, []);
 
     const toggleMenu = useCallback(() => {
         setIsOpen(prevState => !prevState);
@@ -29,10 +24,7 @@ export const SiteNavigationProvider = ({children}) => {
                 isOpen,
                 setIsOpen,
                 toggleMenu,
-                closeMenu,
-                isAuditModalOpen,
-                setIsAuditModalOpen,
-                toggleAuditModal
+                closeMenu
             }}>
             {children}
         </SiteNavigationContext.Provider>
