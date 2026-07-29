@@ -348,14 +348,19 @@ le commentaire existant**, il porte le détail vérifié :
 | ENG-109 `@type` WebPage | **Done** |
 | ENG-87 Sitemap/Bing/GSC/IndexNow | **In Progress** — bloquée par ENG-110 |
 | ENG-95 JSON-LD | **In Progress** — reste dépend de M4 |
-| ENG-110 accès GSC (Charles) | **Backlog**, priorité High |
+| ENG-110 accès GSC (Charles) | **Todo**, priorité High |
 
 ⚠️ **Piège vécu en écrivant ces commentaires** : le WAF Cloudflare devant Linear
 **rejette les commandes shell avec pipe** dans le corps d'un commentaire
 (`curl … | grep …` est lu comme une injection). Le POST échoue avec une page
 d'erreur Cloudflare, pas avec un message Linear. Reformuler en prose.
 
-### ✅ 2. ENG-87 Bing/IndexNow — **CLOS le 2026-07-29**
+### 🟡 2. ENG-87 Bing/IndexNow — **la partie Bing est finie, l'issue reste ouverte**
+
+⚠️ Ne pas la lire comme close : **ENG-87 est en `In Progress`, bloquée par
+ENG-110.** Ses points 1 (sitemap), 2 (Bing WMT) et 4 (IndexNow) sont faits et
+vérifiés ; son point 3 **Google Search Console** ne l'est pas, faute d'accès.
+C'est la seule chose qui manque pour la clôturer.
 
 📄 **`docs/geo-bing-indexnow-runbook.md`**, section « Relevé du 2026-07-29 ».
 
