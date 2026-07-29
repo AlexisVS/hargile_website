@@ -17,13 +17,58 @@ Lire EN PREMIER, dans cet ordre :
 
 ## État au départ (vérifié le 2026-07-29)
 
-- **v0.19.0 est taguée, poussée et publiée** (release GitHub + image GHCR).
-  Vérifié à la main dans le navigateur avant tag : pas de flash, loader OK aux
-  deux largeurs.
-- **Le plan perf est entièrement livré** (phases 1 à 3). PSI production sur
-  v0.18.0 : desktop **91** (baseline 61), mobile **94**, SEO **100**.
-  v0.19.0 n'est pas censée bouger ces chiffres — 2.1 retire un chunk gaspillé,
-  pas du travail sur le chemin critique.
+- **v0.19.0 est taguée, publiée ET déployée** (2026-07-29 10:03 UTC).
+  Vérifié en prod : 14 marqueurs `data-reveal-index` et **0 `opacity:0` inline
+  sur la copie** sur `/fr` et `/en`, `/fr/audit/result` → 404.
+- ⚠️ **v0.18.0 n'a jamais été déployée.** La prod a tourné sur **v0.17.0** du
+  2026-07-28 au 2026-07-29 10:03 UTC : le PR de bump d'image côté
+  `hargile-infra` est resté ouvert (voir « Comment le déploiement marche »).
+  Conséquence : **les chiffres PSI « desktop 91 / mobile 94 / SEO 100 »
+  attribués à v0.18.0 mesurent en réalité v0.17.0**, donc la phase 1 seule.
+  L'effet en production des phases 2–3 n'a jamais été mesuré — v0.19.0 est la
+  première build qui les contient en prod. **Un run PSI maintenant est la
+  première mesure honnête du travail perf.**
+- Le plan perf est entièrement livré côté code (phases 1 à 3).
+
+## Comment le déploiement marche (personne ne l'avait écrit — d'où 2 releases perdues)
+
+Ce dépôt **ne se déploie pas tout seul** et le tag n'est pas ce qui part en
+prod. La chaîne réelle :
+
+1. Push sur `main` **ou** tag `v*` → workflow `docker.yml` → image poussée sur
+   `ghcr.io/alexisvs/hargile-website:<tag>`. **S'arrête là.** Un run vert ici
+   veut dire « image publiée », pas « site à jour ».
+2. Le contrôleur image-automation de Flux (dans le cluster) voit la nouvelle
+   image et commite un bump sur la branche `image-updates/auto` du dépôt
+   **`HARGILE-tech-studio/hargile-infra`**, fichier
+   `clusters/ks5/apps/hargile-website.yaml` (une ligne, `APP_IMAGE:`).
+3. Ce bump vit dans une **PR** que `auto-merge-image-updates.yml` fusionne
+   *une fois la CI verte*.
+4. Flux tourne **dans le cluster** et poll `master` de `hargile-infra` toutes
+   les **1 min** (`clusters/ks5/flux-system/gotk-sync.yaml`) → applique →
+   les pods roulent. Compter ~2 min entre le merge et le site à jour.
+
+**Le point de rupture est l'étape 3.** La CI de `hargile-infra` tourne sur
+`runs-on: arc-hargile-org` — des runners self-hosted (Actions Runner Controller)
+dans le cluster. Runners morts = checks en `queued` = PR jamais fusionnée = rien
+ne se déploie, **sans aucun signal d'échec** : tout est vert côté `hargile_website`.
+C'est exactement ce qui a mangé v0.18.0.
+
+À savoir : le workflow `Flux Reconcile` ne *fait* pas le déploiement, il ne fait
+que forcer une synchro immédiate. Flux dans le cluster continue son poll même
+si ARC est mort — donc une PR fusionnée part en prod même sans runner.
+
+**Après chaque release, vérifier que c'est vraiment déployé** (30 s) :
+
+```bash
+curl -s -o /dev/null -w '%{http_code}\n' https://hargile.com/fr/audit/result   # 404 = v0.18.0+
+curl -s https://hargile.com/fr | grep -c 'data-reveal-index'                   # >0 = v0.19.0+
+gh pr list -R HARGILE-tech-studio/hargile-infra                                # une PR de bump ouverte = bloqué
+```
+
+Si une PR `image-updates/auto` traîne : son diff est une seule ligne, elle se
+fusionne à la main avec `gh pr merge <n> -R HARGILE-tech-studio/hargile-infra
+--squash --delete-branch --admin`, et Flux prend le relais en ~2 min.
 - **Le code-review priorités 1 et 2 est clos** : 1.1, 1.2, 1.3, 2.1, 2.3
   livrés. Reste **2.2** et le lot **3.x**.
 - **Le HTML SSR ne cache plus aucune copie.** 0 `opacity:0` inline sur `/fr`
@@ -103,12 +148,16 @@ locale par défaut, Bing/IndexNow, `llms.txt`.
   l'ANCIEN build. `Get-NetTCPConnection -LocalPort 3000` puis tuer par PID.
   (Arrivé encore le 2026-07-29 : un `next start` de la session précédente
   servait toujours le build v0.18.0.)
-- **Vérifier la version déployée dans un NAVIGATEUR, pas en curl depuis
-  l'agent.** Le 2026-07-29, curl depuis la session a servi 20 min une copie
-  cachée identique au byte près (même etag, 4 hostnames, cache-busters ignorés)
-  alors que v0.18.0 était bien live — d'où un diagnostic « pas déployé »
-  entièrement faux. Marqueur de version : `data-reveal-index` présent dans le
-  HTML de `/fr` = v0.19.0 ou plus récent.
+- **« Taguée » ≠ « déployée ».** Voir la section déploiement plus haut. Le
+  2026-07-29, v0.18.0 est restée non déployée pendant ~1 h sans que rien ne
+  paraisse cassé. Toujours faire le check à 30 s après une release.
+- **Le diagnostic « pas déployé » de la session précédente était en fait
+  juste — c'est la rétractation qui était fausse.** Une copie cachée servie en
+  curl avait fait croire à un artefact de cache, et le marqueur
+  `/fr/audit/result` (qui renvoyait 200, donc « pas déployé ») a été écarté à
+  tort. Marqueurs fiables : `/fr/audit/result` → 404 = v0.18.0+ ;
+  `data-reveal-index` dans le HTML de `/fr` = v0.19.0+. Croire le marqueur, et
+  vérifier l'état réel dans `hargile-infra` plutôt que de spéculer sur le cache.
 - **`npm run lint` sort 4 erreurs préexistantes** (`mvp-studio.jsx`,
   `Footer.jsx`, et 2× `setState` dans un effet de `hero.jsx`). C'est la
   baseline, pas une régression : comparer à 4, pas à 0.

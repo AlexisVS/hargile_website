@@ -4,11 +4,24 @@
 > Baseline: **desktop Performance 61** (FCP 0.3 s, LCP 0.6 s, **TBT 13,900 ms**,
 > CLS 0.044, **SI 3.6 s**) vs **mobile 95** (LCP render delay 6,290 ms).
 >
-> **RÉSULTAT PROD (2026-07-29, PSI sur v0.18.0 déployée) : desktop 91
-> (baseline 61 — objectif 90+ atteint), mobile 94 (baseline 95, plat), SEO
-> 92 → 100.** L'écart avec le banc local (desktop 98) est attendu : PSI tourne
-> sans GPU, donc le backdrop passe en rendu logiciel — c'est précisément le
-> verdict SwiftShader que le banc local ne peut pas voir.
+> **RÉSULTAT PROD (2026-07-29) : desktop 91 (baseline 61 — objectif 90+
+> atteint), mobile 94 (baseline 95, plat), SEO 92 → 100.** L'écart avec le banc
+> local (desktop 98) est attendu : PSI tourne sans GPU, donc le backdrop passe
+> en rendu logiciel — c'est précisément le verdict SwiftShader que le banc local
+> ne peut pas voir.
+>
+> ⚠️ **CORRECTION (2026-07-29, plus tard) — ces chiffres mesurent v0.17.0, pas
+> v0.18.0.** v0.18.0 n'a jamais été déployée : le PR de bump d'image dans
+> `hargile-infra` est resté ouvert, et le cluster a servi
+> `hargile-website:v0.17.0` jusqu'au 2026-07-29 10:03 UTC. Preuve indépendante
+> du manifeste : `hargile.com/fr/audit/result` renvoyait encore **200** alors
+> que v0.18.0 supprime cette route — c'est exactement le marqueur que la session
+> précédente s'était donné, et il disait « pas déployé » tout du long.
+>
+> Donc **desktop 91 = phase 1 seule** (livrée dans v0.17.0). L'effet des
+> **phases 2–3 en production n'a jamais été mesuré** : elles ne sont arrivées
+> en prod que le 2026-07-29 à 10:03 UTC, avec v0.19.0. Refaire un run PSI
+> maintenant — c'est la première mesure honnête de ce travail.
 >
 > **STATUS (2026-07-29): fully implemented and merged to `main`, tagged
 > v0.18.0.** Phase 1 shipped in v0.17.0 (`f92df2a`). Phases 2–3 were built on
