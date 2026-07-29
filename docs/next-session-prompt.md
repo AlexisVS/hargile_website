@@ -17,10 +17,12 @@ Lire EN PREMIER, dans cet ordre :
 
 ## État au départ (vérifié le 2026-07-29)
 
-- **v0.19.1 est taguée, publiée ET déployée** (2026-07-29 12:58 UTC).
-  Vérifié en prod : 14 marqueurs `data-reveal-index` et **0 `opacity:0` inline
-  sur la copie** sur `/fr` et `/en`, `/fr/audit/result` → 404, et **aucun
-  fichier de police `-ext` demandé** (le fix d'ordre `@font-face`).
+- **v0.19.2 est taguée et publiée** (retrait du handle X mort). **v0.19.1 est
+  déployée et vérifiée en prod** : 14 marqueurs `data-reveal-index`, **0
+  `opacity:0` inline sur la copie** sur `/fr` et `/en`, `/fr/audit/result` →
+  404, et **aucun fichier de police `-ext` demandé** (fix d'ordre
+  `@font-face`). Vérifier que v0.19.2 a bien roulé — marqueur : plus aucune
+  balise `twitter:site` / `twitter:creator` dans le HTML.
 - ✅ **PSI production, 8 runs sur v0.19.1 : médiane desktop 89, médiane
   mobile 94.** Baseline desktop 61. Objectif 90+ atteint, le plan perf est
   livré. **Il n'y a plus rien à gratter côté score** : les items restants
