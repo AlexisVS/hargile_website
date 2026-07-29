@@ -3,7 +3,7 @@
 > Fichier à copier-coller tel quel en ouverture de session. C'est **la** source
 > unique : les sections « Prompt de reprise » de `homepage-performance-plan.md`
 > et `homepage-code-review-plan.md` renvoient ici pour éviter la dérive.
-> Dernière mise à jour : 2026-07-29, après le tag **v0.19.0**.
+> Dernière mise à jour : 2026-07-29, après le tag **v0.19.1** (déployé).
 
 ---
 
@@ -17,21 +17,36 @@ Lire EN PREMIER, dans cet ordre :
 
 ## État au départ (vérifié le 2026-07-29)
 
-- **v0.19.0 est taguée, publiée ET déployée** (2026-07-29 10:03 UTC).
+- **v0.19.1 est taguée, publiée ET déployée** (2026-07-29 12:58 UTC).
   Vérifié en prod : 14 marqueurs `data-reveal-index` et **0 `opacity:0` inline
-  sur la copie** sur `/fr` et `/en`, `/fr/audit/result` → 404.
-- ✅ **PSI production (v0.19.1, 6 runs à chaud) : médiane desktop 93 (87–97),
-  médiane mobile 94 (84–97).** Baseline desktop 61. Objectif 90+ atteint, le
-  plan perf est livré. **Il n'y a plus rien à gratter côté score** : les items
-  restants (2.2, 3.x) sont qualité de code et accessibilité, pas perf.
-- ⚠️ **Le score bouge de ±10 points d'un run à l'autre, sans changement de
-  code.** Le TBT pèse 30 % et il est dominé par le parse/execute de three.js du
-  backdrop ; PSI n'a pas de GPU, donc ça passe en SwiftShader et le coût dépend
-  de la machine tirée au sort (TBT mesuré de 40 à 160 ms sur le même build).
-  **Un écart de 10 points n'est pas un signal.** Médiane de 3 à 5 runs, sinon
-  ne rien conclure. Le « 99/99 » qui traînait dans les docs était un run isolé,
-  pris pour argent comptant parce qu'il faisait plaisir — ne pas s'en servir
-  comme baseline.
+  sur la copie** sur `/fr` et `/en`, `/fr/audit/result` → 404, et **aucun
+  fichier de police `-ext` demandé** (le fix d'ordre `@font-face`).
+- ✅ **PSI production, 8 runs sur v0.19.1 : médiane desktop 89, médiane
+  mobile 94.** Baseline desktop 61. Objectif 90+ atteint, le plan perf est
+  livré. **Il n'y a plus rien à gratter côté score** : les items restants
+  (2.2, 3.x) sont qualité de code et accessibilité, pas perf.
+- 🛑 **LIRE CECI AVANT DE REGARDER UN SCORE PSI. L'amplitude est de ±25 points
+  sans le moindre changement de code.** Runs bruts : desktop 70 / 79 / 95 / 87 /
+  97 / 91 / 71 / 93, mobile 82 / 98 / 97 / 84 / 93 / 95 / 71 / 97. Un run à
+  71/71 et le suivant, **5 secondes plus tard**, à 93/97 — même build, mêmes
+  octets, même serveur.
+  **Cause** : le TBT pèse 30 % du score et il est dominé par le backdrop WebGL
+  du hero, qui **anime en continu**. PSI tourne sans GPU, donc chaque frame
+  passe en SwiftShader sur le CPU, et le coût dépend de la machine que la flotte
+  Google attribue au run (TBT mesuré de 40 à 160 ms sur le même build).
+  **Conséquence pratique** : un run PSI isolé sur ce site ne mesure pas le code.
+  Médiane de 3 à 5 runs, ou rien. Le « 99/99 » qui a traîné une heure dans ces
+  docs était un run isolé, pris pour argent comptant parce qu'il faisait
+  plaisir — la règle des médianes avait été appliquée aux chiffres qui
+  déplaisaient et levée pour celui-là. Ne pas s'en resservir comme baseline.
+  **Ce qui compte vraiment, ce sont les données terrain (CrUX)** en haut du
+  rapport PSI, pas le score labo : de vrais utilisateurs, avec de vrais GPU.
+- 💡 **Piste si l'amplitude devient gênante** (non faite, non chiffrée) :
+  détecter le rendu logiciel via `gl.getParameter(gl.RENDERER)` (retourne
+  « SwiftShader » / « llvmpipe ») et router ces clients vers **l'image fixe que
+  `prefers-reduced-motion` produit déjà**. Ce n'est pas tricher : c'est ne pas
+  faire tourner une animation GPU coûteuse sur une machine sans GPU, ce qui
+  profite aussi aux vraies machines bas de gamme.
 - ℹ️ **PSI teste `hargile.com`, pas `hargile.com/fr`** : l'apex fait un 307 vers
   `/fr` (+44 ms sur le chemin critique, et `/fr` apparaît deux fois dans l'arbre
   de dépendances). `/fr` en direct ne redirige pas. C'est la « contradiction de
@@ -42,12 +57,13 @@ Lire EN PREMIER, dans cet ordre :
   `hargile-infra` est resté ouvert (voir « Comment le déploiement marche »).
   Les anciens chiffres « desktop 91 / mobile 94 » attribués à v0.18.0
   mesuraient en fait v0.17.0, donc la phase 1 seule.
-- ⚠️ **Ne jamais juger sur un run isolé, surtout juste après un déploiement.**
-  Le 2026-07-29, le premier run post-roulement a sorti desktop 89 avec un TTFB
-  de 2 489 ms (conteneur froid — le serveur mesurait 72–224 ms en direct au même
-  moment), et le suivant mobile 81. Les vrais chiffres sont 99/99. Deux
-  diagnostics ont failli partir sur du bruit : attendre que ça chauffe, puis
-  médianes de 3.
+- ⚠️ **Un run juste après un déploiement ne mesure rien d'utile**, et pas
+  seulement à cause du conteneur froid : chaque build re-hashe le nom de tous
+  les chunks, donc le cache CDN est vide pour **chaque** CSS/JS/police. Un run
+  à +1 min a sorti desktop 70 ; le même build tourne à 91–97 une fois chaud. Un
+  premier run post-rollout a même sorti un TTFB de 2 489 ms alors que le serveur
+  répondait en 72–224 ms mesuré en direct au même instant (et « Server responds
+  quickly, 10 ms » dans le rapport PSI suivant). Attendre ~10 min.
 
 ## Comment le déploiement marche (personne ne l'avait écrit — d'où 2 releases perdues)
 
@@ -112,44 +128,29 @@ fusionne à la main avec `gh pr merge <n> -R HARGILE-tech-studio/hargile-infra
   `"cubes"`. `HeroBackdrop` ne rend rien tant que c'est `null` — c'est le fix
   2.1, pas une négligence.
 
-## À FAIRE EN PREMIER — branche `fix/font-subset-order` (non vérifiée)
+### Livré dans v0.19.1, et vérifié en prod
 
-Deux correctifs sont commités sur la branche **`fix/font-subset-order`**
-(commit `1ad8c9d`), **hors de `main` parce qu'ils n'ont jamais été ouverts dans
-un navigateur**. Ils compilent et le raisonnement tient, rien de plus. Les
-vérifier, puis merger ou jeter.
+Les deux correctifs qui traînaient sur une branche sont **mergés, déployés et
+confirmés dans le rapport PSI lui-même** — la branche `fix/font-subset-order`
+n'existe plus.
 
-1. **Ordre des `@font-face`** (`src/app/styles/sass/_font-family.scss`) — les
-   sous-ensembles se recouvrent : `U+0100-02BA` (latin-ext) avale
-   `U+0152-0153` (Œ œ) que latin déclare aussi, et d'après CSS Fonts §4.5 la
-   **dernière** règle qui matche gagne. latin-ext étant déclaré en second, le
-   seul « œ » de « sculpte une œuvre » tirait les deux fichiers `-ext` sur
-   toutes les pages FR (~31 KB, découverts tard via le CSS, en queue de chemin
-   critique : 406 ms et 494 ms sur le PSI mobile). Le fix inverse les blocs.
-   **Vérifié seulement dans le CSS compilé** — l'ordre sort bien inversé. Jamais
-   observé côté requêtes réseau.
-2. **Reflow forcé** (`recent-works-showcase.jsx`, `layout()`) — écrivait
-   `outer.style.height` puis lisait `outer.getBoundingClientRect()` à la ligne
-   suivante ; en plus le ResizeObserver écoute `document.body`, donc chaque
-   écriture de hauteur rappelait `layout()`. Les lectures passent avant les
-   écritures. **Le plus risqué des deux** : si `outerTop` n'est pas indépendant
-   de la hauteur de la section comme supposé, le scroll horizontal épinglé se
-   cale au mauvais offset. Rien n'a été scrollé pour le vérifier.
+- **Ordre des `@font-face`** (`_font-family.scss`) — les sous-ensembles se
+  recouvraient (`U+0100-02BA` de latin-ext avale `U+0152-0153`, Œ œ), et
+  d'après CSS Fonts §4.5 la **dernière** règle qui matche gagne. latin-ext
+  était déclaré en second, donc le seul « œ » de « sculpte une œuvre » tirait
+  les deux fichiers `-ext` sur toutes les pages FR. latin est maintenant déclaré
+  en dernier. **Ne pas réinverser ces blocs** (un commentaire le dit sur place).
+  Résultat mesuré en prod : plus aucun `-ext.woff2` demandé, et les deux nœuds
+  de 406/494 ms ont disparu de l'arbre de dépendances PSI.
+- **Reflow forcé** (`recent-works-showcase.jsx`, `layout()`) — les lectures
+  passent avant les écritures. L'insight « Forced reflow » a disparu du rapport.
 
-**Comment vérifier** (`agent-browser` est installé) :
-
-- charger `/fr`, lire `performance.getEntriesByType('resource')` et confirmer
-  qu'**aucun** `-ext.woff2` n'apparaît. `/en` sert de témoin : pas de « œ »,
-  donc il ne devait déjà charger que `latin`.
-- scroller la section recent-works au-dessus **et** en dessous de 900 px :
-  le `translateX` du rail doit suivre le scroll et le compteur `01/03`
-  progresser. C'est le test qui décide du sort du correctif 2.
-
-Si le pin casse, jeter le correctif 2 et ne garder que le 1 — c'est celui qui
-a un vrai argument derrière lui.
-
-Aucun des deux ne bougera un score : on est à 99/99. Le premier économise des
-octets réels sur les pages FR, le second retire un antipattern.
+Méthode qui a servi à les valider, à réutiliser (`agent-browser` est installé) :
+`performance.getEntriesByType("resource")` pour les polices réellement
+demandées, et un scroll réel pour le pin. Deux pièges rencontrés :
+`window.scrollTo` ne fait rien (Lenis intercepte — utiliser `agent-browser
+scroll down N`), et `querySelector("[class*=track]")` attrape `trackWrap` avant
+`track`, ce qui fait passer un pin fonctionnel pour cassé.
 
 ## Ce qui reste — proposition de périmètre, à valider
 

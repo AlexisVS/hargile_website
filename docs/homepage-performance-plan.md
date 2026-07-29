@@ -21,11 +21,16 @@
 > Donc **desktop 91 = phase 1 seule** (livrée dans v0.17.0). Les phases 2–3 ne
 > sont arrivées en prod que le 2026-07-29 à 10:03 UTC, avec v0.19.0.
 >
-> ✅ **MESURE RÉELLE (2026-07-29, PSI prod chaude, 6 runs sur v0.19.1) :
-> médiane desktop 93 (87–97), médiane mobile 94 (84–97).** Baseline desktop
-> 61 → **93**. Objectif 90+ atteint. Runs bruts : desktop 70 / 79 / 95 / 87 /
-> 97 / 91, mobile 82 / 98 / 97 / 84 / 93 / 95 (les deux premiers pris ~1 min
-> après le rollout, à froid — exclus de la médiane).
+> ✅ **MESURE RÉELLE (2026-07-29, PSI prod, 8 runs sur v0.19.1) :
+> médiane desktop 89, médiane mobile 94.** Baseline desktop 61. Objectif 90+
+> atteint. Runs bruts : desktop 70 / 79 / 95 / 87 / 97 / 91 / 71 / 93,
+> mobile 82 / 98 / 97 / 84 / 93 / 95 / 71 / 97.
+>
+> ⚠️ **L'amplitude est d'environ ±25 points, et « attendre que ça chauffe » ne
+> suffit pas.** Un run à chaud, 20 min après le déploiement, a rendu 71/71 ; le
+> run suivant, **5 secondes plus tard**, 93/97. Même build, mêmes octets, même
+> serveur. Le site est la constante, la mesure est la variable. Un run PSI isolé
+> sur ce site ne mesure pas le code — ne jamais en tirer de conclusion.
 >
 > ⚠️ **Le « 99/99 » écrit ici plus tôt était UN seul run, et il ne faut pas le
 > prendre pour la baseline.** C'est la même erreur que celle dénoncée juste en
