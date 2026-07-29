@@ -9,6 +9,15 @@ const siteHostname = (process.env.NEXT_PUBLIC_SITE_URL || 'hargile.com')
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     output: "standalone",
+    env: {
+        /* Inlined at build time, so the same literal ends up in the SSR HTML and
+           in the client bundle — no hydration mismatch, and no `new Date()`
+           during render. The footer copyright used to be seeded with a hardcoded
+           2025 and only corrected in an effect, which meant the *raw* HTML said
+           2025 forever. AI crawlers do not execute JavaScript, so that stale
+           year was the freshness signal they read. Now every build refreshes it. */
+        NEXT_PUBLIC_BUILD_YEAR: String(new Date().getFullYear()),
+    },
     compiler: {
         styledComponents: true,
     },

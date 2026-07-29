@@ -22,12 +22,14 @@ const Footer = () => {
     // "Tech Studio" lives with the hero copy — one source for the label site-wide
     const tHero = useTranslations('pages.homepage.sections.hero.v2');
 
-    // Read the current year on the client only. Calling new Date() during render
-    // of a client component makes the output non-deterministic (server prerender
-    // vs. hydration can straddle a year boundary), which Next.js 16 flags. Seed
-    // with a stable base year so the prerendered markup matches first paint, then
-    // correct to the live year after mount.
-    const [year, setYear] = useState(2025);
+    // Calling new Date() during render of a client component makes the output
+    // non-deterministic (server prerender vs. hydration can straddle a year
+    // boundary), which Next.js 16 flags. So seed with a stable value and correct
+    // to the live year after mount. The seed is the *build* year, inlined by
+    // next.config.mjs: the previous hardcoded 2025 meant the raw HTML — the only
+    // thing AI crawlers ever read, since none of them run JS — advertised a
+    // stale year indefinitely.
+    const [year, setYear] = useState(() => Number(process.env.NEXT_PUBLIC_BUILD_YEAR) || 2025);
     useEffect(() => {
         setYear(new Date().getFullYear());
     }, []);
