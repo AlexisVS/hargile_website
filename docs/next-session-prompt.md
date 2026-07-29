@@ -30,10 +30,14 @@ Lire EN PREMIER, dans cet ordre :
   97 / 91 / 71 / 93, mobile 82 / 98 / 97 / 84 / 93 / 95 / 71 / 97. Un run à
   71/71 et le suivant, **5 secondes plus tard**, à 93/97 — même build, mêmes
   octets, même serveur.
-  **Cause** : le TBT pèse 30 % du score et il est dominé par le backdrop WebGL
-  du hero, qui **anime en continu**. PSI tourne sans GPU, donc chaque frame
-  passe en SwiftShader sur le CPU, et le coût dépend de la machine que la flotte
-  Google attribue au run (TBT mesuré de 40 à 160 ms sur le même build).
+  **Ce qui bouge** : uniquement le TBT (30 % du score), mesuré de **40 ms à
+  1 530 ms sur les mêmes octets**. À 1 530 ms il rapporte 0 de ses 30 points, ce
+  qui plafonne le run vers 70. Tout le reste est stable sur tous les runs :
+  FCP 0,3–0,9 s, LCP 0,5–1,4 s, CLS 0,017, serveur 10 ms.
+  **La cause n'est PAS identifiée** — et surtout, ce n'est **pas** la boucle
+  d'animation WebGL : elle est déjà gatée sur rasteriseur logiciel depuis la
+  phase 1.1 (`cube-grid.jsx:102`, `ColorBends.jsx:206`). Hypothèses restantes et
+  méthode dans `docs/tbt-variance-plan.md`.
   **Conséquence pratique** : un run PSI isolé sur ce site ne mesure pas le code.
   Médiane de 3 à 5 runs, ou rien. Le « 99/99 » qui a traîné une heure dans ces
   docs était un run isolé, pris pour argent comptant parce qu'il faisait
@@ -53,7 +57,7 @@ Lire EN PREMIER, dans cet ordre :
   métriques terrain. Donc les Core Web Vitals **ne peuvent pas** peser sur le
   référencement, et le score labo n'est que du diagnostic. Le plan conclut
   explicitement : **ne pas l'exécuter pour l'instant**, la contrainte de ce site
-  est le trafic, pas les millisecondes. Priorité à  phase 1.
+  est le trafic, pas les millisecondes. Priorité à `geo-plan.md` phase 1.
 - ℹ️ **PSI teste `hargile.com`, pas `hargile.com/fr`** : l'apex fait un 307 vers
   `/fr` (+44 ms sur le chemin critique, et `/fr` apparaît deux fois dans l'arbre
   de dépendances). `/fr` en direct ne redirige pas. C'est la « contradiction de
