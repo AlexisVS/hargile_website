@@ -213,7 +213,9 @@ export default function ColorBends({
     renderer.domElement.style.display = 'block';
     container.appendChild(renderer.domElement);
 
-    const clock = new THREE.Clock();
+    // Timer, not Clock — Clock is deprecated as of three r183 and warns on
+    // construction. Timer only advances on update(), called once per rAF tick.
+    const timer = new THREE.Timer();
 
     const handleResize = () => {
       const w = container.clientWidth || 1;
@@ -235,7 +237,7 @@ export default function ColorBends({
     }
 
     const drawFrame = (dt) => {
-      const elapsed = clock.elapsedTime;
+      const elapsed = timer.getElapsed();
       material.uniforms.uTime.value = elapsed;
 
       const deg = (rotationRef.current % 360) + autoRotateRef.current * elapsed;
@@ -259,7 +261,8 @@ export default function ColorBends({
 
     const loop = () => {
       rafRef.current = requestAnimationFrame(loop);
-      acc += clock.getDelta();
+      timer.update();
+      acc += timer.getDelta();
       if (acc < FRAME_MIN) return;
       const dt = acc;
       acc = 0;
@@ -280,7 +283,10 @@ export default function ColorBends({
       if (staticOnly) return;
       const shouldRun = intersecting && !document.hidden;
       if (shouldRun && rafRef.current === null) {
-        clock.getDelta(); // swallow the paused gap — one giant dt is not a frame
+        // Swallow the paused gap — one giant dt is not a frame. reset() moves the
+        // timer's cursor to now without folding the gap into elapsed, so uTime
+        // resumes where it left off instead of jumping the gradient forward.
+        timer.reset();
         rafRef.current = requestAnimationFrame(loop);
       } else if (!shouldRun && rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current);

@@ -234,13 +234,17 @@ const CubeGrid = () => {
         mesh.instanceMatrix.needsUpdate = true;
         scene.add(mesh);
 
-        const clock = new THREE.Clock();
+        // Timer, not Clock — Clock is deprecated as of three r183 and warns on
+        // construction. Timer only advances when update() is called, which is
+        // once per render(), so elapsed freezes while the loop is gated off
+        // instead of running on wall time.
+        const timer = new THREE.Timer();
 
         const pushTrail = (x, z, strength) => {
             const o = trailHead * 4;
             trailData[o] = x;
             trailData[o + 1] = z;
-            trailData[o + 2] = clock.getElapsedTime();
+            trailData[o + 2] = timer.getElapsed();
             trailData[o + 3] = strength;
             trailTex.needsUpdate = true;
             trailHead = (trailHead + 1) % TRAIL;
@@ -261,7 +265,6 @@ const CubeGrid = () => {
         // follows the pointer with a slight fluid lag instead of snapping.
         const cursorTarget = new THREE.Vector2();
         let cursorTargetStrength = 0;
-        let lastT = 0;
 
         const onPointerMove = (e) => {
             const r = mount.getBoundingClientRect();
@@ -297,7 +300,7 @@ const CubeGrid = () => {
             }
             // Set here rather than with the ripple push: hovering should suppress
             // idle ripples even while the throttles are skipping pushes.
-            lastMove = clock.getElapsedTime();
+            lastMove = timer.getElapsed();
 
             // Strength scales with pointer speed — slow drags ripple less.
             if (!lastHit) {
@@ -309,7 +312,7 @@ const CubeGrid = () => {
                 return;
             }
 
-            const now = clock.getElapsedTime();
+            const now = timer.getElapsed();
 
             const d = Math.hypot(hit.x - lastHit.x, hit.z - lastHit.z);
             if (d < 0.3) return; // ignore jitter and slow drift — the mound covers it
@@ -364,14 +367,14 @@ const CubeGrid = () => {
         let frame = null;
 
         const render = () => {
-            const t = clock.getElapsedTime();
+            timer.update();
+            const t = timer.getElapsed();
             uniforms.uTime.value = t;
 
             // Frame-rate-independent damping toward the pointer. Clamp dt: the loop
             // is gated by the IntersectionObserver, so the first frame after
             // re-entry can carry a huge gap.
-            const dt = Math.min(t - lastT, 0.1);
-            lastT = t;
+            const dt = Math.min(timer.getDelta(), 0.1);
 
             const s = uniforms.uCursorStrength.value;
             // Position tracks the pointer directly — any smoothing here read as
