@@ -9,8 +9,17 @@ import styles from "./recent-works-showcase.module.scss";
 
 const PIN_BREAKPOINT = 900;
 
-// Domaine nu pour la barre de navigateur factice des cartes.
-const hostnameOf = (url) => new URL(url).hostname.replace(/^www\./, "");
+// Domaine nu pour la barre de navigateur factice des cartes. Gardé : `new URL`
+// throw sur une URL relative ou vide, et ça s'exécute pendant le render — une
+// actionUrl mal formée ajoutée dans portfolio-data.js blanchirait la homepage
+// entière pour une puce décorative. Chaîne vide = pas de puce.
+const hostnameOf = (url) => {
+    try {
+        return new URL(url).hostname.replace(/^www\./, "");
+    } catch {
+        return "";
+    }
+};
 
 const RecentWorksShowcaseV2 = () => {
     const t = useTranslations("pages.homepage.sections.recent-works");
@@ -111,36 +120,42 @@ const RecentWorksShowcaseV2 = () => {
                 </div>
                 <div className={styles.trackWrap} ref={wrapRef}>
                     <div className={styles.track} ref={trackRef}>
-                        {projects.map((project) => (
-                            <article className={styles.card} key={project.id}>
-                                <div className={styles.cardMedia}>
-                                    <Image
-                                        src={project.image}
-                                        alt={project.title}
-                                        fill
-                                        sizes="(max-width: 899px) 100vw, 46vw"
-                                    />
-                                    <span className={styles.domainChip} aria-hidden="true">
-                                        {hostnameOf(project.actionUrl)}
-                                    </span>
-                                </div>
-                                <div className={styles.cardBody}>
-                                    <div className={styles.eyebrow}>{project.subtitle}</div>
-                                    <h3 className={styles.title}>{project.title}</h3>
-                                    <p className={styles.desc}>{project.description}</p>
-                                    <CtaLink
-                                        href={project.actionUrl}
-                                        external
-                                        variant="ghost"
-                                        size="sm"
-                                        className={styles.more}
-                                        aria-label={project.title}
-                                    >
-                                        {project.actionText}
-                                    </CtaLink>
-                                </div>
-                            </article>
-                        ))}
+                        {projects.map((project) => {
+                            const domain = hostnameOf(project.actionUrl);
+
+                            return (
+                                <article className={styles.card} key={project.id}>
+                                    <div className={styles.cardMedia}>
+                                        <Image
+                                            src={project.image}
+                                            alt={project.title}
+                                            fill
+                                            sizes="(max-width: 899px) 100vw, 46vw"
+                                        />
+                                        {domain && (
+                                            <span className={styles.domainChip} aria-hidden="true">
+                                                {domain}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <div className={styles.cardBody}>
+                                        <div className={styles.eyebrow}>{project.subtitle}</div>
+                                        <h3 className={styles.title}>{project.title}</h3>
+                                        <p className={styles.desc}>{project.description}</p>
+                                        <CtaLink
+                                            href={project.actionUrl}
+                                            external
+                                            variant="ghost"
+                                            size="sm"
+                                            className={styles.more}
+                                            aria-label={project.title}
+                                        >
+                                            {project.actionText}
+                                        </CtaLink>
+                                    </div>
+                                </article>
+                            );
+                        })}
 
                         <div className={styles.end}>
                             <CtaLink
