@@ -67,9 +67,7 @@
     },
     "footer": {
       "address": {
-        "line1": "Rue Sterckx 5, bt. 28",
-        "line2": "1060 Saint-Gilles",
-        "line3": "Belgium"
+        "country": "Belgium"
       },
       "copyright": "© {year} HARGILE. All Rights Reserved",
       "links": {

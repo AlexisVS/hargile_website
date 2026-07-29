@@ -14,6 +14,7 @@ import {Copyright} from "@/components/footer/Copyright.styled";
 import {SocialContainer, SocialLinkIcon} from "@/components/footer/social-medias.styled";
 import {SiGithub, SiInstagram} from "@icons-pack/react-simple-icons";
 import LinkedinIcon from "@/components/icons/LinkedinIcon";
+import {NAP, napCityLine} from "@/lib/nap";
 
 
 const Footer = () => {
@@ -82,9 +83,11 @@ const Footer = () => {
 
             {/* Bottom bar: address + email on one line, copyright on the other side */}
             <BottomBarStyled>
+                {/* Address and email come from @/lib/nap so the copy and the
+                    JSON-LD entity cannot drift apart. Only the country is translated. */}
                 <Address>
-                    {t('address.line1')} · {t('address.line2')} · {t('address.line3')} ·{' '}
-                    <a target={'_blank'} href="mailto:contact@hargile.com">contact@hargile.com</a>
+                    {NAP.street} · {napCityLine} · {t('address.country')} ·{' '}
+                    <a target={'_blank'} href={`mailto:${NAP.email}`}>{NAP.email}</a>
                 </Address>
                 <Copyright>{t('copyright', {year})}</Copyright>
             </BottomBarStyled>

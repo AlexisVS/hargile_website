@@ -12,6 +12,7 @@ import {useTranslations} from "next-intl";
 import LanguageSelector from "@/app/[locale]/components/language-selector/language-selector";
 import {SiGithub, SiInstagram} from "@icons-pack/react-simple-icons";
 import LinkedinIcon from "@/components/icons/LinkedinIcon";
+import {NAP, napCityLine} from "@/lib/nap";
 import {
     Brand,
     NavbarMenuButtons,
@@ -41,6 +42,8 @@ const Navbar = () => {
     const brandRef = useRef(null);
     const [scrolled, setScrolled] = useState(false);
     const t = useTranslations('components.menu');
+    // The country line is shared with the footer — one translated string, one source.
+    const tAddress = useTranslations('components.footer');
     const isMounted = useIsClient();
 
     useMenuItems(isOpen);
@@ -138,17 +141,20 @@ const Navbar = () => {
                         ))}
                     </MenuItemsContainer>
                     
+                    {/* Same NAP source as the footer and the JSON-LD entity.
+                        The country used to be a hardcoded "Belgium" here, which
+                        showed in English on the French nav. */}
                     <ContactInfo>
-                        <ContactEmail href="mailto:contact@hargile.com">
-                            contact@hargile.com
+                        <ContactEmail href={`mailto:${NAP.email}`}>
+                            {NAP.email}
                         </ContactEmail>
-                        <ContactPhone href="tel:+32477045080">
-                            +32 477 04 50 80
+                        <ContactPhone href={`tel:${NAP.phone}`}>
+                            {NAP.phoneDisplay}
                         </ContactPhone>
                         <ContactAddress>
-                            Rue Sterckx 5, bt. 28<br/>
-                            1060 Saint-Gilles<br/>
-                            Belgium
+                            {NAP.street}<br/>
+                            {napCityLine}<br/>
+                            {tAddress('address.country')}
                         </ContactAddress>
                     </ContactInfo>
                     
