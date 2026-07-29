@@ -3,24 +3,61 @@
 > Fichier à copier-coller tel quel en ouverture de session. C'est **la** source
 > unique : les sections « Prompt de reprise » de `homepage-performance-plan.md`
 > et `homepage-code-review-plan.md` renvoient ici pour éviter la dérive.
-> Dernière mise à jour : 2026-07-29, après le tag **v0.20.0**. Prochaine session :
-> **GEO phase 1, items 2 à 4** — l'item 1 (entité Organization) est livré.
+> Dernière mise à jour : 2026-07-29 (2e session du jour), **6 commits non
+> poussés sur `main`**, rien de taggué. **La phase 1 du GEO est terminée côté
+> code.** Ce qui reste d'elle est manuel (Bing) ou volontairement reporté
+> (locale par défaut). Prochaine session : **pousser + déployer, puis phase 2**.
 
 ---
 
 Lire EN PREMIER, dans cet ordre :
 
 1. ce fichier — état réel, périmètre, pièges ;
-2. `docs/homepage-code-review-plan.md` — le détail par item, avec ce qui est
+2. `docs/geo-plan.md` — la phase 2 est la suite ;
+3. `docs/geo-bing-indexnow-runbook.md` — ce que Mihai doit faire au navigateur ;
+4. `docs/homepage-code-review-plan.md` — le détail par item, avec ce qui est
    déjà livré marqué ✅ ; ne pas ré-auditer ;
-3. `docs/geo-plan.md` — si la session porte sur la phase 1 (voir plus bas) ;
-4. `docs/homepage-performance-plan.md` §Verification — pièges de mesure.
+5. `docs/homepage-performance-plan.md` §Verification — pièges de mesure.
+
+## ⚠️ À FAIRE EN OUVRANT LA SESSION
+
+**7 commits sont sur `main` en local et n'ont jamais été poussés.** Ils n'ont
+donc jamais été construits en image, jamais déployés, et rien de ce qui suit
+n'est en prod. Mihai n'a pas encore donné son accord pour pousser (règle en bas
+de ce fichier) : **le demander avant toute autre chose**, sinon la session
+suivante repart avec 14 commits en attente.
+
+```
+(HEAD)  docs: record the GEO phase 1 close-out, and correct §1.2
+da07038 fix(seo): drive the footer year from the build, not a hardcoded seed
+4d65ec8 fix(seo): make robots.txt come from one source that actually serves
+cd7e77a seo(geo): add the IndexNow key and a submission script (ENG-87)
+6ee7fb0 seo(geo): publish /llms.txt (GEO §1.4)
+a9d2812 fix(seo): declare the home page as WebPage, not WebSite (ENG-109)
+0498118 chore(seo): add an offline JSON-LD validator with a negative control
+```
+
+(`git log --oneline main...origin/main` pour la liste à jour.)
+
+Une fois poussé et **vérifié déployé** (voir « Comment le déploiement marche »),
+marqueurs de cette release :
+
+```bash
+curl -s -o /dev/null -w '%{http_code}\n' https://hargile.com/llms.txt          # 200
+curl -s https://hargile.com/fr | grep -c '"@type":"WebPage"'                   # >0
+curl -s https://hargile.com/fr | grep -o '© [0-9]*'                            # © 2026
+curl -s https://hargile.com/robots.txt | grep -c 'Disallow: /api/'             # 1
+curl -s https://hargile.com/bfca279c73ec400f7b3ceef8e1e1483f.txt               # la clé
+```
+
+**Et seulement ensuite** `npm run seo:indexnow` — soumettre des URLs qui
+servent encore l'ancien HTML ne fait qu'indexer l'ancien HTML plus vite.
 
 ## État au départ (vérifié le 2026-07-29)
 
-- **v0.20.0 est taguée** (entité Organization + module NAP). Marqueur de
-  déploiement : `curl -s https://hargile.com/fr | grep -c '"alternateName":"HARGILE Tech Studio"'`
-  → **> 0 = v0.20.0 est en prod**. Vérifier avant toute autre chose.
+- **v0.20.0 est taguée et déployée** (entité Organization + module NAP).
+  Marqueur : `curl -s https://hargile.com/fr | grep -c '"alternateName":"HARGILE Tech Studio"'`
+  → **> 0 = v0.20.0 est en prod**. Confirmé.
 - **v0.19.2 est déployée et vérifiée en prod** (retrait du handle X mort) :
   plus aucune balise `twitter:site` / `twitter:creator`. Attention, au début de
   la session du 29/07 elle ne l'était **pas encore** — le bump infra venait de
@@ -173,12 +210,50 @@ demandées, et un scroll réel pour le pin. Deux pièges rencontrés :
 scroll down N`), et `querySelector("[class*=track]")` attrape `trackWrap` avant
 `track`, ce qui fait passer un pin fonctionnel pour cassé.
 
-## 🎯 PROCHAINE SESSION : GEO phase 1 — ordre d'exécution
+## 🎯 GEO phase 1 — TERMINÉE côté code
 
 Décidé le 2026-07-29. La perf est finie et **CrUX ne renvoie aucune donnée**
 pour hargile.com : la contrainte de ce site est d'être trouvé, pas d'être
 rapide. Tout ce qui suit sert ENG-74 (Urgent, assigné à Mihai) et ses
 milestones M1–M5.
+
+Récapitulatif de ce qui a été fait dans la 2e session du 29/07 — **ne pas
+ré-auditer**, tout est vérifié en local (build + 6 pages + navigateur) :
+
+- ✅ **ENG-109** — le `@type` de page est `WebPage` et non plus `WebSite`. On
+  publiait un `WebSite` `isPartOf` un autre `WebSite` : deux entités de niveau
+  site concurrentes au lieu d'un site + N pages. **Rien n'était invalide** (0
+  erreur de validateur avant comme après), c'est bien pour ça que ça avait
+  survécu — c'est un contresens de modélisation, pas un bug de syntaxe.
+- ✅ **`/llms.txt`** — servi par `src/app/llms.txt/route.js`. Une **route**, pas
+  un fichier de `public/`, pour que le NAP et les profils viennent de
+  `@/lib/nap` et du nouveau `@/seo/same-as`. Attentes nulles, comme annoncé.
+- ✅ **IndexNow (ENG-87, moitié code)** — clé publique dans
+  `public/bfca279c73ec400f7b3ceef8e1e1483f.txt`, script `npm run seo:indexnow`.
+  La clé **est publique par conception** (c'est le mécanisme de vérification du
+  protocole) : ne pas la traiter comme un secret, ne pas la déplacer en env.
+- ✅ **`robots.txt` ramené à une source unique.** `src/app/robots.js` déclarait
+  `Disallow: /api/` et `/admin/` — **et n'a jamais servi un octet** : un fichier
+  de `public/` masque une route App Router du même chemin, et `next-sitemap`
+  écrit `public/robots.txt` au postbuild. Vérifié en prod. La route est
+  supprimée, la policy est dans `next-sitemap.config.js`.
+- ✅ **Année du footer** — le `useState` était seedé à 2025 et corrigé dans un
+  effet ; le HTML brut annonçait donc 2025 pour toujours, et **aucun crawler IA
+  n'exécute de JS**. Seed inliné au build via `NEXT_PUBLIC_BUILD_YEAR`.
+- ✅ **Validateur JSON-LD réécrit dans le dépôt** (`npm run seo:jsonld -- --site
+  http://localhost:3000`), avec contrôle négatif obligatoire — voir « Pièges ».
+- ✅ **Test crawlers** — bingbot, GPTBot, OAI-SearchBot, ClaudeBot,
+  PerplexityBot, meta-externalagent : **200 pour les six**, texte identique au
+  mot près à un curl normal. Le « WAF test » d'ENG-74 M2 est répondu : rien
+  n'est bloqué, il n'y a rien à débloquer.
+- 📄 **§1.2 locale par défaut cadrée puis reportée** →
+  `docs/geo-default-locale-plan.md`.
+
+Curiosité relevée, **sans suite prévue** : les réponses servies aux
+non-bots contiennent **deux fois** le même bloc `<style>` inline de 15,8 KB
+(126 KB contre 109 KB pour bingbot). Ce n'est pas du contenu, la perf est close
+et CrUX est vide — c'est noté pour que personne ne reparte enquêter sur l'écart
+d'octets en croyant à du cloaking.
 
 ### ✅ 1. `docs/geo-entity-plan.md` — entité Organization — **LIVRÉ en v0.20.0**
 
@@ -204,62 +279,49 @@ Ce qui a changé, et qui compte pour la suite :
   `ProfessionalService` (sous-type de `LocalBusiness`). C'est le coût assumé du
   type, qui corrobore la catégorie GBP.
 
-**Une divergence relevée et NON corrigée** : le `@type` de page est `WebSite` et
-non `WebPage` (clé `schemaType` des fichiers de messages), ce qui imbrique un
-`WebSite` dans un autre via `isPartOf`. Le plan interdisait de toucher
-`schemaType` dans cet item. **C'est ENG-109 dans Linear**, milestone M5,
-~20 min — voir le point 5 de l'ordre d'exécution.
-
-**Outil réutilisable** : un validateur JSON-LD hors ligne a été écrit (il
-contrôle chaque `@type` et chaque propriété contre le vocabulaire schema.org
-réel, et a été testé par contrôle négatif). Il vit dans le scratchpad de la
-session, donc **il est perdu** — le réécrire si besoin, ou le sortir du
-scratchpad cette fois. Résultat sur v0.20.0 : 37 propriétés, 0 erreur,
+**Outil réutilisable, désormais dans le dépôt** : `scripts/validate-json-ld.mjs`
+(`npm run seo:jsonld -- --site http://localhost:3000`). Il contrôle chaque
+`@type` et chaque propriété contre le vocabulaire schema.org réel, télécharge
+le dump une fois dans `.cache/` (gitignoré), et **refuse de rendre un verdict
+si son contrôle négatif échoue**. Résultat courant : 37 propriétés, 0 erreur,
 0 avertissement, sur les 6 pages et les 2 locales.
 
-### 2. Bing Webmaster Tools + IndexNow — **COMMENCER PAR LÀ** (§1.3, ~30 min, pas de code)
+### ✅ 2. ENG-87 Bing/IndexNow — code livré, **la moitié navigateur reste à faire**
 
-**Plus important que sa taille le suggère** : ChatGPT Search interroge l'index
-**Bing**. Une page que Bing n'a pas indexée ne peut pas apparaître dans une
-réponse ChatGPT, quel que soit le classement Google. Personne n'a vérifié le
-statut Bing. Import en un clic depuis Search Console, soumettre `sitemap.xml`,
-inspecter les 6 URLs. C'est le seul item qui peut débloquer une source entière.
+📄 **`docs/geo-bing-indexnow-runbook.md`** — tout y est, étape par étape.
 
-C'est **ENG-87** dans Linear (« Sitemap, Bing Webmaster Tools, Search Console et
-IndexNow », milestone M2). ⚠️ **Ça se fait dans un navigateur, pas dans ce
-dépôt** : l'agent ne peut pas créer les comptes ni valider la propriété du
-domaine. Le rôle de la session est de préparer (URLs du sitemap, méthode de
-vérification, clé IndexNow) et de guider — l'exécution est manuelle.
+Côté dépôt il ne reste rien : clé IndexNow, script de soumission, `robots.txt`
+propre, sitemap propre, et la preuve qu'aucun crawler IA n'est bloqué.
 
-### 3. `llms.txt` (§1.4, ~30 min)
+Ce qui reste **n'appartient qu'à Mihai** et se fait dans un navigateur :
+vérifier la propriété dans Bing Webmaster Tools (import Search Console = un
+clic), soumettre `sitemap.xml`, inspecter les 6 URLs, relever les résultats
+dans le tableau du runbook. **Plus important que sa taille le suggère** :
+ChatGPT Search interroge l'index Bing, et personne n'a jamais regardé si
+hargile.com y est. Le livrable de cet item est de **savoir**.
 
-Faible valeur assumée (l'étude SE Ranking sur 300 k domaines ne trouve aucune
-corrélation), mais trivial. À faire en dernier de la phase 1, jamais en premier.
+Si Bing refuse l'import GSC, il faudra du code (balise `msvalidate.01` ou
+`BingSiteAuth.xml`) — le runbook dit lequel et où.
 
-### 4. §1.2 locale par défaut — **à scoper, pas à exécuter à l'aveugle**
+### ✅ 3. `llms.txt` — livré
 
-`localePrefix: 'as-needed'` ferait servir le français à la racine et
-supprimerait le 307 de l'apex. Mais c'est une **migration d'URL** : toutes les
-URLs FR changent, `next-sitemap.config.js` construit `/${locale}${path}` et
-sortirait des URLs fausses, hreflang/x-default à reprendre dans le même
-déploiement. Écrire un plan avant de toucher quoi que ce soit.
+### 📄 4. §1.2 locale par défaut — **cadré, et volontairement reporté**
 
-### 5. ENG-109 — `WebSite` → `WebPage` (~20 min, bonus)
+Voir **`docs/geo-default-locale-plan.md`**. Le point décisif, qui contredit ce
+que ce fichier et `geo-plan.md` racontaient jusqu'ici : **`localePrefix` ne
+ferait rien**. Ce dépôt n'utilise pas le middleware de next-intl — le routage de
+locale est écrit à la main dans `src/proxy.js`, qui ne lit pas cette option.
+Poser `as-needed` ferait générer des `href` non préfixés que `proxy.js`
+redirigerait aussitôt : **une redirection de plus à chaque navigation interne**
+pour en supprimer une sur l'apex. Strictement pire qu'aujourd'hui.
 
-**Hors phase 1** (c'est M5), donc à ne prendre que si le temps le permet — mais
-les items 2 et 3 ci-dessus se passent surtout dans un navigateur, donc il reste
-probablement de la capacité côté code. Petit, isolé, testable avec le même
-validateur JSON-LD.
+Le vrai coût, c'est une réécriture de `proxy.js` + six fichiers de construction
+d'URL, dans un seul déploiement. Le vrai gain, c'est 44 ms sur un site dont
+CrUX ne mesure rien. **Décision : le faire en même temps que la phase 2**,
+quand l'espace d'URL change de toute façon — une seule vague de réindexation
+au lieu de deux.
 
-Chaque page déclare `"@type": "WebSite"` puis un `isPartOf` vers un autre
-`WebSite`. `isPartOf` va de `WebPage` **vers** `WebSite` : en l'état on publie
-des entités de niveau site concurrentes au lieu d'un site + N pages, et les
-propriétés de page (`breadcrumb`, `datePublished`) n'ont plus de sens.
-
-⚠️ `schemaType` est lu **par locale** depuis `src/messages/{fr,en}.json` —
-changer les deux, et vérifier que le `@id` de page (`#page`) et celui de
-`#organization` restent intacts. Rien n'est invalide au sens du validateur
-(0 erreur aujourd'hui) : c'est un contresens de modélisation, pas un bug.
+### ✅ 5. ENG-109 — `WebSite` → `WebPage` — livré
 
 ### Puis la vraie contrainte — phase 2
 
@@ -284,10 +346,15 @@ les annuaires affichent la même adresse et le même nom que le schéma.
 
 ## Ce qui reste côté code — proposition de périmètre, à valider
 
-**Recommandation : finir `geo-plan.md` phase 1** — il ne reste que Bing/IndexNow,
-`llms.txt` et le scoping de la locale par défaut. L'entité Organization est
-livrée en v0.20.0. C'est la seule chose de la liste qui a une valeur business
-directe (visibilité dans les moteurs de réponse IA) ; le reste est du polish.
+**Recommandation : pousser les 6 commits, vérifier le déploiement, faire tourner
+`npm run seo:indexnow`, puis attaquer la phase 2.** La phase 1 est finie ; elle
+a rendu l'entité correctement décrite, ce qui ne sert à rien tant qu'il n'y a
+que 3 pages à décrire. La phase 2 est la seule chose de la liste qui déplace
+encore quelque chose.
+
+⚠️ La phase 2 est **du contenu**, pas du code, et elle a une dépendance :
+**ENG-82 « Lister 20 prompts cibles GEO »**. Sans ces prompts, les pages
+services et la FAQ s'écrivent à l'aveugle. Commencer par là.
 
 **Si tu préfères finir le code-review d'abord**, l'ordre qui a du sens :
 
@@ -346,10 +413,33 @@ directe (visibilité dans les moteurs de réponse IA) ; le reste est du polish.
   `node -e "…(d.match(/style=\"[^\"]*\"/g)||[]).filter(s=>/opacity:0(?![.\d])/.test(s))…"`.
   Règle générale : **une commande de vérification qui échoue doit être bruyante**
   — vérifier le code de sortie, pas seulement le nombre affiché.
-- **Un validateur qui renvoie « 0 erreur » ne vaut rien sans contrôle négatif.**
-  Lui donner un document volontairement cassé et confirmer qu'il gueule. Fait
-  pour le validateur JSON-LD ; sans ça, « 0 erreur » peut juste vouloir dire
-  « le script ne teste rien ».
+- **Un validateur qui renvoie « 0 erreur » ne vaut rien sans contrôle négatif —
+  et le contrôle négatif ne vaut rien sans cas positif.** Vécu pour de bon le
+  29/07 : la réécriture de `scripts/validate-json-ld.mjs` a indexé **zéro**
+  classe et **zéro** propriété (le dump schema.org nomme ses termes
+  `schema:Organization`, pas en URL complète), donc *tout* était « inconnu ».
+  Les 3 cas censés produire une erreur sont passés au vert **pour la mauvaise
+  raison**. Seuls les cas qui attendent un document **valide** l'ont révélé.
+  Un jeu de tests négatifs doit donc toujours contenir au moins un cas positif.
+  Le script refuse maintenant de rendre un verdict si son self-test échoue.
+- **Un fichier de `public/` masque une route App Router du même chemin, en
+  silence.** `src/app/robots.js` n'a jamais servi un octet parce que
+  `next-sitemap` écrit `public/robots.txt` au postbuild. Deux sources dont une
+  gagne sans le dire est pire que n'importe laquelle des deux seule : la morte
+  se lit comme vivante, et l'éditer ne change rien tout en donnant l'impression
+  du contraire. Corrigé, mais la règle vaut pour tout futur `sitemap.xml`,
+  `manifest.webmanifest`, etc.
+- **`cacheComponents` refuse `export const dynamic` dans une route**, avec une
+  erreur de build franche. Ce n'est pas grave — une route qui ne lit rien de la
+  requête est prérendue de toute façon (vérifier `○ /ma-route` dans la sortie de
+  build).
+- **Ne pas écrire de here-string PowerShell (`@'…'@`) dans l'outil Bash.** Le
+  message de commit part en morceaux et git répond « pathspec 'Rich' did not
+  match any file(s) ». Utiliser un heredoc `git commit -F - <<'EOF'`.
+- **Vérifier qu'un commit est constructible avant de passer au suivant.** Le
+  commit ENG-109 a d'abord embarqué un `import` vers un fichier encore non
+  suivi par git : vert en local, cassé pour quiconque le récupère. `git status`
+  après chaque `git add` partiel.
 - **`validator.schema.org` et le Rich Results Test n'ont pas d'API publique
   utilisable** : le POST sort `numObjects: 0`. Les deux acceptent en revanche un
   **snippet collé** (onglet « Code » / « Code snippet »), donc aucun déploiement
