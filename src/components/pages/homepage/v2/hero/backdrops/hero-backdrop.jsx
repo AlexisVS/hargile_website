@@ -5,12 +5,11 @@ import {useEffect, useState} from "react";
 import styles from "../hero.module.scss";
 
 /* Hero backdrop switcher — lets us compare WebGL treatments without touching hero.jsx.
-   Pass `variant`, or leave it out and it reads ?backdrop=<key> from the URL, then
-   NEXT_PUBLIC_HERO_BACKDROP, then falls back to DEFAULT_VARIANT. */
+   `variant` is required and has a single owner: useHeroVariant in hero.jsx, which
+   also parses ?backdrop=<key>. It passes null until it has resolved the viewport
+   (see the note there) and this renders nothing in the meantime. */
 
 export const VARIANTS = ["bends", "cubes", "none"];
-
-const DEFAULT_VARIANT = "bends";
 
 // Three.js is client-only and ~150KB — keep every variant out of the initial bundle.
 const ColorBends = dynamic(() => import("@/components/vendor/color-bends/ColorBends"), {ssr: false});
@@ -56,24 +55,15 @@ const usePortrait = () => {
     return portrait;
 };
 
-const resolveVariant = () => {
-    if (typeof window !== "undefined") {
-        const q = new URLSearchParams(window.location.search).get("backdrop");
-        if (q && VARIANTS.includes(q)) return q;
-    }
-    const env = process.env.NEXT_PUBLIC_HERO_BACKDROP;
-    return VARIANTS.includes(env) ? env : DEFAULT_VARIANT;
-};
-
 const HeroBackdrop = ({variant}) => {
-    const active = variant ?? resolveVariant();
     const portrait = usePortrait();
 
-    if (active === "none") return null;
+    // null = not resolved yet; "none" = deliberately no backdrop. Nothing to draw either way.
+    if (!variant || variant === "none") return null;
 
     return (
         <div className={styles.backdrop} aria-hidden="true">
-            {active === "bends" && (
+            {variant === "bends" && (
                 <ColorBends
                     className=""
                     colors={BEND_COLORS}
@@ -103,7 +93,7 @@ const HeroBackdrop = ({variant}) => {
                     parallax={0.3}
                 />
             )}
-            {active === "cubes" && <CubeGrid/>}
+            {variant === "cubes" && <CubeGrid/>}
         </div>
     );
 };

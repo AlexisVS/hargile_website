@@ -16,12 +16,17 @@ const CARDS = [
 
 /* Cubes are a desktop treatment: they're pointer-driven (touch only ever sees
    idle ripples) and the WebGL cost is real on phones. Below the breakpoint the
-   hero falls back to the color bends. Resolved in an effect so server and first
-   client render agree ("bends"), then corrected after mount — the backdrops are
-   ssr:false dynamic imports anyway, so nothing visible has loaded by then.
+   hero falls back to the color bends. matchMedia can't run during render (server
+   and first client render have to agree), so the variant starts null — meaning
+   *unresolved* — and HeroBackdrop renders nothing until the effect lands it.
+   Starting at "bends" instead made every desktop load mount ColorBends for a
+   beat before flipping to cubes: its chunk was fetched for nothing and the
+   gradient was visibly on screen on a hard refresh. Waiting costs one frame,
+   and the backdrops are ssr:false dynamic imports, so nothing visible has
+   loaded that early either way.
    A `backdrop` prop or ?backdrop=<key> URL param still forces a variant. */
 const useHeroVariant = (override) => {
-    const [variant, setVariant] = useState(override ?? "bends");
+    const [variant, setVariant] = useState(override ?? null);
 
     useEffect(() => {
         if (override) return;
@@ -54,6 +59,11 @@ const useBackdropReady = (containerRef, variant) => {
     const [ready, setReady] = useState(false);
 
     useEffect(() => {
+        // Unresolved variant: nothing is mounted to watch yet. Stay not-ready and
+        // don't arm the timeout — useHeroVariant's effect resolves on the same
+        // commit, which re-runs this one. (The loader keeps its own backstop.)
+        if (!variant) return;
+
         if (variant === "none") {
             setReady(true);
             return;
