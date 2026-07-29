@@ -39,7 +39,7 @@ The whole point of this item is that engines cross-check the NAP they read in
 the copy against the NAP in the structured data. Right now there is nothing to
 cross-check against.
 
-## Questions — two resolved, three open
+## Questions — three resolved, two open
 
 ### ✅ Q1 — Business address — **RESOLVED 2026-07-29: Rue Sterckx**
 
@@ -141,11 +141,6 @@ published social handle resolving to nothing is a claim that fails
 verification — the opposite of what corroboration is for. Keep `twitter:card`,
 `twitter:title` and `twitter:description`: those drive link previews and are
 doing real work. If the handle is later claimed, it also goes into `SAME_AS`.
-
-`seo.global.twitterHandle` ships `@hargile_agency` in both locales, but X is not
-in `SAME_AS`. Either it is live and belongs in `sameAs`, or it is dead and the
-handle should be deleted from `src/messages/*.json`. A handle pointing at
-nothing is a broken corroboration signal.
 
 ### Q4 — `foundingDate`?
 
