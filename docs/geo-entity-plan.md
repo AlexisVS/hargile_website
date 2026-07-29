@@ -7,8 +7,9 @@
 > calls M3 "meilleur rapport effet/coût"), it is self-contained in this repo,
 > and the data mostly already exists on the site — it just isn't in the schema.
 >
-> ⛔ **Blocked on five answers from Mihai** (below). Three of them cannot be
-> guessed, and one of them is actively dangerous to guess wrong.
+> **Q1 and Q2 are resolved** (2026-07-29). Three small answers remain — Q3
+> (is the X handle alive), Q4 (foundingDate) and Q5 (areaServed) — none of
+> which block starting.
 
 ## What ships today — verified in production 2026-07-29
 
@@ -38,38 +39,48 @@ The whole point of this item is that engines cross-check the NAP they read in
 the copy against the NAP in the structured data. Right now there is nothing to
 cross-check against.
 
-## ⛔ Answer these first
+## Questions — two resolved, three open
 
-### Q1 — Which address is the business address? *(blocking)*
+### ✅ Q1 — Business address — **RESOLVED 2026-07-29: Rue Sterckx**
 
-The site publishes **two different ones, on the same page**:
+`address` = **Rue Sterckx 5, bt. 28 · 1060 Saint-Gilles · BE**.
 
-- **Rue Sterckx 5, bt. 28 · 1060 Saint-Gilles** — the footer, presented as
-  HARGILE's address.
-- **Rue Coenraets 72 · 1060 Bruxelles** — the privacy policy, as
-  "Productions Associées ASBL", because *"HARGILE exerçant son activité via
-  SMART"*.
+Context: the team are **employees of SMART**; HARGILE is a practice, not a
+registered company. schema.org `Organization` does not require legal
+personality — it describes the thing a client deals with, so the address is
+where you actually work from. Rue Coenraets 72 is Productions Associées ASBL's
+registered address and stays out of the schema.
 
-Both are in the `/fr` HTML right now. That is a NAP conflict a crawler can see
-without leaving the page, and it is the single biggest thing undermining entity
-confidence — worse than the missing schema.
+**Correction to an earlier claim in this plan:** the two addresses in the `/fr`
+HTML were called a NAP conflict. Re-reading the string, the privacy policy says
+*"Responsable du traitement : HARGILE (activité menée via SMART) — Productions
+Associées ASBL, Rue Coenraets 72…"* — it already attributes that address to the
+ASBL rather than to HARGILE. It is a legal disclosure, not a contradiction.
+**No copy change is needed.** What matters instead: the schema declares only
+Sterckx, and the off-site listings (Google Business Profile, directories) agree
+with it. That cross-source agreement is the actual M3 work.
 
-Which one goes in `address`? (Usual answer: the place you actually work from,
-i.e. Sterckx — but this is a real-world question, not a code one.)
+### ✅ Q2 — BCE number — **RESOLVED 2026-07-29: privacy policy yes, schema no**
 
-### Q2 — The BCE number *(blocking, and do not guess)*
+**Keep it in the privacy policy.** GDPR Art. 13 requires identifying the data
+controller; naming Productions Associées ASBL with its address and BCE is
+exactly that number doing its job. Nothing to change there.
 
-The privacy policy carries **BCE 0896.755.397**, which belongs to **Productions
-Associées ASBL**, not to HARGILE.
+**Never put it in the schema.** `identifier`/`vatID` on `#organization` asserts
+"HARGILE *is* the entity registered as 0896.755.397". It is not — the ASBL is.
+Anyone resolving that number lands on a different organisation, and that is far
+harder to undo than to avoid.
 
-**Do not put it on the HARGILE entity as `vatID`/`taxID`/`identifier`.** A
-company number is the strongest cross-checkable identifier there is; attaching
-someone else's would tie your entity to a different organisation in every
-system that reads it, and it is far harder to undo than to avoid.
+HARGILE has no company number of its own, so **omit the identifier entirely** —
+the correct outcome, not a gap.
 
-Question: does HARGILE have its own BCE/VAT number? If yes it is a high-value
-field. If no — if HARGILE is a trading name operating under SMART — then we
-omit the identifier entirely and that is the correct outcome, not a gap.
+Also skip `parentOrganization` / `memberOf` pointing at the ASBL. Semantically
+tempting, but it models a corporate hierarchy, and "employees of a cooperative"
+is not one. A simple entity beats a clever one.
+
+**Open, and not a repo question:** whether SMART or the HARGILE team is the data
+controller for the site's data — it depends on who determines purposes and
+means. Worth confirming with SMART's legal support, who exist for this.
 
 ### Q3 — Is `@hargile_agency` alive?
 
@@ -134,6 +145,7 @@ const organization = {
     availableLanguage: ["fr", "en"],
   },
   areaServed: /* Q5 */,
+  // NO identifier/vatID — see Q2. HARGILE has no company number of its own.
   knowsAbout: [/* from the hero capability cards — keep them in sync */],
   // foundingDate: Q4 · identifier/vatID: only if Q2 says HARGILE has its own
 };
