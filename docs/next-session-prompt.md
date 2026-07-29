@@ -4,9 +4,17 @@
 > unique : les sections « Prompt de reprise » de `homepage-performance-plan.md`
 > et `homepage-code-review-plan.md` renvoient ici pour éviter la dérive.
 > Dernière mise à jour : 2026-07-29 (3e session du jour). **La phase 1 du GEO
-> est terminée, relue, taguée `v0.21.0`, déployée et vérifiée en prod.**
-> Les URLs ont été soumises à IndexNow. Prochaine session : **phase 2**
-> (du contenu), en commençant par ENG-82.
+> est terminée, relue, taguée `v0.21.0` / `v0.21.1`, déployée et vérifiée en
+> prod.** Les URLs ont été soumises à IndexNow, Bing est vérifié, et
+> `hargile.com` est confirmé dans l'index Bing.
+>
+> ### 👉 Par quoi commencer la prochaine session : **ENG-82, puis ENG-83**
+>
+> Pas « la phase 2 » en général — ces deux-là précisément, dans cet ordre, et
+> avant de toucher au moindre contenu. Le détail est dans « Ordre recommandé »
+> plus bas. En une ligne : ENG-82 conditionne tout ce qui s'écrit ensuite, et
+> **ENG-83 est le seul item du backlog qui devient impossible si on le
+> repousse** — c'est une photo d'avant.
 
 ---
 
@@ -328,6 +336,25 @@ le dump une fois dans `.cache/` (gitignoré), et **refuse de rendre un verdict
 si son contrôle négatif échoue**. Résultat courant : 37 propriétés, 0 erreur,
 0 avertissement, sur les 6 pages et les 2 locales.
 
+### 🗂️ État Linear au 2026-07-29 (fin de 3e session)
+
+Mis à jour et commenté le jour même — **ne pas re-commenter ces issues sans lire
+le commentaire existant**, il porte le détail vérifié :
+
+| Issue | Statut |
+| --- | --- |
+| ENG-85 robots.txt crawlers IA | **Done** |
+| ENG-86 CDN/WAF ne bloque pas les bots | **Done** |
+| ENG-109 `@type` WebPage | **Done** |
+| ENG-87 Sitemap/Bing/GSC/IndexNow | **In Progress** — bloquée par ENG-110 |
+| ENG-95 JSON-LD | **In Progress** — reste dépend de M4 |
+| ENG-110 accès GSC (Charles) | **Backlog**, priorité High |
+
+⚠️ **Piège vécu en écrivant ces commentaires** : le WAF Cloudflare devant Linear
+**rejette les commandes shell avec pipe** dans le corps d'un commentaire
+(`curl … | grep …` est lu comme une injection). Le POST échoue avec une page
+d'erreur Cloudflare, pas avec un message Linear. Reformuler en prose.
+
 ### ✅ 2. ENG-87 Bing/IndexNow — **CLOS le 2026-07-29**
 
 📄 **`docs/geo-bing-indexnow-runbook.md`**, section « Relevé du 2026-07-29 ».
@@ -382,9 +409,8 @@ dominant gap — everything else is tuning.** » La phase 1 rend l'entité
 correctement décrite ; la phase 2 la rend citable. C'est du contenu, pas du
 code, et ça mérite sa propre session.
 
-Utile en parallèle : **ENG-82 « Lister 20 prompts cibles GEO »** (Backlog) —
-sans ces prompts, la FAQ et les pages services de la phase 2 s ecrivent à
-l'aveugle.
+👉 **L'ordre exact est arrêté** : voir « Ordre recommandé pour les prochaines
+sessions » plus bas. Ne pas repartir de « la phase 2 » en général.
 
 ### Hors repo, mais c'est le levier
 
@@ -393,18 +419,60 @@ vérifient **l'accord entre sources indépendantes** : GBP, annuaires (Sortlist,
 Clutch), profils sociaux. Aucun JSON-LD ne remplace ça. Vérifier que le GBP et
 les annuaires affichent la même adresse et le même nom que le schéma.
 
-## Ce qui reste côté code — proposition de périmètre, à valider
+## 🧭 Ordre recommandé pour les prochaines sessions
 
-**Fait : les commits sont relus, taggés v0.21.0, déployés, et `seo:indexnow` a
-tourné. Il reste la phase 2.** La phase 1 a rendu l'entité correctement
-décrite, ce qui ne sert à rien tant qu'il n'y a que 3 pages à décrire. La
-phase 2 est la seule chose de la liste qui déplace encore quelque chose.
+Arrêté le 2026-07-29 avec Mihai. La phase 1 a rendu l'entité correctement
+décrite, ce qui ne sert à rien tant qu'il n'y a que 3 pages à décrire.
 
-⚠️ La phase 2 est **du contenu**, pas du code, et elle a une dépendance :
-**ENG-82 « Lister 20 prompts cibles GEO »**. Sans ces prompts, les pages
-services et la FAQ s'écrivent à l'aveugle. Commencer par là.
+### Session suivante — fermer M1 (une demi-journée)
 
-**Si tu préfères finir le code-review d'abord**, l'ordre qui a du sens :
+1. **ENG-82 « Lister 20 prompts cibles GEO »**. Prérequis de tout le reste :
+   sans cette liste, les pages services et la FAQ s'écrivent à l'aveugle, et
+   surtout **aucun relevé ultérieur n'est comparable** si la liste bouge entre
+   deux mesures. C'est de la rédaction, pas du code.
+2. **ENG-83 « Relevé de citations initial sur 5 moteurs »**, juste après.
+   ⚠️ **C'est le seul item du backlog qui devient définitivement impossible si
+   on le repousse** : une fois le contenu changé, la photo d'avant n'existe
+   plus, et on ne pourra jamais dire si la phase 2 a servi à quelque chose.
+   Le faire AVANT de toucher au contenu, pas après.
+
+### Puis M4 — la vraie contrainte, par ordre de valeur
+
+3. **ENG-91 pages services** — une page par offre. Le plus fort levier de tout
+   le backlog : chaque page devient une réponse citable à une question précise.
+   👉 **Embarquer la réécriture de la locale par défaut dans le même
+   déploiement** (`docs/geo-default-locale-plan.md`) : l'espace d'URL change de
+   toute façon, autant n'avoir qu'une seule vague de réindexation. Ça touche
+   `src/proxy.js` + six fichiers de construction d'URL — ce n'est pas anodin,
+   lire le plan avant.
+4. **ENG-92 FAQ** — alimentée directement par les 20 prompts d'ENG-82. Ajouter
+   le `FAQPage` en JSON-LD par-dessus, ce qui avance ENG-95.
+5. **ENG-93 études de cas** — les rapatrier depuis `portfolio.hargile.com`.
+   Aujourd'hui la matière la plus citable du studio vit sur un sous-domaine qui
+   ne renforce pas le domaine principal.
+
+### En parallèle, hors repo — et ça pèse autant que le JSON-LD
+
+6. **ENG-89** (propager la description canonique) et **ENG-90** (consolider les
+   deux organisations GitHub). Les moteurs résolvent une entité en croisant des
+   sources indépendantes. Deux organisations GitHub qui racontent des choses
+   différentes, c'est exactement le désaccord entre sources que `@/lib/nap` et
+   `@/seo/same-as` ont éliminé côté site. Aucun code requis.
+7. **ENG-110** — accès Google Search Console pour `pmihai31@gmail.com`,
+   assignée à Charles. Bloque la clôture d'ENG-87, et surtout : sans GSC, on
+   écrira les pages de M4 sans jamais voir sur quelles requêtes elles
+   atterrissent.
+
+### ❌ Ce qu'il ne faut PAS rouvrir
+
+**La perf.** `docs/tbt-variance-plan.md` conclut lui-même de ne pas l'exécuter :
+CrUX ne renvoie **aucune** donnée pour hargile.com, donc les Core Web Vitals ne
+peuvent pas peser sur le référencement, et un score PSI isolé varie de ±25
+points sans le moindre changement de code. La contrainte de ce site est le
+trafic, pas les millisecondes. Le plan perf est livré (médianes desktop 89 /
+mobile 94 sur v0.19.1) et clos.
+
+## Ce qui reste côté code — petit format, à prendre entre deux items de contenu
 
 - **2.2** — le pinning de recent-works ignore `prefers-reduced-motion`. Seul
   vrai défaut fonctionnel restant (accessibilité). Petit.
