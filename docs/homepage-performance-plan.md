@@ -18,10 +18,22 @@
 > que v0.18.0 supprime cette route — c'est exactement le marqueur que la session
 > précédente s'était donné, et il disait « pas déployé » tout du long.
 >
-> Donc **desktop 91 = phase 1 seule** (livrée dans v0.17.0). L'effet des
-> **phases 2–3 en production n'a jamais été mesuré** : elles ne sont arrivées
-> en prod que le 2026-07-29 à 10:03 UTC, avec v0.19.0. Refaire un run PSI
-> maintenant — c'est la première mesure honnête de ce travail.
+> Donc **desktop 91 = phase 1 seule** (livrée dans v0.17.0). Les phases 2–3 ne
+> sont arrivées en prod que le 2026-07-29 à 10:03 UTC, avec v0.19.0.
+>
+> ✅ **MESURE RÉELLE (2026-07-29, PSI sur v0.19.0 déployée et chaude) :
+> desktop 99, mobile 99.** Baseline desktop 61 → **99**. C'est la première
+> mesure honnête des phases 2–3 en production, et l'objectif 90+ est très
+> largement dépassé.
+>
+> ⚠️ **Les deux premiers runs après le déploiement ont menti, dans les deux
+> sens.** Un run lancé juste après le roulement des pods a donné desktop 89
+> avec un TTFB de 2 489 ms — c'était un conteneur froid, pas un serveur lent
+> (mesuré en direct juste après : TTFB 72–224 ms, y compris cache-bustée et sur
+> `/api/health`, non cachable). Le run suivant a donné mobile 81, du bruit pur.
+> **Attendre quelques minutes après un déploiement, puis médianes de 3 runs** —
+> la règle était déjà écrite plus bas, elle a failli coûter deux chasses au
+> fantôme.
 >
 > **STATUS (2026-07-29): fully implemented and merged to `main`, tagged
 > v0.18.0.** Phase 1 shipped in v0.17.0 (`f92df2a`). Phases 2–3 were built on

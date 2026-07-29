@@ -20,15 +20,21 @@ Lire EN PREMIER, dans cet ordre :
 - **v0.19.0 est taguée, publiée ET déployée** (2026-07-29 10:03 UTC).
   Vérifié en prod : 14 marqueurs `data-reveal-index` et **0 `opacity:0` inline
   sur la copie** sur `/fr` et `/en`, `/fr/audit/result` → 404.
+- ✅ **PSI production sur v0.19.0 : desktop 99, mobile 99.** Baseline desktop
+  61. Le plan perf est livré, mesuré, et l'objectif 90+ largement dépassé —
+  **il n'y a plus rien à gratter côté score**. Les items restants (2.2, 3.x)
+  sont de la qualité de code et de l'accessibilité, pas de la perf.
 - ⚠️ **v0.18.0 n'a jamais été déployée.** La prod a tourné sur **v0.17.0** du
   2026-07-28 au 2026-07-29 10:03 UTC : le PR de bump d'image côté
   `hargile-infra` est resté ouvert (voir « Comment le déploiement marche »).
-  Conséquence : **les chiffres PSI « desktop 91 / mobile 94 / SEO 100 »
-  attribués à v0.18.0 mesurent en réalité v0.17.0**, donc la phase 1 seule.
-  L'effet en production des phases 2–3 n'a jamais été mesuré — v0.19.0 est la
-  première build qui les contient en prod. **Un run PSI maintenant est la
-  première mesure honnête du travail perf.**
-- Le plan perf est entièrement livré côté code (phases 1 à 3).
+  Les anciens chiffres « desktop 91 / mobile 94 » attribués à v0.18.0
+  mesuraient en fait v0.17.0, donc la phase 1 seule.
+- ⚠️ **Ne jamais juger sur un run isolé, surtout juste après un déploiement.**
+  Le 2026-07-29, le premier run post-roulement a sorti desktop 89 avec un TTFB
+  de 2 489 ms (conteneur froid — le serveur mesurait 72–224 ms en direct au même
+  moment), et le suivant mobile 81. Les vrais chiffres sont 99/99. Deux
+  diagnostics ont failli partir sur du bruit : attendre que ça chauffe, puis
+  médianes de 3.
 
 ## Comment le déploiement marche (personne ne l'avait écrit — d'où 2 releases perdues)
 
