@@ -16,10 +16,11 @@ import {
     CategoryTitle,
     CookieBanner,
     CookieCategory,
+    ModalBody,
     ModalContainer,
-    ModalContent,
     ModalDescription,
     ModalFooter,
+    ModalHeader,
     ModalOverlay,
     ModalTitle,
     PrimaryButton,
@@ -143,13 +144,19 @@ export default function GDPRManager({children}) {
                 </CookieBanner>
             )}
 
+            {/* data-lenis-prevent : sans ça, Lenis (smooth scroll monté sur le root)
+                intercepte la molette et fait défiler la page derrière la modale au
+                lieu de la liste. Lenis remonte le composedPath, donc l'attribut sur
+                l'overlay couvre tout le sous-arbre. */}
             {currentModal === 'preferences' && (
-                <ModalOverlay role="dialog" aria-labelledby="cookie-preferences-title">
+                <ModalOverlay role="dialog" aria-labelledby="cookie-preferences-title" data-lenis-prevent>
                     <ModalContainer>
-                        <ModalContent>
+                        <ModalHeader>
                             <ModalTitle id="cookie-preferences-title">{t('title')}</ModalTitle>
                             <ModalDescription>{t('description')}</ModalDescription>
+                        </ModalHeader>
 
+                        <ModalBody>
                             <CookieCategory>
                                 <CategoryHeader>
                                     <CategoryTitle>{t('necessaryCookies.title')}</CategoryTitle>
@@ -209,19 +216,19 @@ export default function GDPRManager({children}) {
                                     {t('privacyPolicy.link')}
                                 </Link>
                             </PrivacyText>
+                        </ModalBody>
 
-                            <ModalFooter>
-                                <TertiaryButton onClick={rejectAll}>
-                                    {t('rejectAll')}
-                                </TertiaryButton>
-                                <SecondaryButton onClick={acceptAll}>
-                                    {t('acceptAll')}
-                                </SecondaryButton>
-                                <PrimaryButton onClick={savePreferences}>
-                                    {t('save')}
-                                </PrimaryButton>
-                            </ModalFooter>
-                        </ModalContent>
+                        <ModalFooter>
+                            <TertiaryButton onClick={rejectAll}>
+                                {t('rejectAll')}
+                            </TertiaryButton>
+                            <SecondaryButton onClick={acceptAll}>
+                                {t('acceptAll')}
+                            </SecondaryButton>
+                            <PrimaryButton onClick={savePreferences}>
+                                {t('save')}
+                            </PrimaryButton>
+                        </ModalFooter>
                     </ModalContainer>
                 </ModalOverlay>
             )}

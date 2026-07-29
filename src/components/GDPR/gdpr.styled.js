@@ -120,8 +120,9 @@ export const TertiaryButton = styled(Button)`
 export const ModalOverlay = styled.div`
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px);
+    background-color: rgba(4, 5, 10, 0.72);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -129,62 +130,89 @@ export const ModalOverlay = styled.div`
     padding: 1rem;
 `;
 
+/* Header and footer stay put; only ModalBody scrolls. The whole subtree carries
+   data-lenis-prevent (set on the overlay in GDPRManager) — without it Lenis
+   swallows the wheel event at the root and scrolls the page behind the modal. */
 export const ModalContainer = styled.div`
-    background-color: rgba(17, 12, 41, 0.85);
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(10, 10, 18, 0.94);
     backdrop-filter: blur(16px);
-    border-radius: 1rem;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-    max-width: 800px;
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 0.875rem;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+    max-width: 620px;
     width: 100%;
-    max-height: 90vh;
+    max-height: min(88vh, 46rem);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+`;
+
+export const ModalHeader = styled.div`
+    padding: 1.6rem 1.75rem 1.15rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    flex-shrink: 0;
+`;
+
+export const ModalBody = styled.div`
+    padding: 1.25rem 1.75rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
     overflow-y: auto;
-    border: 1px solid rgba(150, 185, 249, 0.2);
+    /* Stops the scroll from chaining to the page once the list bottoms out. */
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 
     &::-webkit-scrollbar {
-        width: 10px;
+        width: 8px;
     }
 
     &::-webkit-scrollbar-track {
-        background: rgba(30, 20, 70, 0.2);
-        border-radius: 8px;
+        background: transparent;
     }
 
     &::-webkit-scrollbar-thumb {
-        background: rgba(150, 185, 249, 0.3);
+        background: rgba(255, 255, 255, 0.16);
         border-radius: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.26);
     }
 `;
 
-export const ModalContent = styled.div`
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-`;
-
-export const ModalTitle = styled.h2.attrs({
-    className: "fluid-type-2",
-})`
+export const ModalTitle = styled.h2`
+    font-size: 1.1rem;
+    line-height: 1.3;
     color: var(--color-text-light);
     font-weight: 600;
+    text-shadow: none;
 `;
 
-export const ModalDescription = styled.p.attrs({
-    className: "fluid-type-0",
-})`
-    color: rgba(255, 255, 255, 0.8);
+export const ModalDescription = styled.p`
+    font-size: 13.5px;
+    font-weight: 300;
+    line-height: 1.5;
+    color: rgba(237, 237, 237, 0.7);
+    text-shadow: none;
+    margin: 0;
 `;
 
 export const CookieCategory = styled.div`
-    background-color: rgba(30, 20, 70, 0.3);
-    border-radius: 0.75rem;
-    padding: 1.25rem;
-    border: 1px solid rgba(150, 185, 249, 0.15);
-    transition: transform 0.2s ease;
+    background-color: rgba(255, 255, 255, 0.025);
+    border-radius: 0.625rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
 
     &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        border-color: rgba(150, 185, 249, 0.3);
+        background-color: rgba(255, 255, 255, 0.04);
     }
 `;
 
@@ -192,39 +220,48 @@ export const CategoryHeader = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.75rem;
+    gap: 1rem;
+    margin-bottom: 0.4rem;
 `;
 
-export const CategoryTitle = styled.h3.attrs({
-    className: "fluid-type-1",
-})`
+export const CategoryTitle = styled.h3`
+    font-size: 14px;
+    line-height: 1.3;
     color: var(--color-text-light);
-    font-weight: 600;
-`;
-
-export const AlwaysActiveTag = styled.span.attrs({
-    className: "fluid-type--1",
-})`
-    background-color: rgba(150, 185, 249, 0.2);
-    color: var(--color-text-light);
-    padding: 0.25rem 0.75rem;
-    border-radius: 1rem;
     font-weight: 500;
+    text-shadow: none;
 `;
 
-export const CategoryDescription = styled.p.attrs({
-    className: "fluid-type-0",
-})`
-    color: rgba(255, 255, 255, 0.7);
+export const AlwaysActiveTag = styled.span`
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    color: rgba(237, 237, 237, 0.65);
+    padding: 0.2rem 0.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 1rem;
+    font-weight: 400;
+    white-space: nowrap;
 `;
 
-export const PrivacyText = styled.p.attrs({
-    className: "fluid-type-0",
-})`
-    color: rgba(255, 255, 255, 0.7);
+export const CategoryDescription = styled.p`
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.5;
+    color: rgba(237, 237, 237, 0.6);
+    text-shadow: none;
+    margin: 0;
+`;
+
+export const PrivacyText = styled.p`
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.5;
+    color: rgba(237, 237, 237, 0.6);
+    text-shadow: none;
+    margin: 0.25rem 0 0;
 
     a {
-        color: var(--color-accent-mihai);
+        color: #96b9f9;
         text-decoration: none;
 
         &:hover {
@@ -235,10 +272,12 @@ export const PrivacyText = styled.p.attrs({
 
 export const ModalFooter = styled.div`
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-end;
     gap: 0.75rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid rgba(150, 185, 249, 0.2);
+    padding: 1.15rem 1.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
 `;
 
 export const ToggleSwitch = styled.label`
@@ -294,23 +333,29 @@ export const SettingsButton = styled.button`
     bottom: 1.5rem;
     left: 1.5rem;
     z-index: 40;
-    background-color: rgba(17, 12, 41, 0.75);
-    color: var(--color-text-light);
-    padding: 0.75rem;
+    background-color: rgba(10, 10, 18, 0.8);
+    color: rgba(237, 237, 237, 0.75);
+    padding: 0.65rem;
     border-radius: 50%;
     backdrop-filter: blur(8px);
-    border: 1px solid rgba(150, 185, 249, 0.3);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
 
     &:hover {
-        transform: translateY(-3px) rotate(15deg);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        background-color: rgba(150, 185, 249, 0.4);
+        color: var(--color-text-light);
+        border-color: rgba(150, 185, 249, 0.45);
+        background-color: rgba(255, 255, 255, 0.06);
+    }
+
+    &:focus-visible {
+        outline: 2px solid rgba(150, 185, 249, 0.7);
+        outline-offset: 2px;
     }
 
     svg {
-        width: 1.5rem;
-        height: 1.5rem;
+        width: 1.25rem;
+        height: 1.25rem;
     }
 `;
