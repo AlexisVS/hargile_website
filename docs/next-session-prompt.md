@@ -3,10 +3,10 @@
 > Fichier à copier-coller tel quel en ouverture de session. C'est **la** source
 > unique : les sections « Prompt de reprise » de `homepage-performance-plan.md`
 > et `homepage-code-review-plan.md` renvoient ici pour éviter la dérive.
-> Dernière mise à jour : 2026-07-29 (2e session du jour). **La phase 1 du GEO
-> est terminée côté code, poussée sur `main`, et volontairement NON taggée.**
-> Décision de Mihai : *code review d'abord, tag et release ensuite.*
-> Prochaine session : **relire ces 8 commits**, puis tagger, puis phase 2.
+> Dernière mise à jour : 2026-07-29 (3e session du jour). **La phase 1 du GEO
+> est terminée, relue, taguée `v0.21.0`, déployée et vérifiée en prod.**
+> Les URLs ont été soumises à IndexNow. Prochaine session : **phase 2**
+> (du contenu), en commençant par ENG-82.
 
 ---
 
@@ -19,55 +19,69 @@ Lire EN PREMIER, dans cet ordre :
    déjà livré marqué ✅ ; ne pas ré-auditer ;
 5. `docs/homepage-performance-plan.md` §Verification — pièges de mesure.
 
-## ⚠️ À FAIRE EN OUVRANT LA SESSION : la code review
+## ✅ Code review faite, v0.21.0 taguée, déployée et vérifiée
 
-**8 commits sont poussés sur `main` et ne sont PAS déployés.** C'est voulu, et
-c'est possible parce que **seul un tag `v*` déclenche un déploiement** sur ce
-projet (voir le point 🔑 de « Comment le déploiement marche » — l'`ImagePolicy`
-Flux est en semver, les tags `:main`/`:latest`/`:sha-*` d'un push de branche ne
-sont jamais sélectionnés). La prod tourne toujours **v0.20.0**.
+La code review demandée par Mihai a été faite en ouverture de la 3e session du
+29/07, sur `git diff v0.20.0..main` (9 commits, dont 6 de code). **Conclusion :
+rien de bloquant.** Ne pas la refaire.
 
-Mihai a demandé une **code review de ces commits avant tout tag ou release**.
-C'est la première chose à faire :
+Ce qui a été vérifié sur un vrai build, et pas seulement relu :
+
+- **Suppression de `src/app/robots.js`** — le risque « et si `next-sitemap` ne
+  tournait pas dans l'image ? » est définitivement clos : `Dockerfile:15` fait
+  `RUN npm run build`, npm enchaîne sur `postbuild`, et le
+  `COPY … /app/public` du stage runner (`Dockerfile:27`) a lieu **après**.
+  Le `robots.txt` servi en prod porte maintenant les lignes `Disallow: /api/`
+  et `/admin/` — que la route morte n'a jamais servies.
+- **`/llms.txt`** — build en `○` (prérendu statique), 200 `text/plain`. Point
+  qui n'était pas écrit et qui compte : `src/proxy.js:4` teste `/\.(.*)$/`,
+  donc le point dans `llms.txt` fait sauter le middleware — **pas** de
+  redirection de locale. Les 6 URLs externes qu'il annonce répondent 200
+  (portfolio, les 3 sites clients, LinkedIn, GitHub) : un lien mort là serait
+  exactement la « source qui contredit les autres » que `@/seo/same-as` existe
+  pour éviter.
+- **Année du footer** — `© 2026` dans le HTML brut de `/fr` et `/en`.
+- **JSON-LD** — 6 pages × 2 locales, 37 propriétés, 0 erreur, 0 avertissement,
+  contrôle négatif vert. Le seul `"@type":"WebSite"` restant est le nœud
+  `isPartOf` : c'est la forme correcte, pas un reste.
+- **Garde-fou GEO** — 0 `opacity:0` inline (mesuré via node, pas `grep -P`),
+  `<h1>` présent. bingbot / ClaudeBot / PerplexityBot / GPTBot → 200.
+- **Lint** — 4 erreurs, la baseline exacte.
+
+Deux détails relevés, aucun bloquant et aucun corrigé :
+
+- `.cache/` n'est pas dans `.dockerignore`. Sans effet réel : la CI construit
+  depuis un clone frais où le dossier n'existe pas.
+- L'année du footer est l'année du **build**. Un build qui traverse le 31/12
+  affichera l'année précédente dans le HTML brut jusqu'au build suivant.
+  Toujours strictement mieux que le 2025 en dur d'avant.
+
+**Déploiement : passé sans accroc**, contrairement à v0.18.0. Image construite,
+PR `image-updates/auto` #172 ouverte à 15:45 UTC avec le bon diff d'une ligne
+(`v0.20.0` → `v0.21.0`), checks réellement exécutés (les runners ARC étaient
+vivants), auto-mergée à 15:47 UTC par `github-actions`, Flux a suivi. Aucune
+intervention manuelle.
+
+Les 5 marqueurs de prod passent :
 
 ```bash
-git log --oneline v0.20.0..main          # les 8 commits
-git diff v0.20.0..main                   # le diff complet
+curl -s -o /dev/null -w '%{http_code}\n' https://hargile.com/llms.txt          # 200 ✅
+curl -s https://hargile.com/fr | grep -c '"@type":"WebPage"'                   # 1 ✅
+curl -s https://hargile.com/fr | grep -o '© [0-9]*'                            # © 2026 ✅
+curl -s https://hargile.com/robots.txt | grep -c 'Disallow: /api/'             # 1 ✅
+curl -s https://hargile.com/bfca279c73ec400f7b3ceef8e1e1483f.txt               # la clé ✅
 ```
 
-Périmètre à relire en priorité, par ordre de risque :
-
-1. **`fix(seo): make robots.txt come from one source`** — supprime
-   `src/app/robots.js`. Le risque évident (« et si `next-sitemap` ne tournait
-   pas dans l'image ? le site n'aurait plus de `robots.txt` du tout ») **a été
-   vérifié et est écarté** : le `Dockerfile` fait `RUN npm run build`, npm
-   enchaîne automatiquement sur `postbuild`, et le `COPY … /app/public` du
-   stage runner a lieu après. Preuve empirique en plus : le `robots.txt` servi
-   en prod aujourd'hui est déjà celui de next-sitemap (il porte la ligne
-   `Host:`, que la route supprimée n'a jamais produite). Relire quand même le
-   diff, mais l'inquiétude est levée.
-2. **`src/app/llms.txt/route.js`** — nouvelle route publique.
-3. **`fix(seo): drive the footer year from the build`** — touche
-   `next.config.mjs` (`env:`), donc tout le bundle.
-4. Le reste est du script hors runtime (`scripts/`) ou du contenu de messages.
-
-**Puis tagger** (numéro à trancher avec Mihai : `v0.21.0` se défend — nouvelle
-URL publique `/llms.txt`, deux scripts npm, une route supprimée). Après le tag,
-attendre le déploiement réel et vérifier :
-
-```bash
-curl -s -o /dev/null -w '%{http_code}\n' https://hargile.com/llms.txt          # 200
-curl -s https://hargile.com/fr | grep -c '"@type":"WebPage"'                   # >0
-curl -s https://hargile.com/fr | grep -o '© [0-9]*'                            # © 2026
-curl -s https://hargile.com/robots.txt | grep -c 'Disallow: /api/'             # 1
-curl -s https://hargile.com/bfca279c73ec400f7b3ceef8e1e1483f.txt               # la clé
-```
-
-**Et seulement ensuite** `npm run seo:indexnow` — soumettre des URLs qui
-servent encore l'ancien HTML ne fait qu'indexer l'ancien HTML plus vite.
+**`npm run seo:indexnow` a été lancé après confirmation du déploiement** : les
+6 URLs soumises, HTTP 202 (accepté, clé en cours de validation). **Ne pas le
+relancer à chaque session** — il ne sert qu'après un changement de contenu réel.
 
 ## État au départ (vérifié le 2026-07-29)
 
+- **v0.21.0 est taguée, déployée et vérifiée** (GEO phase 1 : `/llms.txt`,
+  `WebPage`, robots.txt à source unique, année du footer, IndexNow).
+  Marqueur : `curl -s -o /dev/null -w '%{http_code}\n' https://hargile.com/llms.txt`
+  → **200 = v0.21.0 est en prod**. Confirmé le 2026-07-29.
 - **v0.20.0 est taguée et déployée** (entité Organization + module NAP).
   Marqueur : `curl -s https://hargile.com/fr | grep -c '"alternateName":"HARGILE Tech Studio"'`
   → **> 0 = v0.20.0 est en prod**. Confirmé.
@@ -370,11 +384,10 @@ les annuaires affichent la même adresse et le même nom que le schéma.
 
 ## Ce qui reste côté code — proposition de périmètre, à valider
 
-**Recommandation : pousser les 6 commits, vérifier le déploiement, faire tourner
-`npm run seo:indexnow`, puis attaquer la phase 2.** La phase 1 est finie ; elle
-a rendu l'entité correctement décrite, ce qui ne sert à rien tant qu'il n'y a
-que 3 pages à décrire. La phase 2 est la seule chose de la liste qui déplace
-encore quelque chose.
+**Fait : les commits sont relus, taggés v0.21.0, déployés, et `seo:indexnow` a
+tourné. Il reste la phase 2.** La phase 1 a rendu l'entité correctement
+décrite, ce qui ne sert à rien tant qu'il n'y a que 3 pages à décrire. La
+phase 2 est la seule chose de la liste qui déplace encore quelque chose.
 
 ⚠️ La phase 2 est **du contenu**, pas du code, et elle a une dépendance :
 **ENG-82 « Lister 20 prompts cibles GEO »**. Sans ces prompts, les pages
