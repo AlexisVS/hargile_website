@@ -204,11 +204,11 @@ Ce qui a changé, et qui compte pour la suite :
   `ProfessionalService` (sous-type de `LocalBusiness`). C'est le coût assumé du
   type, qui corrobore la catégorie GBP.
 
-**Une divergence relevée et NON corrigée**, à traiter un jour : le `@type` de
-page est `WebSite` et non `WebPage` (il vient de la clé `schemaType` des
-fichiers de messages), ce qui imbrique un `WebSite` dans un autre via
-`isPartOf`. Le plan interdisait de toucher `schemaType` dans cet item, donc
-c'est resté. C'est une vraie erreur de modélisation, petite, isolée.
+**Une divergence relevée et NON corrigée** : le `@type` de page est `WebSite` et
+non `WebPage` (clé `schemaType` des fichiers de messages), ce qui imbrique un
+`WebSite` dans un autre via `isPartOf`. Le plan interdisait de toucher
+`schemaType` dans cet item. **C'est ENG-109 dans Linear**, milestone M5,
+~20 min — voir le point 5 de l'ordre d'exécution.
 
 **Outil réutilisable** : un validateur JSON-LD hors ligne a été écrit (il
 contrôle chaque `@type` et chaque propriété contre le vocabulaire schema.org
@@ -243,6 +243,23 @@ supprimerait le 307 de l'apex. Mais c'est une **migration d'URL** : toutes les
 URLs FR changent, `next-sitemap.config.js` construit `/${locale}${path}` et
 sortirait des URLs fausses, hreflang/x-default à reprendre dans le même
 déploiement. Écrire un plan avant de toucher quoi que ce soit.
+
+### 5. ENG-109 — `WebSite` → `WebPage` (~20 min, bonus)
+
+**Hors phase 1** (c'est M5), donc à ne prendre que si le temps le permet — mais
+les items 2 et 3 ci-dessus se passent surtout dans un navigateur, donc il reste
+probablement de la capacité côté code. Petit, isolé, testable avec le même
+validateur JSON-LD.
+
+Chaque page déclare `"@type": "WebSite"` puis un `isPartOf` vers un autre
+`WebSite`. `isPartOf` va de `WebPage` **vers** `WebSite` : en l'état on publie
+des entités de niveau site concurrentes au lieu d'un site + N pages, et les
+propriétés de page (`breadcrumb`, `datePublished`) n'ont plus de sens.
+
+⚠️ `schemaType` est lu **par locale** depuis `src/messages/{fr,en}.json` —
+changer les deux, et vérifier que le `@id` de page (`#page`) et celui de
+`#organization` restent intacts. Rien n'est invalide au sens du validateur
+(0 erreur aujourd'hui) : c'est un contresens de modélisation, pas un bug.
 
 ### Puis la vraie contrainte — phase 2
 
