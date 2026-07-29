@@ -3,18 +3,26 @@
 > Fichier à copier-coller tel quel en ouverture de session. C'est **la** source
 > unique : les sections « Prompt de reprise » de `homepage-performance-plan.md`
 > et `homepage-code-review-plan.md` renvoient ici pour éviter la dérive.
-> Dernière mise à jour : 2026-07-29 (3e session du jour). **La phase 1 du GEO
-> est terminée, relue, taguée `v0.21.0` / `v0.21.1`, déployée et vérifiée en
-> prod.** Les URLs ont été soumises à IndexNow, Bing est vérifié, et
-> `hargile.com` est confirmé dans l'index Bing.
+> Dernière mise à jour : 2026-07-29 (4e passe — cadrage de la session M1, sans
+> code). **La phase 1 du GEO est terminée, relue, taguée `v0.21.0` / `v0.21.1`,
+> déployée et vérifiée en prod.** Les URLs ont été soumises à IndexNow, Bing est
+> vérifié, et `hargile.com` est confirmé dans l'index Bing.
 >
-> ### 👉 Par quoi commencer la prochaine session : **ENG-82, puis ENG-83**
+> ### 👉 Par quoi commencer la prochaine session
 >
-> Pas « la phase 2 » en général — ces deux-là précisément, dans cet ordre, et
-> avant de toucher au moindre contenu. Le détail est dans « Ordre recommandé »
-> plus bas. En une ligne : ENG-82 conditionne tout ce qui s'écrit ensuite, et
-> **ENG-83 est le seul item du backlog qui devient impossible si on le
-> repousse** — c'est une photo d'avant.
+> 1. **Minute 1 — la demande à Alexis** qui débloque ENG-84. Elle part en
+>    premier parce qu'elle se mesure une semaine plus tard, pas le jour même.
+> 2. **ENG-82** — figer les 20 prompts.
+> 3. **ENG-83** — le relevé de citations initial.
+>
+> Pas « la phase 2 » en général. ENG-82 conditionne tout ce qui s'écrit ensuite,
+> et **ENG-83 est le seul livrable qui devient impossible si on le repousse** —
+> c'est une photo d'avant. Plan détaillé dans « Session suivante » plus bas.
+>
+> ⚠️ **M1 contient TROIS issues, pas deux.** Ce fichier a longtemps listé
+> ENG-82 et ENG-83 en annonçant « fermer M1 » : **ENG-84** (passage des crawlers
+> IA dans les logs) appartient aussi au milestone M1 et n'était mentionné nulle
+> part. Vérifié dans Linear le 2026-07-29.
 
 ---
 
@@ -349,6 +357,7 @@ le commentaire existant**, il porte le détail vérifié :
 | ENG-87 Sitemap/Bing/GSC/IndexNow | **In Progress** — bloquée par ENG-110 |
 | ENG-95 JSON-LD | **In Progress** — reste dépend de M4 |
 | ENG-110 accès GSC (Charles) | **Todo**, priorité High |
+| ENG-82 · ENG-83 · ENG-84 (M1) | **Backlog** — c'est la session suivante |
 
 ⚠️ **Piège vécu en écrivant ces commentaires** : le WAF Cloudflare devant Linear
 **rejette les commandes shell avec pipe** dans le corps d'un commentaire
@@ -429,41 +438,204 @@ les annuaires affichent la même adresse et le même nom que le schéma.
 Arrêté le 2026-07-29 avec Mihai. La phase 1 a rendu l'entité correctement
 décrite, ce qui ne sert à rien tant qu'il n'y a que 3 pages à décrire.
 
-### Session suivante — fermer M1 (une demi-journée)
+### Session suivante — M1 (une journée, sans une ligne de code)
 
-1. **ENG-82 « Lister 20 prompts cibles GEO »**. Prérequis de tout le reste :
-   sans cette liste, les pages services et la FAQ s'écrivent à l'aveugle, et
-   surtout **aucun relevé ultérieur n'est comparable** si la liste bouge entre
-   deux mesures. C'est de la rédaction, pas du code.
-2. **ENG-83 « Relevé de citations initial sur 5 moteurs »**, juste après.
-   ⚠️ **C'est le seul item du backlog qui devient définitivement impossible si
-   on le repousse** : une fois le contenu changé, la photo d'avant n'existe
-   plus, et on ne pourra jamais dire si la phase 2 a servi à quelque chose.
-   Le faire AVANT de toucher au contenu, pas après.
+⚠️ **M1 = ENG-82 + ENG-83 + ENG-84.** Les versions précédentes de ce fichier
+n'en listaient que deux. Aucune des trois n'est du code : rien à builder, rien à
+taguer, rien à déployer.
+
+Et **M1 ne se referme pas ce jour-là** : ENG-82 et ENG-83 se terminent dans la
+session, ENG-84 non — sa mesure n'est possible qu'une semaine après le
+changement d'infra demandé au point 1. Annoncer « M1 fermée » en fin de session
+serait faux.
+
+#### 1. Minute 1 — envoyer la demande qui débloque ENG-84
+
+ENG-84 veut compter le passage des crawlers IA dans les logs des 30 derniers
+jours. Vérifié le 2026-07-29 dans `hargile-infra` — **ne pas ré-enquêter** :
+
+- La stack existe : Loki + Promtail + Grafana. Promtail lit déjà le log d'accès
+  JSON de Traefik (`/var/log/traefik/access.log`, job `traefik-access`) et le
+  pousse dans Loki.
+- **La rétention Loki est de 7 jours, pas 30** —
+  `infrastructure/loki/helmrelease.yaml`, `retention_period: 168h`, avec un
+  compactor qui supprime pour de bon. Les « 30 derniers jours » de l'issue sont
+  impossibles par construction ; le plafond est une fenêtre glissante de 7 jours.
+- 🛑 **Le User-Agent n'est journalisé nulle part.** Traefik jette les en-têtes de
+  requête du log d'accès sauf mention explicite, et
+  `infrastructure/traefik-config/helmchartconfig.yaml` (96 lignes) n'a aucune
+  section `fields.headers`. **Il n'y a donc rien sur quoi filtrer, à aucune
+  profondeur** : la donnée qu'ENG-84 veut compter n'a jamais été écrite. Ce
+  n'est pas un problème de rétention, c'est un problème de collecte.
+
+**La demande à Alexis, précise** — ajouter sous `logs.access` dans
+`infrastructure/traefik-config/helmchartconfig.yaml` :
+
+```yaml
+fields:
+  headers:
+    defaultMode: drop
+    names:
+      User-Agent: keep
+```
+
+puis confirmer que l'étape `json` du scrape Promtail extrait bien le champ.
+Aucun enjeu vie privée : l'IP client (`ClientHost`) est déjà journalisée, une
+chaîne d'UA l'est moins.
+
+**Conséquence sur l'ordre** : ENG-84 n'est pas « un diagnostic de 15 min à faire
+en premier », c'est **une demande à envoyer en premier et une mesure à faire une
+semaine plus tard** — le compteur ne démarre qu'une fois l'en-tête activé. En
+attendant, le seul chiffre de crawl disponible reste Bing WMT (dernier crawl
+connu : 2026-07-28 18:48).
+
+#### 2. ENG-82 — figer les 20 prompts (~1 h 30)
+
+**D'où viennent les faits** : `src/app/llms.txt/route.js`. C'est déjà
+l'inventaire canonique et à source unique de ce que le studio vend — 4 offres
+(apps web sur mesure pour PME, IA « là où elle change le résultat », SEO
+automatisé, MVP en 30 jours à prix fixe) et 3 preuves (Ecole du Bonheur,
+La Marquisette, VENIZI, détail dans `src/data/portfolio-data.js`).
+
+⚠️ **Ne pas partir de `src/messages/fr.json`** : il porte encore la taxonomie de
+services du v1 (dev / IA / analyse / maintenance), d'autres projets (AGVES,
+I GO) et du lorem ipsum dans `our-solutions`. Écrire les prompts là-dessus,
+c'est viser des choses que le site ne vend pas. Ne pas partir non plus de la
+prose de `geo-plan.md` §2.1 : elle date du 28/07 et n'est pas la source.
+
+**Forme** : des questions entières, telles qu'un prospect les tape, jamais des
+mots-clés. Réparties sur quatre intentions pour ne pas sur-représenter la
+première qui vient :
+
+| Intention | Forme d'exemple |
+| --- | --- |
+| Découverte locale | « quelle agence peut développer une application web sur mesure pour une PME à Bruxelles » |
+| Offre précise | « qui peut livrer un MVP en 30 jours en Belgique à prix fixe » |
+| Stack / techno | « studio Next.js et Laravel en Belgique » |
+| Décision / coût | « combien coûte une app web sur mesure en Belgique », « sur-mesure ou WordPress pour une PME » |
+
+**Deux ajouts au-delà de ce que demande l'issue**, tous deux payants plus tard :
+
+- **Taguer chaque prompt avec la page M4 censée y répondre** (`/services/mvp`,
+  `/faq`, telle étude de cas…). ENG-91/92/93 tombent alors de la liste au lieu
+  de s'écrire à l'aveugle — c'est exactement la raison pour laquelle ENG-82
+  passe en premier.
+- **Écrire les règles de gel dans le document** : identifiants `P01`–`P20`,
+  jamais renumérotés, jamais reformulés ; les idées suivantes vont dans une
+  section « candidats v2 » sous la ligne. Sans ça, le relevé d'ENG-97 cesse
+  silencieusement d'être comparable.
+
+**Langue : 13 FR / 7 EN.** `fr` est la locale par défaut, les clients sont
+francophones, et l'espace de requêtes IA en français est nettement moins
+disputé — tout en couvrant `/en`, qui existe et est indexé. 15/5 ou 12/8 se
+défendent aussi ; ce qui compte est de fixer le ratio **avant** d'écrire, pas
+prompt par prompt.
+
+**Livrable** : `docs/geo-prompt-panel.md`, un commit
+`docs(geo): fige les 20 prompts cibles (ENG-82)`, un commentaire sur ENG-82,
+statut Done.
+
+**Où vivent les deux documents de la session.** ENG-82 dit « document
+partagé », ENG-83 « partagé avec l'équipe », sans dire où. **Le dépôt est la
+source** : git horodate le gel et diffe contre le relevé M5. Si Dorian et
+Charles ont besoin d'une surface lisible, une page Notion **miroir**, dont la
+première ligne dit « copie — source : `docs/geo-prompt-panel.md` ». Pas deux
+originaux : ce dépôt vient de perdre du temps sur exactement ça
+(`public/robots.txt` masquant `src/app/robots.js`).
+
+#### 3. ENG-83 — le relevé de citations initial
+
+**Qui le passe** : Mihai et Dorian, sur des comptes gratuits. C'est le bon
+instrument — c'est ce qu'un prospect utilise. Trois conditions pour que la
+donnée survive au relevé M5 :
+
+- **Se répartir par moteur, pas par prompt.** L'un prend ChatGPT + Copilot,
+  l'autre Gemini + Perplexity + Claude : chaque colonne a alors des conditions
+  constantes. Réparti par prompt, chaque colonne mélange deux comptes et deux
+  historiques.
+- **Déconnecté ou navigation privée, mémoire et instructions personnalisées
+  coupées, un chat neuf par prompt.** Un compte gratuit avec historique
+  personnalise quand même.
+- **Noter qui a passé chaque ligne et quel modèle est apparu** — les offres
+  gratuites changent de modèle sous le capot sans le dire.
+
+⚠️ **Ne jamais utiliser la réponse de l'assistant de cette session comme point
+de mesure « Claude ».** Ça mesurerait des données d'entraînement, pas la surface
+de recherche et de citation. Il faut claude.ai avec la recherche web active, en
+session neuve, comme les autres. Sur l'offre gratuite la recherche web n'est pas
+toujours disponible : si elle est coupée, marquer la cellule comme telle plutôt
+que d'enregistrer un faux « non cité ».
+
+**Conditions à figer en en-tête du document**, sinon le relevé M5 mesure les
+conditions et pas le travail : date, moteur + niveau de modèle, recherche web
+on/off, déconnecté ou privé, mémoire off, région BE, langue du navigateur, un
+chat neuf par prompt (aucune relance dans le même fil).
+
+**Schéma de ligne** — plus riche que les 3 champs de l'issue, pour le même
+effort de saisie :
+
+```
+prompt_id | moteur | cité O/N | position dans la réponse | URL exacte citée |
+est-ce hargile.com ? | concurrents nommés, dans l'ordre | domaines sources
+cités | extrait verbatim si cité | opérateur
+```
+
+🛑 **Mesurer le bruit, ne pas l'importer.** ENG-97 annonce que « la visibilité
+IA fluctue de 5 à 7 points quand on rejoue les mêmes requêtes sans rien
+changer ». C'est mot pour mot le piège du PSI dans ce dépôt : un run isolé pris
+pour une baseline. Donc **rejouer un sous-ensemble fixe — 5 prompts × 2 moteurs
+× 3 répétitions, une trentaine de cellules de plus** — pour mesurer la variance
+réelle de ce site au lieu d'hériter d'un chiffre écrit ailleurs. Sans ce
+plancher de bruit, aucun écart lu en M5 ne sera interprétable.
+
+**Estimer en mesurant, pas en devinant.** Passer les 10 premières cellules,
+chronométrer, extrapoler, **puis** décider entre les 100 complètes et un
+périmètre réduit. Ordre de grandeur actuel : 3 à 5 h à deux, soit 1 h 30 à
+2 h 30 chacun. Si le périmètre est réduit, **écrire noir sur blanc ce qui a été
+abandonné** — jamais de troncature silencieuse.
+
+**Attendu, à annoncer d'avance** : le compte de citations sera très
+probablement 0/100 ou proche. Ce n'est pas un échec, c'est la baseline. La
+valeur est dans les deux autres colonnes — **quels concurrents les moteurs
+nomment, et quels domaines ils citent** (fiches Sortlist/Clutch, comparatifs).
+C'est ce qui dit à quoi ressemble une bonne réponse sur ce marché, et ça
+alimente directement la phase 3 (ENG-89, ENG-90).
+
+**Livrables** : `docs/geo-citation-baseline-<date>.md` — nom daté, parce que
+c'est une photo et qu'on ne l'édite plus après — et un CSV pour le diff d'ENG-97.
+
+#### 4. Clôture de session
+
+Statuts Linear pour ENG-82, ENG-83 et ENG-84 (celle-ci **reste ouverte**, en
+attente d'Alexis puis de 7 jours de logs), et **réécrire l'en-tête de ce
+fichier** pour pointer la session d'après : ENG-91 + la réécriture de la locale
+par défaut dans le même déploiement, et le rappel de revenir mesurer ENG-84.
+⚠️ Rappel : le WAF Cloudflare devant Linear rejette les commandes shell avec
+pipe dans un corps de commentaire. Rédiger en prose.
 
 ### Puis M4 — la vraie contrainte, par ordre de valeur
 
-3. **ENG-91 pages services** — une page par offre. Le plus fort levier de tout
+4. **ENG-91 pages services** — une page par offre. Le plus fort levier de tout
    le backlog : chaque page devient une réponse citable à une question précise.
    👉 **Embarquer la réécriture de la locale par défaut dans le même
    déploiement** (`docs/geo-default-locale-plan.md`) : l'espace d'URL change de
    toute façon, autant n'avoir qu'une seule vague de réindexation. Ça touche
    `src/proxy.js` + six fichiers de construction d'URL — ce n'est pas anodin,
    lire le plan avant.
-4. **ENG-92 FAQ** — alimentée directement par les 20 prompts d'ENG-82. Ajouter
+5. **ENG-92 FAQ** — alimentée directement par les 20 prompts d'ENG-82. Ajouter
    le `FAQPage` en JSON-LD par-dessus, ce qui avance ENG-95.
-5. **ENG-93 études de cas** — les rapatrier depuis `portfolio.hargile.com`.
+6. **ENG-93 études de cas** — les rapatrier depuis `portfolio.hargile.com`.
    Aujourd'hui la matière la plus citable du studio vit sur un sous-domaine qui
    ne renforce pas le domaine principal.
 
 ### En parallèle, hors repo — et ça pèse autant que le JSON-LD
 
-6. **ENG-89** (propager la description canonique) et **ENG-90** (consolider les
+7. **ENG-89** (propager la description canonique) et **ENG-90** (consolider les
    deux organisations GitHub). Les moteurs résolvent une entité en croisant des
    sources indépendantes. Deux organisations GitHub qui racontent des choses
    différentes, c'est exactement le désaccord entre sources que `@/lib/nap` et
    `@/seo/same-as` ont éliminé côté site. Aucun code requis.
-7. **ENG-110** — accès Google Search Console pour `pmihai31@gmail.com`,
+8. **ENG-110** — accès Google Search Console pour `pmihai31@gmail.com`,
    assignée à Charles. Bloque la clôture d'ENG-87, et surtout : sans GSC, on
    écrira les pages de M4 sans jamais voir sur quelles requêtes elles
    atterrissent.
