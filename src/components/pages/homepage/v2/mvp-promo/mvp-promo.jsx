@@ -41,7 +41,7 @@ const Step = ({step, i, fill, reveal, t}) => {
     const weekOpacity = useTransform(ignite, [0, 1], [0.45, 1]);
 
     return (
-        <motion.div className={styles.step} {...reveal(i)}>
+        <div className={styles.step} {...reveal(i)}>
             <motion.div className={styles.dot} style={{opacity: dotOpacity, scale: dotScale}}/>
             <div className={styles.ghostNum} aria-hidden="true">{step.num}</div>
             <div className={styles.stepBody}>
@@ -51,7 +51,7 @@ const Step = ({step, i, fill, reveal, t}) => {
                 <h3 className={styles.stepTitle}>{t(`steps.${step.key}.title`)}</h3>
                 <p className={styles.stepText}>{t(`steps.${step.key}.text`)}</p>
             </div>
-        </motion.div>
+        </div>
     );
 };
 
@@ -78,12 +78,12 @@ const MvpPromoV2 = () => {
     return (
         <section className={section.section}>
             <div className={section.container}>
-                <motion.h2 className={section.heading} {...reveal(0)}>
+                <h2 className={section.heading} {...reveal(0)}>
                     {t("title")} <span className={styles.accent}>{t("titleAccent")}</span>
-                </motion.h2>
-                <motion.p className={section.lead} style={{maxWidth: "56ch"}} {...reveal(1)}>
+                </h2>
+                <p className={section.lead} style={{maxWidth: "56ch"}} {...reveal(1)}>
                     {t("lead")}
-                </motion.p>
+                </p>
 
                 <div className={styles.timeline} ref={timelineRef}>
                     <div className={styles.rail} aria-hidden="true">
@@ -103,11 +103,11 @@ const MvpPromoV2 = () => {
                     </div>
                 </div>
 
-                <motion.div className={styles.ctaWrap} {...reveal(3)}>
+                <div className={styles.ctaWrap} {...reveal(3)}>
                     <CtaLink href="/contact" variant="primary">
                         {t("cta")}
                     </CtaLink>
-                </motion.div>
+                </div>
             </div>
         </section>
     );

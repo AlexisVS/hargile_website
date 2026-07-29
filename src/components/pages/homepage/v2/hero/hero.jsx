@@ -217,13 +217,13 @@ const HeroV2 = ({backdrop, label}) => {
                         </div>
                     </motion.div>
                 ) : (
-                    <motion.div
-                        className={styles.visual}
-                        aria-hidden="true"
-                        initial={{opacity: 0}}
-                        animate={{opacity: 1}}
-                        transition={{duration: 0.8, ease: "easeOut", delay: 0.25}}
-                    >
+                    /* Fade-in in CSS (hero.module.scss), not motion: this branch is
+                       the one that ships in the SSR HTML, and a serialized
+                       `opacity: 0` left the three capability blurbs invisible to
+                       every client that doesn't run JS — the same defect the copy
+                       above was fixed for. The rail branch opposite is desktop-only
+                       and mounts after hydration, so it never reaches that HTML. */
+                    <div className={styles.visual} aria-hidden="true">
                         {CARDS.map((card) => (
                             <div key={card.key} className={`${styles.floatCard} ${styles[card.className]}`}>
                                 <div className={styles.cardDot}/>
@@ -231,7 +231,7 @@ const HeroV2 = ({backdrop, label}) => {
                                 <div className={styles.cardText}>{t(`cards.${card.key}.text`)}</div>
                             </div>
                         ))}
-                    </motion.div>
+                    </div>
                 )}
             </div>
         </section>

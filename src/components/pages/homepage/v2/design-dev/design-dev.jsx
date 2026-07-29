@@ -1,7 +1,7 @@
 "use client";
 
 import {useRef} from "react";
-import {motion, useReducedMotion, useScroll} from "motion/react";
+import {useReducedMotion, useScroll} from "motion/react";
 import {useTranslations} from "next-intl";
 import section from "../v2-section.module.scss";
 import styles from "./design-dev.module.scss";
@@ -37,9 +37,9 @@ const DesignDevV2 = () => {
     return (
         <section className={section.section}>
             <div className={section.container}>
-                <motion.h2 className={`${section.heading} ${styles.centered}`} {...reveal(0)}>
+                <h2 className={`${section.heading} ${styles.centered}`} {...reveal(0)}>
                     {t("title")}
-                </motion.h2>
+                </h2>
 
                 <blockquote ref={manifestoRef} className={styles.manifesto}>
                     {/* Les mots scrubbés partent à opacity 0.16 : décoratifs pour

@@ -102,6 +102,29 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+
+  /* Reveal per word. A transition rather than an animation on purpose: the
+     accent words spend their single `animation` slot on the shine below, and
+     two shorthands on one element would just overwrite each other.
+     The resting state — here — is the finished one, so the server HTML has no
+     per-word opacity for a crawler to read as blank (see verbs-quote.jsx). */
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+
+/* Parked below the fold by JS. `transition: none` makes the hiding a jump cut:
+   it happens off-screen during hydration and must never be a visible fade-out
+   for someone already scrolling. */
+.wordPending {
+  opacity: 0.01;
+  transform: translateY(0.7em);
+  transition: none;
+
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+  }
 }
 
 /* Closing phrase: blue accent gradient + a highlight layer parked off-screen left,

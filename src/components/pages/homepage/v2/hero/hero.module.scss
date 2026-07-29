@@ -455,6 +455,11 @@
 /* --- Right-side capability cards --- */
 
 .visual {
+  /* Same 0.8 s / 0.25 s delay the motion props used, moved to CSS for the same
+     reason as the copy above: this branch is what the server renders, so an
+     inline `opacity: 0` here hid the capability blurbs from non-JS clients.
+     Opacity only, so it already IS the reduced-motion form. */
+  animation: heroRevealFade 0.8s ease-out 0.25s both;
   flex: 1 1 340px;
   max-width: 420px;
   min-width: 300px;

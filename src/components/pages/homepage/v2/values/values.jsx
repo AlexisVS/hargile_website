@@ -1,6 +1,5 @@
 "use client";
 
-import {motion} from "motion/react";
 import {useTranslations} from "next-intl";
 import section from "../v2-section.module.scss";
 import styles from "./values.module.scss";
@@ -20,22 +19,22 @@ const ValuesV2 = () => {
         <section className={`${section.section} ${section.sectionEnd}`}>
             <div className={styles.orb} aria-hidden="true"/>
             <div className={section.container}>
-                <motion.h2 className={section.heading} {...reveal(0)}>
+                <h2 className={section.heading} {...reveal(0)}>
                     {t("who_title")}
-                </motion.h2>
-                <motion.p className={styles.statement} {...reveal(1)}>
+                </h2>
+                <p className={styles.statement} {...reveal(1)}>
                     {statement}
-                </motion.p>
+                </p>
                 {ambition && (
-                    <motion.p className={styles.ambition} {...reveal(1)}>
+                    <p className={styles.ambition} {...reveal(1)}>
                         {ambition}
-                    </motion.p>
+                    </p>
                 )}
                 {/* Value cards — same lit-glass card + luminous dot as the hero's
                     capability cards on mobile (.floatCard / .cardDot) */}
                 <div className={styles.values}>
                     {values.map((v, i) => (
-                        <motion.div
+                        <div
                             key={v.value}
                             className={styles.card}
                             {...reveal(i)}
@@ -43,7 +42,7 @@ const ValuesV2 = () => {
                             <div className={styles.cardDot} aria-hidden="true"/>
                             <h3 className={styles.valueName}>{v.value}</h3>
                             <p className={styles.valueDesc}>{v.description}</p>
-                        </motion.div>
+                        </div>
                     ))}
                 </div>
             </div>
