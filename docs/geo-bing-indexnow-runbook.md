@@ -6,6 +6,10 @@
 > créer les comptes, ni valider la propriété du domaine, ni cliquer dans une
 > console Microsoft. Tout le code que cet item demandait est livré (voir « Déjà
 > fait » plus bas) ; ce qui reste tient en ~30 min et n'appartient qu'à Mihai.
+>
+> ✅ **FAIT le 2026-07-29. Propriété vérifiée, sitemap soumis, `/fr` confirmée
+> indexée, IndexNow accepté.** Voir « Relevé du 2026-07-29 » en bas — c'est la
+> section à lire, le reste est la procédure qui a servi à y arriver.
 
 ## Pourquoi ça compte plus que sa taille
 
@@ -135,19 +139,54 @@ fait qu'indexer l'ancien HTML plus vite.
 - Bing WMT → **Site Explorer** : arborescence crawlée, erreurs éventuelles.
 - Bing WMT → **Crawl information** : bingbot passe-t-il, et à quelle fréquence ?
 
-## Ce qu'il faut noter quelque part (ENG-87)
+## ✅ Relevé du 2026-07-29 — ENG-87 est répondu
 
-Ce sont les chiffres de départ pour la phase 4 « mesurer » :
+**La réponse à la question que cet item posait : `hargile.com` EST dans l'index
+Bing, et depuis longtemps.** Découverte le 25 mars 2025. Ce n'était pas acquis —
+personne ne l'avait jamais regardé, et l'hypothèse « aucune URL n'y est » était
+sur la table.
+
+Ce que l'URL Inspection de `https://hargile.com/fr` renvoie :
+
+- **Indexed successfully — URL can appear on Bing**
+- Discovered on **25 Mar 2025**
+- Last crawl attempted : **2026-07-28 18:48**
+- Crawl allowed : **Yes** · Page Fetch : **Successful** · Indexing allowed : **Yes**
+- Canonical URL : `- -`
+- **No SEO/GEO issues found** (Bing a désormais un contrôle « GEO » explicite)
+- **1 markup type found : JSON-LD**
 
 | À relever | Valeur |
 | --- | --- |
-| Propriété Bing vérifiée le | |
-| Méthode de vérification | |
-| Sitemap accepté (statut) | |
-| URLs indexées / 6 | |
-| Date du premier crawl bingbot | |
-| Soumission IndexNow acceptée | |
-| `site:hargile.com` sur Bing | |
+| Propriété Bing vérifiée le | 2026-07-29 ✅ |
+| Méthode de vérification | fichier `BingSiteAuth.xml`, livré en **v0.21.1** |
+| Sitemap accepté (statut) | soumis le 2026-07-29, les 6 URLs sont remontées |
+| URLs indexées / 6 | `/fr` **indexée**, confirmée. Les 5 autres non inspectées |
+| Date du premier crawl bingbot | découverte 2025-03-25 ; dernier crawl 2026-07-28 18:48 |
+| Soumission IndexNow acceptée | ✅ HTTP **202**, 6 URLs, 2026-07-29 |
+| `site:hargile.com` sur Bing | **non mesuré** — Bing sert un captcha aux fetchs automatisés, à faire à la main |
+
+### Deux fausses pistes, vérifiées et écartées le jour même
+
+À ne pas ré-ouvrir. Les deux venaient d'une lecture trop rapide du rapport Bing.
+
+- **`Canonical URL: - -` n'est pas un canonical manquant.** La page émet bien
+  `<link rel="canonical" href="https://hargile.com/fr"/>` — vérifié en prod. Le
+  `- -` de Bing veut dire « aucun canonical *divergent* », ce qui est l'état
+  sain.
+- **hreflang n'est pas absent** parce qu'il n'y a pas de `<link hreflang>` dans
+  le `<head>`. Il est déclaré **dans le sitemap** — les 6 URLs portent chacune
+  `fr` / `en` / `x-default`, en absolu et auto-référencées. Le sitemap est l'une
+  des trois méthodes officielles ; c'est valide. Ajouter les liens dans le
+  `<head>` serait de la redondance, pas un correctif.
+
+### Le seul point à retenir pour la suite
+
+**Le dernier crawl (2026-07-28 18:48) est ANTÉRIEUR aux déploiements du 29/07.**
+Ce que Bing a indexé est donc l'ancien HTML : avant `WebPage`, avant
+`/llms.txt`, avant l'année du footer. La soumission IndexNow du 29/07 doit
+provoquer un re-crawl dans les jours qui viennent. **Ne rien en conclure avant
+que « Last crawl attempted » soit postérieur au 2026-07-29 15:47 UTC.**
 
 ## Après quoi
 

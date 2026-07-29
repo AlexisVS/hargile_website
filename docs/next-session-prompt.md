@@ -78,6 +78,10 @@ relancer à chaque session** — il ne sert qu'après un changement de contenu r
 
 ## État au départ (vérifié le 2026-07-29)
 
+- **v0.21.1 est taguée, déployée et vérifiée** — `public/BingSiteAuth.xml`,
+  pour la vérification de propriété Bing.
+  Marqueur : `curl -s -o /dev/null -w '%{http_code}\n' https://hargile.com/BingSiteAuth.xml`
+  → **200 = v0.21.1 est en prod**.
 - **v0.21.0 est taguée, déployée et vérifiée** (GEO phase 1 : `/llms.txt`,
   `WebPage`, robots.txt à source unique, année du footer, IndexNow).
   Marqueur : `curl -s -o /dev/null -w '%{http_code}\n' https://hargile.com/llms.txt`
@@ -324,22 +328,29 @@ le dump une fois dans `.cache/` (gitignoré), et **refuse de rendre un verdict
 si son contrôle négatif échoue**. Résultat courant : 37 propriétés, 0 erreur,
 0 avertissement, sur les 6 pages et les 2 locales.
 
-### ✅ 2. ENG-87 Bing/IndexNow — code livré, **la moitié navigateur reste à faire**
+### ✅ 2. ENG-87 Bing/IndexNow — **CLOS le 2026-07-29**
 
-📄 **`docs/geo-bing-indexnow-runbook.md`** — tout y est, étape par étape.
+📄 **`docs/geo-bing-indexnow-runbook.md`**, section « Relevé du 2026-07-29 ».
 
-Côté dépôt il ne reste rien : clé IndexNow, script de soumission, `robots.txt`
-propre, sitemap propre, et la preuve qu'aucun crawler IA n'est bloqué.
+**La réponse : `hargile.com` EST dans l'index Bing, découverte le 25 mars 2025.**
+C'était la question ouverte de tout l'item — l'hypothèse « aucune URL n'y est »
+était sérieusement sur la table. `/fr` est *Indexed successfully*, crawl et
+indexation autorisés, JSON-LD détecté, **« No SEO/GEO issues found »**.
 
-Ce qui reste **n'appartient qu'à Mihai** et se fait dans un navigateur :
-vérifier la propriété dans Bing Webmaster Tools (import Search Console = un
-clic), soumettre `sitemap.xml`, inspecter les 6 URLs, relever les résultats
-dans le tableau du runbook. **Plus important que sa taille le suggère** :
-ChatGPT Search interroge l'index Bing, et personne n'a jamais regardé si
-hargile.com y est. Le livrable de cet item est de **savoir**.
+Conséquence pour la phase 2 : les nouvelles pages atterriront dans un index qui
+existe déjà et qui nous crawle, au lieu d'avoir à s'y faire une place. C'est
+une bonne nouvelle, et elle change le cadrage.
 
-Si Bing refuse l'import GSC, il faudra du code (balise `msvalidate.01` ou
-`BingSiteAuth.xml`) — le runbook dit lequel et où.
+Vérification de propriété faite par **fichier `BingSiteAuth.xml`** (v0.21.1), et
+non par import GSC : la propriété Search Console de `hargile.com` appartient à
+un collègue, et l'import Bing exige un OAuth depuis le compte Google qui la
+détient. Le fichier statique évitait toute coordination. **À demander quand même
+pour la phase 2 : un accès GSC nommé** — faire du SEO sans pouvoir ouvrir la
+Search Console du site est un angle mort, indépendamment de Bing.
+
+⚠️ **Le dernier crawl Bing (2026-07-28 18:48) précède les déploiements du 29/07.**
+Ce qui est indexé est l'ancien HTML. Ne rien conclure des rapports Bing tant que
+« Last crawl attempted » n'est pas postérieur au 2026-07-29 15:47 UTC.
 
 ### ✅ 3. `llms.txt` — livré
 
