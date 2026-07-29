@@ -8,7 +8,6 @@ import Navbar from "@/components/navigation/navbar";
 import LenisProvider from "@/components/providers/lenis-provider";
 import ScrollToTop from "@/components/providers/scroll-to-top";
 import HeroLoadingProvider from "@/components/providers/hero-loading-provider";
-import '../../styles/global.scss'
 
 
 export default function ContextLayout({children}) {

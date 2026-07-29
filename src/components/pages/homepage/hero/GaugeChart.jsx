@@ -1,16 +1,9 @@
 'use client'
 
-import {Cell, Pie, PieChart} from 'recharts'
 import {animate, motion, useMotionValue, useTransform} from 'motion/react'
 import {useEffect, useState} from 'react'
 
 const COLORS = ['#EF4444', '#F59E0B', '#22C55E'] // rouge, orange, vert
-
-const data = [
-    {name: 'Bad', value: 50},
-    {name: 'Average', value: 40},
-    {name: 'Good', value: 10},
-]
 
 const getScoreColor = (score) => {
     if (score >= 90) return COLORS[2]
@@ -20,6 +13,25 @@ const getScoreColor = (score) => {
 
 const angleToX = (angle) => 100 + 70 * Math.cos(Math.PI - (angle * Math.PI) / 180)
 const angleToY = (angle) => 100 - 70 * Math.sin(Math.PI - (angle * Math.PI) / 180)
+
+/* Cadran en arcs SVG — remplace le PieChart recharts (seul usage de recharts
+   dans le projet, ~500 KB avec d3 pour trois arcs statiques). Même géométrie :
+   demi-cercle 180°→0°, segments 50/40/10 séparés par 3° de padding, rayon
+   médian 83 pour l'anneau inner 80 / outer 86 d'origine. Angles en convention
+   recharts : 0° = est, croissant anti-horaire. */
+const ARC_RADIUS = 83
+const ARC_WIDTH = 6
+const arcPoint = (angle) => {
+    const rad = (angle * Math.PI) / 180
+    return `${(100 + ARC_RADIUS * Math.cos(rad)).toFixed(2)} ${(100 - ARC_RADIUS * Math.sin(rad)).toFixed(2)}`
+}
+const arcPath = (from, to) =>
+    `M ${arcPoint(from)} A ${ARC_RADIUS} ${ARC_RADIUS} 0 0 1 ${arcPoint(to)}`
+const ARCS = [
+    {d: arcPath(180, 93), color: COLORS[0]}, // Bad — 50 %
+    {d: arcPath(90, 20.4), color: COLORS[1]}, // Average — 40 %
+    {d: arcPath(17.4, 0), color: COLORS[2]}, // Good — 10 %
+]
 
 const GaugeChart = ({score = 0, label = 'Score'}) => {
     const motionScore = useMotionValue(0)
@@ -57,44 +69,30 @@ const GaugeChart = ({score = 0, label = 'Score'}) => {
 
     return (
         <div className="flex flex-col items-center">
-            <div className="relative">
-                <PieChart width={200} height={200}>
-                    <Pie
-                        data={data}
-                        startAngle={180}
-                        endAngle={0}
-                        innerRadius={80}
-                        outerRadius={86}
-                        paddingAngle={3}
-                        dataKey="value"
-                        isAnimationActive={false}
-                    >
-                        {data.map((_, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index]} stroke={COLORS[index]}/>
-                        ))}
-                    </Pie>
-                </PieChart>
-
-                <svg
-                    width="200"
-                    height="200"
-                    className="absolute top-0 left-0"
-                    style={{pointerEvents: 'none'}}
-                >
-                    <motion.line
-                        x1="100"
-                        y1="100"
-                        x2={needleX}
-                        y2={needleY}
-                        stroke={needleColor}
-                        strokeWidth="3"
-                        strokeLinecap="round"
+            <svg width="200" height="200">
+                {ARCS.map((arc) => (
+                    <path
+                        key={arc.color}
+                        d={arc.d}
+                        stroke={arc.color}
+                        strokeWidth={ARC_WIDTH}
+                        fill="none"
                     />
+                ))}
 
-                    <circle cx="100" cy="100" r="4" fill={needleColor}/>
-                    <circle cx="100" cy="100" r="2" fill="#ffffff"/>
-                </svg>
-            </div>
+                <motion.line
+                    x1="100"
+                    y1="100"
+                    x2={needleX}
+                    y2={needleY}
+                    stroke={needleColor}
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                />
+
+                <circle cx="100" cy="100" r="4" fill={needleColor}/>
+                <circle cx="100" cy="100" r="2" fill="#ffffff"/>
+            </svg>
 
             <div className="mt-2 text-lg text-white font-semibold flex items-center space-x-2">
                 <span>{label}:</span>

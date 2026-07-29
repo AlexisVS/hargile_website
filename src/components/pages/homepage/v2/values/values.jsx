@@ -41,7 +41,7 @@ const ValuesV2 = () => {
                             {...reveal(i)}
                         >
                             <div className={styles.cardDot} aria-hidden="true"/>
-                            <h4 className={styles.valueName}>{v.value}</h4>
+                            <h3 className={styles.valueName}>{v.value}</h3>
                             <p className={styles.valueDesc}>{v.description}</p>
                         </motion.div>
                     ))}

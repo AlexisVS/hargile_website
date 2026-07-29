@@ -42,17 +42,26 @@ const DesignDevV2 = () => {
                 </motion.h2>
 
                 <blockquote ref={manifestoRef} className={styles.manifesto}>
-                    {words.map(({w, accent}, i) => (
-                        <ScrubWord
-                            key={`${w}-${i}`}
-                            word={w}
-                            className={accent ? styles.mWordAccent : styles.mWord}
-                            progress={scrollYProgress}
-                            start={(i / n) * 0.85}
-                            end={(i / n) * 0.85 + 0.15}
-                            reduced={reducedMotion}
-                        />
-                    ))}
+                    {/* Les mots scrubbés partent à opacity 0.16 : décoratifs pour
+                        l'accessibilité (aria-hidden), le vrai texte est la copie
+                        .srOnly juste après — phrases entières au lieu de mots
+                        éparpillés pour les lecteurs d'écran. */}
+                    <span aria-hidden="true">
+                        {words.map(({w, accent}, i) => (
+                            <ScrubWord
+                                key={`${w}-${i}`}
+                                word={w}
+                                className={accent ? styles.mWordAccent : styles.mWord}
+                                progress={scrollYProgress}
+                                start={(i / n) * 0.85}
+                                end={(i / n) * 0.85 + 0.15}
+                                reduced={reducedMotion}
+                            />
+                        ))}
+                    </span>
+                    <span className={styles.srOnly}>
+                        {words.map(({w}) => w).join(" ")}
+                    </span>
                 </blockquote>
 
                 <div className={styles.quoteAfterManifesto}>

@@ -111,16 +111,18 @@ export default function GDPRManager({children}) {
         openPreferences
     }
 
-    if (!initialized) {
-        return null
-    }
-
     return (
         <RGPDContext.Provider value={contextValue}>
             {children}
 
+            {/* Le bandeau est rendu côté serveur : sinon son paint post-hydration
+                devient l'élément LCP mobile. Pendant SSR/hydration currentModal
+                vaut 'banner' (initialized=false) ; pour les visiteurs ayant déjà
+                consenti, le script inline du layout pose html[data-gdpr-stored]
+                avant le premier paint et global.scss masque .gdpr-banner jusqu'à
+                ce que l'hydration bascule sur 'closed'. */}
             {currentModal === 'banner' && (
-                <CookieBanner role="dialog" aria-labelledby="cookie-consent-banner-title">
+                <CookieBanner className="gdpr-banner" role="dialog" aria-labelledby="cookie-consent-banner-title">
                     <BannerContainer>
                         <BannerContent>
                             <BannerTitle id="cookie-consent-banner-title">{t('title')}</BannerTitle>
