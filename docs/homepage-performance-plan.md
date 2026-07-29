@@ -36,7 +36,7 @@
 > prendre pour la baseline.** C'est la même erreur que celle dénoncée juste en
 > dessous, commise à l'envers : la règle des médianes a été appliquée aux
 > chiffres qui déplaisaient (89, 81) et levée pour celui qui plaisait. Le vrai
-> résultat est une **distribution d'environ ±10 points**, pas un nombre.
+> résultat est une **distribution d'environ ±25 points**, pas un nombre.
 >
 > **Pourquoi l'écart est si large ici, et pourquoi ça ne se répare pas.** Le TBT
 > pèse 30 % du score et il est dominé par le parse/execute de three.js pour le
