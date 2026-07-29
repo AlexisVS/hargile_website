@@ -3,10 +3,10 @@
 > Fichier à copier-coller tel quel en ouverture de session. C'est **la** source
 > unique : les sections « Prompt de reprise » de `homepage-performance-plan.md`
 > et `homepage-code-review-plan.md` renvoient ici pour éviter la dérive.
-> Dernière mise à jour : 2026-07-29 (2e session du jour), **6 commits non
-> poussés sur `main`**, rien de taggué. **La phase 1 du GEO est terminée côté
-> code.** Ce qui reste d'elle est manuel (Bing) ou volontairement reporté
-> (locale par défaut). Prochaine session : **pousser + déployer, puis phase 2**.
+> Dernière mise à jour : 2026-07-29 (2e session du jour). **La phase 1 du GEO
+> est terminée côté code, poussée sur `main`, et volontairement NON taggée.**
+> Décision de Mihai : *code review d'abord, tag et release ensuite.*
+> Prochaine session : **relire ces 8 commits**, puis tagger, puis phase 2.
 
 ---
 
@@ -19,28 +19,41 @@ Lire EN PREMIER, dans cet ordre :
    déjà livré marqué ✅ ; ne pas ré-auditer ;
 5. `docs/homepage-performance-plan.md` §Verification — pièges de mesure.
 
-## ⚠️ À FAIRE EN OUVRANT LA SESSION
+## ⚠️ À FAIRE EN OUVRANT LA SESSION : la code review
 
-**7 commits sont sur `main` en local et n'ont jamais été poussés.** Ils n'ont
-donc jamais été construits en image, jamais déployés, et rien de ce qui suit
-n'est en prod. Mihai n'a pas encore donné son accord pour pousser (règle en bas
-de ce fichier) : **le demander avant toute autre chose**, sinon la session
-suivante repart avec 14 commits en attente.
+**8 commits sont poussés sur `main` et ne sont PAS déployés.** C'est voulu, et
+c'est possible parce que **seul un tag `v*` déclenche un déploiement** sur ce
+projet (voir le point 🔑 de « Comment le déploiement marche » — l'`ImagePolicy`
+Flux est en semver, les tags `:main`/`:latest`/`:sha-*` d'un push de branche ne
+sont jamais sélectionnés). La prod tourne toujours **v0.20.0**.
 
-```
-(HEAD)  docs: record the GEO phase 1 close-out, and correct §1.2
-da07038 fix(seo): drive the footer year from the build, not a hardcoded seed
-4d65ec8 fix(seo): make robots.txt come from one source that actually serves
-cd7e77a seo(geo): add the IndexNow key and a submission script (ENG-87)
-6ee7fb0 seo(geo): publish /llms.txt (GEO §1.4)
-a9d2812 fix(seo): declare the home page as WebPage, not WebSite (ENG-109)
-0498118 chore(seo): add an offline JSON-LD validator with a negative control
+Mihai a demandé une **code review de ces commits avant tout tag ou release**.
+C'est la première chose à faire :
+
+```bash
+git log --oneline v0.20.0..main          # les 8 commits
+git diff v0.20.0..main                   # le diff complet
 ```
 
-(`git log --oneline main...origin/main` pour la liste à jour.)
+Périmètre à relire en priorité, par ordre de risque :
 
-Une fois poussé et **vérifié déployé** (voir « Comment le déploiement marche »),
-marqueurs de cette release :
+1. **`fix(seo): make robots.txt come from one source`** — supprime
+   `src/app/robots.js`. Le risque évident (« et si `next-sitemap` ne tournait
+   pas dans l'image ? le site n'aurait plus de `robots.txt` du tout ») **a été
+   vérifié et est écarté** : le `Dockerfile` fait `RUN npm run build`, npm
+   enchaîne automatiquement sur `postbuild`, et le `COPY … /app/public` du
+   stage runner a lieu après. Preuve empirique en plus : le `robots.txt` servi
+   en prod aujourd'hui est déjà celui de next-sitemap (il porte la ligne
+   `Host:`, que la route supprimée n'a jamais produite). Relire quand même le
+   diff, mais l'inquiétude est levée.
+2. **`src/app/llms.txt/route.js`** — nouvelle route publique.
+3. **`fix(seo): drive the footer year from the build`** — touche
+   `next.config.mjs` (`env:`), donc tout le bundle.
+4. Le reste est du script hors runtime (`scripts/`) ou du contenu de messages.
+
+**Puis tagger** (numéro à trancher avec Mihai : `v0.21.0` se défend — nouvelle
+URL publique `/llms.txt`, deux scripts npm, une route supprimée). Après le tag,
+attendre le déploiement réel et vérifier :
 
 ```bash
 curl -s -o /dev/null -w '%{http_code}\n' https://hargile.com/llms.txt          # 200
@@ -131,6 +144,17 @@ prod. La chaîne réelle :
 1. Push sur `main` **ou** tag `v*` → workflow `docker.yml` → image poussée sur
    `ghcr.io/alexisvs/hargile-website:<tag>`. **S'arrête là.** Un run vert ici
    veut dire « image publiée », pas « site à jour ».
+
+   🔑 **Et surtout : seul un tag `v*` peut déclencher un déploiement.**
+   Vérifié le 2026-07-29 dans
+   `hargile-infra/infrastructure/flux-image-automation/image-policies.yaml` :
+   l'`ImagePolicy` de `hargile-website` est en **semver** (`range: '>=0.0.0'`).
+   Un push de branche produit `:main`, `:latest`, `:sha-…` — **aucun n'est un
+   tag semver, donc aucun n'est sélectionné**. Le commentaire du fichier le dit
+   noir sur blanc.
+   **Conséquence pratique : pousser sur `main` est sûr.** Ça construit l'image
+   et ne déploie rien. C'est ce qui permet de faire relire du code poussé avant
+   de décider d'une release. Ne pas confondre « poussé » et « en prod ».
 2. Le contrôleur image-automation de Flux (dans le cluster) voit la nouvelle
    image et commite un bump sur la branche `image-updates/auto` du dépôt
    **`HARGILE-tech-studio/hargile-infra`**, fichier

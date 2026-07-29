@@ -33,7 +33,7 @@ Three findings adopted from ENG-74, folded into the phases below:
   Clutch, GitHub, Google Business Profile and directories. Consolidate to a
   single active GitHub org (archive/redirect the other). The engine won't cite
   an entity it can't build stably.
-- ~~**Footer year is stale (2025).**~~ ✅ Réglé en v0.20.1. La cause exacte
+- ~~**Footer year is stale (2025).**~~ ✅ Réglé, non encore taggué. La cause exacte
   méritait d'être notée : le `useState` était **seedé** à 2025 et corrigé dans
   un effet, donc seul un navigateur voyait la bonne année. Le HTML brut — la
   seule chose que lisent les crawlers IA, aucun n'exécutant de JS — annonçait
@@ -60,8 +60,13 @@ Three findings adopted from ENG-74, folded into the phases below:
   (GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot, Meta-ExternalAgent all
   read the first HTML response only; Gemini is the lone exception via
   Googlebot's rendering service).
-- `src/app/robots.js` allows `*` — every AI crawler is permitted. No
-  Cloudflare-style default blocking in the way.
+- `robots.txt` allows `*` — every AI crawler is permitted. No Cloudflare-style
+  default blocking in the way. (Il est généré par `next-sitemap.config.js`.
+  `src/app/robots.js` a existé et **n'a jamais rien servi** — un fichier de
+  `public/` masque une route App Router du même chemin ; la route est
+  supprimée.) Confirmé le 2026-07-29 en envoyant les vrais user-agents :
+  bingbot, GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot et
+  meta-externalagent reçoivent tous un 200 et le même texte.
 - JSON-LD on every page (`src/seo/build-json-ld.js` → Organization + per-page
   type), per-page metadata (`src/seo/generate-page-metadata.js`), sitemap with
   correct hreflang (`next-sitemap.config.js`).
@@ -90,7 +95,7 @@ Three findings adopted from ENG-74, folded into the phases below:
    (and the root really serves English), but the sitemap and
    `shared-metadata.js` declare `fr` as x-default. Conflicting signals.
    **Resolved:** default is `fr` (decision 2026-07-28) — see §1.2.
-7. ~~`llms.txt` missing~~ — ✅ livré en v0.20.1, avec les mêmes attentes
+7. ~~`llms.txt` missing~~ — ✅ livré (non encore taggué), avec les mêmes attentes
    nulles qu'annoncé (SE Ranking, 300 k domaines : **aucune corrélation**
    avec les citations IA ; 1 seul des 50 domaines les plus cités en publie
    un ; Google déclare ne pas s'en servir). Fait parce que c'est trivial, pas
@@ -169,7 +174,7 @@ mount correctly under the flipped default before shipping.
 
 > 📄 **Mode d'emploi : `docs/geo-bing-indexnow-runbook.md`** (2026-07-29).
 
-Tout le code est livré (v0.20.1) : clé IndexNow dans `public/`, script de
+Tout le code est livré (non encore taggué) : clé IndexNow dans `public/`, script de
 soumission `npm run seo:indexnow`, `robots.txt` ramené à une seule source qui
 sert réellement. Vérifié au passage — **aucun crawler IA n'est bloqué** :
 bingbot, GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot et
@@ -183,7 +188,7 @@ seo:indexnow` une fois le déploiement confirmé. Le livrable est de **savoir**
 si Bing indexe ce site — personne ne l'a jamais regardé, et sans index Bing il
 n'y a pas de citation ChatGPT possible.
 
-### 1.4 llms.txt — ✅ LIVRÉ (v0.20.1)
+### 1.4 llms.txt — ✅ LIVRÉ (non encore taggué)
 
 Servi à `/llms.txt`, généré par `src/app/llms.txt/route.js` — une route et non
 un fichier statique, pour que le NAP et les profils viennent de `@/lib/nap` et
