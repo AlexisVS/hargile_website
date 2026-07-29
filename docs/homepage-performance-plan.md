@@ -329,8 +329,14 @@ measurement time)*
      before concluding anything is broken.
    - GEO guardrail §1.5 after each change: `curl` the raw HTML of `/fr` and
      `/en` — h1 + copy present without JS, no new inline `opacity:0` on copy.
-     (7 pre-existing occurrences remain: menu CSS, `aria-hidden` hero visual,
-     below-the-fold `whileInView` reveals — text is still in the HTML.)
+     **Count with a guard**: `opacity:0(?![.\d])`, or better, only count matches
+     inside a `style="…"` attribute. A bare `grep -o 'opacity:0'` also matches
+     `opacity:0.16` / `0.25` / `0.45` (scrub-word, mvp-promo dots) and inflated
+     the old baseline from 27 to 76.
+     As of v0.19.0 the copy is clean: **0** inline `opacity:0` on both locales.
+     Six matches remain in `<style>` blocks — three CSS rules emitted twice
+     (hamburger `bar-middle`, mobile-menu overlay, a hover blob) — and none of
+     them touch copy, so six is the floor, not a target to drive down.
 4. Manual QA:
    - Real-GPU Chrome (`chrome://gpu` reports hardware acceleration) still shows
      the animated cube grid and the animated bends.
