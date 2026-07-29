@@ -86,7 +86,14 @@ relative/empty URL added later throws during render → blank homepage.
 
 ## Priority 2 — medium impact
 
-### 2.1 Desktop fetches the ColorBends chunk it never uses
+### 2.1 Desktop mounts ColorBends before flipping to cubes — visible flash
+
+> **Upgraded 2026-07-29 (observed, not inferred).** Originally written as
+> "wasted bytes." Mihai reports that on a hard refresh at desktop width the
+> bends gradient is **visibly rendered** before the cube grid replaces it. So
+> this is not just a wasted chunk — it is a wrong-backdrop flash on every cold
+> desktop load. No "confirm it's real" step needed; go straight to the fix.
+> Raised to Priority 1 in practice.
 
 **Problem.** `useHeroVariant` (`hero.jsx` ~lines 23–41) initializes to
 `"bends"` and corrects to `"cubes"` in an effect after mount. That first
@@ -222,8 +229,14 @@ Skip this item entirely if v2 isn't considered final yet.
 >   le verdict SwiftShader existe. Ne rien conclure du banc local seul.
 > - Reste non fait dans ce plan : 1.1, 1.3, 2.1, 2.2, 2.3, et tout le tier 3.
 >
-> ORDRE RECOMMANDÉ : 1.3 (one-liner, zéro risque) → 2.1 (+ 2.3 dans la foulée)
-> → 1.1 (le gros morceau). Un commit par item.
+> ORDRE RECOMMANDÉ : 2.1 (+ 2.3 dans la foulée) d'abord — c'est le seul
+> défaut **visible** par un visiteur → 1.3 (one-liner, zéro risque) → 1.1 (le
+> gros morceau). Un commit par item.
+>
+> VÉRIF PRÉALABLE (30 s) : confirmer d'abord quelle version tourne en prod.
+> `curl -s -o /dev/null -w '%{http_code}' https://hargile.com/fr/audit/result`
+> → **404 = v0.18.0**, 200 = encore v0.17.0. Les chiffres PSI ne veulent rien
+> dire tant que ce n'est pas 404.
 >
 > **1.3 — `hostnameOf` peut blanchir la homepage.**
 > `recent-works-showcase.jsx` ~ligne 13 : `new URL(url).hostname` non gardé,
@@ -233,13 +246,14 @@ Skip this item entirely if v2 isn't considered final yet.
 > blanche. Fix : try/catch → `""`, et ne rendre la puce `domainChip` que si
 > non vide.
 >
-> **2.1 — MESURER AVANT DE TOUCHER.** L'hypothèse : `useHeroVariant`
-> (`hero.jsx` ~23-41) démarre à `"bends"` et corrige en effet après mount,
-> donc le premier render client monte `<ColorBends>` et déclenche le fetch de
-> son chunk avant le flip. Non vérifié — DevTools Network sur un viewport
-> ≥1024 px, hard reload, chercher un chunk `color-bends`. **Si absent, l'item
-> est caduc : le noter ici et passer.** Si présent : état initial `null`
-> (= non résolu) et `HeroBackdrop` rend `null` tant que non résolu. La
+> **2.1 — CONFIRMÉ VISUELLEMENT, à corriger en priorité.** Mihai voit, en hard
+> refresh sur desktop, le dégradé bends s'afficher **réellement** avant que la
+> grille de cubes le remplace. Ce n'est donc pas qu'un chunk gaspillé : c'est
+> un flash de mauvais backdrop à chaque chargement à froid. Cause :
+> `useHeroVariant` (`hero.jsx` ~23-41) démarre à `"bends"` et ne corrige qu'en
+> effet après mount, donc le premier render client monte `<ColorBends>`.
+> Fix : état initial `null` (= non résolu) et `HeroBackdrop` rend `null` tant
+> que non résolu — desktop ne monte alors plus jamais ColorBends. La
 > résolution doit rester dans un effet (accord SSR / premier render client —
 > sinon mismatch d'hydratation sur la classe `sectionSharp` et le markup du
 > rail). ATTENTION `useBackdropReady` (`hero.jsx` ~53-106) : chemin rapide
