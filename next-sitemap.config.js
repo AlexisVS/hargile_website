@@ -26,6 +26,22 @@ module.exports = {
     generateRobotsTxt: true,
     generateIndexSitemap: false,
 
+    /* robots.txt is generated HERE and nowhere else. There used to be a
+       src/app/robots.js declaring these same rules, but a file in public/ wins
+       over an App Router route at the same path — next-sitemap writes
+       public/robots.txt on postbuild, so the route never served a single byte
+       and its Disallow lines never shipped. Verified against production. One
+       source, and it is the one that wins.
+
+       Everything stays allowed on purpose: every AI crawler (GPTBot,
+       OAI-SearchBot, ClaudeBot, PerplexityBot, Meta-ExternalAgent…) is welcome.
+       Only the non-page surfaces are excluded. */
+    robotsTxtOptions: {
+        policies: [
+            {userAgent: '*', allow: '/', disallow: ['/api/', '/admin/']},
+        ],
+    },
+
     /* Everything is declared explicitly in additionalPaths below. Auto-discovery
        from the build output is what pulled robots.txt, manifest.webmanifest and
        the banner tools into the sitemap. */
