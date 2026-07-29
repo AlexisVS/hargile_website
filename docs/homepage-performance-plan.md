@@ -21,19 +21,30 @@
 > Donc **desktop 91 = phase 1 seule** (livrée dans v0.17.0). Les phases 2–3 ne
 > sont arrivées en prod que le 2026-07-29 à 10:03 UTC, avec v0.19.0.
 >
-> ✅ **MESURE RÉELLE (2026-07-29, PSI sur v0.19.0 déployée et chaude) :
-> desktop 99, mobile 99.** Baseline desktop 61 → **99**. C'est la première
-> mesure honnête des phases 2–3 en production, et l'objectif 90+ est très
-> largement dépassé.
+> ✅ **MESURE RÉELLE (2026-07-29, PSI prod chaude, 6 runs sur v0.19.1) :
+> médiane desktop 93 (87–97), médiane mobile 94 (84–97).** Baseline desktop
+> 61 → **93**. Objectif 90+ atteint. Runs bruts : desktop 70 / 79 / 95 / 87 /
+> 97 / 91, mobile 82 / 98 / 97 / 84 / 93 / 95 (les deux premiers pris ~1 min
+> après le rollout, à froid — exclus de la médiane).
 >
-> ⚠️ **Les deux premiers runs après le déploiement ont menti, dans les deux
-> sens.** Un run lancé juste après le roulement des pods a donné desktop 89
-> avec un TTFB de 2 489 ms — c'était un conteneur froid, pas un serveur lent
-> (mesuré en direct juste après : TTFB 72–224 ms, y compris cache-bustée et sur
-> `/api/health`, non cachable). Le run suivant a donné mobile 81, du bruit pur.
-> **Attendre quelques minutes après un déploiement, puis médianes de 3 runs** —
-> la règle était déjà écrite plus bas, elle a failli coûter deux chasses au
-> fantôme.
+> ⚠️ **Le « 99/99 » écrit ici plus tôt était UN seul run, et il ne faut pas le
+> prendre pour la baseline.** C'est la même erreur que celle dénoncée juste en
+> dessous, commise à l'envers : la règle des médianes a été appliquée aux
+> chiffres qui déplaisaient (89, 81) et levée pour celui qui plaisait. Le vrai
+> résultat est une **distribution d'environ ±10 points**, pas un nombre.
+>
+> **Pourquoi l'écart est si large ici, et pourquoi ça ne se répare pas.** Le TBT
+> pèse 30 % du score et il est dominé par le parse/execute de three.js pour le
+> backdrop du hero. PSI tourne sans GPU : ce travail passe en SwiftShader, et
+> son coût dépend de la machine que la flotte Google attribue au run. Mesuré :
+> TBT de 40 ms à 160 ms d'un run à l'autre, sans changement de code. Un écart
+> de 10 points entre deux runs n'est donc **pas** un signal.
+>
+> ⚠️ **Après un déploiement, attendre.** Ce n'est pas seulement le conteneur qui
+> est froid : chaque build renomme tous les chunks (hash de contenu), donc le
+> cache CDN est vide pour **chaque** CSS/JS/police. Un run à +1 min a sorti 70.
+> Attendre ~10 min, puis médiane de 3 à 5 runs. Un run isolé après déploiement
+> ne veut rien dire, dans un sens comme dans l'autre.
 >
 > **STATUS (2026-07-29): fully implemented and merged to `main`, tagged
 > v0.18.0.** Phase 1 shipped in v0.17.0 (`f92df2a`). Phases 2–3 were built on

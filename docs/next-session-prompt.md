@@ -20,10 +20,23 @@ Lire EN PREMIER, dans cet ordre :
 - **v0.19.0 est taguée, publiée ET déployée** (2026-07-29 10:03 UTC).
   Vérifié en prod : 14 marqueurs `data-reveal-index` et **0 `opacity:0` inline
   sur la copie** sur `/fr` et `/en`, `/fr/audit/result` → 404.
-- ✅ **PSI production sur v0.19.0 : desktop 99, mobile 99.** Baseline desktop
-  61. Le plan perf est livré, mesuré, et l'objectif 90+ largement dépassé —
-  **il n'y a plus rien à gratter côté score**. Les items restants (2.2, 3.x)
-  sont de la qualité de code et de l'accessibilité, pas de la perf.
+- ✅ **PSI production (v0.19.1, 6 runs à chaud) : médiane desktop 93 (87–97),
+  médiane mobile 94 (84–97).** Baseline desktop 61. Objectif 90+ atteint, le
+  plan perf est livré. **Il n'y a plus rien à gratter côté score** : les items
+  restants (2.2, 3.x) sont qualité de code et accessibilité, pas perf.
+- ⚠️ **Le score bouge de ±10 points d'un run à l'autre, sans changement de
+  code.** Le TBT pèse 30 % et il est dominé par le parse/execute de three.js du
+  backdrop ; PSI n'a pas de GPU, donc ça passe en SwiftShader et le coût dépend
+  de la machine tirée au sort (TBT mesuré de 40 à 160 ms sur le même build).
+  **Un écart de 10 points n'est pas un signal.** Médiane de 3 à 5 runs, sinon
+  ne rien conclure. Le « 99/99 » qui traînait dans les docs était un run isolé,
+  pris pour argent comptant parce qu'il faisait plaisir — ne pas s'en servir
+  comme baseline.
+- ℹ️ **PSI teste `hargile.com`, pas `hargile.com/fr`** : l'apex fait un 307 vers
+  `/fr` (+44 ms sur le chemin critique, et `/fr` apparaît deux fois dans l'arbre
+  de dépendances). `/fr` en direct ne redirige pas. C'est la « contradiction de
+  locale par défaut » déjà listée dans `geo-plan.md` phase 1 — à traiter là, pas
+  en one-shot.
 - ⚠️ **v0.18.0 n'a jamais été déployée.** La prod a tourné sur **v0.17.0** du
   2026-07-28 au 2026-07-29 10:03 UTC : le PR de bump d'image côté
   `hargile-infra` est resté ouvert (voir « Comment le déploiement marche »).
