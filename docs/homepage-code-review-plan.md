@@ -66,6 +66,11 @@ hero chunks/fonts during the LCP window.
 **Fix.** Remove the `priority` prop (default lazy-loading is correct here).
 One-line change.
 
+✅ **DONE 2026-07-29** (shipped in v0.18.0). Confirmed live before the fix: the
+`/fr` head carried `rel="preload" as="image"` for `ecoledub.webp` alongside the
+two font preloads. Removed the prop; the map's now-unused `i` param went with
+it. Verified absent from the built HTML afterwards.
+
 **Verification.** Build, view page source, confirm no preload for
 `/images/portfolio/ecoledub.webp`. Optionally re-run Lighthouse desktop and
 compare against the numbers in `docs/homepage-performance-plan.md`.

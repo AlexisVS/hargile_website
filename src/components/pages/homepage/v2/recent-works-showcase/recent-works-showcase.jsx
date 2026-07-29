@@ -111,7 +111,7 @@ const RecentWorksShowcaseV2 = () => {
                 </div>
                 <div className={styles.trackWrap} ref={wrapRef}>
                     <div className={styles.track} ref={trackRef}>
-                        {projects.map((project, i) => (
+                        {projects.map((project) => (
                             <article className={styles.card} key={project.id}>
                                 <div className={styles.cardMedia}>
                                     <Image
@@ -119,7 +119,6 @@ const RecentWorksShowcaseV2 = () => {
                                         alt={project.title}
                                         fill
                                         sizes="(max-width: 899px) 100vw, 46vw"
-                                        priority={i === 0}
                                     />
                                     <span className={styles.domainChip} aria-hidden="true">
                                         {hostnameOf(project.actionUrl)}

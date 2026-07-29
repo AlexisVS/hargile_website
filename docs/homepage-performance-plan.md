@@ -4,11 +4,14 @@
 > Baseline: **desktop Performance 61** (FCP 0.3 s, LCP 0.6 s, **TBT 13,900 ms**,
 > CLS 0.044, **SI 3.6 s**) vs **mobile 95** (LCP render delay 6,290 ms).
 >
-> **STATUS (2026-07-28): fully implemented.** Phase 1 shipped in v0.17.0
-> (`f92df2a`). Phases 2–3 implemented on `feat/perf-phase2-3` the same day —
-> per-item notes below are marked ✅ DONE with deviations where reality
-> disagreed with the plan (notably: GaugeChart was *not* dead, and the GDPR
-> banner turned out to be the mobile LCP element — see 2.5). Local medians
+> **STATUS (2026-07-29): fully implemented and merged to `main`, tagged
+> v0.18.0.** Phase 1 shipped in v0.17.0 (`f92df2a`). Phases 2–3 were built on
+> `feat/perf-phase2-3` on 2026-07-28 and merged on 2026-07-29 — the branch is
+> now historical, read `main`. Per-item notes below are marked ✅ DONE with
+> deviations where reality disagreed with the plan (notably: GaugeChart was
+> *not* dead — though the whole audit feature it served was removed on
+> 2026-07-29 as unreachable dead code, taking the SVG rewrite with it; and the
+> GDPR banner turned out to be the mobile LCP element — see 2.5). Local medians
 > after Phases 2–3, `/fr`, 3 clean runs per form factor:
 > **desktop 98** (TBT 48 ms, SI 1.06 s, LCP 1.0 s, CLS 0.045) and
 > **mobile 49** on the much-harsher local bench (TBT 1.4 s, CLS 0.009), with
@@ -341,43 +344,46 @@ measurement time)*
 > (ce fichier — statut réel du plan, résultats, pièges de mesure) et
 > docs/geo-plan.md §1.5 (guardrail : le copy doit rester dans le premier HTML).
 >
-> ÉTAT AU DÉPART :
-> - Prod = v0.17.0 = main `e12eff8` (Phase 1 seulement). TOUT le reste est sur
->   la branche **`feat/perf-phase2-3`** poussée sur origin, tête `a59c5c4`,
->   arbre propre, rien mergé, rien taggé.
-> - La branche contient : Phase 2 complète (i18n scopé via `CLIENT_NAMESPACES`
->   dans le root layout — toute string client ajoutée doit rejoindre cette
->   liste ; reflow rail ; spinner paused ; import dupliqué), l'item 2.5
->   découvert à la mesure (bandeau GDPR SSR + script inline anti-flash —
->   c'était l'élément LCP mobile), Phase 3 complète (recharts retiré, la jauge
->   de /audit/result réécrite en SVG pur — elle n'était PAS morte ; deps
->   nettoyées ; lock régénéré proprement ; aria-labels ; h4→h3), les deux
->   décisions design tranchées (769-1023 px : panneaux teintés sans
->   backdrop-filter ; manifesto : aria-hidden + copie sr-only), et les docs à
->   jour. Le commit `1205928` (docs/homepage-code-review-plan.md, plan de
->   code-review de la page v2, pas encore exécuté) est aussi sur cette branche.
-> - Médianes locales validées avant push : desktop 98 (TBT 48 ms, SI 1,06 s),
+> ÉTAT AU DÉPART (2026-07-29) :
+> - `feat/perf-phase2-3` est **mergée dans main** (merge `173af25`) et taggée
+>   **v0.18.0**. La branche est historique — lire `main`. Les phases 1-3 sont
+>   toutes livrées : Phase 2 (i18n scopé via `CLIENT_NAMESPACES` dans le root
+>   layout — toute string client ajoutée doit rejoindre cette liste ; reflow
+>   rail ; spinner paused ; import dupliqué), l'item 2.5 découvert à la mesure
+>   (bandeau GDPR SSR + script inline anti-flash — c'était l'élément LCP
+>   mobile), Phase 3 (recharts retiré ; deps nettoyées ; lock régénéré ;
+>   aria-labels ; h4→h3), et les deux décisions design tranchées (769-1023 px :
+>   panneaux teintés sans backdrop-filter ; manifesto : aria-hidden + copie
+>   sr-only).
+> - Depuis le merge, sur main : la **feature audit supprimée** (`f883d1c`) —
+>   elle n'avait plus aucun point d'entrée (AuditButton importé nulle part,
+>   donc la modale ne pouvait jamais s'ouvrir) ; ça emporte GaugeChart et sa
+>   réécriture SVG, `/audit/result`, `/api/audit` et 5 sous-arbres i18n. Effet
+>   payload : `/fr` 136 KB → 126 KB. Et le **preload de l'image below-the-fold
+>   retiré** (item 1.2 du code-review plan) : `priority` sur la 1re carte
+>   portfolio préchargeait `ecoledub.webp` dans la fenêtre LCP.
+> - Médianes locales validées : desktop 98 (TBT 48 ms, SI 1,06 s),
 >   mobile /fr 49 (banc local volontairement dur), LCP = h1 partout,
->   CLS mobile 0.009.
+>   CLS mobile 0.009. **Pas encore mesuré en prod.**
+> - `docs/homepage-code-review-plan.md` reste **non exécuté** sauf son item 1.2.
+>   Son item 1.1 (copy below-the-fold en `opacity:0` dans le HTML SSR — 76
+>   occurrences, bloqueur GEO) est le prochain gros morceau.
 > - Absents de ce poste si différent : `src/app/[locale]/banner-mvp/`
 >   (gitignoré, outil local) et `..\lh-reports\` (rapports hors repo).
 >
 > TÂCHES :
-> 1. `git fetch && git checkout feat/perf-phase2-3 && npm ci`, puis
->    `npm run build && npm run start` et re-QA rapide (routes des 2 locales,
->    ?backdrop=cubes / ?backdrop=bends dismissent le loader, /contact,
->    portrait 390x844 = 1 canvas, cartes teintées à ~900 px).
-> 2. Merger dans main + tag **v0.18.0** (le workflow Docker build sur main ET
->    sur tags v* ; le serveur suit les releases).
-> 3. Après déploiement : PSI production sur /fr et /en, 3-4 runs par form
+> 1. Après déploiement : PSI production sur /fr et /en, 3-4 runs par form
 >    factor, MÉDIANES (PSI est instable sur cette page : 95/81/40 le même jour
 >    sur le même code). C'est LÀ que le verdict SwiftShader existe — le banc
 >    local ne le voit pas. Attendu : desktop 90+ (baseline 61), mobile ~95-98.
 >    Vérifier que l'élément LCP est bien le h1 (plus le bandeau GDPR).
-> 4. Guardrail GEO §1.5 post-deploy : curl du HTML de prod /fr et /en → h1,
+> 2. Guardrail GEO §1.5 post-deploy : curl du HTML de prod /fr et /en → h1,
 >    copy et texte cookies présents sans JS.
-> 5. Ensuite, au choix : exécuter docs/homepage-code-review-plan.md, ou
->    attaquer le GEO plan Phase 1 (docs/geo-plan.md).
+> 3. Ensuite, au choix : exécuter le reste de
+>    docs/homepage-code-review-plan.md (1.1 en priorité, puis 1.3 et 2.1 —
+>    2.1 = le chunk ColorBends encore téléchargé sur desktop, à confirmer au
+>    DevTools avant de toucher au code), ou attaquer le GEO plan Phase 1
+>    (docs/geo-plan.md).
 >
 > PIÈGES (tous vécus, détail dans la section Verification ci-dessus) : tuer
 > les vieux `next start` avant toute mesure ; fermer le navigateur QA pendant
