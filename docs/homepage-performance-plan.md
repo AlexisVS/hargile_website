@@ -343,61 +343,7 @@ measurement time)*
 
 ---
 
-## Prompt de reprise — prochaine session (copier-coller)
+## Prompt de reprise
 
-> Session : reprise du travail perf homepage depuis un autre poste, déploiement
-> v0.18.0 et vérification PSI. Lire EN PREMIER docs/homepage-performance-plan.md
-> (ce fichier — statut réel du plan, résultats, pièges de mesure) et
-> docs/geo-plan.md §1.5 (guardrail : le copy doit rester dans le premier HTML).
->
-> ÉTAT AU DÉPART (2026-07-29) :
-> - `feat/perf-phase2-3` est **mergée dans main** (merge `173af25`) et taggée
->   **v0.18.0**. La branche est historique — lire `main`. Les phases 1-3 sont
->   toutes livrées : Phase 2 (i18n scopé via `CLIENT_NAMESPACES` dans le root
->   layout — toute string client ajoutée doit rejoindre cette liste ; reflow
->   rail ; spinner paused ; import dupliqué), l'item 2.5 découvert à la mesure
->   (bandeau GDPR SSR + script inline anti-flash — c'était l'élément LCP
->   mobile), Phase 3 (recharts retiré ; deps nettoyées ; lock régénéré ;
->   aria-labels ; h4→h3), et les deux décisions design tranchées (769-1023 px :
->   panneaux teintés sans backdrop-filter ; manifesto : aria-hidden + copie
->   sr-only).
-> - Depuis le merge, sur main : la **feature audit supprimée** (`f883d1c`) —
->   elle n'avait plus aucun point d'entrée (AuditButton importé nulle part,
->   donc la modale ne pouvait jamais s'ouvrir) ; ça emporte GaugeChart et sa
->   réécriture SVG, `/audit/result`, `/api/audit` et 5 sous-arbres i18n. Effet
->   payload : `/fr` 136 KB → 126 KB. Et le **preload de l'image below-the-fold
->   retiré** (item 1.2 du code-review plan) : `priority` sur la 1re carte
->   portfolio préchargeait `ecoledub.webp` dans la fenêtre LCP.
-> - Médianes locales validées : desktop 98 (TBT 48 ms, SI 1,06 s),
->   mobile /fr 49 (banc local volontairement dur), LCP = h1 partout,
->   CLS mobile 0.009. **Pas encore mesuré en prod.**
-> - `docs/homepage-code-review-plan.md` reste **non exécuté** sauf son item 1.2.
->   Son item 1.1 (copy below-the-fold en `opacity:0` dans le HTML SSR — 76
->   occurrences, bloqueur GEO) est le prochain gros morceau.
-> - Absents de ce poste si différent : `src/app/[locale]/banner-mvp/`
->   (gitignoré, outil local) et `..\lh-reports\` (rapports hors repo).
->
-> TÂCHES :
-> 1. Après déploiement : PSI production sur /fr et /en, 3-4 runs par form
->    factor, MÉDIANES (PSI est instable sur cette page : 95/81/40 le même jour
->    sur le même code). C'est LÀ que le verdict SwiftShader existe — le banc
->    local ne le voit pas. Attendu : desktop 90+ (baseline 61), mobile ~95-98.
->    Vérifier que l'élément LCP est bien le h1 (plus le bandeau GDPR).
-> 2. Guardrail GEO §1.5 post-deploy : curl du HTML de prod /fr et /en → h1,
->    copy et texte cookies présents sans JS.
-> 3. Ensuite, au choix : exécuter le reste de
->    docs/homepage-code-review-plan.md (1.1 en priorité, puis 1.3 et 2.1 —
->    2.1 = le chunk ColorBends encore téléchargé sur desktop, à confirmer au
->    DevTools avant de toucher au code), ou attaquer le GEO plan Phase 1
->    (docs/geo-plan.md).
->
-> PIÈGES (tous vécus, détail dans la section Verification ci-dessus) : tuer
-> les vieux `next start` avant toute mesure ; fermer le navigateur QA pendant
-> Lighthouse ; comparer à locale constante ; `npm run dev -- -p X` avale le
-> flag (utiliser `npx next dev -p X`) ; en dev le premier démarrage à froid
-> peut 404 transitoirement toutes les routes (context) — recompiler avant de
-> conclure ; une string i18n manquante est SILENCIEUSE en prod, bruyante en
-> dev seulement.
->
-> RÈGLES : mesurer avant de proposer quoi que ce soit ; ne rien pousser ni
-> merger sans mon accord explicite.
+Le prompt de reprise vit désormais dans **`docs/next-session-prompt.md`**.
+Source unique — ne pas en recopier une version ici, elle dériverait.
