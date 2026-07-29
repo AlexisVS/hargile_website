@@ -2,14 +2,7 @@ import {getTranslations} from "next-intl/server";
 import {SITE_URL} from "@/lib/site-url";
 import {NAP} from "@/lib/nap";
 import {ROUTES} from "@/seo/routes";
-
-/* Profiles Google uses to tie the site to a known entity (Knowledge Panel).
-   Kept in sync with the footer / navbar links. */
-const SAME_AS = [
-    "https://www.linkedin.com/company/hargile",
-    "https://www.instagram.com/hargile_tech_studio/",
-    "https://github.com/HARGILE-tech-studio",
-];
+import {SAME_AS} from "@/seo/same-as";
 
 /* Topics the homepage actually sells — the three hero capability cards plus the
    MVP-in-a-month offer. Deliberately not read from the message files: these are
@@ -35,6 +28,16 @@ export async function buildJsonLd({locale, pagePath}) {
         const baseUrl = `${SITE_URL}/${locale}${pathSuffix}`;
         const imageUrl = `${SITE_URL}/images/brand/brand_large.png`;
 
+        /* Per-page type, read from the message files so it can differ per page.
+           It must always be WebPage or one of its subtypes (ContactPage,
+           AboutPage, CollectionPage, FAQPage…): this node is a *page*, and the
+           `isPartOf` below points it at the site-level WebSite node. The home
+           page used to declare `WebSite` here, which published a WebSite that
+           was part of another WebSite — two competing site entities instead of
+           one site plus N pages, and page properties (breadcrumb,
+           datePublished) with nothing to attach to. Never put a non-page type
+           here; a Service or SoftwareApplication belongs in its own node
+           alongside this one, not in its place. */
         let schemaType = "WebPage";
         try {
             const candidate = pageT("schemaType");
