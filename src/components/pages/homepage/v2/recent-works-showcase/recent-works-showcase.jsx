@@ -49,17 +49,26 @@ const RecentWorksShowcaseV2 = () => {
         let outerTop = 0;
 
         // Hauteur de la section = 100vh + distance horizontale à parcourir.
+        // Toutes les LECTURES d'abord, les ÉCRITURES ensuite : lire un
+        // getBoundingClientRect après avoir écrit outer.style.height force un
+        // layout synchrone, et le ResizeObserver sur document.body rappelle
+        // layout() à chaque écriture de hauteur — donc ça se paie en boucle.
+        // outerTop ne dépend pas de la hauteur de la section elle-même (ce qui
+        // est au-dessus la positionne), la lecture avant écriture donne la même
+        // valeur.
         const layout = () => {
             pinnedRef.current = window.innerWidth >= PIN_BREAKPOINT;
+            const width = track.scrollWidth;
+            outerTop = outer.getBoundingClientRect().top + window.scrollY;
+
             if (pinnedRef.current) {
-                pinDist = Math.max(0, track.scrollWidth - window.innerWidth);
+                pinDist = Math.max(0, width - window.innerWidth);
                 outer.style.height = `${window.innerHeight + pinDist}px`;
             } else {
                 pinDist = 0;
                 outer.style.height = "auto";
                 track.style.transform = "none";
             }
-            outerTop = outer.getBoundingClientRect().top + window.scrollY;
         };
 
         // Le scroll vertical "consommé" par la section devient une translation X.
