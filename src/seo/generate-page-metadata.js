@@ -66,13 +66,17 @@ export async function generatePageMetadata({params, pagePath}) {
                 ],
             },
 
+            /* No `creator`/`site`: HARGILE has no X account. The handle that
+               used to sit here (@hargile_agency) came from a 2025 SEO scaffold
+               and never pointed at a real profile — a published handle that
+               resolves to nothing is a corroboration signal that fails when an
+               engine checks it. The card/title/description/images stay: they
+               drive link previews and don't claim an account exists. */
             twitter: {
                 card: 'summary_large_image',
                 title: pageT('og.title'),
                 description: pageT('og.description'),
                 images: [imageUrl],
-                creator: globalT('twitterHandle'),
-                site: globalT('twitterHandle'),
             },
 
             robots: {

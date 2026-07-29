@@ -7,9 +7,10 @@
 > calls M3 "meilleur rapport effet/coût"), it is self-contained in this repo,
 > and the data mostly already exists on the site — it just isn't in the schema.
 >
-> **Q1, Q2 and Q3 are resolved** (2026-07-29), and the Google Business Profile
-> confirms the address from outside the repo. Two one-line answers remain — Q4
-> (foundingDate) and Q5 (areaServed) — neither of which blocks starting.
+> **Q1, Q2 and Q3 are resolved** (2026-07-29) — Q3 is already shipped — and the
+> Google Business Profile confirms the address from outside the repo. Two
+> one-line answers remain, Q4 (foundingDate) and Q5 (areaServed), neither of
+> which blocks starting.
 
 ## What ships today — verified in production 2026-07-29
 
@@ -136,7 +137,10 @@ It ships live today in `twitter:site` and `twitter:creator`, and it lives in
 **two** places: `seo.global.twitterHandle` in both message files, and a
 hardcoded `'@hargile_agency'` in `shared-metadata.js:69-70`.
 
-**Recommendation: delete from both**, unless someone claims the handle. A
+**Done** — confirmed by Mihai that there is no X account, and both sources are
+deleted. Verified on  and : no , no ,
+zero occurrences of the handle; /// and
+every  tag intact, so link previews are unaffected. Original reasoning: a
 published social handle resolving to nothing is a claim that fails
 verification — the opposite of what corroboration is for. Keep `twitter:card`,
 `twitter:title` and `twitter:description`: those drive link previews and are

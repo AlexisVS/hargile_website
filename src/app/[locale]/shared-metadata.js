@@ -66,8 +66,7 @@ export function generateSharedMetadata(params, translations) {
                 ? 'Agence digitale spécialisée dans le développement web, les solutions IA et les stratégies marketing'
                 : 'Digital agency specializing in web development, AI solutions, and marketing strategies',
             images: [imageUrl],
-            creator: '@hargile_agency',
-            site: '@hargile_agency',
+            // No creator/site — see the note in src/seo/generate-page-metadata.js.
         },
         robots: {
             index: true,
