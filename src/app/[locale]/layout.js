@@ -14,15 +14,18 @@ import ClientGDPRWrapper from "@/components/GDPR/ClientGDPRWrapper";
    passent pas par le provider et ne sont pas concernés. Attention : une string
    absente est SILENCIEUSE en prod (MISSING_MESSAGE seulement en dev) — après
    tout ajout de namespace client, re-vérifier cette liste par grep de
-   useTranslations( et cliquer toutes les routes en dev. Les namespaces
-   pages.services / pages.about-us sont volontairement absents : leurs
-   composants ne sont routés nulle part (301 vers /). */
+   useTranslations( et cliquer toutes les routes en dev. Le namespace
+   pages.about-us est volontairement absent : ses composants ne sont routés
+   nulle part (307 vers /). pages.services et pages.faq sont les arbres M4
+   (les pages /services* et /faq), réécrits — la taxonomie v1 n'existe plus. */
 const CLIENT_NAMESPACES = [
     'components',
     'pages.homepage',
     'pages.portfolio',
     'pages.contact',
     'pages.privacy-policy',
+    'pages.services',
+    'pages.faq',
 ];
 
 export function generateStaticParams() {
