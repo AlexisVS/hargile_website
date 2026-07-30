@@ -1,0 +1,21 @@
+/* Mini-FAQ — a closing sub-block, so its title sits a step below the
+   section heading scale. */
+
+.title {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(24px, 2.2vw, 32px);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0;
+  color: #ededed;
+}
+
+.accordionWrap {
+  margin-top: 32px;
+  max-width: 860px;
+}
+
+.allWrap {
+  margin-top: 28px;
+}

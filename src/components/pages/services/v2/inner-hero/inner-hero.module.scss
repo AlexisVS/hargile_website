@@ -1,0 +1,125 @@
+/* Inner-page hero — compact counterpart of the homepage hero.
+   Asymmetric split: eyebrow + H1 anchor left, the answer paragraph sits in the
+   right column on a hairline, baseline-tense (items end). One accent, no fill:
+   the bottom hairline is the only separation from the page body. */
+
+.hero {
+  position: relative;
+  /* Full-bleed out of .content-container, like every v2 section. */
+  margin-inline: calc(50% - 50vw);
+  /* Top padding clears the fixed navbar (no offset comes from the layout);
+     the bottom stays tighter — the hairline does the closing. */
+  padding: clamp(148px, 17vw, 236px) 0 clamp(56px, 7vw, 92px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+
+  h1,
+  p {
+    text-shadow: none; /* opt out of the legacy .content-container shadow */
+  }
+}
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-gutter);
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: clamp(40px, 5vw, 88px);
+  align-items: end;
+}
+
+.eyebrow {
+  font-size: 14px;
+  font-weight: 500;
+  /* Same technical-marker tracking as the homepage hero eyebrow. */
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #96b9f9;
+  margin: 0 0 18px;
+}
+
+.title {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(38px, 4.6vw, 68px);
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+  margin: 0;
+  max-width: 16ch;
+  text-wrap: balance;
+  /* Shorter run of the homepage headline ramp: white holds longer, lands on
+     the light brand blue — quieter than the home, same family. width must
+     shrink-wrap so the ramp maps onto glyphs, not empty box. */
+  width: fit-content;
+  background: linear-gradient(135deg, #ffffff 30%, #dce7fd 68%, #96b9f9 105%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-bottom: 0.08em;
+}
+
+/* The answer is content, not decoration: brighter and larger than a .lead. */
+.answer {
+  font-size: clamp(16px, 1.2vw, 18px);
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.8);
+  line-height: 1.65;
+  max-width: 54ch;
+  margin: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  padding-top: 26px;
+}
+
+@media (max-width: 860px) {
+  .container {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
+}
+
+/* Entry reveal — same numbers as the homepage hero (0.5s / 16px / 0.09s
+   stagger, 0.01 opacity floor): one reveal on the site, one set of numbers.
+   Pure CSS so no-JS clients still end on the visible state, and the SSR HTML
+   never carries opacity:0. */
+.eyebrow,
+.title,
+.answer {
+  animation: innerHeroReveal 0.5s ease-out both;
+}
+
+.title {
+  animation-delay: 0.09s;
+}
+
+.answer {
+  animation-delay: 0.18s;
+}
+
+@keyframes innerHeroReveal {
+  from {
+    opacity: 0.01;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes innerHeroRevealFade {
+  from {
+    opacity: 0.01;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eyebrow,
+  .title,
+  .answer {
+    animation-name: innerHeroRevealFade;
+  }
+}
