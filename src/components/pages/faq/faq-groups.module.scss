@@ -1,0 +1,48 @@
+/* FAQ groups — quiet h2 markers over the shared accordion. */
+
+.groupTitle {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(24px, 2.2vw, 32px);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0;
+  color: #ededed;
+}
+
+.accordionWrap {
+  margin-top: 28px;
+  max-width: 880px;
+}
+
+.more {
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  padding-top: clamp(40px, 5vw, 64px);
+}
+
+.moreTitle {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(24px, 2.2vw, 32px);
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: #ededed;
+}
+
+.moreText {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.68);
+  line-height: 1.6;
+  margin: 14px 0 0;
+  max-width: 52ch;
+}
+
+.moreLinks {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 26px 0 0;
+  padding: 0;
+}
