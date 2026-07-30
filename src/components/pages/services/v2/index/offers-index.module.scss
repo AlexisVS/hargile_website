@@ -1,0 +1,91 @@
+/* Offer rows — numbered editorial list. Each row: numeral | copy | cta. */
+
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: clamp(56px, 6vw, 96px) minmax(0, 1fr) auto;
+  gap: clamp(16px, 2.5vw, 40px);
+  align-items: start;
+  padding: clamp(32px, 4vw, 52px) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+
+  &:last-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  }
+}
+
+.num {
+  font-family: var(--font-headings);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  color: rgba(150, 185, 249, 0.55);
+  /* Optical baseline with the row title. */
+  padding-top: 10px;
+}
+
+.title {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(24px, 2.6vw, 38px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+  color: #ededed;
+  transition: color 0.2s;
+}
+
+.row:hover .title {
+  color: #b8cdfb;
+}
+
+.promise {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.68);
+  line-height: 1.6;
+  margin: 12px 0 0;
+  max-width: 52ch;
+}
+
+.deliverables {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 16px 0 0;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(237, 237, 237, 0.5);
+
+  li:not(:first-child)::before {
+    content: "\00b7";
+    margin-right: 18px;
+    color: rgba(150, 185, 249, 0.45);
+  }
+}
+
+.ctaCol {
+  padding-top: 6px;
+}
+
+@media (max-width: 720px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .num {
+    padding-top: 0;
+    margin-bottom: 10px;
+  }
+
+  .ctaCol {
+    padding-top: 22px;
+  }
+}
