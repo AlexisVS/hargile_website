@@ -33,21 +33,23 @@
 > - ⚠️ Ne rien conclure des rapports GSC/Bing avant que leurs crawls soient
 >   postérieurs au 2026-07-30 ~09:20 UTC.
 >
-> ### 👉 Par quoi commencer la prochaine session
+> ### 👉 Par quoi commencer la prochaine session (mis à jour 2026-07-30 soir)
 >
-> 1. **Minute 1 — la demande à Alexis** qui débloque ENG-84. Elle part en
->    premier parce qu'elle se mesure une semaine plus tard, pas le jour même.
-> 2. **ENG-82** — figer les 20 prompts.
-> 3. **ENG-83** — le relevé de citations initial.
+> **La prochaine session est la session M4 : FAQ + pages services, niveau
+> Awwwards.** Prompt complet, décisions à trancher et pièges d'intégration dans
+> **`docs/m4-content-session-prompt.md`** — phase Plan obligatoire avant tout
+> code. Les 4 skills VibeCurb sont déjà installés dans `.claude/skills/`.
 >
-> Pas « la phase 2 » en général. ENG-82 conditionne tout ce qui s'écrit ensuite,
-> et **ENG-83 est le seul livrable qui devient impossible si on le repousse** —
-> c'est une photo d'avant. Plan détaillé dans « Session suivante » plus bas.
+> Répartition actée le 30/07 : **ENG-82 (les 20 prompts) part chez Dorian** —
+> ne pas la refaire en session. **ENG-83 reste une photo d'AVANT** : le relevé
+> de citations doit idéalement passer avant la mise en ligne des pages M4 —
+> à rappeler à Mihai en ouverture. **ENG-84 est In Progress** : la PR
+> hargile-infra#176 (User-Agent dans les logs Traefik) attend le merge
+> d'Alexis ; mesure possible ~1 semaine après son merge (fenêtre Loki 7 j).
 >
-> ⚠️ **M1 contient TROIS issues, pas deux.** Ce fichier a longtemps listé
-> ENG-82 et ENG-83 en annonçant « fermer M1 » : **ENG-84** (passage des crawlers
-> IA dans les logs) appartient aussi au milestone M1 et n'était mentionné nulle
-> part. Vérifié dans Linear le 2026-07-29.
+> État Linear au soir du 30/07 : ENG-87 **Done** (les 4 points), ENG-110
+> **Done** (accès GSC opérationnel, outillé via MCP `gsc` — voir baseline
+> `docs/geo-gsc-baseline-2026-07-30.md`, relevé comparatif ~mi-août).
 
 ---
 
