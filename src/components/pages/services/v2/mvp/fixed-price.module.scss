@@ -1,0 +1,27 @@
+/* Fixed price — the one framed block of the page: a hairline card, tinted
+   toward the accent, so the commitment reads as signed rather than said. */
+
+.frame {
+  border: 1px solid rgba(150, 185, 249, 0.3);
+  border-radius: 16px;
+  padding: clamp(32px, 4.5vw, 56px);
+}
+
+.title {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(26px, 2.6vw, 40px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+  color: #ededed;
+}
+
+.text {
+  font-size: clamp(15px, 1.15vw, 17px);
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.72);
+  line-height: 1.65;
+  max-width: 62ch;
+  margin: 18px 0 0;
+}
