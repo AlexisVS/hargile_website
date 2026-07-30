@@ -32,6 +32,8 @@ import {
 } from "@/components/navigation/navbar.styled";
 const menuItems = [
     {path: '/', id: 'home'},
+    {path: '/services', id: 'services'},
+    {path: '/faq', id: 'faq'},
     {path: '/contact', id: 'contact'},
 ];
 

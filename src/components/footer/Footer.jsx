@@ -67,6 +67,8 @@ const Footer = () => {
                 </BrandBlockStyled>
 
                 <BottomLinksStyled as="nav" aria-label={t('sections.company')}>
+                    <FooterLinkStyled as={Link} href="/services">{t('links.services')}</FooterLinkStyled>
+                    <FooterLinkStyled as={Link} href="/faq">{t('links.faq')}</FooterLinkStyled>
                     <FooterLinkStyled as={Link} href="/contact">{t('links.contact')}</FooterLinkStyled>
                     <FooterLinkStyled as={Link}
                                       href="/legal/privacy-policy">{t('links.privacyPolicy')}</FooterLinkStyled>
