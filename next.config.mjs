@@ -67,10 +67,12 @@ const nextConfig = {
     async redirects() {
         /* Pages removed in the site refresh (feature/site-refresh). Their URLs
            are still indexed / bookmarked, so 301 them to the closest surviving
-           destination rather than 404. next-intl prefixes every route with the
-           locale, so each source is declared twice: `/:locale(en|fr)/path` for
-           the prefixed URLs, plus the bare `/path` that next-intl resolves to
-           the default locale. `permanent: true` = 301. */
+           destination rather than 404. Each source is declared twice: the bare
+           `/path` (the unprefixed French namespace, and any legacy unprefixed
+           link) and `/:locale(en|fr)/path` for old prefixed URLs. These run
+           BEFORE src/proxy.js, so /fr/services 301s straight to `/` in one hop
+           instead of chaining through the /fr → / redirect. `permanent: true`
+           = 301. */
         const gone = [
             // about-us may be restored later, so keep it temporary (307): a 301
             // gets cached hard by browsers and would keep sending visitors to /

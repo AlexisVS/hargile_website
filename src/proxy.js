@@ -3,53 +3,64 @@ import {routing} from '@/i18n/routing';
 
 const PUBLIC_FILE = /\.(.*)$/;
 
+/* URL scheme (default-locale migration, docs/geo-default-locale-plan.md):
+   French — the default locale — lives UNPREFIXED at the root. English keeps
+   its /en prefix. Concretely:
+
+     /            → 200, French home (internal rewrite to /fr, invisible)
+     /contact     → 200, French contact
+     /en/contact  → 200, English contact (served as-is)
+     /fr/contact  → 301 → /contact (old indexed URLs must not 404)
+
+   The unprefixed form is served with a REWRITE, not a redirect: the apex must
+   answer 200 with the French page itself. Google never indexes a URL that
+   redirects — the 307 the apex used to send is exactly why Search Console
+   reported hargile.com as "not indexed".
+
+   Deliberately no NEXT_LOCALE cookie handling anymore: `/` is the canonical
+   x-default page and must serve the same French content to everyone.
+   Auto-redirecting visitors by stored preference from an x-default URL is what
+   Google explicitly advises against; the language switcher is the way to /en. */
 export async function proxy(req) {
-    // Skip middleware for static files, API routes, and Next.js internal routes
+    const {pathname, search} = req.nextUrl;
+
+    // Skip static files, API routes, and Next.js internal routes
     if (
-        req.nextUrl.pathname.startsWith('/_next') ||
-        req.nextUrl.pathname.includes('/api/') ||
-        PUBLIC_FILE.test(req.nextUrl.pathname)
+        pathname.startsWith('/_next') ||
+        pathname.includes('/api/') ||
+        PUBLIC_FILE.test(pathname)
     ) {
         return;
     }
 
-    // Get the preferred locale from cookie or use the default
-    const preferredLocale = req.cookies.get('NEXT_LOCALE')?.value;
-    const locale = preferredLocale && routing.locales.includes(preferredLocale)
-        ? preferredLocale
-        : routing.defaultLocale;
+    const segments = pathname.split('/').filter(Boolean);
+    const [first, second] = segments;
 
-    // Root path - redirect to the locale, keeping the query string
-    // (?backdrop=… debug overrides were silently dropped before).
-    if (req.nextUrl.pathname === '/') {
-        return NextResponse.redirect(new URL(`/${locale}${req.nextUrl.search}`, req.url));
+    // Old default-locale URLs: /fr and /fr/* → permanent redirect, unprefixed.
+    // (Dead pages like /fr/services never reach this point: next.config.mjs
+    // redirects() runs before the proxy and 301s them straight to `/`.)
+    if (first === routing.defaultLocale) {
+        const rest = segments.slice(1).join('/');
+        return NextResponse.redirect(new URL(`/${rest}${search}`, req.url), 301);
     }
 
-    // Check for locale confusion - e.g., /en/fr or /en/nl
-    const pathParts = req.nextUrl.pathname.split('/').filter(Boolean);
-    if (pathParts.length >= 2) {
-        const firstPart = pathParts[0];
-        const secondPart = pathParts[1];
-
-        // If first part is a valid locale and second part is also in our locale list
-        if (
-            routing.locales.includes(firstPart) &&
-            routing.locales.includes(secondPart)
-        ) {
-            // Redirect to default locale with the rest of the path
-            const newPath = `/${locale}/${pathParts.slice(2).join('/')}`;
-            return NextResponse.redirect(new URL(newPath, req.url));
+    if (routing.locales.includes(first)) {
+        // Locale confusion (/en/fr/contact, /en/en): collapse onto the first
+        // locale rather than silently serving a nested 404.
+        if (routing.locales.includes(second)) {
+            const rest = segments.slice(2).join('/');
+            return NextResponse.redirect(
+                new URL(`/${first}${rest ? `/${rest}` : ''}${search}`, req.url),
+                301
+            );
         }
+        // /en/* — served as-is
+        return;
     }
 
-    // Handle default locale and missing locale
-    const pathnameIsMissingLocale = !routing.locales.some(
-        locale => req.nextUrl.pathname.startsWith(`/${locale}/`) || req.nextUrl.pathname === `/${locale}`
+    // Unprefixed path → French, via internal rewrite (URL bar and canonical
+    // stay unprefixed; the [locale] segment still receives 'fr').
+    return NextResponse.rewrite(
+        new URL(`/${routing.defaultLocale}${pathname === '/' ? '' : pathname}${search}`, req.url)
     );
-
-    if (pathnameIsMissingLocale || req.nextUrl.locale === 'default') {
-        return NextResponse.redirect(
-            new URL(`/${locale}${req.nextUrl.pathname}${req.nextUrl.search}`, req.url)
-        );
-    }
 }

@@ -1,5 +1,6 @@
 import {getTranslations} from 'next-intl/server';
 import {SITE_URL} from '@/lib/site-url';
+import {localeUrl} from '@/seo/locale-url';
 import {NOINDEX_PAGES, ROUTES} from '@/seo/routes';
 
 /**
@@ -27,9 +28,10 @@ export async function generatePageMetadata({params, pagePath}) {
             namespace: `seo.pages.${pagePath}`
         });
 
-        // Base URL configuration (unified on SITE_URL — hargile.com)
+        // Base URL configuration (unified on SITE_URL — hargile.com).
+        // French is unprefixed, English is /en — localeUrl owns that rule.
         const pathSuffix = ROUTES[pagePath] ?? `/${pagePath.replaceAll('.', '/')}`;
-        const baseUrl = `${SITE_URL}/${locale}${pathSuffix}`;
+        const baseUrl = localeUrl(locale, pathSuffix);
         const imageUrl = `${SITE_URL}/images/brand/brand_large.png`;
         const indexable = !NOINDEX_PAGES.has(pagePath);
 
@@ -42,10 +44,10 @@ export async function generatePageMetadata({params, pagePath}) {
             alternates: {
                 canonical: baseUrl,
                 languages: {
-                    'fr': `${SITE_URL}/fr${pathSuffix}`,
-                    'en': `${SITE_URL}/en${pathSuffix}`,
+                    'fr': localeUrl('fr', pathSuffix),
+                    'en': localeUrl('en', pathSuffix),
                     // French is the default locale, so it doubles as x-default.
-                    'x-default': `${SITE_URL}/fr${pathSuffix}`,
+                    'x-default': localeUrl('fr', pathSuffix),
                 },
             },
 

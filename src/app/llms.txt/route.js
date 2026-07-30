@@ -38,21 +38,22 @@ function body() {
 > integrates AI where it earns its place, and automates SEO. Work is done
 > in-house; clients keep ownership of their code and data.
 
-The site is published in French and English. French is the default: ${page("/")}
-redirects to ${page("/fr")}. Each page exists at /fr and /en and the two are
-cross-linked with hreflang; neither is a translation proxy of the other.
+The site is published in French and English. French is the default and is
+served at the root: ${page("/")} is the French home page. English lives under
+/en. Each page exists in both languages and the two are cross-linked with
+hreflang; neither is a translation proxy of the other.
 
 The full copy of every page is present in the first HTML response — no
 JavaScript execution is required to read this site.
 
 ## Pages
 
-- [Home — FR](${page("/fr")}): what the studio does, the four offers, three
+- [Home — FR](${page("/")}): what the studio does, the four offers, three
   recent projects, and the studio's values.
 - [Home — EN](${page("/en")}): English version of the above.
-- [Contact — FR](${page("/fr/contact")}): contact form, email, phone and address.
+- [Contact — FR](${page("/contact")}): contact form, email, phone and address.
 - [Contact — EN](${page("/en/contact")}): English version of the above.
-- [Privacy policy — FR](${page("/fr/legal/privacy-policy")}): how personal data
+- [Privacy policy — FR](${page("/legal/privacy-policy")}): how personal data
   is collected, used and protected.
 - [Privacy policy — EN](${page("/en/legal/privacy-policy")}): English version of
   the above.

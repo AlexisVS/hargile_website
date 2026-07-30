@@ -1,5 +1,6 @@
 import {getTranslations} from "next-intl/server";
 import {SITE_URL} from "@/lib/site-url";
+import {localeUrl} from "@/seo/locale-url";
 import {NAP} from "@/lib/nap";
 import {ROUTES} from "@/seo/routes";
 import {SAME_AS} from "@/seo/same-as";
@@ -24,8 +25,12 @@ export async function buildJsonLd({locale, pagePath}) {
         const globalT = await getTranslations({locale, namespace: "seo.global"});
         const pageT = await getTranslations({locale, namespace: `seo.pages.${pagePath}`});
 
+        /* French unprefixed, English /en — localeUrl owns that rule. Note this
+           changes each page's @id on migration day: the page entity is reissued
+           under its new URL, which is the point — the 301 from the old /fr URL
+           tells engines the two are the same page. */
         const pathSuffix = ROUTES[pagePath] ?? `/${pagePath.replaceAll(".", "/")}`;
-        const baseUrl = `${SITE_URL}/${locale}${pathSuffix}`;
+        const baseUrl = localeUrl(locale, pathSuffix);
         const imageUrl = `${SITE_URL}/images/brand/brand_large.png`;
 
         /* Per-page type, read from the message files so it can differ per page.

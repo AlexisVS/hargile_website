@@ -1,12 +1,13 @@
 // src/app/[locale]/shared-metadata.js
 import {SITE_URL} from '@/lib/site-url';
+import {localeUrl} from '@/seo/locale-url';
 
 export function generateSharedMetadata(params, translations) {
     const {locale} = params;
     const isDefault = locale === 'fr'; // French is the default
 
-    // Base URL with locale
-    const baseUrl = `${SITE_URL}/${locale}`;
+    // Base URL with locale: French unprefixed, English /en (localeUrl).
+    const baseUrl = localeUrl(locale);
 
     // Default image path (absolute URL required for OG/Twitter)
     const imageUrl = `${SITE_URL}/images/brand/brand_large.png`;
@@ -31,8 +32,8 @@ export function generateSharedMetadata(params, translations) {
         alternates: {
             canonical: baseUrl,
             languages: {
-                'fr': `${SITE_URL}/fr`,
-                'en': `${SITE_URL}/en`,
+                'fr': localeUrl('fr'),
+                'en': localeUrl('en'),
             },
         },
         // OpenGraph metadata

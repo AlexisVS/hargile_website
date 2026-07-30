@@ -261,8 +261,13 @@ async function selfTest(vocab) {
 
 /* ---------------------------------------------------------------------- main */
 
+/* French — the default locale — is unprefixed, English is /en (mirrors
+   src/seo/locale-url.js). Validating the canonical URLs directly matters:
+   the old prefixed /fr URLs answer 301, and following the redirect would
+   validate the right page under the wrong address. */
 const LOCALES = ["fr", "en"];
 const SITE_PATHS = ["", "/contact", "/legal/privacy-policy"];
+const localePath = (locale, path) => (locale === "fr" ? path || "/" : `/${locale}${path}`);
 
 async function main() {
     const argv = process.argv.slice(2);
@@ -277,7 +282,7 @@ async function main() {
     if (siteIndex !== -1) {
         const base = argv[siteIndex + 1]?.replace(/\/$/, "");
         if (!base) throw new Error("--site needs a base URL, e.g. --site http://localhost:3000");
-        sources = LOCALES.flatMap((l) => SITE_PATHS.map((p) => `${base}/${l}${p}`));
+        sources = LOCALES.flatMap((l) => SITE_PATHS.map((p) => `${base}${localePath(l, p)}`));
     }
     if (sources.length === 0) {
         process.stderr.write("Nothing to validate. Pass URLs/files, --site <base>, or --self-test.\n");

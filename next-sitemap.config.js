@@ -18,7 +18,13 @@ const PAGES = [
     {path: 'legal/privacy-policy', changefreq: 'yearly', priority: 0.3},
 ];
 
-const url = (locale, path) => `${SITE_URL}/${locale}${path ? `/${path}` : ''}`;
+/* French — the default locale — is unprefixed, English keeps /en. This mirrors
+   src/seo/locale-url.js (this file is CommonJS and cannot import it): change
+   the two together. The French home is `${SITE_URL}/`, never the bare origin. */
+const url = (locale, path) => {
+    const suffix = `${locale === DEFAULT_LOCALE ? '' : `/${locale}`}${path ? `/${path}` : ''}`;
+    return suffix ? `${SITE_URL}${suffix}` : `${SITE_URL}/`;
+};
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
