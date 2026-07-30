@@ -1,9 +1,78 @@
 # Locale par défaut sans préfixe — cadrage
 
 > GEO plan §1.2. Écrit le 2026-07-29, **après lecture du code**, pas d'après le
-> plan. Conclusion en tête : **ne pas exécuter maintenant.** Ce document existe
-> pour que la décision soit prise sur des faits, et pour que le jour où ça se
-> fait, ça se fasse en une fois.
+> plan. La conclusion d'origine était « ne pas exécuter maintenant » —
+> **caduque depuis le 2026-07-30, voir la section suivante.**
+
+## ✅ EXÉCUTÉ le 2026-07-30 — commité, PAS ENCORE relâché
+
+La décision de reporter a été renversée par Mihai le 2026-07-30, sur deux faits
+nouveaux vus dans la Search Console (accès GSC obtenu — ENG-110 avancée) :
+
+1. **L'apex `hargile.com` est « Non indexée : Introuvable (404) »** dans GSC.
+   Deux causes distinctes, démêlées le jour même :
+   - le rapport 404 vient des variantes **`http://`** (apex et www, crawlées
+     les 19–20/07) : le port 80 sert un 404 nu, voir « Découverte infra »
+     ci-dessous — **fix côté `hargile-infra`, pas ce dépôt** ;
+   - en `https://`, l'apex répond 307 → `/fr` — et **une URL qui redirige
+     n'est jamais indexée**. La seule façon d'indexer `hargile.com` est
+     que `/` serve 200. C'est exactement cette migration.
+2. Attendre la phase 2 économisait une vague de réindexation *théorique* ;
+   ne pas être indexé du tout sur l'apex est un coût *réel* et immédiat.
+
+**Ce qui a été fait** — tous les fichiers du tableau ci-dessous, dans un seul
+jeu de commits, plus deux hors tableau : `scripts/validate-json-ld.mjs`
+(liste d'URLs canoniques) et `src/app/llms.txt/route.js` (prose + liste de
+pages). Nouveau module : **`src/seo/locale-url.js`**, la règle unique
+« FR sans préfixe, EN sous /en » — toute nouvelle construction d'URL passe
+par lui (le sitemap CJS duplique la règle inline, changer les deux ensemble).
+
+**Vérifié en local sur build de prod** (`npm run build` + serveur) :
+
+- `/`, `/contact`, `/legal/privacy-policy`, `/en`, `/en/contact`,
+  `/en/legal/privacy-policy` → **200** ; `<html lang>` correct.
+- `/fr`, `/fr/contact`, `/fr/legal/privacy-policy` → **301** vers la forme nue,
+  query string conservée (`/fr?backdrop=cubes` → `/?backdrop=cubes`).
+- `/en/fr/contact` → 301 `/en/contact` ; `/services` et `/fr/services` → 308 `/`
+  en un saut (les redirects de next.config passent avant le proxy).
+- canonical de `/` = `https://hargile.com`, hreflang fr/x-default → apex,
+  en → `/en`, identiques sur les deux locales ; sitemap = les 6 URLs nues ;
+  JSON-LD : 6 pages, 37 propriétés, 0 erreur, contrôle négatif vert ;
+  garde-fou GEO : 0 `opacity:0` inline, `<h1>` présent ; lint = baseline (4).
+- Les liens internes du HTML FR sont nus (`href="/contact"`), EN préfixés.
+
+**Reste à faire (bloqué sur accord de Mihai — règle du dépôt : ne rien
+pousser/tagger sans accord) :** pousser, tagger, vérifier en prod
+(`curl -sI https://hargile.com/fr` → 301 `/`, `/` → 200, canonical `/`),
+resoumettre le sitemap dans GSC et Bing WMT, `npm run seo:indexnow`,
+puis « Demander une indexation » sur l'apex dans GSC.
+
+### Découverte infra du même jour (hors dépôt) — le vrai 404
+
+`http://hargile.com/` et `http://www.hargile.com/` répondent **404** (vérifié
+au curl le 2026-07-30). Cause, lue dans `hargile-infra` : le template ingress
+(`templates/nodejs/app.yaml`) fixe
+`traefik.ingress.kubernetes.io/router.entrypoints: websecure` — **aucun router
+n'écoute sur le port 80**, donc le middleware `redirect-https` de
+`chain-default` ne peut jamais tirer, et Traefik sert son 404 par défaut.
+Demande à faire à Alexis : ajouter dans le patch Ingress de
+`apps/hargile-website/kustomization.yaml` :
+
+```yaml
+- op: replace
+  path: /metadata/annotations/traefik.ingress.kubernetes.io~1router.entrypoints
+  value: web,websecure
+```
+
+(Scopé à l'app plutôt qu'au template : le solveur ACME `cm-acme-http-solver`
+crée son propre Ingress sans la chain — c'est précisément pour ça que la
+redirection est en middleware et pas en entrypoint — mais autant ne pas
+changer le comportement des autres apps sans les regarder une par une.)
+
+---
+
+Le reste du document est le cadrage d'origine du 2026-07-29, conservé tel quel :
+c'est lui qui décrit pourquoi chaque fichier change et ce que ça met en jeu.
 
 ## Ce qu'on croyait, et ce qui est vrai
 

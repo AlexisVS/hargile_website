@@ -3,10 +3,31 @@
 > Fichier à copier-coller tel quel en ouverture de session. C'est **la** source
 > unique : les sections « Prompt de reprise » de `homepage-performance-plan.md`
 > et `homepage-code-review-plan.md` renvoient ici pour éviter la dérive.
-> Dernière mise à jour : 2026-07-29 (4e passe — cadrage de la session M1, sans
-> code). **La phase 1 du GEO est terminée, relue, taguée `v0.21.0` / `v0.21.1`,
-> déployée et vérifiée en prod.** Les URLs ont été soumises à IndexNow, Bing est
-> vérifié, et `hargile.com` est confirmé dans l'index Bing.
+> Dernière mise à jour : 2026-07-30. **La phase 1 du GEO est terminée, taguée
+> `v0.21.0` / `v0.21.1`, déployée et vérifiée en prod.** IndexNow soumis, Bing
+> vérifié, `hargile.com` confirmé dans l'index Bing.
+>
+> ### 🔴 2026-07-30 — migration locale par défaut EXÉCUTÉE, en attente de release
+>
+> Mihai a obtenu l'accès GSC (ENG-110 avancée) et y a vu l'apex « Non indexée :
+> Introuvable (404) ». Diagnostic et décision dans
+> **`docs/geo-default-locale-plan.md`, section « EXÉCUTÉ le 2026-07-30 »** —
+> à lire avant tout le reste. En bref :
+>
+> - **Le code de la migration est commité et vérifié en local** : FR nu à la
+>   racine (`/`, `/contact`, …), EN sous `/en`, `/fr/*` → 301. Nouveau module
+>   `src/seo/locale-url.js` = la règle unique de construction d'URL.
+> - **Pas encore poussé/tagué/déployé** — attend l'accord de Mihai. Au
+>   déploiement : vérifier les 301/200 en prod, resoumettre le sitemap (GSC +
+>   Bing), `npm run seo:indexnow`, demander l'indexation de l'apex dans GSC.
+> - ⚠️ **Les anciens marqueurs `curl …/fr` de ce fichier deviennent 301 après
+>   ce déploiement** : lire `/` et `/en` à la place (ou `curl -L`).
+> - **Le vrai 404 de GSC est infra** : le port 80 (http://) sert 404 — aucun
+>   router Traefik sur l'entrypoint `web`. Demande à Alexis rédigée dans le
+>   plan (annotation `web,websecure` sur l'ingress hargile-website).
+> - GSC : deux propriétés existent (`hargile.com` domaine + préfixe
+>   `https://hargile.com/en/`). La propriété domaine suffit ; celle en `/en/`
+>   est redondante, supprimable sans effet sur l'indexation.
 >
 > ### 👉 Par quoi commencer la prochaine session
 >
