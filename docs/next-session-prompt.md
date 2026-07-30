@@ -3,9 +3,58 @@
 > Fichier à copier-coller tel quel en ouverture de session. C'est **la** source
 > unique : les sections « Prompt de reprise » de `homepage-performance-plan.md`
 > et `homepage-code-review-plan.md` renvoient ici pour éviter la dérive.
-> Dernière mise à jour : 2026-07-30. **La phase 1 du GEO est terminée, taguée
-> `v0.21.0` / `v0.21.1`, déployée et vérifiée en prod.** IndexNow soumis, Bing
-> vérifié, `hargile.com` confirmé dans l'index Bing.
+> Dernière mise à jour : 2026-07-30 (fin de session M4). **La phase 1 du GEO
+> est terminée (`v0.21.0`/`v0.21.1` en prod) ; la session M4 (ENG-91/92) est
+> CODÉE et COMMITÉE sur main, non poussée, non déployée.**
+>
+> ### ✅ 2026-07-30 (soir) — session M4 : les 6 pages sont construites (non déployées)
+>
+> Plan validé par Mihai (5 pages d'un coup, slugs FR partagés entre locales,
+> **aucun montant publié** pour le MVP — « prix fixe annoncé avant le début »),
+> puis exécuté en 12 commits sur `main`, de `95088ca` (messages) à la mise à
+> jour de ce fichier. **Rien n'est poussé/tagué/déployé** — consigne explicite
+> de Mihai : des commits, jamais de tag ni de release sans son accord.
+>
+> Ce qui existe maintenant (vérifié sur build de prod local, FR nu + `/en`) :
+>
+> - **`/services`** (index, 4 offres en rangées numérotées + preuves),
+>   **`/services/applications-web`** (in-house + 3 récits de cas),
+>   **`/services/ia`** (grille signal/résultat + bloc honnêteté),
+>   **`/services/seo`** (méthode 4 étapes + méta-preuve « regardez cette page »),
+>   **`/services/mvp-30-jours`** (timeline verticale, inclus/pas inclus, prix
+>   fixe), **`/faq`** (12 questions, ids stables pour le mapping P01–P20).
+> - JSON-LD : nœud `Service` en `@graph` à côté du WebPage sur les 4 pages
+>   service ; `FAQPage.mainEntity` sur `/faq` construit depuis `pages.faq.items`
+>   (source unique HTML + markup). **Sortie des 3 anciennes pages vérifiée
+>   byte-identique.** `npm run seo:jsonld -- --site` : 18/18 URLs à 0 erreur,
+>   contrôle négatif passé. Lint : baseline 4 inchangée.
+> - Les 8 points de couture sont faits : redirect `services` retiré de `gone`
+>   (`next.config.mjs`), ROUTES +6, `seo.pages.*` fr+en (le `ServicePage`
+>   invalide → `CollectionPage`), sitemap 18 URLs, SITE_PATHS +6, llms.txt
+>   +12 puces et offres liées, `CLIENT_NAMESPACES` += `pages.services`/`pages.faq`,
+>   navbar + footer. Réponses FAQ dans le HTML accordéon fermé, 0 `opacity:0`
+>   inline, copie intégrale SSR sur toutes les pages.
+> - La taxonomie v1 de `pages.services` (18 sous-services, lorem) est **purgée**
+>   des deux locales. Les composants v1 morts (`src/components/pages/services/*.jsx`
+>   hors `v2/`, homepage v1) sont toujours là, orphelins — nettoyage possible
+>   mais non fait.
+>
+> ### 👉 Par quoi commencer la prochaine session
+>
+> 1. **Revue visuelle par Mihai** : `npm run build && npm run start`, puis les
+>    6 URLs ci-dessus sur `http://localhost:3000` (FR) et `/en/...` (EN), deux
+>    breakpoints. Les ajustements visuels se font en dial-par-dial (habitude
+>    établie).
+> 2. **ENG-83 avant la mise en prod** : le relevé de citations est une photo
+>    d'AVANT — s'il n'est pas fait, la mise en prod attend 2-3 jours, pas
+>    l'inverse. Rappelé à Mihai en session M4 ; re-vérifier son statut Linear.
+> 3. **Au go de Mihai seulement** : push, tag, déploiement ; puis resoumettre le
+>    sitemap (GSC via MCP `gsc` + Bing), `npm run seo:indexnow`, demandes
+>    d'indexation, et mettre à jour **ENG-91 / ENG-92 / ENG-95** dans Linear
+>    (prose sans pipes — WAF).
+> 4. **Réconciliation ENG-82** : quand Dorian livre `docs/geo-prompt-panel.md`,
+>    mapper chaque `P01`–`P20` sur sa page/entrée FAQ (les items de
+>    `pages.faq.items` ont un `id` stable prévu pour ça).
 >
 > ### ✅ 2026-07-30 — migration locale par défaut DÉPLOYÉE (v0.22.0)
 >
@@ -33,22 +82,16 @@
 > - ⚠️ Ne rien conclure des rapports GSC/Bing avant que leurs crawls soient
 >   postérieurs au 2026-07-30 ~09:20 UTC.
 >
-> ### 👉 Par quoi commencer la prochaine session (mis à jour 2026-07-30 soir)
+> ### État Linear / répartition (au soir du 30/07, avant la session M4)
 >
-> **La prochaine session est la session M4 : FAQ + pages services, niveau
-> Awwwards.** Prompt complet, décisions à trancher et pièges d'intégration dans
-> **`docs/m4-content-session-prompt.md`** — phase Plan obligatoire avant tout
-> code. Les 4 skills VibeCurb sont déjà installés dans `.claude/skills/`.
->
-> Répartition actée le 30/07 : **ENG-82 (les 20 prompts) part chez Dorian** —
-> ne pas la refaire en session. **ENG-83 reste une photo d'AVANT** : le relevé
-> de citations doit idéalement passer avant la mise en ligne des pages M4 —
-> à rappeler à Mihai en ouverture. **ENG-84 est In Progress** : la PR
-> hargile-infra#176 (User-Agent dans les logs Traefik) attend le merge
-> d'Alexis ; mesure possible ~1 semaine après son merge (fenêtre Loki 7 j).
->
-> État Linear au soir du 30/07 : ENG-87 **Done** (les 4 points), ENG-110
-> **Done** (accès GSC opérationnel, outillé via MCP `gsc` — voir baseline
+> **ENG-91/92 : le code est fait (voir ci-dessus), les tickets passent à
+> « livré » seulement après déploiement.** ENG-95 est avancée par le
+> `FAQPage.mainEntity`. Répartition actée le 30/07 : **ENG-82 (les 20 prompts)
+> chez Dorian** — `docs/geo-prompt-panel.md` n'existait pas encore en fin de
+> session M4, la FAQ a été rédigée depuis les offres, à réconcilier. **ENG-84
+> In Progress** : PR hargile-infra#176 (User-Agent dans les logs Traefik)
+> attend le merge d'Alexis ; mesure ~1 semaine après (fenêtre Loki 7 j).
+> ENG-87 **Done**, ENG-110 **Done** (GSC via MCP `gsc`, baseline
 > `docs/geo-gsc-baseline-2026-07-30.md`, relevé comparatif ~mi-août).
 
 ---
