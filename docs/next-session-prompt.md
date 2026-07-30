@@ -7,27 +7,31 @@
 > `v0.21.0` / `v0.21.1`, déployée et vérifiée en prod.** IndexNow soumis, Bing
 > vérifié, `hargile.com` confirmé dans l'index Bing.
 >
-> ### 🔴 2026-07-30 — migration locale par défaut EXÉCUTÉE, en attente de release
+> ### ✅ 2026-07-30 — migration locale par défaut DÉPLOYÉE (v0.22.0)
 >
 > Mihai a obtenu l'accès GSC (ENG-110 avancée) et y a vu l'apex « Non indexée :
-> Introuvable (404) ». Diagnostic et décision dans
-> **`docs/geo-default-locale-plan.md`, section « EXÉCUTÉ le 2026-07-30 »** —
-> à lire avant tout le reste. En bref :
+> Introuvable (404) ». Diagnostic, décision et relevé de release dans
+> **`docs/geo-default-locale-plan.md`, section « EXÉCUTÉ le 2026-07-30 »**. En bref :
 >
-> - **Le code de la migration est commité et vérifié en local** : FR nu à la
->   racine (`/`, `/contact`, …), EN sous `/en`, `/fr/*` → 301. Nouveau module
->   `src/seo/locale-url.js` = la règle unique de construction d'URL.
-> - **Pas encore poussé/tagué/déployé** — attend l'accord de Mihai. Au
->   déploiement : vérifier les 301/200 en prod, resoumettre le sitemap (GSC +
->   Bing), `npm run seo:indexnow`, demander l'indexation de l'apex dans GSC.
-> - ⚠️ **Les anciens marqueurs `curl …/fr` de ce fichier deviennent 301 après
->   ce déploiement** : lire `/` et `/en` à la place (ou `curl -L`).
-> - **Le vrai 404 de GSC est infra** : le port 80 (http://) sert 404 — aucun
->   router Traefik sur l'entrypoint `web`. Demande à Alexis rédigée dans le
->   plan (annotation `web,websecure` sur l'ingress hargile-website).
-> - GSC : deux propriétés existent (`hargile.com` domaine + préfixe
->   `https://hargile.com/en/`). La propriété domaine suffit ; celle en `/en/`
->   est redondante, supprimable sans effet sur l'indexation.
+> - **`v0.22.0` est taguée, déployée et vérifiée en prod** (~09:20 UTC) : FR nu
+>   à la racine (`/`, `/contact`, …), EN sous `/en`, `/fr/*` → **301**. Nouveau
+>   module `src/seo/locale-url.js` = la règle unique de construction d'URL.
+>   IndexNow soumis (HTTP 200, les 6 URLs nues).
+>   Marqueur : `curl -s -o /dev/null -w '%{http_code}' https://hargile.com/fr`
+>   → **301 = v0.22.0 en prod**.
+> - ⚠️ **Les anciens marqueurs `curl …/fr` de ce fichier répondent 301
+>   désormais** : lire `/` et `/en` à la place (ou `curl -L`).
+> - **Le 404 de GSC était infra et est corrigé** : aucun router Traefik
+>   n'écoutait le port 80. PR hargile-infra#174 mergée le 30/07 —
+>   `http://hargile.com/` → 308 https. Le template `nodejs` a le même trou
+>   pour les autres apps ; signalé à Alexis, à traiter au niveau template.
+> - **Reste côté Mihai (navigateur)** : resoumettre `sitemap.xml` dans GSC et
+>   Bing WMT ; « Demander une indexation » sur `hargile.com` dans GSC ;
+>   (optionnel) supprimer la propriété GSC redondante `https://hargile.com/en/`
+>   — la propriété domaine `hargile.com` couvre tout, suppression sans effet
+>   sur l'indexation.
+> - ⚠️ Ne rien conclure des rapports GSC/Bing avant que leurs crawls soient
+>   postérieurs au 2026-07-30 ~09:20 UTC.
 >
 > ### 👉 Par quoi commencer la prochaine session
 >

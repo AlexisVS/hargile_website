@@ -41,11 +41,18 @@ par lui (le sitemap CJS duplique la règle inline, changer les deux ensemble).
   garde-fou GEO : 0 `opacity:0` inline, `<h1>` présent ; lint = baseline (4).
 - Les liens internes du HTML FR sont nus (`href="/contact"`), EN préfixés.
 
-**Reste à faire (bloqué sur accord de Mihai — règle du dépôt : ne rien
-pousser/tagger sans accord) :** pousser, tagger, vérifier en prod
-(`curl -sI https://hargile.com/fr` → 301 `/`, `/` → 200, canonical `/`),
-resoumettre le sitemap dans GSC et Bing WMT, `npm run seo:indexnow`,
-puis « Demander une indexation » sur l'apex dans GSC.
+**✅ Relâché le 2026-07-30 (accord de Mihai) : `v0.22.0` déployée et vérifiée
+en prod à ~09:20 UTC.** Les 6 URLs nues → 200, les 3 anciennes `/fr*` → 301
+(query conservée), canonical/hreflang/sitemap corrects sous UA Googlebot,
+`npm run seo:indexnow` → HTTP 200 sur les 6 nouvelles URLs.
+**Reste côté Mihai (navigateur)** : resoumettre `sitemap.xml` dans GSC et
+Bing WMT, puis « Demander une indexation » sur `hargile.com` dans GSC.
+
+**Le fix port 80 est aussi déployé** : PR
+[hargile-infra#174](https://github.com/HARGILE-tech-studio/hargile-infra/pull/174)
+mergée le 2026-07-30 09:02 UTC — `http://hargile.com/` répond 308 vers https
+(vérifié 09:05). Le template `templates/nodejs` garde le même trou pour les
+autres apps : signalé à Alexis dans la PR, à trancher au niveau template.
 
 ### Découverte infra du même jour (hors dépôt) — le vrai 404
 
