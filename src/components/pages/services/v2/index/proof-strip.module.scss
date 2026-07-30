@@ -1,4 +1,14 @@
-/* Proof strip — three quiet project cards, image + name + one line. */
+/* Proof strip — three quiet project cards, image + name + one line, inside
+   hairline frames. Heading and portfolio link share the closing baseline of the
+   header row, so the section opens on one line rather than two stacked blocks. */
+
+.head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
 
 .label {
   font-size: 13px;
@@ -9,30 +19,51 @@
   margin: 0 0 16px;
 }
 
+.title {
+  max-width: 22ch;
+  text-wrap: balance;
+}
+
+/* Sits on the heading's last baseline rather than its box bottom. */
+.headLink {
+  padding-bottom: 6px;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(20px, 2.5vw, 36px);
+  gap: clamp(18px, 2vw, 28px);
   margin-top: clamp(36px, 4vw, 56px);
 }
 
+.cell {
+  min-width: 0;
+}
+
+/* The frame the reference gives each card: a hairline and 14px of air, no fill,
+   no radius on the outer box — the radius stays on the image inside it. */
 .card {
   display: block;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   text-decoration: none;
+  transition: border-color 0.3s ease;
 
   &:focus-visible {
     outline: 2px solid rgba(150, 185, 249, 0.7);
     outline-offset: 4px;
-    border-radius: 14px;
   }
 }
 
 .media {
   position: relative;
   aspect-ratio: 16 / 10;
-  border-radius: 14px;
+  border-radius: 10px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  transition: border-color 0.3s ease;
 }
 
 .img {
@@ -40,8 +71,8 @@
   transition: transform 0.4s ease;
 }
 
-.card:hover .img {
-  transform: scale(1.03);
+.body {
+  padding: 18px 6px 6px;
 }
 
 .client {
@@ -50,12 +81,8 @@
   font-size: 18px;
   letter-spacing: -0.01em;
   color: #ededed;
-  margin: 16px 0 0;
+  margin: 0;
   transition: color 0.2s;
-}
-
-.card:hover .client {
-  color: #b8cdfb;
 }
 
 .subtitle {
@@ -63,20 +90,56 @@
   font-weight: 300;
   color: rgba(237, 237, 237, 0.55);
   margin: 6px 0 0;
+  line-height: 1.55;
 }
 
-.allWrap {
-  margin-top: clamp(32px, 4vw, 48px);
+/* TiltedCard reduced to its one honest idea: ±4°, no glare, no lift, no shadow.
+   --tx/--ty come from useSpotlight and rest at 0, so the identity transform here
+   is what a keyboard or touch user sees. */
+@media (hover: hover) and (pointer: fine) {
+  .card {
+    transform: perspective(900px)
+      rotateX(calc(var(--ty, 0) * -4deg))
+      rotateY(calc(var(--tx, 0) * 4deg));
+    transition: transform 0.15s ease-out, border-color 0.3s ease;
+  }
+
+  .card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .card:hover .img {
+    transform: scale(1.04);
+  }
+
+  .card:hover .media {
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+
+  .card:hover .client {
+    color: #b8cdfb;
+  }
 }
 
 @media (max-width: 720px) {
   .grid {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  .headLink {
+    padding-bottom: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .img {
+  .img,
+  .media,
+  .client {
+    transition: none;
+  }
+
+  .card {
+    transform: none;
     transition: none;
   }
 

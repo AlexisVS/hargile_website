@@ -5,10 +5,53 @@
   padding-top: clamp(48px, 6vw, 80px);
 }
 
+/* Box variant (hub pages): the same copy inside a hairline panel, actions
+   pushed to the far edge. auto-fit rather than a fixed split, so the actions
+   drop under the copy on their own once the panel gets narrow. */
+.box {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: clamp(32px, 5vw, 80px);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: clamp(28px, 4vw, 64px);
+  align-items: center;
+}
+
+.copy {
+  min-width: 0;
+}
+
+/* The page lands on the identity ramp — same gradient as the hero H1, shorter
+   run. width must shrink-wrap so the ramp maps onto glyphs, not an empty box. */
+.title {
+  width: fit-content;
+  max-width: 100%;
+  background: linear-gradient(135deg, #ffffff 30%, #dce7fd 68%, #96b9f9 105%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-bottom: 0.06em;
+}
+
 .text {
   max-width: 52ch;
 }
 
 .ctaWrap {
   margin-top: 36px;
+}
+
+.actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* Once the panel has stacked, right-aligned buttons under left-aligned copy
+   read as a mistake. */
+@media (max-width: 760px) {
+  .actions {
+    justify-content: flex-start;
+  }
 }

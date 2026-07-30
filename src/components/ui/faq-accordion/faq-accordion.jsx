@@ -27,10 +27,12 @@ const PlusIcon = ({open}) => (
  * reveal: optional useReveal() dispenser from the parent section; index is
  * reset per accordion so the shared 1-8 stagger loop is never outgrown.
  * headingLevel: the q wrapper tag, h3 by default.
+ * defaultOpenIndex: which item rests open (null — all closed — by default).
+ * The collapse is CSS either way, so this changes nothing for a crawler.
  */
-const FaqAccordion = ({items, reveal, headingLevel: Heading = "h3"}) => {
+const FaqAccordion = ({items, reveal, headingLevel: Heading = "h3", defaultOpenIndex = null}) => {
     const baseId = useId();
-    const [openIndex, setOpenIndex] = useState(null);
+    const [openIndex, setOpenIndex] = useState(defaultOpenIndex);
 
     return (
         <div className={styles.list}>
@@ -46,7 +48,7 @@ const FaqAccordion = ({items, reveal, headingLevel: Heading = "h3"}) => {
                             <button
                                 type="button"
                                 id={buttonId}
-                                className={styles.trigger}
+                                className={`${styles.trigger} ${open ? styles.triggerOpen : ""}`}
                                 aria-expanded={open}
                                 aria-controls={panelId}
                                 onClick={() => setOpenIndex(open ? null : i)}

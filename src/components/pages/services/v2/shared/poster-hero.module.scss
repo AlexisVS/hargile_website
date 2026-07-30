@@ -1,0 +1,151 @@
+/* Poster hero — the headline is the whole visual: no backdrop, no WebGL (the
+   hero loader only covers / and /contact). Same tokens as inner-hero, one step
+   larger and stacked instead of split.
+
+   No bottom hairline: whatever follows opens with its own border-top (the offer
+   rows, the first FAQ chapter), and two lines 1px apart would read as a mistake. */
+
+.hero {
+  position: relative;
+  /* Full-bleed out of .content-container, like every v2 section. */
+  margin-inline: calc(50% - 50vw);
+  /* Top clears the fixed navbar — no offset comes from the layout. */
+  padding: clamp(148px, 17vw, 236px) 0 clamp(52px, 7vw, 96px);
+
+  h1,
+  p {
+    text-shadow: none; /* opt out of the legacy .content-container shadow */
+  }
+}
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-gutter);
+  box-sizing: border-box;
+}
+
+.marker {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: clamp(28px, 4vw, 52px);
+}
+
+.markerRule {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 1px;
+  background: rgba(150, 185, 249, 0.6);
+}
+
+.eyebrow {
+  font-size: 14px;
+  font-weight: 500;
+  /* Same technical-marker tracking as the homepage hero eyebrow. */
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #96b9f9;
+  margin: 0;
+}
+
+/* Poster scale — a clear step above the detail pages' hero (68px cap) without
+   passing the homepage headline's authority. Capped by measure rather than by
+   font-size alone: our titles are sentences, not the two-word titles the
+   reference layout was drawn around, so 20ch is what keeps them to two lines. */
+.title {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(44px, 7.2vw, 112px);
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+  margin: 0;
+  max-width: 20ch;
+  text-wrap: balance;
+  /* Identity ramp, same stops as the inner hero. width must shrink-wrap so the
+     gradient maps onto glyphs, not an empty box. */
+  width: fit-content;
+  background: linear-gradient(135deg, #ffffff 30%, #dce7fd 68%, #96b9f9 105%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-bottom: 0.08em;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: clamp(32px, 5vw, 88px);
+  margin-top: clamp(40px, 5vw, 80px);
+  align-items: start;
+}
+
+/* The answer is content, not decoration: brighter and larger than a .lead. */
+.answer {
+  font-size: clamp(16px, 1.2vw, 18px);
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.8);
+  line-height: 1.65;
+  max-width: 62ch;
+  margin: 0;
+}
+
+.aside {
+  border-left: 1px solid rgba(255, 255, 255, 0.09);
+  padding-left: clamp(20px, 3vw, 40px);
+}
+
+/* One column: a left hairline on a full-width block reads as a quote bar. */
+@media (max-width: 860px) {
+  .aside {
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.09);
+    padding-left: 0;
+    padding-top: 28px;
+  }
+}
+
+/* Entry reveal — same numbers as the homepage hero (0.5s / 16px / 0.09s
+   stagger, 0.01 opacity floor): one reveal on the site, one set of numbers.
+   Pure CSS so no-JS clients still end on the visible state. */
+.marker,
+.title,
+.body {
+  animation: posterHeroReveal 0.5s ease-out both;
+}
+
+.title {
+  animation-delay: 0.09s;
+}
+
+.body {
+  animation-delay: 0.18s;
+}
+
+@keyframes posterHeroReveal {
+  from {
+    opacity: 0.01;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes posterHeroRevealFade {
+  from {
+    opacity: 0.01;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marker,
+  .title,
+  .body {
+    animation-name: posterHeroRevealFade;
+  }
+}

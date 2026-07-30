@@ -1,18 +1,24 @@
 "use client";
 
 import {useTranslations} from "next-intl";
-import InnerHero from "@/components/pages/services/v2/inner-hero/inner-hero";
+import PosterHero from "@/components/pages/services/v2/shared/poster-hero";
+import FaqIndex from "@/components/pages/faq/faq-index";
 import FaqGroups from "@/components/pages/faq/faq-groups";
 import CtaBand from "@/components/pages/services/v2/shared/cta-band";
 
 export default function FaqPageClient() {
-    const t = useTranslations("pages.faq.hero");
+    const t = useTranslations("pages.faq");
 
     return (
         <>
-            <InnerHero eyebrow={t("eyebrow")} title={t("title")} answer={t("answer")}/>
+            <PosterHero
+                eyebrow={t("hero.eyebrow")}
+                title={t("hero.title")}
+                answer={t("hero.answer")}
+                aside={<FaqIndex/>}
+            />
             <FaqGroups/>
-            <CtaBand/>
+            <CtaBand variant="box" secondary={{href: "/services", label: t("ctaSecondary")}}/>
         </>
     );
 }

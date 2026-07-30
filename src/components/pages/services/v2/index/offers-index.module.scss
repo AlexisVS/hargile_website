@@ -1,46 +1,138 @@
-/* Offer rows — numbered editorial list. Each row: numeral | copy | cta. */
+/* Offer rows + numeral spine.
+
+   The row is a three-part flex line — small numeral, copy block, chevron —
+   separated from the next only by a hairline, and pushed right by its own
+   --indent. Nothing is a card and nothing is filled; the spotlight (shared
+   .spot) is the only surface that lights up.
+
+   Hover is one gesture applied to four parts at once: the hairline brightens,
+   the title slides, the numeral warms, the chevron nudges — all transform and
+   opacity. */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  gap: clamp(24px, 4vw, 72px);
+  align-items: start;
+}
+
+/* Holds while its rows scroll under it. 16vh matches the reference; the max()
+   keeps it clear of the fixed navbar on short viewports. */
+.spine {
+  position: sticky;
+  top: max(96px, 16vh);
+  align-self: start;
+}
+
+.spineKicker {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #96b9f9;
+  margin: 0;
+}
+
+/* The one moving part on the page. Crossfade only — a numeral that slid or
+   counted would be reporting scroll position, which nobody asked for. */
+.spineNum {
+  display: block;
+  margin-top: 14px;
+  background: linear-gradient(135deg, #ffffff 30%, #dce7fd 68%, #96b9f9 105%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: spineIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.spineLabel {
+  font-family: var(--font-headings);
+  font-weight: 600;
+  font-size: clamp(18px, 1.6vw, 24px);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: rgba(237, 237, 237, 0.72);
+  margin: 10px 0 0;
+  animation: spineIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.spineText {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.55);
+  line-height: 1.6;
+  margin: 28px 0 0;
+  max-width: 34ch;
+}
+
+@keyframes spineIn {
+  from {
+    opacity: 0.01;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
 .rows {
   display: flex;
   flex-direction: column;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
 }
 
 .row {
-  display: grid;
-  grid-template-columns: clamp(56px, 6vw, 96px) minmax(0, 1fr) auto;
-  gap: clamp(16px, 2.5vw, 40px);
-  align-items: start;
-  padding: clamp(32px, 4vw, 52px) 0;
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: clamp(16px, 2.4vw, 40px);
+  flex-wrap: wrap;
+  padding: clamp(30px, 4vw, 54px) clamp(16px, 2vw, 32px) clamp(30px, 4vw, 54px) var(--indent, 0px);
   border-top: 1px solid rgba(255, 255, 255, 0.09);
-
-  &:last-child {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
-  }
+  transition: border-color 0.3s ease;
 }
 
 .num {
+  flex: 0 0 auto;
   font-family: var(--font-headings);
   font-weight: 600;
-  font-size: 15px;
-  letter-spacing: 0.08em;
-  color: rgba(150, 185, 249, 0.55);
-  /* Optical baseline with the row title. */
-  padding-top: 10px;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  color: #96b9f9;
+}
+
+.main {
+  flex: 1 1 300px;
+  min-width: 0;
 }
 
 .title {
   font-family: var(--font-headings);
   font-weight: 700;
-  font-size: clamp(24px, 2.6vw, 38px);
+  font-size: clamp(26px, 3vw, 44px);
   letter-spacing: -0.02em;
-  line-height: 1.1;
+  line-height: 1.08;
   margin: 0;
   color: #ededed;
-  transition: color 0.2s;
+  transition: color 0.32s ease, transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.row:hover .title {
-  color: #b8cdfb;
+/* Stretches the anchor's hit area over the whole row: one anchor, one focus
+   stop, and the accessible name stays the offer title. */
+.rowLink {
+  color: inherit;
+  text-decoration: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(150, 185, 249, 0.7);
+    outline-offset: 4px;
+  }
 }
 
 .promise {
@@ -48,44 +140,110 @@
   font-weight: 300;
   color: rgba(237, 237, 237, 0.68);
   line-height: 1.6;
-  margin: 12px 0 0;
+  margin: 14px 0 0;
   max-width: 52ch;
 }
 
 .deliverables {
   list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 18px;
-  margin: 16px 0 0;
-  padding: 0;
+  gap: 8px 22px;
   font-size: 13px;
   font-weight: 400;
+  line-height: 1.5;
   color: rgba(237, 237, 237, 0.5);
 
-  li:not(:first-child)::before {
-    content: "\00b7";
-    margin-right: 18px;
-    color: rgba(150, 185, 249, 0.45);
+  li {
+    padding-left: 16px;
+    position: relative;
+  }
+
+  li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 6px;
+    height: 1px;
+    background: rgba(150, 185, 249, 0.45);
   }
 }
 
-.ctaCol {
-  padding-top: 6px;
+.chevron {
+  flex: 0 0 auto;
+  align-self: center;
+  color: #96b9f9;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+
+  svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+  }
 }
 
-@media (max-width: 720px) {
-  .row {
+/* One gesture, four parts. :has() carries the same state to keyboard focus so a
+   tab stop is not a lesser affordance than a pointer. */
+@media (hover: hover) and (pointer: fine) {
+  .row:hover,
+  .row:has(.rowLink:focus-visible) {
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+
+  .row:hover .title,
+  .row:has(.rowLink:focus-visible) .title {
+    color: #b8cdfb;
+    transform: translateX(8px);
+  }
+
+  .row:hover .chevron,
+  .row:has(.rowLink:focus-visible) .chevron {
+    transform: translateX(8px);
+  }
+}
+
+/* One column: the spine loses its point once nothing scrolls past it, so it
+   becomes a plain heading over the list and the giant numeral steps down. */
+@media (max-width: 900px) {
+  .layout {
     grid-template-columns: minmax(0, 1fr);
-    gap: 0;
+    gap: clamp(28px, 5vw, 44px);
   }
 
-  .num {
-    padding-top: 0;
-    margin-bottom: 10px;
+  .spine {
+    position: static;
   }
 
-  .ctaCol {
-    padding-top: 22px;
+  .spineNum,
+  .spineLabel {
+    display: none;
+  }
+
+  .spineText {
+    margin-top: 14px;
+    max-width: 60ch;
+  }
+
+  .row {
+    --indent: 0px;
+
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row,
+  .title,
+  .chevron {
+    transition: none;
+  }
+
+  .spineNum,
+  .spineLabel {
+    animation: none;
   }
 }

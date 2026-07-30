@@ -205,6 +205,7 @@
       }
     },
     "faq": {
+      "ctaSecondary": "See the services",
       "hero": {
         "eyebrow": "FAQ",
         "title": "The questions we actually get asked.",
@@ -1002,6 +1003,7 @@
         }
       },
       "index": {
+        "ctaSecondary": "Read the FAQ",
         "detailCta": "See the offer",
         "hero": {
           "eyebrow": "Services",
@@ -1050,6 +1052,15 @@
           "label": "Proof",
           "title": "Three recent projects.",
           "linkLabel": "Full portfolio"
+        },
+        "spine": {
+          "kicker": "Four offers",
+          "text": "Every offer is a delivery commitment, not a catalogue line. You talk to the team that designs it and writes the code, from scoping to launch."
+        },
+        "stats": {
+          "mvp": "days to an MVP",
+          "projects": "projects live",
+          "offers": "offers, one studio"
         }
       },
       "shared": {

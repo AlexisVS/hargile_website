@@ -1,0 +1,46 @@
+/* The site's one spotlight — SpotlightCard with the colour ramp, the animated
+   border and the glow removed. What is left is a single soft radial of the brand
+   blue at 5.5%, following the pointer, under the content.
+
+   Coordinates come from useSpotlight.js. Before the first pointermove the
+   fallbacks centre it, so a keyboard user tabbing through gets a plain centred
+   wash rather than a highlight stuck in a corner.
+
+   isolation: isolate is deliberate — it makes the host a stacking context so the
+   z-index: -1 below paints above the host's own background but under every
+   child, without the consumer having to know. */
+
+.spot {
+  position: relative;
+  isolation: isolate;
+}
+
+.spot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+      420px circle at var(--sx, 50%) var(--sy, 50%),
+      rgba(150, 185, 249, 0.055),
+      transparent 68%
+  );
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+/* Hover only, and only where hovering means something. Focus is served by the
+   consumer's own :has(:focus-visible) rules — a tab stop should not have to
+   guess a pointer position. */
+@media (hover: hover) and (pointer: fine) {
+  .spot:hover::before {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spot::before {
+    transition: none;
+  }
+}

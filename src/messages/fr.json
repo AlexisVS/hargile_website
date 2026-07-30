@@ -205,6 +205,7 @@
       }
     },
     "faq": {
+      "ctaSecondary": "Voir les services",
       "hero": {
         "eyebrow": "FAQ",
         "title": "Les questions qu'on nous pose vraiment.",
@@ -1002,6 +1003,7 @@
         }
       },
       "index": {
+        "ctaSecondary": "Lire la FAQ",
         "detailCta": "Découvrir l'offre",
         "hero": {
           "eyebrow": "Services",
@@ -1050,6 +1052,15 @@
           "label": "Preuves",
           "title": "Trois projets récents.",
           "linkLabel": "Tout le portfolio"
+        },
+        "spine": {
+          "kicker": "Quatre offres",
+          "text": "Chaque offre est un engagement de livraison, pas une ligne de catalogue. Vous parlez à l'équipe qui conçoit et qui code, du cadrage à la mise en ligne."
+        },
+        "stats": {
+          "mvp": "jours pour un MVP",
+          "projects": "projets en ligne",
+          "offers": "offres, un studio"
         }
       },
       "shared": {
