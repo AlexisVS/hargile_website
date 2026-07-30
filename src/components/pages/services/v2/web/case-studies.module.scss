@@ -1,0 +1,120 @@
+/* Case rows — copy | image, alternating sides, hairline separations. */
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  margin-top: clamp(40px, 5vw, 64px);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 4.5vw, 72px);
+  align-items: center;
+  padding: clamp(36px, 4.5vw, 56px) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+
+  &:last-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  }
+}
+
+.rowFlip {
+  .copy {
+    order: 2;
+  }
+
+  .media {
+    order: 1;
+  }
+}
+
+.sector {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #96b9f9;
+  margin: 0 0 14px;
+}
+
+.client {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(24px, 2.4vw, 36px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+  color: #ededed;
+}
+
+.text {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.68);
+  line-height: 1.65;
+  max-width: 46ch;
+  margin: 16px 0 0;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #96b9f9;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(150, 185, 249, 0.35);
+  padding-bottom: 3px;
+  transition: color 0.2s, border-color 0.2s;
+
+  &:hover {
+    color: #b8cdfb;
+    border-color: rgba(150, 185, 249, 0.7);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(150, 185, 249, 0.7);
+    outline-offset: 2px;
+  }
+}
+
+.arrow {
+  transition: transform 0.2s ease;
+}
+
+.link:hover .arrow {
+  transform: translateX(2px);
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.img {
+  object-fit: cover;
+}
+
+@media (max-width: 860px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  /* Copy first on mobile, whatever the desktop order. */
+  .rowFlip .copy,
+  .copy {
+    order: 1;
+  }
+
+  .rowFlip .media,
+  .media {
+    order: 2;
+  }
+}
