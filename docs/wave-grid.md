@@ -91,6 +91,35 @@ introduce.
 
 [hb]: ../src/components/pages/homepage/v2/hero/backdrops/hero-backdrop.jsx
 
+## Two exports per page is now three files, and one is not shipped
+
+`/services` has `curated.*`; the homepage has `home.*` (wide) and, once it is
+rendered and looked at, `home-phone.*`. The phone one is **not a fallback and not
+a crop** — `object-fit: cover` keeps roughly the middle 29% of the wide frame at
+390x844, so a phone was being shown a slice of a composition laid out for a frame
+it never sees. It is composed at the aspect it is served at.
+
+⚠️ **`home-phone.*` is not committed and its `<source>` is commented out.** The
+only render produced so far was a black column; see phase 7 in
+[homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md).
+
+## ⚠️ Exports that "hang" are an agent-browser session collision
+
+Not the page, not the code. agent-browser keeps one daemon per session name, and
+two processes on `default` at once fight over it — sometimes with a real error,
+sometimes by `open` never returning. Once wedged, every capture hangs until the
+orphaned headless Chromes are killed:
+
+```
+agent-browser close --all
+# if that is not enough, kill chrome.exe processes whose command line contains
+# agent-browser-chrome- (a temp profile dir; never your own browser)
+```
+
+The script now uses its own `wave-export` session, so it cannot collide with
+hand-run `agent-browser`. **Two exports at once still would — run them one after
+the other.**
+
 ## URL switches
 
 All authoring-only. Absent the params, none of this costs anything — no picker,

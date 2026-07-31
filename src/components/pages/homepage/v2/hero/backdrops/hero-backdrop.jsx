@@ -47,14 +47,83 @@ if (typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").ma
    visible extent of about z ±3.9. Hence rz 3.0 rather than 1.9, and a centre
    near the vertical middle rather than below it.
 
-   Shallower, though — depth 0.55 against the services 0.8. The .backdrop mask
-   (hero.module.scss) already fades the whole canvas out across the copy side;
-   stacking a full-depth damp under it flattened the left half to a dead plate.
-   The two are doing one job between them.
+   **depth is the dial to move first, and it has been moved twice.** It ran at
+   0.55 against the services 0.8, on the reasoning that the .backdrop mask
+   (hero.module.scss) already fades the canvas out across the copy side, so a
+   full-depth damp under it flattened the left half to a dead plate — the two
+   doing one job between them. In practice 0.55 left ripples crossing the copy
+   from the eyebrow down through the CTA row, which is the one thing the quiet
+   zone exists to prevent, so it is back at the services value.
+
+   If this now reads as a dead plate rather than a dark bed, the fix is to come
+   back down (0.65–0.7), NOT to move the seeds: a seed cannot light the frame
+   without throwing a ~6-unit ring through the middle on its way there. See the
+   note on CALM in wave-grid.jsx.
 
    Module-level so the reference is stable: WaveGrid rebuilds its scene when this
    changes, and an inline literal would be a new object on every render. */
-const HOME_CALM = {cx: -3.6, cz: 0.2, rx: 5.2, rz: 3.0, depth: 0.55};
+const HOME_CALM = {cx: -3.6, cz: 0.2, rx: 5.2, rz: 3.0, depth: 0.8};
+
+/* The phone's quiet zone — a horizontal BAND, not a copy of the wide ellipse.
+
+   The wide frame puts copy down the left and light on the right, so its ellipse
+   is off-centre and the light arrives from the side. A phone has one column:
+   eyebrow, headline, paragraph, both CTAs and the rail all run down the middle
+   with nothing beside them. There is no side for the light to come from — so the
+   quiet zone spans the full width and is short in z, and the light arrives from
+   above and below instead. That is what makes the copy read as sitting *in* the
+   surface rather than on a dark rectangle laid over it.
+
+   ⚠️ These numbers are derived from the phone framing, not from the wide one,
+   and the first version of this constant got that wrong: it used rx 3.4 when the
+   entire visible half-width was 2.3, so it damped the screen edge to edge and
+   exported a black column. With HOME_RELIEF_PHONE's radius 26 the visible extent
+   is about x ±4.4, z ±9.5 — hence rx 5.4 (past the frame edge, so the damping
+   never shows a rim) and rz 4.6 (the copy band; RIM_OUT 1.35 ramps it out by
+   z ≈ 6.2, leaving the top and bottom thirds lit).
+
+   depth is 0.7 rather than the wide frame's 0.8: below 1024px .backdrop already
+   drops to opacity 0.6 with no mask at all (hero.module.scss), so the same damp
+   lands on an already-quieter surface. */
+const HOME_CALM_PHONE = {cx: 0, cz: 0.2, rx: 5.4, rz: 4.6, depth: 0.7};
+
+/* The colour ramp is deliberately NOT overridden here.
+
+   It was, briefly — a more saturated mid, on the theory that the homepage hero
+   could carry more colour than /services. Wrong call: the lit tone is
+   $accent-mihai (#96b9f9, _theme.scss), the brand accent, and it is what the
+   /services grid, that page's eyebrow and this page's own eyebrow and rail dots
+   all already use. Pushing the homepage cubes off it made this one hero the only
+   surface on the site lit in a colour nothing else uses.
+
+   So both heroes take WaveGrid's default ramp and the grid reads as the same
+   object on both pages. If the surface needs more presence, `relief` is the
+   dial — the ramp keys off height, so a taller surface is a more colourful one
+   without moving the hue off brand. */
+
+/* Relief for the phone frame only — "reaches higher, and you can see the
+   levels".
+
+   Two separate things, and only doing both reads as 3D:
+
+   - **radius** pulls the camera back, from 14 to 26. This one is not optional:
+     at the default distance a phone aspect sees only world x ±2.3, about six
+     pillars across the whole screen, which reads as a few flat slabs rather than
+     as a grid at all. At 26 it is x ±4.4, roughly eleven. See WaveGrid's prop
+     docs for why distance rather than a wider field of view.
+   - **maxHeight** raises the clamp, so overlapping ripples stack into genuinely
+     taller pillars instead of all flattening at the same ceiling. Amplitude is
+     left alone: raising it instead makes every ripple taller, including the ones
+     that should stay low, which just brightens the whole plate.
+   - **view** tilts the camera further off overhead. This is the one that shows
+     *sides* of pillars rather than only their tops — dead overhead, a height
+     difference survives as colour alone and the frame reads flat however tall it
+     is. A phone frame can afford more tilt than a wide one because the grid edge
+     enters a narrow frustum much later.
+
+   Still inside WaveGrid's ±1 normalised range, which caps at ±5.4°/±9°; past it
+   the frustum points out across the grid toward its boundary. */
+const HOME_RELIEF_PHONE = {radius: 26, maxHeight: 1.05, view: {mx: -0.2, my: 0.95}};
 
 /* The exported still, for viewports that don't get the canvas. Its own file, not
    the /services one: that image was composed against a different quiet ellipse
@@ -63,6 +132,28 @@ const HOME_CALM = {cx: -3.6, cz: 0.2, rx: 5.2, rz: 3.0, depth: 0.55};
    below. */
 const IMAGE_DIR = "/images/wave-grid";
 const HOME_IMAGE = "home";
+/* Served to phones instead of HOME_IMAGE. A separate render, not a crop: the
+   wide export is 1.6:1 and object-fit: cover keeps roughly its middle 29% at
+   390x844, so a phone was being shown a slice of a composition laid out for a
+   frame it never sees. This one is composed at the aspect it is served at. */
+/* ⚠️ NOT SERVED YET — one line of JSX away, deliberately not taken.
+
+   The <source> that would use this is commented out below, because the only
+   home-phone.* render produced so far was wrong: the camera was over-zoomed and
+   the quiet zone damped the frame edge to edge, so the export was a black column
+   with about six giant pillars. Shipping that would put a black hero on every
+   phone. The framing bug is fixed (see HOME_RELIEF_PHONE), but the fixed version
+   has not been rendered and looked at.
+
+   To finish: `npm run images:wavegrid:phone`, LOOK at the file, then uncomment
+   the two <source> elements below. Everything else — the quiet band, the relief
+   override, the export target, the npm script, the aspect-derived preview — is
+   already in place. */
+const PHONE_IMAGE = "home-phone";
+/* Where the phone render takes over from the wide one. Matches the <source>
+   media query below; both have to move together or a viewport gets the image
+   composed for the other one. */
+const PHONE_MAX = 640;
 
 /* Authoring switches, all absent in normal use:
 
@@ -124,6 +215,30 @@ const useWide = () => {
     return wide;
 };
 
+/* Whether the canvas, when one is mounted, is drawing the phone frame.
+
+   Deliberately derived rather than passed as its own URL flag. The phone export
+   and a narrow-window preview have to be the same composition — if they could
+   disagree, they eventually would, which is the same drift the export switches
+   are wired into this component to avoid. So one rule decides both: an export
+   uses the aspect it was asked for, and everything else uses the viewport.
+
+   Returns null while unresolved, for the same reason useWide does. */
+const usePhoneFrame = (exportSize) => {
+    const [narrow, setNarrow] = useState(null);
+
+    useEffect(() => {
+        const mq = window.matchMedia(`(max-width: ${PHONE_MAX}px)`);
+        const sync = () => setNarrow(mq.matches);
+        sync();
+        mq.addEventListener("change", sync);
+        return () => mq.removeEventListener("change", sync);
+    }, []);
+
+    if (exportSize) return exportSize.h > exportSize.w;
+    return narrow;
+};
+
 /* WaveGrid's `compact` profile is deliberately never used here. It reframes the
    grid for a narrow canvas, and on this page there is no narrow canvas: below
    1024px the still image is served instead, and an export always uses the full
@@ -144,6 +259,7 @@ const useWide = () => {
 const WaveSurface = () => {
     const {variant: wave, exportSize} = useWaveSwitches();
     const wide = useWide();
+    const phoneFrame = usePhoneFrame(exportSize);
 
     /* Both authoring switches force a *still* canvas at any width: an export
        must capture one frame, and browsing compositions with ?wave=N is
@@ -152,12 +268,15 @@ const WaveSurface = () => {
     const authored = exportSize !== null || wave !== null;
 
     if (authored) {
+        // Unresolved only on the ?wave= path; an export answers from its size.
+        if (phoneFrame === null) return null;
         return (
             <WaveGrid
                 mode="still"
                 variant={wave}
                 exportSize={exportSize}
-                calm={HOME_CALM}
+                calm={phoneFrame ? HOME_CALM_PHONE : HOME_CALM}
+                relief={phoneFrame ? HOME_RELIEF_PHONE : null}
             />
         );
     }
@@ -169,6 +288,24 @@ const WaveSurface = () => {
 
     return (
         <picture>
+            {/* Phone render — a different composition, not a crop. Its media
+                query must match PHONE_MAX, which is what the canvas branch above
+                switches on. Disabled until a good render exists; see PHONE_IMAGE.
+
+                Note it must stay FIRST when re-enabled: <picture> takes the first
+                matching <source>, so a later one never wins.
+
+            <source
+                media={`(max-width: ${PHONE_MAX}px)`}
+                srcSet={`${IMAGE_DIR}/${PHONE_IMAGE}.avif`}
+                type="image/avif"
+            />
+            <source
+                media={`(max-width: ${PHONE_MAX}px)`}
+                srcSet={`${IMAGE_DIR}/${PHONE_IMAGE}.webp`}
+                type="image/webp"
+            />
+            */}
             {/* AVIF first, WebP fallback. The fallback is required, not
                 belt-and-braces: browserslist allows edge >= 111 and Edge only
                 shipped AVIF in 121. */}

@@ -10,6 +10,7 @@
     "images:portfolio": "node scripts/optimize-portfolio-images.mjs",
     "images:wavegrid": "node scripts/export-wave-grid.mjs",
     "images:wavegrid:home": "node scripts/export-wave-grid.mjs --page=home",
+    "images:wavegrid:phone": "node scripts/export-wave-grid.mjs --page=phone",
     "seo:jsonld": "node scripts/validate-json-ld.mjs",
     "seo:indexnow": "node scripts/indexnow-ping.mjs",
     "postbuild": "next-sitemap"

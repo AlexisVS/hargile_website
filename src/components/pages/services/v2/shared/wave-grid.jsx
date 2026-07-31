@@ -286,10 +286,23 @@ const LIVE_GRID = 40;
    is 9°; the upstream comments claiming ±14°/±22° are wrong). Staying inside
    that range is what keeps the frustum pointed down into the grid rather than
    out across it toward the boundary. */
+/* Default orbit distance, and the default for `relief.radius`. 14 frames the
+   wide hero at roughly x ±8.2; see the prop docs for why a tall frame has to
+   override it rather than inherit it. */
 const RADIUS = 14;
 const ALPHA_RANGE = Math.PI * 0.03;
 const BETA_RANGE = Math.PI * 0.05;
-const STILL_VIEW = {mx: -0.55, my: 0.65}; // normalised within the ranges above
+/* Default rest pose, and the default for `relief.view`. Normalised within the
+   ranges above, so ±1 is the full ±5.4°/±9° and nothing outside that is
+   reachable — deliberately, since past the range the frustum points out across
+   the grid toward its boundary rather than down into it.
+
+   **This is the dial for "does it read as 3D".** Toward 0,0 is dead overhead,
+   where pillars show only their tops and height differences survive as colour
+   alone. Away from it you start seeing pillar sides, which is what reads as
+   relief and tiering. A tall frame can afford more of it than a wide one: the
+   grid edge enters a wide frustum long before a narrow one. */
+const STILL_VIEW = {mx: -0.55, my: 0.65};
 
 /* Live mode keeps that same vantage as its rest pose and lets the pointer swing
    it, rather than resting dead overhead the way upstream does. Overhead is where
@@ -322,9 +335,26 @@ const fovForAspect = (aspect) => {
     return (2 * Math.atan(refHalfWidth / aspect) * 180) / Math.PI;
 };
 
-const COLOR_BASE = "#0e1730"; // floor at rest — above the page black, so pillars still have form
-const COLOR_MID = "#96b9f9";  // $accent-mihai — the dominant lit tone
-const COLOR_HIGH = "#dce7fd"; // crest highlight, same ramp as the h1 gradient
+/* The colour ramp, shared by BOTH heroes on purpose.
+
+   A per-page `colors` prop was added and removed the same day. `mid` is
+   $accent-mihai (_theme.scss), the brand accent that the eyebrows, the rail dots
+   and the /services copy already use — so a per-page ramp had no caller, and the
+   only thing it could ever have done was take one hero off brand while the other
+   stayed on it. Changing these three changes every wave grid on the site, which
+   is the intent. If the two pages ever genuinely need different palettes, this is
+   the place — but write the caller first, not the knob.
+
+   How the three are used, when picking replacements (see the fragment patch
+   below): `mid` owns most of the visible range *and* is what gets added back on
+   top after lighting, so it is the one that decides how colourful the surface
+   reads. `high` is only the last 40% of the ramp. Swapping `high` for something
+   saturated does much less than swapping `mid`. */
+const COLORS = {
+    base: "#0e1730", // floor at rest — above the page black, so pillars still have form
+    mid: "#96b9f9",  // $accent-mihai — the dominant lit tone
+    high: "#dce7fd", // crest highlight, same ramp as the h1 gradient
+};
 
 /* Shared by the visible material and the shadow depth material: the displaced
    silhouette has to match, or pillars cast the shadow of their rest pose.
@@ -471,13 +501,36 @@ const patchVertexShader = (vertexShader, trailLen) =>
 
    `mode` is "still" or "live". An export is always still: the whole point is a
    single frame, and a live composition would capture whichever moment the
-   script happened to ask on. */
+   script happened to ask on.
+
+   `relief` overrides how tall, how tilted and how far back the surface is seen
+   from ({amplitude, maxHeight, view, radius}) — shallow-merged, so
+   `{maxHeight: 1.1}` keeps the mode's own amplitude. It defaults to the module
+   constants, so a caller that passes nothing renders exactly what it rendered
+   before the prop existed. There is deliberately no matching `colors` prop; see
+   COLORS above.
+
+   **`radius` is what a tall frame needs, and the reason is fovForAspect.** That
+   lock only *closes* the vertical FOV past the reference aspect; below it the
+   vertical stays at REF_FOV and horizontal coverage collapses with the aspect.
+   At a phone's ~0.46:1 that leaves world x ±2.3 visible against a wide frame's
+   ±8.2 — a narrow slot through the grid, showing about six enormous pillars.
+   Pulling the camera back scales both axes at once and keeps the perspective
+   gentle, which matters here: opening the FOV instead would need ~75° at that
+   aspect, which makes near pillars loom and pushes the frustum toward the slab's
+   edge.
+
+   ⚠️ Like `calm`, `relief` must be a **stable reference** — a module constant,
+   not an inline literal. It is an effect dependency, and the effect tears down
+   and rebuilds the whole scene; a fresh object per render would rebuild it on
+   every render. */
 const WaveGrid = ({
     compact = false,
     variant = null,
     exportSize = null,
     mode = "still",
     calm = null,
+    relief = null,
 }) => {
     const mountRef = useRef(null);
 
@@ -492,6 +545,7 @@ const WaveGrid = ({
         // phone profile's narrower field of view into it would double-crop.
         const profile = compact && !exportSize ? PROFILES.compact : PROFILES.full;
         const quiet = calm ?? profile.calm;
+
 
         let renderer;
         try {
@@ -528,6 +582,15 @@ const WaveGrid = ({
            change tears the whole scene down and rebuilds it. */
         const GRID = animate ? Math.min(profile.grid, LIVE_GRID) : profile.grid;
         const trailLen = animate ? LIVE_LEN : STILL_LEN;
+
+        /* Mode tuning and rest pose, with the `relief` override folded in. Both
+           live here rather than beside their first use because the camera is
+           aimed long before the material is built, and a const declared lower
+           down is in its temporal dead zone at that point. */
+        const modeTuning = animate ? MODE.live : MODE.still;
+        const tuning = relief ? {...modeTuning, ...relief} : modeTuning;
+        const restView = relief?.view ?? STILL_VIEW;
+        const orbitRadius = relief?.radius ?? RADIUS;
 
         /* Still gets DPR 2: fill rate is irrelevant for a single frame, and a
            still image is where aliasing on thousands of hard pillar edges is
@@ -588,13 +651,13 @@ const WaveGrid = ({
             const alpha = my * ALPHA_RANGE;
             const beta = mx * BETA_RANGE;
             camera.position.set(
-                -RADIUS * Math.cos(alpha) * Math.sin(beta),
-                RADIUS * Math.cos(alpha) * Math.cos(beta),
-                RADIUS * Math.sin(alpha),
+                -orbitRadius * Math.cos(alpha) * Math.sin(beta),
+                orbitRadius * Math.cos(alpha) * Math.cos(beta),
+                orbitRadius * Math.sin(alpha),
             );
             camera.lookAt(0, 0, 0);
         };
-        aimCamera(STILL_VIEW.mx, STILL_VIEW.my);
+        aimCamera(restView.mx, restView.my);
         scene.add(camera);
 
         // Cooler and dimmer than the original's white 0.5 / 4.0 pair: the floor has
@@ -672,7 +735,7 @@ const WaveGrid = ({
         // Keyed off `animate`, not off `mode`: a live mount that fell back to a
         // still frame must use the still numbers, or the authored composition
         // renders at live amplitude and reads as a flat floor.
-        const tuning = animate ? MODE.live : MODE.still;
+
 
         // Shared by reference into both shaders, so the depth pass displaces
         // identically to the visible one.
@@ -712,9 +775,9 @@ const WaveGrid = ({
 
         material.onBeforeCompile = (shader) => {
             Object.assign(shader.uniforms, uniforms);
-            shader.uniforms.uColorBase = {value: new THREE.Color(COLOR_BASE)};
-            shader.uniforms.uColorMid = {value: new THREE.Color(COLOR_MID)};
-            shader.uniforms.uColorHigh = {value: new THREE.Color(COLOR_HIGH)};
+            shader.uniforms.uColorBase = {value: new THREE.Color(COLORS.base)};
+            shader.uniforms.uColorMid = {value: new THREE.Color(COLORS.mid)};
+            shader.uniforms.uColorHigh = {value: new THREE.Color(COLORS.high)};
 
             shader.vertexShader = patchVertexShader(shader.vertexShader, trailLen);
 
@@ -809,8 +872,8 @@ const WaveGrid = ({
         let lastMove = 0;      // when the pointer was last in bounds, for the idle gate
         let nextIdle = TRAIL.idleEvery;
         // Camera tilt: a target the pointer sets and a current the loop chases.
-        const view = {mx: STILL_VIEW.mx, my: STILL_VIEW.my};
-        const viewTarget = {mx: STILL_VIEW.mx, my: STILL_VIEW.my};
+        const view = {mx: restView.mx, my: restView.my};
+        const viewTarget = {mx: restView.mx, my: restView.my};
 
         const onPointerMove = (e) => {
             const r = mount.getBoundingClientRect();
@@ -826,8 +889,8 @@ const WaveGrid = ({
                 // otherwise measure the jump across the gap as one huge delta and
                 // fire a max-strength ripple.
                 lastSeed = null;
-                viewTarget.mx = STILL_VIEW.mx;
-                viewTarget.my = STILL_VIEW.my;
+                viewTarget.mx = restView.mx;
+                viewTarget.my = restView.my;
                 return;
             }
 
@@ -835,8 +898,8 @@ const WaveGrid = ({
             const ny = -((e.clientY - r.top) / r.height) * 2 + 1;
 
             // Around the rest pose, not from zero — see LIVE_SWING.
-            viewTarget.mx = STILL_VIEW.mx + nx * LIVE_SWING;
-            viewTarget.my = STILL_VIEW.my + ny * LIVE_SWING;
+            viewTarget.mx = restView.mx + nx * LIVE_SWING;
+            viewTarget.my = restView.my + ny * LIVE_SWING;
 
             ndc.set(nx, ny);
             raycaster.setFromCamera(ndc, camera);
@@ -877,8 +940,8 @@ const WaveGrid = ({
         // so without this the tilt would sit frozen at the exit point.
         const onDocLeave = () => {
             lastSeed = null;
-            viewTarget.mx = STILL_VIEW.mx;
-            viewTarget.my = STILL_VIEW.my;
+            viewTarget.mx = restView.mx;
+            viewTarget.my = restView.my;
         };
 
         /* Ambient ripples, so the grid isn't dead when untouched — and on touch,
@@ -992,7 +1055,7 @@ const WaveGrid = ({
                 mount.removeChild(renderer.domElement);
             }
         };
-    }, [compact, variant, exportSize, mode, calm]);
+    }, [compact, variant, exportSize, mode, calm, relief]);
 
     return <div ref={mountRef} style={{position: "absolute", inset: 0}}/>;
 };

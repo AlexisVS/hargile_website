@@ -8,7 +8,7 @@
 > **moving on desktop, a still frame on mobile**. One visual language on both,
 > replacing today's split where desktop gets cubes and mobile gets colour bends.
 >
-> **Status (2026-07-31, third session).** Phases 1–6 shipped. Mihai picked the
+> **Status (2026-07-31, third session).** Phases 1–6 shipped, phase 7 part-done. Mihai picked the
 > wave hero, so `/` serves it at every width — live canvas on desktop, exported
 > still below 1024px, capability rail instead of glass cards on both — and phase
 > 6 then removed everything the comparison had needed: the `bends` and `cubes`
@@ -427,6 +427,87 @@ Verified, not assumed:
   `react-hooks/set-state-in-effect` in `hero.jsx`, in the variant-resolution
   effects that no longer exist. **The baseline is 2 now** — the remaining two are
   in `mvp-studio.jsx` and `Footer.jsx` and are untouched by this work.
+
+### 🟡 Phase 7 — Steering the composition instead of shuffling seeds
+
+Mihai's call, and the right one: `?wave=N` is a *rejection sampler* that already
+knows about the quiet ellipse, so flipping through seeds only ever explores
+inside constraints someone else authored. The seed table's own comment says the
+same thing — "deliberately laid out, not random". So this phase moves the
+constraints, not the dice.
+
+**Landed and verified:**
+
+- **`HOME_CALM.depth` 0.55 → 0.8.** At 0.55, ripples crossed the copy from the
+  eyebrow down through the CTA row, which is the one thing the quiet zone exists
+  to prevent. The old reasoning — that the `.backdrop` mask already fades the
+  copy side, so a full damp under it would flatten the left half to a dead plate
+  — is recorded on the constant, along with the fallback (0.65–0.7) if it now
+  reads flat. Confirmed in the exported image: copy side dark, accent blue right.
+- **A `relief` prop on `WaveGrid`** — `{amplitude, maxHeight, view, radius}`,
+  shallow-merged over the mode's own tuning. `/services` passes nothing and its
+  export stays byte-identical, which is what makes the default safe.
+- **The export script gets its own agent-browser session.** See below; this was
+  the session's biggest time sink and it was never a code bug.
+
+**Reverted, and worth knowing why:**
+
+- **A per-page `colors` prop.** It was added, used to give the homepage a more
+  saturated mid (#4d84f0), and removed the same day at Mihai's instruction. The
+  lit tone is `$accent-mihai` (#96b9f9, `_theme.scss`) — the brand accent the
+  eyebrows, the rail dots and the /services copy already use. Pushing the
+  homepage cubes off it made that hero the only surface on the site lit in a
+  colour nothing else uses. **Both heroes share `COLORS`; that is the intent, not
+  an oversight.** The prop went with the override rather than being left as a
+  knob with no caller — the same rule phase 6 applied to the backdrop variants.
+
+**Open, and the reason the phone image is not shipped:**
+
+The first `home-phone` render came out as a black column with about six enormous
+pillars, and both causes were framing, not seeds:
+
+1. **`fovForAspect` only closes the FOV, never opens it.** Past the 1.6:1
+   reference it holds horizontal coverage and narrows vertically; *below* it the
+   vertical stays at 40° and horizontal coverage just collapses with the aspect.
+   At a phone's 0.46:1 that leaves world x ±2.3 against the wide frame's ±8.2 —
+   a narrow slot through the grid.
+2. **`HOME_CALM_PHONE` was sized from the wide frame's world extents.** `rx 3.4`
+   against a visible half-width of 2.3 damped the screen edge to edge.
+
+Fixed by adding `radius` to `relief` (14 → 26 for the phone, giving x ±4.4,
+z ±9.5, ~11 pillars) and re-deriving the quiet zone as a **horizontal band**
+rather than an ellipse — on a phone the copy spans nearly the full width, so
+there is no side for the light to arrive from and it has to come from above and
+below instead.
+
+**Not verified.** The fixed version has not been rendered and looked at, so the
+`<source>` that would serve `home-phone.*` is commented out in `hero-backdrop.jsx`
+and no image is committed. Uncommenting it without a good render puts a black
+hero on every phone. `radius: 26` is an estimate from the FOV maths, not a
+measurement — 30 gives ~13 pillars, 34 ~14, and past that the perspective
+flattens enough that the tilt stops reading as relief.
+
+### 🔧 The export script and agent-browser sessions
+
+Most of a session was lost to exports that "hung" with no output. It was never
+the page and never the code: **agent-browser keeps one daemon per session name,
+and two processes on `default` at once fight over it.** Sometimes that surfaces
+honestly —
+
+```
+A daemon for session 'default' started concurrently with different daemon
+configuration. Retry the command so agent-browser can restart it with the
+requested configuration.
+```
+
+— and the rest of the time `open` simply never returns. Worse, once wedged it
+stays wedged: even a known-good `/services` capture hangs until the orphaned
+headless Chrome processes (temp `agent-browser-chrome-*` profile) are killed.
+
+`scripts/export-wave-grid.mjs` now runs in its own `wave-export` session and
+tears down with `close` rather than `close --all`, so it can no longer collide
+with hand-run `agent-browser` — nor kill someone else's session on exit. **Two
+exports at once would still collide with each other; run them in sequence.**
 
 ## Open questions
 

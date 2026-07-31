@@ -16,12 +16,17 @@
 //   npm run dev                                       # in another terminal
 //   node scripts/export-wave-grid.mjs                 # /services, curated
 //   node scripts/export-wave-grid.mjs 7 32            # /services, variants 7 and 32
-//   node scripts/export-wave-grid.mjs --page=home     # homepage wave hero
+//   node scripts/export-wave-grid.mjs --page=home     # homepage hero, wide
 //   node scripts/export-wave-grid.mjs --page=home 7   # homepage, variant 7
+//   node scripts/export-wave-grid.mjs --page=phone    # homepage hero, phone frame
 //
-// Output: public/images/wave-grid/{curated,wave-7,home,home-wave-7,…}.{avif,webp}
+// Output: public/images/wave-grid/{curated,wave-7,home,home-wave-7,home-phone,…}
+//         .{avif,webp}
 // For /services, point DEFAULT_IMAGE in wave-grid-backdrop.jsx at whichever one
-// you keep; for the homepage, HOME_IMAGE in hero-backdrop.jsx.
+// you keep; for the homepage, HOME_IMAGE / PHONE_IMAGE in hero-backdrop.jsx.
+//
+// `home` and `phone` are the SAME hero at two aspects, and both are shipped —
+// the phone one is not a fallback. Re-export both when the composition changes.
 //
 // Neither target uses a dedicated export component. That is deliberate: the
 // exported image has to be the composition the live canvas draws, and a second
@@ -43,10 +48,19 @@ const run = promisify(execFile);
 
 /* 1.6:1 matches REF_ASPECT in wave-grid.jsx — the ratio at which the live
    camera's field-of-view lock engages. Exporting at exactly that ratio is what
-   lets object-fit: cover reproduce the camera's own reframing at every other
-   aspect. 2560 wide covers a 1280px CSS hero at 2x. */
-const WIDTH = 2560;
-const HEIGHT = 1600;
+   lets object-fit: cover reproduce the camera's own reframing at nearby aspects.
+   2560 wide covers a 1280px CSS hero at 2x. */
+const WIDE = {w: 2560, h: 1600};
+
+/* The phone render, and the reason it is a separate size rather than the same
+   image cropped. `cover` reproduces the camera's reframing over a modest range
+   of aspects; a 390x844 phone is 0.46:1 against the wide frame's 1.6:1, which
+   keeps roughly its middle 29% and throws the rest away. Composing at the served
+   aspect is the only way the phone gets a frame that was laid out for it.
+
+   1170x2532 is a 390x844 CSS viewport at 3x — the common iPhone size, and the
+   tallest common ratio, so shorter phones crop slightly rather than letterbox. */
+const PHONE = {w: 1170, h: 2532};
 
 const ORIGIN = process.env.EXPORT_ORIGIN ?? "http://localhost:3000";
 const OUT_DIR = path.join("public", "images", "wave-grid");
@@ -63,8 +77,15 @@ const OUT_DIR = path.join("public", "images", "wave-grid");
    preview route is load-bearing for this script; do not delete it as a duplicate
    of `/` without re-testing this. */
 const TARGETS = {
-    services: {path: "/services", curated: "curated", variant: (v) => `wave-${v}`},
-    home: {path: "/preview/home-wave", curated: "home", variant: (v) => `home-wave-${v}`},
+    services: {path: "/services", size: WIDE, curated: "curated", variant: (v) => `wave-${v}`},
+    home: {path: "/preview/home-wave", size: WIDE, curated: "home", variant: (v) => `home-wave-${v}`},
+    /* Same route as `home` — the composition switch is the export ASPECT, not a
+       flag. hero-backdrop.jsx picks the phone quiet zone and relief when the
+       requested height exceeds its width, which is the same rule a narrow
+       browser window follows, so `?wave=N` at phone width previews exactly what
+       this writes. A dedicated flag could disagree with the preview; an aspect
+       cannot. */
+    phone: {path: "/preview/home-wave", size: PHONE, curated: "home-phone", variant: (v) => `home-phone-${v}`},
 };
 
 // The page renders with alpha so the CSS background shows through; flattened
@@ -100,11 +121,30 @@ const findBrowser = () => {
 
 const BIN = findBrowser();
 
+/* Our own browser session, rather than agent-browser's `default`.
+
+   Found the hard way: agent-browser keeps one daemon per session name, and two
+   processes touching `default` at once fails with
+
+     A daemon for session 'default' started concurrently with different daemon
+     configuration.
+
+   — but only sometimes. The rest of the time the two just fight over the same
+   browser and `open` never returns, which reads as this script hanging rather
+   than as a conflict. That is exactly what happened: an export running here
+   while someone drove agent-browser by hand in another terminal.
+
+   A dedicated name makes the two independent, so exporting no longer depends on
+   nobody else using the tool at the same time. It is also why the teardown below
+   closes THIS session and not `--all`: `--all` would kill a session somebody else
+   is in the middle of. */
+const SESSION = "wave-export";
+
 const browser = async (...args) => {
     if (!BIN) throw new Error("agent-browser not found. Install it with: npm i -g agent-browser");
     try {
         // 20 MB: a 2560x1600 PNG data URL runs to about 3.3 MB, well past the default.
-        const {stdout} = await run(BIN.cmd, [...BIN.pre, ...args], {maxBuffer: 20 * 1024 * 1024});
+        const {stdout} = await run(BIN.cmd, [...BIN.pre, "--session", SESSION, ...args], {maxBuffer: 20 * 1024 * 1024});
         return stdout;
     } catch (error) {
         if (error.code === "ENOENT") {
@@ -137,13 +177,14 @@ const READY = `(() => {
 const GRAB = `document.querySelector('canvas').toDataURL('image/png')`;
 
 const capture = async (target, name, query) => {
-    const url = `${ORIGIN}${target.path}?export=${WIDTH}x${HEIGHT}${query}`;
+    const {w, h} = target.size;
+    const url = `${ORIGIN}${target.path}?export=${w}x${h}${query}`;
     await browser("open", url);
 
     // The chunk is lazily imported, then the scene builds and compiles shaders.
     // Poll instead of a flat sleep so a fast machine isn't punished and a slow
     // one isn't cut off mid-compile.
-    const want = `${WIDTH}x${HEIGHT}`;
+    const want = `${w}x${h}`;
     let ready = false;
     for (let attempt = 0; attempt < 40 && !ready; attempt++) {
         await new Promise((r) => setTimeout(r, 500));
@@ -176,7 +217,7 @@ if (!target) {
 }
 
 await mkdir(OUT_DIR, {recursive: true});
-console.log(`Exporting ${WIDTH}x${HEIGHT} from ${ORIGIN}${target.path}\n`);
+console.log(`Exporting ${target.size.w}x${target.size.h} from ${ORIGIN}${target.path}\n`);
 
 try {
     if (variants.length === 0) {
@@ -188,8 +229,9 @@ try {
         }
     }
 } finally {
-    // Leaving the session open would hold a browser process after the script exits.
-    await browser("close", "--all").catch(() => {});
+    // Leaving the session open would hold a browser process after the script
+    // exits. Closes only our own session — see SESSION above for why not --all.
+    await browser("close").catch(() => {});
 }
 
 console.log(`\nWritten to ${OUT_DIR}`);

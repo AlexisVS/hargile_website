@@ -162,6 +162,72 @@
 >   d'avant cette session. Les deux restantes sont dans `mvp-studio.jsx` et
 >   `Footer.jsx`.
 >
+> ### ✅ 2026-07-31 (fin) — phase 7 : on pilote la composition, on ne tire plus au sort
+>
+> Décision de Mihai, et c'est la bonne : `?wave=N` est un **échantillonnage par
+> rejet** qui connaît déjà l'ellipse de calme, donc feuilleter des graines
+> n'explore que l'intérieur de contraintes écrites par quelqu'un d'autre. Le
+> commentaire de la table de graines dit la même chose — « deliberately laid out,
+> not random ». Cette phase déplace donc les contraintes, pas les dés.
+>
+> **Acquis et vérifié :**
+>
+> - **`HOME_CALM.depth` 0.55 → 0.8.** À 0.55 des ondulations traversaient la
+>   copie de l'eyebrow jusqu'à la rangée de CTA. Le repli (0,65–0,7) est noté sur
+>   la constante si ça lit maintenant « plaque morte » plutôt que « lit sombre ».
+>   Vérifié sur l'image exportée : côté copie sombre, bleu accent à droite.
+> - **Une prop `relief` sur `WaveGrid`** — `{amplitude, maxHeight, view, radius}`.
+>   `/services` ne passe rien et son export reste identique à l'octet.
+> - **Le script d'export a sa propre session agent-browser** (voir plus bas).
+>
+> **Annulé, et il faut savoir pourquoi :**
+>
+> - **Une prop `colors` par page.** Ajoutée, utilisée pour donner à la homepage un
+>   mid plus saturé (#4d84f0), puis retirée le jour même sur consigne de Mihai :
+>   la teinte allumée est `$accent-mihai` (#96b9f9, `_theme.scss`), l'accent de
+>   marque que les eyebrows, les points du rail et la copie de /services utilisent
+>   déjà. **Les deux heros partagent `COLORS`, c'est voulu.** La prop est partie
+>   avec l'override plutôt que de rester un bouton sans appelant — la règle même
+>   que la phase 6 a appliquée aux variantes.
+>
+> ### ⚠️ L'image téléphone n'est PAS livrée, et c'est délibéré
+>
+> Le premier rendu `home-phone` était une colonne noire avec six énormes piliers.
+> Deux causes, toutes deux de cadrage :
+>
+> 1. **`fovForAspect` ne fait que *fermer* le champ, jamais l'ouvrir.** Sous le
+>    ratio de référence 1.6:1 le vertical reste à 40° et la couverture
+>    horizontale s'effondre avec l'aspect : à 0,46:1 il ne reste que x ±2,3
+>    contre ±8,2 en large.
+> 2. **`HOME_CALM_PHONE` était dimensionnée sur les unités du cadre large**
+>    (`rx 3.4` contre une demi-largeur visible de 2,3) : tout l'écran amorti.
+>
+> Corrigé en ajoutant `radius` à `relief` (14 → 26 : x ±4,4, z ±9,5, ~11 piliers)
+> et en refaisant la zone calme en **bande horizontale** — sur un téléphone la
+> copie occupe presque toute la largeur, la lumière doit donc venir du haut et du
+> bas, pas du côté.
+>
+> **Non vérifié.** La version corrigée n'a pas été rendue ni regardée, donc le
+> `<source>` qui servirait `home-phone.*` est **commenté** dans
+> `hero-backdrop.jsx` et aucune image n'est commitée. Le décommenter sans un bon
+> rendu met un hero noir sur tous les téléphones. `radius: 26` est une estimation
+> issue du calcul de champ, pas une mesure.
+>
+> ### 🔧 Sessions agent-browser — la vraie cause des « exports qui pendent »
+>
+> Beaucoup de temps perdu sur des exports sans sortie. Ce n'était **ni la page ni
+> le code** : agent-browser garde **un démon par nom de session**, et deux
+> processus sur `default` se battent pour lui. Parfois ça se dit franchement
+> (« A daemon for session 'default' started concurrently with different daemon
+> configuration »), le reste du temps `open` ne rend simplement jamais la main.
+> Et une fois coincé ça le reste : même la capture `/services` connue bonne pend
+> tant que les Chrome headless orphelins (profil temporaire
+> `agent-browser-chrome-*`) ne sont pas tués.
+>
+> `scripts/export-wave-grid.mjs` tourne désormais dans sa propre session
+> `wave-export` et ferme avec `close` et non `close --all`. ⚠️ **Deux exports
+> simultanés se collisionneraient encore entre eux — les enchaîner.**
+>
 > ### 👉 Par quoi commencer la prochaine session
 >
 > #### 1. Essayer une autre image fixe pour le hero (demande de Mihai)
@@ -213,7 +279,19 @@
 > le moment de rendre `STILL` propre à chaque page, pas de basculer l'une puis
 > l'autre.
 >
-> #### 2. Une revue visuelle du hero, à deux largeurs
+> #### 2. Finir le cadre téléphone (30 s d'export, puis les yeux)
+>
+> ```
+> npm run dev
+> npm run images:wavegrid:phone     # écrit home-phone.{avif,webp}
+> ```
+>
+> Puis **regarder le fichier**. S'il est bon : décommenter les deux `<source>` de
+> `hero-backdrop.jsx` (voir la note sur `PHONE_IMAGE`, qui dit aussi pourquoi ils
+> doivent rester en premier dans le `<picture>`). S'il est encore trop zoomé,
+> `radius` dans `HOME_RELIEF_PHONE` est le seul chiffre à bouger.
+>
+> #### 3. Une revue visuelle du hero, à deux largeurs
 >
 > Rien ne devrait avoir bougé à l'écran : tout ce qui est supprimé était
 > inatteignable, et la fusion `.sectionSharp`/`.sectionWave` → `.backdrop` a été
@@ -222,7 +300,7 @@
 > dessous : pas de masque, opacité 0,6). Mais c'est du CSS refondu à la main, donc
 > ça se regarde : `/` à 1440x900 et à 390x844.
 >
-> #### 3. Ensuite seulement
+> #### 4. Ensuite seulement
 >
 > Au go de Mihai : fusion de la branche, puis les points M4 encore ouverts
 > ci-dessous.
