@@ -8,10 +8,15 @@
 > **moving on desktop, a still frame on mobile**. One visual language on both,
 > replacing today's split where desktop gets cubes and mobile gets colour bends.
 >
-> **Status (2026-07-31, second session).** Phases 1, 2 and 4 are shipped —
-> `/preview/home-wave` renders the live grid. Phase 3 (mobile still) and Phase 5
-> (decide and unify) are open, and Phase 3's loader problem is still live: see
-> the warning under it.
+> **Status (2026-07-31, second session).** Phases 1–4 are shipped:
+> `/preview/home-wave` runs the live grid on desktop and serves an exported still
+> below 1024px, and the loader bug the plan warned about is fixed. **Phase 5
+> (decide and unify) is the only one open** — three variants are alive right now,
+> which is one more than the plan says should be.
+>
+> For the day-to-day loop — browsing compositions, exporting either page's image,
+> moving a quiet zone — see [wave-grid.md](./wave-grid.md); it now covers both
+> pages side by side.
 
 ## Where we are
 
@@ -220,7 +225,7 @@ the wave chunk.
   The horizontal ramp is re-declared rather than overridden, because `mask-image`
   is a shorthand for the whole layer list.
 
-### Phase 3 — Mobile still frame
+### ✅ Phase 3 — Mobile still frame
 
 Below 1024px, serve the exported image instead of a canvas — the same `<picture>`
 approach as `/services`, so the two pages share one mechanism.
@@ -229,10 +234,10 @@ This is what unifies the design: same cubes, same colour, same composition
 language on both. Desktop moves, mobile does not.
 
 It needs its **own export**, not the services one: the homepage hero is a
-different aspect and has a different quiet zone. Run
-`npm run images:wavegrid` against a homepage export URL — Phase 3 will need the
-`?export=` switch wired into the homepage hero too, or a small dedicated export
-route.
+different aspect and has a different quiet zone. That means the `?export=` switch
+has to reach the homepage hero — either wired into it, or via a small dedicated
+export route. *(Wired in; see below for why the dedicated route was the wrong
+half of that choice.)*
 
 **⚠️ Check the hero loader.** The branded loader on `/` dismisses when the
 backdrop's canvas paints — `useBackdropReady` watches the subtree with a
@@ -242,6 +247,35 @@ will never satisfy that, so mobile would fall through to the hard timeout and th
 loader would visibly outstay the content. Either resolve readiness on the image's
 `load` event, or treat the image variant as ready immediately (it is — the markup
 is server-rendered).
+
+**Done.**
+
+- **`<picture>` below 1024px**, canvas at or above it. The breakpoint matches
+  `useHeroVariant`'s own, so the backdrop and the hero's layout decision change
+  together. `useWaveWide` returns three states, not two — `null` means
+  *unresolved* and the wave branch renders nothing until the effect lands.
+  Defaulting to either side would mount the wrong one for a beat, and on a phone
+  that means paying for the three.js parse the still exists to avoid.
+- **Its own export**, as the plan required: `home.{avif,webp}`, 22 kB AVIF.
+  `curated.*` is untouched — the two targets write under different names so one
+  can never overwrite the other.
+- **The export runs through the live hero**, via `?export=` wired into
+  `hero-backdrop.jsx`, rather than a dedicated export route. The exported image
+  has to be the composition the live canvas draws, and one call site with one
+  `HOME_CALM` is the only way to guarantee that. A second `WaveGrid` mount is
+  precisely how the two would drift.
+- **`?wave=N` on the homepage renders a *still*, not a live grid** — live mode
+  ignores the seed table entirely and fills its trail from the pointer, so a live
+  `?wave=7` would show nothing about composition 7.
+- **The loader bug was real and is fixed.** `useBackdropReady` now queries
+  `canvas, img`. The image branch waits on `complete` / `load` / `error` rather
+  than resolving on appearance — "treat it as ready immediately" was the wrong
+  half of the choice, because the markup being server-rendered says nothing about
+  whether 22 kB of AVIF has decoded. Verified at 390×844: image served, no canvas
+  mounted, loader gone.
+- **`compact` is deliberately never passed** on this page. It reframes the grid
+  for a narrow canvas, and there is no narrow canvas here — below 1024px the
+  image is served, and an export always uses the full profile by design.
 
 ### ✅ Phase 4 — The second homepage route
 

@@ -53,16 +53,26 @@ const useHeroVariant = (override) => {
     return variant;
 };
 
-/* Signals when the hero's WebGL backdrop has actually painted, so the branded
-   loader can dismiss on "hero ready" rather than a fixed timer.
+/* Signals when the hero's backdrop has actually painted, so the branded loader
+   can dismiss on "hero ready" rather than a fixed timer.
 
-   The backdrop variants (ColorBends / CubeGrid) are ssr:false dynamic imports
-   that append a <canvas> once their WebGL context is up and the first shader is
-   compiled. We watch the backdrop subtree for that canvas (MutationObserver),
-   then wait two animation frames to guarantee a painted frame before flagging
-   ready. Two backstops keep it honest: the "none" variant has no canvas so it's
-   ready at once, and a hard timeout dismisses the loader even if a device fails
-   to report a canvas — the loader must never outstay the content. */
+   The WebGL variants (ColorBends / CubeGrid / the live wave grid) are ssr:false
+   dynamic imports that append a <canvas> once their context is up and the first
+   shader is compiled. We watch the backdrop subtree for that element
+   (MutationObserver), then wait two animation frames to guarantee a painted
+   frame before flagging ready.
+
+   **It has to watch for an <img> too.** Below 1024px the wave variant serves the
+   exported still instead of a canvas, and a canvas-only query would never be
+   satisfied — the hero would fall through to the hard timeout below and the
+   loader would visibly outstay content that was already on screen. An image is
+   not ready when it appears, though, only when it has decoded, so that branch
+   waits on `complete` / the load event rather than resolving at once.
+
+   Two backstops keep the whole thing honest: the "none" variant has no backdrop
+   element so it's ready immediately, and a hard timeout dismisses the loader even
+   if a device fails to report either — the loader must never outstay the
+   content. */
 const useBackdropReady = (containerRef, variant) => {
     const [ready, setReady] = useState(false);
 
@@ -84,24 +94,42 @@ const useBackdropReady = (containerRef, variant) => {
         let raf1 = 0;
         let raf2 = 0;
         let done = false;
+        let pending = null; // the <img> we're waiting on, so its listener can be removed
 
         const markReady = () => {
             if (done) return;
             done = true;
-            // Two rAFs: the canvas exists in the DOM, now let it paint a frame.
+            // Two rAFs: the element exists in the DOM, now let it paint a frame.
             raf1 = requestAnimationFrame(() => {
                 raf2 = requestAnimationFrame(() => setReady(true));
             });
         };
 
-        if (container.querySelector("canvas")) {
-            markReady();
-        }
+        // A canvas is painted by the time it is appended; an image is only a
+        // promise of pixels until it has decoded. `complete` covers the common
+        // case where it was already in the HTTP cache, and it is also true on a
+        // failed load — which is correct here, since a broken image is still a
+        // reason to stop waiting.
+        const markWhenPainted = (el) => {
+            if (el.tagName !== "IMG" || el.complete) {
+                markReady();
+                return;
+            }
+            pending = el;
+            el.addEventListener("load", markReady, {once: true});
+            el.addEventListener("error", markReady, {once: true});
+        };
+
+        const found = () => container.querySelector("canvas, img");
+
+        const initial = found();
+        if (initial) markWhenPainted(initial);
 
         const observer = new MutationObserver(() => {
-            if (container.querySelector("canvas")) {
+            const el = found();
+            if (el) {
                 observer.disconnect();
-                markReady();
+                markWhenPainted(el);
             }
         });
         observer.observe(container, {childList: true, subtree: true});
@@ -115,6 +143,8 @@ const useBackdropReady = (containerRef, variant) => {
         return () => {
             observer.disconnect();
             clearTimeout(timeout);
+            pending?.removeEventListener("load", markReady);
+            pending?.removeEventListener("error", markReady);
             if (raf1) cancelAnimationFrame(raf1);
             if (raf2) cancelAnimationFrame(raf2);
         };

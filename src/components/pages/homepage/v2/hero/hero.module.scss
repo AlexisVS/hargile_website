@@ -160,6 +160,31 @@
   mask-composite: add;
   -webkit-mask-image: linear-gradient(100deg, transparent 0%, rgba(0, 0, 0, 0.55) 38%, #000 62%);
   -webkit-mask-composite: source-over;
+
+  /* Below the canvas breakpoint the copy spans the full width, so a horizontal
+     falloff has nowhere left to hide the grid — drop the mask and lean on
+     opacity instead. Same conclusion /services reached at its own breakpoint. */
+  @media (max-width: 1023px) {
+    mask-image: none;
+    -webkit-mask-image: none;
+    opacity: 0.6;
+  }
+}
+
+/* The exported still, served in place of the canvas below 1024px.
+
+   cover, not contain: the export is a fixed 1.6:1 frame and the hero is any
+   ratio from a tall phone to a wide tablet, so it has to fill and crop. That
+   crop is not a compromise — it reproduces what the live camera does with its
+   field-of-view lock (see fovForAspect in wave-grid.jsx), which is why one image
+   covers every viewport instead of needing a per-breakpoint set. Centred so the
+   quiet zone stays put relative to the copy. */
+.waveStill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 /* Comparison label — only rendered while several hero variants are stacked. */

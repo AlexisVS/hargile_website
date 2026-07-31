@@ -1,4 +1,4 @@
-// Render the services hero wave grid to a still image.
+// Render a hero wave grid to a still image.
 //
 // The grid is a single frame that never changes, so shipping three.js (~150 kB
 // gzipped, plus parsing it, building 2304 instances, compiling two shader
@@ -7,13 +7,26 @@
 // component in a real browser — the only way to run WebGL — and writes the
 // canvas out as AVIF + WebP.
 //
-// Usage:
-//   npm run dev                                  # in another terminal
-//   node scripts/export-wave-grid.mjs            # the curated composition
-//   node scripts/export-wave-grid.mjs 7 32       # generated variants 7 and 32
+// Two pages use the grid and each needs its own image: they have different quiet
+// zones and different copy layouts, so one export cannot serve both. --page
+// picks which, and each writes under its own name so they can't overwrite each
+// other.
 //
-// Output: public/images/wave-grid/{curated,wave-7,...}.{avif,webp}
-// Point DEFAULT_IMAGE in wave-grid-backdrop.jsx at whichever one you keep.
+// Usage:
+//   npm run dev                                       # in another terminal
+//   node scripts/export-wave-grid.mjs                 # /services, curated
+//   node scripts/export-wave-grid.mjs 7 32            # /services, variants 7 and 32
+//   node scripts/export-wave-grid.mjs --page=home     # homepage wave hero
+//   node scripts/export-wave-grid.mjs --page=home 7   # homepage, variant 7
+//
+// Output: public/images/wave-grid/{curated,wave-7,home,home-wave-7,…}.{avif,webp}
+// For /services, point DEFAULT_IMAGE in wave-grid-backdrop.jsx at whichever one
+// you keep; for the homepage, HOME_IMAGE in hero-backdrop.jsx.
+//
+// The homepage target renders through the live hero, not through a dedicated
+// export page. That is deliberate: the exported image has to be the composition
+// the live canvas draws, and a second mounting of WaveGrid is exactly how the
+// two would drift apart.
 //
 // Requires agent-browser (npm i -g agent-browser) — a headless browser is
 // unavoidable for WebGL, and this keeps a ~300 MB Puppeteer download out of the
@@ -37,6 +50,13 @@ const HEIGHT = 1600;
 
 const ORIGIN = process.env.EXPORT_ORIGIN ?? "http://localhost:3000";
 const OUT_DIR = path.join("public", "images", "wave-grid");
+
+/* Where each page's grid lives, and what its files are called.
+   `curated` is the name of the hand-composed default; variants get a suffix. */
+const TARGETS = {
+    services: {path: "/services", curated: "curated", variant: (v) => `wave-${v}`},
+    home: {path: "/preview/home-wave", curated: "home", variant: (v) => `home-wave-${v}`},
+};
 
 // The page renders with alpha so the CSS background shows through; flattened
 // here to the same $background-dark, since an image has nothing behind it.
@@ -107,8 +127,8 @@ const READY = `(() => {
    ?export= turns on preserveDrawingBuffer. */
 const GRAB = `document.querySelector('canvas').toDataURL('image/png')`;
 
-const capture = async (name, query) => {
-    const url = `${ORIGIN}/services?export=${WIDTH}x${HEIGHT}${query}`;
+const capture = async (target, name, query) => {
+    const url = `${ORIGIN}${target.path}?export=${WIDTH}x${HEIGHT}${query}`;
     await browser("open", url);
 
     // The chunk is lazily imported, then the scene builds and compiles shaders.
@@ -135,18 +155,27 @@ const capture = async (name, query) => {
     console.log(`  ${name.padEnd(12)} avif ${kb(avif.length).padStart(7)}   webp ${kb(webp.length).padStart(7)}`);
 };
 
-const variants = process.argv.slice(2);
+const args = process.argv.slice(2);
+const pageArg = args.find((a) => a.startsWith("--page="))?.slice("--page=".length) ?? "services";
+const variants = args.filter((a) => !a.startsWith("--"));
+
+// hasOwn, not a plain lookup: --page=constructor would otherwise resolve to
+// something off Object.prototype and walk straight past the guard below.
+const target = Object.hasOwn(TARGETS, pageArg) ? TARGETS[pageArg] : null;
+if (!target) {
+    throw new Error(`Unknown --page=${pageArg}. Expected one of: ${Object.keys(TARGETS).join(", ")}`);
+}
 
 await mkdir(OUT_DIR, {recursive: true});
-console.log(`Exporting ${WIDTH}x${HEIGHT} from ${ORIGIN}\n`);
+console.log(`Exporting ${WIDTH}x${HEIGHT} from ${ORIGIN}${target.path}\n`);
 
 try {
     if (variants.length === 0) {
-        await capture("curated", "");
+        await capture(target, target.curated, "");
     } else {
         for (const v of variants) {
             if (!/^\d+$/.test(v)) throw new Error(`Not a variant number: ${v}`);
-            await capture(`wave-${v}`, `&wave=${v}`);
+            await capture(target, target.variant(v), `&wave=${v}`);
         }
     }
 } finally {

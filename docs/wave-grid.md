@@ -66,10 +66,35 @@ So the export is made at exactly 1.6:1 (`REF_ASPECT`), and the crop *reproduces*
 the camera rather than approximating it. No per-breakpoint image set is needed,
 including portrait.
 
+## Two pages, two images
+
+The grid is on two heroes and **each needs its own export**. They are not
+interchangeable: the quiet ellipse is tuned per layout (`/services` has one
+paragraph in a left column, the homepage has eyebrow + headline + paragraph +
+CTA down the same side), so an image made for one puts its dark band in the
+wrong place on the other.
+
+| | `/services` | homepage wave hero |
+| --- | --- | --- |
+| route | `/services` | `/preview/home-wave` (also `/?backdrop=wave`) |
+| desktop | **the still image** | **live canvas**, ≥1024px |
+| mobile | the still image | **the still image**, <1024px |
+| image | `curated.{avif,webp}` | `home.{avif,webp}` |
+| pointed at by | `DEFAULT_IMAGE` in [`wave-grid-backdrop.jsx`][wgb] | `HOME_IMAGE` in [`hero-backdrop.jsx`][hb] |
+| quiet ellipse | `CALM` in [`wave-grid.jsx`][wg] | `HOME_CALM` in [`hero-backdrop.jsx`][hb] |
+| export command | `npm run images:wavegrid` | `npm run images:wavegrid:home` |
+
+`/services` is still everywhere because its grid never moves at all. The homepage
+moves on desktop and freezes on mobile — same cubes, same colour, same
+composition language on both, which is the split the homepage wave hero exists to
+introduce.
+
+[hb]: ../src/components/pages/homepage/v2/hero/backdrops/hero-backdrop.jsx
+
 ## URL switches
 
 All authoring-only. Absent the params, none of this costs anything — no picker,
-no generated seeds, no three.js.
+no generated seeds, and on `/services` no three.js at all.
 
 | URL | What it does |
 | --- | --- |
@@ -77,22 +102,53 @@ no generated seeds, no three.js.
 | `/services?bg=wave-7` | a different exported still, to compare |
 | `/services?wave=7` | composition 7 rendered **live** in WebGL, with a picker |
 | `/services?export=2560x1600` | live render at fixed size — what the script drives |
+| `/preview/home-wave` | canvas on desktop, `home.{avif,webp}` below 1024px |
+| `/preview/home-wave?wave=7` | composition 7 as a **still** frame, for picking |
+| `/preview/home-wave?export=2560x1600` | fixed-size render — what the script drives |
+| `/?backdrop=wave` | the same hero on the real homepage, for an A/B |
+
+Two differences on the homepage worth knowing:
+
+- **`?wave=N` renders a still, not a live grid.** Browsing compositions means
+  browsing seed tables, and live mode ignores the seed table entirely — it fills
+  its trail from the pointer. A live `?wave=7` would show you nothing about
+  composition 7.
+- **No picker widget.** Type the number in the URL; the seed array is printed to
+  the console exactly as on `/services`.
 
 Read via `useSyncExternalStore`, not `useSearchParams`: the latter would opt the
 whole route into dynamic rendering just to support debug flags.
 
+**The homepage export goes through the live hero, not a dedicated export page.**
+That is deliberate. The exported image has to be the composition the live canvas
+draws, and the only way to guarantee it is for both to come out of the same call
+site with the same `HOME_CALM`. A second mounting of `WaveGrid` somewhere else is
+exactly how the two would quietly drift apart.
+
 ## Making a new composition
+
+The same four steps for either page. Where they differ, both are given.
 
 ### 1. Browse
 
 ```
 npm run dev
+
+# /services
 open http://localhost:3000/services?wave=1
+
+# homepage hero
+open http://localhost:3000/preview/home-wave?wave=1
 ```
 
-A picker appears top-right: `← wave 1 → random`. Click through. Every number is
-deterministic — `?wave=34` renders the identical composition forever, on any
-machine — so note the ones you like and come back to them.
+On `/services` a picker appears top-right: `← wave 1 → random`. On the homepage
+there is no picker — edit the number in the URL. Every number is deterministic —
+`?wave=34` renders the identical composition forever, on any machine — so note
+the ones you like and come back to them.
+
+**A composition is not portable between the pages.** The same `?wave=34` renders
+different-looking frames on each, because the quiet ellipse it is damped against
+differs. Always browse on the page you are exporting for.
 
 The generator is constrained, not free random ([`wave-grid.jsx`][wg],
 `buildSeeds`). Three rules keep every variant plausible:
@@ -113,11 +169,23 @@ the quiet zone are fixed across every variant.
 With the dev server still running, in another terminal:
 
 ```
-npm run images:wavegrid          # exports the curated composition
-npm run images:wavegrid 7 32     # exports variants 7 and 32
+# /services
+npm run images:wavegrid                 # the curated composition  → curated.*
+npm run images:wavegrid 7 32            # variants 7 and 32        → wave-7.*, wave-32.*
+
+# homepage hero
+npm run images:wavegrid:home            # the curated composition  → home.*
+npm run images:wavegrid:home 7 32       # variants 7 and 32        → home-wave-7.*, home-wave-32.*
 ```
 
-Output lands in `public/images/wave-grid/{curated,wave-7,…}.{avif,webp}`.
+Output lands in `public/images/wave-grid/`. The two targets write under different
+names on purpose, so exporting one can never overwrite the other's shipped
+image — the thing that would otherwise happen the first time someone forgets the
+flag.
+
+(`images:wavegrid:home` is just `node scripts/export-wave-grid.mjs --page=home`;
+add a `--page` entry to `TARGETS` in that script if the grid ever lands on a
+third page.)
 
 **Expect 60–90 s per variant** and no output until each one finishes — most of it
 is AVIF encoding at effort 6, which trades CPU for those small files. It is not
@@ -129,9 +197,13 @@ project's dependencies for a script that runs a handful of times a year.
 
 ### 3. Ship it
 
-Point `DEFAULT_IMAGE` in [`wave-grid-backdrop.jsx`][wgb] at the filename you
-kept. Commit the `.avif` and `.webp` — they are build outputs, but they are the
-shipped asset.
+Point the page's constant at the filename you kept:
+
+- `/services` → `DEFAULT_IMAGE` in [`wave-grid-backdrop.jsx`][wgb]
+- homepage → `HOME_IMAGE` in [`hero-backdrop.jsx`][hb]
+
+Commit the `.avif` and `.webp` — they are build outputs, but they are the shipped
+asset, and nothing regenerates them at build time.
 
 [wgb]: ../src/components/pages/services/v2/shared/wave-grid-backdrop.jsx
 
@@ -142,6 +214,19 @@ the seed array the browser console prints under `?wave=N` into the `STILL`
 constant. Generated variants are reproducible from the number alone, so this is
 optional — but it makes the composition legible in the source instead of hidden
 behind a PRNG.
+
+⚠️ **`STILL` is shared by both pages.** Editing it changes the `/services` frame
+too, and that frame is the shipped image there — so re-export *both* afterwards
+and check `git status`. If the two pages ever want genuinely different seed
+tables, that is the point at which `STILL` has to become per-page, not a value to
+edit back and forth.
+
+### Changing the quiet zone instead
+
+If the problem is *where* the dark band sits rather than where the light falls,
+the ellipse is the dial, not the seeds — see the note under `CALM` on why
+steering seeds cannot do this job. `CALM` (services) and `HOME_CALM` (homepage)
+are independent, so either can move alone. Re-export the page you changed.
 
 ## The tuning dials
 
@@ -308,11 +393,21 @@ Two things worth knowing before anyone "fixes" this back:
 
 ## Known gaps
 
-- **Not verified on a real phone.** The image path removes the perf question, but
-  the composition at portrait aspect has only been reasoned about, not seen.
+- **Not verified on a real phone.** Both pages' image paths have been checked in
+  a browser at 390×844, which removes the perf question, but the composition at a
+  real portrait aspect on real hardware has still only been reasoned about.
 - **The offers index butts hard onto the grid.** Its `border-top` lands on lit
   pixels at the bottom edge — deliberate, so the grid does not visibly end, but
   worth a look.
-- **The exported image is a build artefact in git.** It must be re-exported
-  whenever the composition changes. That is what the script is for, but nothing
-  enforces it.
+- **The exported images are build artefacts in git.** They must be re-exported
+  whenever the composition changes, and there are two of them now. That is what
+  the script is for, but nothing enforces it. The cheap check after touching
+  anything in `wave-grid.jsx`: re-run both exports and confirm `git status` is
+  clean — if a file changed, either the change was unintended or the image needs
+  committing.
+- **Three homepage backdrop variants are alive at once** (`bends`, `cubes`,
+  `wave`). That is Phase 5 of
+  [homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md) and is meant to be
+  resolved, not left: the current mobile-bends/desktop-cubes split is the
+  inconsistency the wave hero exists to remove, and a third option makes it worse
+  until one is chosen.

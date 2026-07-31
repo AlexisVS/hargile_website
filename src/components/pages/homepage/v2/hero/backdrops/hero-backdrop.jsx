@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useSyncExternalStore} from "react";
 import styles from "../hero.module.scss";
 
 /* Hero backdrop switcher — lets us compare WebGL treatments without touching hero.jsx.
@@ -56,6 +56,73 @@ if (typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").ma
    changes, and an inline literal would be a new object on every render. */
 const HOME_CALM = {cx: -3.6, cz: 0.2, rx: 5.2, rz: 3.0, depth: 0.55};
 
+/* The exported still, for viewports that don't get the canvas. Its own file, not
+   the /services one: that image was composed against a different quiet ellipse
+   and a different hero aspect, so reusing it would put the dark band in the wrong
+   place. Produced by `npm run images:wavegrid:home` — see the export switch
+   below. */
+const IMAGE_DIR = "/images/wave-grid";
+const HOME_IMAGE = "home";
+
+/* Authoring switches on the wave variant, all absent in normal use:
+
+     /preview/home-wave                    → canvas above 1024px, still below
+     /preview/home-wave?wave=7             → composition 7, live, for picking
+     /preview/home-wave?export=2560x1600   → fixed-size render, for the script
+
+   Wired into this component rather than into a dedicated export route on
+   purpose. The exported image has to be the composition the live canvas draws,
+   and the only way to guarantee that is for both to come out of the same call
+   site with the same HOME_CALM — a second mounting of WaveGrid somewhere else is
+   exactly how the two would quietly drift apart.
+
+   Not useSearchParams: that would opt the whole homepage into dynamic rendering
+   to support debug flags. useSyncExternalStore because that is what this is —
+   external state sampled once — and it takes a server snapshot, so hydration is
+   correct rather than a mismatch React has to patch. subscribe is a no-op: the
+   URL cannot change here without a full navigation. */
+const subscribeToUrl = () => () => {};
+const readParams = () => window.location.search;
+const readParamsOnServer = () => "";
+
+const useWaveSwitches = () => {
+    const search = useSyncExternalStore(subscribeToUrl, readParams, readParamsOnServer);
+    const params = new URLSearchParams(search);
+
+    const rawWave = params.get("wave");
+    const wave = rawWave === null ? Number.NaN : Number.parseInt(rawWave, 10);
+
+    const rawExport = params.get("export");
+    const m = rawExport ? /^(\d{2,5})x(\d{2,5})$/.exec(rawExport) : null;
+
+    return {
+        variant: Number.isFinite(wave) ? wave : null,
+        exportSize: m ? {w: Number(m[1]), h: Number(m[2])} : null,
+    };
+};
+
+/* Which side of the wave grid's canvas/image split we're on. Three states, not
+   two: null means *unresolved*, and the wave branch renders nothing until the
+   effect lands. Defaulting to either side instead would mount the wrong one for
+   a beat — on phones that means paying for the three.js parse we are trying to
+   avoid, which is the entire point of the still.
+
+   1024 matches useHeroVariant's own breakpoint in hero.jsx, so the backdrop and
+   the hero's layout decision change together. */
+const useWaveWide = () => {
+    const [wide, setWide] = useState(null);
+
+    useEffect(() => {
+        const mq = window.matchMedia("(min-width: 1024px)");
+        const sync = () => setWide(mq.matches);
+        sync();
+        mq.addEventListener("change", sync);
+        return () => mq.removeEventListener("change", sync);
+    }, []);
+
+    return wide;
+};
+
 // The shader SUMS the stops (sumCol += uColors[i] * w) rather than interpolating
 // between them, so every stop adds light on every band. A near-black stop just
 // burns a slot; two brand blues is what reads as blue instead of washing toward
@@ -83,27 +150,76 @@ const usePortrait = () => {
     return portrait;
 };
 
-/* The wave grid's own breakpoint, matching the one /services uses (860px) rather
-   than the hero's 1024 — it switches the grid to a narrower, pinned-FOV framing
-   so phone pillars stay the same size as desktop ones, which is a question about
-   the canvas, not about the copy layout. */
-const useCompactGrid = () => {
-    const [compact, setCompact] = useState(false);
+/* WaveGrid's `compact` profile is deliberately never used here. It reframes the
+   grid for a narrow canvas, and on this page there is no narrow canvas: below
+   1024px the still image is served instead, and an export always uses the full
+   profile by design. Passing it would only affect the authoring paths, where it
+   would misrepresent what actually ships. */
 
-    useEffect(() => {
-        const mq = window.matchMedia("(max-width: 860px)");
-        const sync = () => setCompact(mq.matches);
-        sync();
-        mq.addEventListener("change", sync);
-        return () => mq.removeEventListener("change", sync);
-    }, []);
+/* The wave backdrop: a canvas on desktop, the exported still below 1024px.
 
-    return compact;
+   This is the split /services already ships, arrived at for the same reason — a
+   surface that never moves costs ~20 kB of AVIF against ~150 kB of three.js plus
+   the main-thread work of parsing it, building the instances and compiling two
+   shader programs. On the homepage the trade is even clearer, because the phone
+   is exactly where that work lands in the hydration window.
+
+   What it buys beyond the bytes is the thing this whole exercise was for: the
+   same cubes, the same colour, the same composition language on both viewports.
+   Desktop moves, mobile does not — instead of today's split where desktop gets
+   cubes and mobile gets colour bends, which are not the same design at all. */
+const WaveBackdrop = () => {
+    const {variant: wave, exportSize} = useWaveSwitches();
+    const wide = useWaveWide();
+
+    /* Both authoring switches force a *still* canvas at any width: an export
+       must capture one frame, and browsing compositions with ?wave=N is
+       browsing seeded still frames — live mode ignores the seed table entirely
+       and fills its trail from the pointer instead. */
+    const authored = exportSize !== null || wave !== null;
+
+    if (authored) {
+        return (
+            <WaveGrid
+                mode="still"
+                variant={wave}
+                exportSize={exportSize}
+                calm={HOME_CALM}
+            />
+        );
+    }
+
+    // Unresolved viewport — render neither rather than guessing. See useWaveWide.
+    if (wide === null) return null;
+
+    if (wide) return <WaveGrid mode="live" calm={HOME_CALM}/>;
+
+    return (
+        <picture>
+            {/* AVIF first, WebP fallback. The fallback is required, not
+                belt-and-braces: browserslist allows edge >= 111 and Edge only
+                shipped AVIF in 121. */}
+            <source srcSet={`${IMAGE_DIR}/${HOME_IMAGE}.avif`} type="image/avif"/>
+            <img
+                className={styles.waveStill}
+                src={`${IMAGE_DIR}/${HOME_IMAGE}.webp`}
+                alt=""
+                /* Intrinsic size of the export — the element is absolutely
+                   positioned, so this is about decode sizing, not layout. */
+                width={2560}
+                height={1600}
+                decoding="async"
+                /* Largest thing in the viewport and very likely the LCP element.
+                   Left to lazy defaults it arrives after the copy, which is the
+                   pop-in the canvas already had. */
+                fetchPriority="high"
+            />
+        </picture>
+    );
 };
 
 const HeroBackdrop = ({variant}) => {
     const portrait = usePortrait();
-    const compactGrid = useCompactGrid();
 
     // null = not resolved yet; "none" = deliberately no backdrop. Nothing to draw either way.
     if (!variant || variant === "none") return null;
@@ -141,9 +257,7 @@ const HeroBackdrop = ({variant}) => {
                 />
             )}
             {variant === "cubes" && <CubeGrid/>}
-            {variant === "wave" && (
-                <WaveGrid mode="live" compact={compactGrid} calm={HOME_CALM}/>
-            )}
+            {variant === "wave" && <WaveBackdrop/>}
         </div>
     );
 };
