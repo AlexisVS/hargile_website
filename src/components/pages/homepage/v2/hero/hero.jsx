@@ -14,6 +14,14 @@ const CARDS = [
     {key: "marketing", className: "floatCardC"},
 ];
 
+/* Backdrops made of hard-edged geometry rather than a gradient wash. They share
+   both of the hero's layout answers: the .sectionSharp mask (a straight fade
+   instead of a soft one, so the edges stay crisp) and the capability rail
+   instead of the floating cards — glass cards sitting on a lattice read as a
+   second grid fighting the first, whichever lattice it is. */
+const SHARP = ["cubes", "wave"];
+const isSharp = (variant) => SHARP.includes(variant);
+
 /* Cubes are a desktop treatment: they're pointer-driven (touch only ever sees
    idle ripples) and the WebGL cost is real on phones. Below the breakpoint the
    hero falls back to the color bends. matchMedia can't run during render (server
@@ -132,7 +140,7 @@ const HeroV2 = ({backdrop, label}) => {
     }, [backdropReady, markHeroReady]);
 
     return (
-        <section className={`${styles.section} ${variant === "cubes" ? styles.sectionSharp : ""}`}>
+        <section className={`${styles.section} ${isSharp(variant) ? styles.sectionSharp : ""}`}>
             <div ref={backdropRef} className={styles.backdropHost}>
                 <HeroBackdrop variant={variant}/>
             </div>
@@ -167,7 +175,7 @@ const HeroV2 = ({backdrop, label}) => {
                     </div>
                 </div>
 
-                {variant === "cubes" ? (
+                {isSharp(variant) ? (
                     /* Against the cube grid, floating cards fight the geometry — so
                        the services read as ONE object instead: a labelled column
                        where a vertical light spine threads three luminous dots (the

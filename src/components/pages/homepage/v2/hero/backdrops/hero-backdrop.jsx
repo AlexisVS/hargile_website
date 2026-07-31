@@ -9,11 +9,15 @@ import styles from "../hero.module.scss";
    also parses ?backdrop=<key>. It passes null until it has resolved the viewport
    (see the note there) and this renders nothing in the meantime. */
 
-export const VARIANTS = ["bends", "cubes", "none"];
+export const VARIANTS = ["bends", "cubes", "wave", "none"];
 
 // Three.js is client-only and ~150KB — keep every variant out of the initial bundle.
 const ColorBends = dynamic(() => import("@/components/vendor/color-bends/ColorBends"), {ssr: false});
 const CubeGrid = dynamic(() => import("./cube-grid"), {ssr: false});
+// The /services wave grid, in its live mode. Shared rather than reimplemented:
+// the two pages are meant to end up with one visual language, and a second copy
+// of that shader is how they'd stop having one.
+const WaveGrid = dynamic(() => import("@/components/pages/services/v2/shared/wave-grid"), {ssr: false});
 
 /* Desktop only: warm the cube-grid chunk at module evaluation rather than
    after mount + the useHeroVariant effect — the three.js download is what the
@@ -23,10 +27,34 @@ const CubeGrid = dynamic(() => import("./cube-grid"), {ssr: false});
    three.js parse/execute forward into the hydration window, which measured as
    +1.7 s of mobile TBT — the lazy mount path keeps that work after TTI.
    (A ?backdrop= override can still load the other variant later; that's the
-   debug path, not the cold-load path.) */
+   debug path, not the cold-load path.)
+
+   Not repeated for the wave chunk, and it doesn't need to be: what the loader
+   waits on is three.js itself, and the two backdrops share that chunk — warming
+   cube-grid warms the expensive half of wave too. Adding a second prefetch would
+   only fetch the shader module, and would do it on every homepage load for a
+   variant almost none of them use. */
 if (typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches) {
     import("./cube-grid");
 }
+
+/* The homepage's own quiet zone — deliberately NOT the /services ellipse.
+
+   That one is tuned to a single answer paragraph sitting in the left column of a
+   two-column hero (x -6.1…-0.1, z 0.3…2.1). This hero puts eyebrow, a large
+   headline, a paragraph and a CTA row down the same side, so the region to keep
+   dark is much taller: roughly the full vertical middle of the frame, against a
+   visible extent of about z ±3.9. Hence rz 3.0 rather than 1.9, and a centre
+   near the vertical middle rather than below it.
+
+   Shallower, though — depth 0.55 against the services 0.8. The .sectionSharp
+   mask (hero.module.scss) already fades the whole canvas out across the copy
+   side; stacking a full-depth damp under it flattened the left half to a dead
+   plate. The two are doing one job between them.
+
+   Module-level so the reference is stable: WaveGrid rebuilds its scene when this
+   changes, and an inline literal would be a new object on every render. */
+const HOME_CALM = {cx: -3.6, cz: 0.2, rx: 5.2, rz: 3.0, depth: 0.55};
 
 // The shader SUMS the stops (sumCol += uColors[i] * w) rather than interpolating
 // between them, so every stop adds light on every band. A near-black stop just
@@ -55,8 +83,27 @@ const usePortrait = () => {
     return portrait;
 };
 
+/* The wave grid's own breakpoint, matching the one /services uses (860px) rather
+   than the hero's 1024 — it switches the grid to a narrower, pinned-FOV framing
+   so phone pillars stay the same size as desktop ones, which is a question about
+   the canvas, not about the copy layout. */
+const useCompactGrid = () => {
+    const [compact, setCompact] = useState(false);
+
+    useEffect(() => {
+        const mq = window.matchMedia("(max-width: 860px)");
+        const sync = () => setCompact(mq.matches);
+        sync();
+        mq.addEventListener("change", sync);
+        return () => mq.removeEventListener("change", sync);
+    }, []);
+
+    return compact;
+};
+
 const HeroBackdrop = ({variant}) => {
     const portrait = usePortrait();
+    const compactGrid = useCompactGrid();
 
     // null = not resolved yet; "none" = deliberately no backdrop. Nothing to draw either way.
     if (!variant || variant === "none") return null;
@@ -94,6 +141,9 @@ const HeroBackdrop = ({variant}) => {
                 />
             )}
             {variant === "cubes" && <CubeGrid/>}
+            {variant === "wave" && (
+                <WaveGrid mode="live" compact={compactGrid} calm={HOME_CALM}/>
+            )}
         </div>
     );
 };

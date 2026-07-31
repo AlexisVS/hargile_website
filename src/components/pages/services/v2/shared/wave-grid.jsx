@@ -4,21 +4,28 @@ import {useEffect, useRef} from "react";
 import * as THREE from "three";
 import {isSoftwareRenderer} from "@/lib/webgl";
 
-/* Wave grid — a single composed still frame, built on the geometry and wave
-   maths of franky-adl/3d-wave-grid (src/ThreeJS/Stage.js, Effects/MouseTrail.js,
-   Camera.js), recoloured for our palette.
+/* Wave grid — the geometry and wave maths of franky-adl/3d-wave-grid
+   (src/ThreeJS/Stage.js, Effects/MouseTrail.js, Camera.js), recoloured for our
+   palette, in two modes off one implementation.
 
-   The upstream project is an interactive toy: a mouse trail feeds ripples into a
-   grid every frame forever. We keep its shape and drop its clock. One frame is
-   rendered at mount from a fixed set of seeded ripples, and nothing runs after
-   that — no rAF loop, no pointer listeners, no camera orbit. The section reads
-   as a slab of pillars caught mid-swell and lit in our blue, which is what it
-   was always for: a surface for the headline to sit on, not something to watch.
+   `mode="still"` (the default, what /services ships) keeps the shape and drops
+   the clock: one frame rendered at mount from a fixed set of seeded ripples, and
+   nothing after it — no rAF loop, no pointer listeners, no camera orbit. The
+   section reads as a slab of pillars caught mid-swell and lit in our blue, which
+   is what it was always for: a surface for the headline to sit on, not something
+   to watch. There is no per-frame cost at all, and it is inherently
+   reduced-motion-safe — no motion to reduce, so no fallback branch to keep
+   honest.
 
-   That buys a lot beyond the look. There is no per-frame cost at all, so the
-   phone-vs-desktop split is now purely about composition rather than budget, and
-   the whole thing is inherently reduced-motion-safe — there is no motion to
-   reduce, so no fallback branch to keep honest.
+   `mode="live"` restores the upstream behaviour: a mouse trail feeds ripples in,
+   idle ripples keep the surface alive when untouched, and the camera tilts with
+   the pointer. Same geometry, same shader, same colour ramp — only the seed
+   source (a fixed table vs. a ring buffer written every few pointer moves) and
+   the presence of a loop differ. One component rather than a fork, because the
+   shader is the bulk of the file and two copies of it would drift.
+
+   Live still degrades to a single still frame under prefers-reduced-motion or a
+   software rasteriser, so the loop is never the thing that has to be trusted.
 
    Geometry is the original's, not the homepage cube-grid.jsx simplification: a
    slab of tall pillars (0.8 wide, 3 high, gap 0.01, so they nearly touch) where
@@ -67,10 +74,16 @@ const STILL = [
     {x: -8.4, z: -0.6, age: 3.4, strength: 0.8},
 ];
 
-/* The shader loops over exactly the seeds that exist — with no live trail there
-   is nothing to leave headroom for. This is a compile-time constant in GLSL, so
-   generated variants must produce exactly this many seeds too. */
-const TRAIL_LEN = STILL.length;
+/* In still mode the shader loops over exactly the seeds that exist — with no
+   live trail there is nothing to leave headroom for. This is a compile-time
+   constant in GLSL, so generated variants must produce exactly this many seeds
+   too. */
+const STILL_LEN = STILL.length;
+
+/* Live mode's ring buffer. The loop runs per vertex and again in the shadow
+   pass, so this is a real cost, not just texture width — upstream's 128 doubles
+   it for trail history that has already faded below visibility. */
+const LIVE_LEN = 64;
 
 /* ---- Variant generator (?wave=N on /services) ----------------------------
    Composing these by hand is slow and I can't see the result, so this makes
@@ -104,7 +117,7 @@ const buildSeeds = (variant) => {
 
     // Bounded rather than while(true): a rejection loop that can't fill its quota
     // would otherwise hang the mount.
-    for (let guard = 0; guard < 4000 && out.length < TRAIL_LEN; guard++) {
+    for (let guard = 0; guard < 4000 && out.length < STILL_LEN; guard++) {
         const x = -9.5 + rnd() * 19;
         const z = -5.2 + rnd() * 10.4;
 
@@ -125,26 +138,65 @@ const buildSeeds = (variant) => {
 
     // Short only if the rejection loop ran out — pad from the curated set so the
     // texture is always fully populated and the shader never reads stale texels.
-    while (out.length < TRAIL_LEN) out.push(STILL[out.length]);
+    while (out.length < STILL_LEN) out.push(STILL[out.length]);
     return out;
 };
 
 const WAVE = {
-    /* Amplitude and maxHeight are both well above the interactive version's
-       0.4/0.45. Moving, a low swell is legible because the eye tracks change;
-       frozen, the same heights read as an almost-flat floor with a faint tint.
-       0.8 of a 3-unit pillar is a third of its height — enough that the frame
-       reads as pillars standing at visibly different heights, which is the
-       "opened up" part, without turning the grid into spikes. */
-    amplitude: 1.0,
-    maxHeight: 0.8,
-    // Shape of each ripple. Unchanged from the interactive tuning — speed only
-    // matters here as the multiplier that turns a seed's age into its radius.
+    /* Shape of each ripple — shared by both modes.
+
+       speed is well under upstream's 6.0, which crosses the frame in under a
+       second and leaves constant motion in the reader's periphery. fadeTime has
+       to rise with it: the fade is on age, so a slower front covers far less
+       ground before it dies. The two are a pair — change one and the ripple
+       either dies before it has travelled or outlives the frame.
+
+       In still mode speed only matters as the multiplier that turns a seed's
+       age into its radius. */
     speed: 2.2,
     frequency: 1.2,
     width: 3.0,
     jitter: 0.2,
     fadeTime: 3.0,
+};
+
+/* Rise, per mode — the one constant that must NOT be shared.
+
+   Moving, a low swell is legible because the eye tracks change. Frozen, the same
+   heights read as an almost-flat floor with a faint tint, so the still frame
+   needs roughly double: 0.8 of a 3-unit pillar is a third of its height, enough
+   that the frame reads as pillars standing at visibly different heights without
+   turning the grid into spikes.
+
+   Copying the still values into the live path is the mistake to avoid — it looks
+   spiky and over-lit, because the emissive lift in the fragment shader keys off
+   height and every passing ripple then peaks it. */
+const RISE = {
+    still: {amplitude: 1.0, maxHeight: 0.8},
+    live: {amplitude: 0.4, maxHeight: 0.45},
+};
+
+/* Live-mode pointer trail.
+
+   spacing is the minimum world-space gap between consecutive ripples: at
+   upstream's 0.1 a single brisk sweep dumps dozens of overlapping fronts and the
+   whole grid boils. idleAfter/idleEvery keep the surface alive when nothing is
+   moving — at upstream's 1.5s cadence against our 3s fade the grid never rests,
+   so ambient ripples come four seconds apart instead.
+
+   idleSpread is in world units, not grid cells. The camera is zoomed well inside
+   the slab (RADIUS 14 against a 40² grid), so a grid-relative spread spawns most
+   ambient ripples off-screen, where they fade before their front ever arrives. */
+const TRAIL = {
+    spacing: 0.35,
+    idleAfter: 3.0,
+    idleEvery: 4.0,
+    idleSpread: 5.0,
+    idleStrength: 0.9,
+    // Ripples die at fadeTime × 4 (exp(-4) ≈ 1.8%), past which a front is still
+    // expanding through the grid while contributing nothing but weight to the
+    // normalising sum.
+    maxAge: 4,
 };
 
 /* The quiet zone: an ellipse in world xz where the wave is damped, so the copy
@@ -173,9 +225,11 @@ const CALM = {cx: -3.1, cz: 1.2, rx: 4.4, rz: 1.9, depth: 0.8};
 const RIM_IN = 0.8;
 const RIM_OUT = 1.35;
 
-/* Two profiles, now purely about framing — with one frame there is no budget
-   argument left. grid is how far the slab extends (margin so its outer edge can
-   never enter frame), fov is null for "derive from aspect". */
+/* Two profiles, about framing. grid is how far the slab extends (margin so its
+   outer edge can never enter frame), fov is null for "derive from aspect".
+
+   For a still frame there is no budget argument left, so both can be generous.
+   A loop is a different question — see LIVE_GRID. */
 const PROFILES = {
     full: {grid: 48, fov: null, calm: CALM},
     /* Portrait aspects fall below REF_ASPECT, where the lock below is a no-op and
@@ -189,6 +243,15 @@ const PROFILES = {
        on phones instead. */
     compact: {grid: 28, fov: 30, calm: {...CALM, depth: 0}},
 };
+
+/* Live mode caps the slab at 40² = 1600 pillars rather than 48² = 2304. Every
+   one of them runs the trail loop in the vertex shader and again in the shadow
+   pass, sixty times a second — a 30% instance cut is the cheapest frame-time
+   dial there is, and at RADIUS 14 the 40² slab's outer edge is still ~16 world
+   units out against a visible half-width of ~8. Nothing that was in frame
+   leaves it. The compact profile is already below this, so the cap is a floor
+   only for the full one. */
+const LIVE_GRID = 40;
 
 /* Camera: the original orbits above the grid and lets the pointer nudge it off
    vertical. We keep the geometry of that and pick one fixed spot on it.
@@ -204,6 +267,20 @@ const RADIUS = 14;
 const ALPHA_RANGE = Math.PI * 0.03;
 const BETA_RANGE = Math.PI * 0.05;
 const STILL_VIEW = {mx: -0.55, my: 0.65}; // normalised within the ranges above
+
+/* Live mode keeps that same vantage as its rest pose and lets the pointer swing
+   it, rather than resting dead overhead the way upstream does. Overhead is where
+   pillars show only their tops and height differences survive as colour alone —
+   tolerable while everything is moving, but it is also what the frame settles
+   back to the moment the pointer leaves, and settling into the flat pose is the
+   worst of both. The swing is a fraction of the ranges so the tilt reads as the
+   surface responding, not as the camera being dragged.
+
+   The chase is a fixed fraction per frame, as upstream: at 60fps it is a ~0.4 s
+   settle, and it is deliberately not made frame-rate-independent because the
+   gate below stops the loop entirely rather than letting it run slow. */
+const LIVE_SWING = 0.45;
+const LIVE_LERP = 0.04;
 
 /* Vertical FOV is only the whole story at the demo's roughly-16:9 full-screen
    box. A hero is much wider than it is tall, and horizontal coverage grows with
@@ -225,14 +302,20 @@ const COLOR_MID = "#96b9f9";  // $accent-mihai — the dominant lit tone
 const COLOR_HIGH = "#dce7fd"; // crest highlight, same ramp as the h1 gradient
 
 /* Shared by the visible material and the shadow depth material: the displaced
-   silhouette has to match, or pillars cast the shadow of their rest pose. */
-const patchVertexShader = (vertexShader) =>
+   silhouette has to match, or pillars cast the shadow of their rest pose.
+
+   trailLen is baked in rather than passed as a uniform because a GLSL loop bound
+   must be a compile-time constant — which is also why the two modes compile two
+   different programs rather than one sized for the worst case. */
+const patchVertexShader = (vertexShader, trailLen) =>
     vertexShader
         .replace(
             "#include <common>",
             `#include <common>
              varying float vHeight;
              uniform sampler2D uTrailTexture;
+             uniform float uTrailCount;
+             uniform float uTime;
              uniform float uWaveSpeed;
              uniform float uWaveFreq;
              uniform float uWaveWidth;
@@ -271,15 +354,27 @@ const patchVertexShader = (vertexShader) =>
                  float waveHeight = 0.0;
                  float totalWeight = 0.0;
 
-                 // seed texel: r = world x, g = world z, b = age, a = strength
-                 for (int i = 0; i < ${TRAIL_LEN}; i++) {
+                 // seed texel: r = world x, g = world z, b = spawn time, a = strength
+                 for (int i = 0; i < ${trailLen}; i++) {
+                     // Live mode's ring buffer fills over time, and an unwritten
+                     // texel is a full-strength ripple sitting at the origin.
+                     // Still mode pins this to its seed count, so the guard is
+                     // free there.
+                     if (float(i) >= uTrailCount) break;
+
                      vec4 td = texelFetch(uTrailTexture, ivec2(i, 0), 0);
 
+                     // Still mode has no clock: uTime stays 0 and a seed's spawn
+                     // time is simply minus its age, so this expression is the
+                     // authored age unchanged.
+                     float age = uTime - td.b;
+                     if (age < 0.0 || age > uFadeTime * ${TRAIL.maxAge.toFixed(1)}) continue;
+
                      float dist = length(worldXZ - td.rg);
-                     float relDist = dist - uWaveSpeed * td.b;
+                     float relDist = dist - uWaveSpeed * age;
 
                      float window = exp(-(relDist * relDist) / (uWaveWidth * uWaveWidth));
-                     float fade = exp(-td.b / uFadeTime);
+                     float fade = exp(-age / uFadeTime);
                      float atten = 1.0 / (1.0 + dist * 0.1);
                      float weight = fade * window * atten * td.a;
 
@@ -322,13 +417,28 @@ const patchVertexShader = (vertexShader) =>
    since we render exactly once and never again, by the time anything reads the
    canvas it would otherwise be blank. Off by default — preserving the buffer
    costs memory and blocks some driver fast paths, which a live page shouldn't
-   pay for a feature only the export uses. */
-const WaveGrid = ({compact = false, variant = null, exportSize = null}) => {
+   pay for a feature only the export uses.
+
+   `calm` overrides the quiet ellipse. The default is tuned to the /services copy
+   box; any other layout needs its own, and the values are not transferable —
+   see CALM. Pass `{depth: 0}` for none at all. It must be a stable reference (a
+   module constant, not an inline literal): it is an effect dependency, and the
+   effect tears down and rebuilds the entire scene.
+
+   `mode` is "still" or "live". An export is always still: the whole point is a
+   single frame, and a live composition would capture whichever moment the
+   script happened to ask on. */
+const WaveGrid = ({
+    compact = false,
+    variant = null,
+    exportSize = null,
+    mode = "still",
+    calm = null,
+}) => {
     const mountRef = useRef(null);
 
-    // Rebuilds on breakpoint or variant change — grid extent, FOV and the seed
-    // texture are all baked in at construction, and there is no loop that could
-    // pick up a change in place.
+    // Rebuilds on breakpoint, variant or mode change — grid extent, FOV, the
+    // shader's loop bound and the seed texture are all baked in at construction.
     useEffect(() => {
         const mount = mountRef.current;
         if (!mount) return;
@@ -337,7 +447,7 @@ const WaveGrid = ({compact = false, variant = null, exportSize = null}) => {
         // every viewport and object-fit: cover does the reframing, so baking the
         // phone profile's narrower field of view into it would double-crop.
         const profile = compact && !exportSize ? PROFILES.compact : PROFILES.full;
-        const GRID = profile.grid;
+        const quiet = calm ?? profile.calm;
 
         let renderer;
         try {
@@ -356,18 +466,38 @@ const WaveGrid = ({compact = false, variant = null, exportSize = null}) => {
            there is exactly one frame to pay for — except on a software rasteriser
            (Lighthouse, VMs, blocklisted drivers), where that frame is drawn on the
            CPU and the depth pass doubles a cost already measured in seconds. */
-        const shadows = !isSoftwareRenderer(renderer.getContext());
+        const software = isSoftwareRenderer(renderer.getContext());
+        const shadows = !software;
 
-        /* DPR 2 rather than the 1.5 the animated version used. Fill rate is
-           irrelevant for a single frame, and a still image is where aliasing on
-           thousands of hard pillar edges is actually noticeable.
+        /* Whether anything actually moves. Live mode degrades to the still frame
+           under prefers-reduced-motion and on a software rasteriser — the same
+           two cases cube-grid.jsx collapses, and for the same reason: a loop the
+           CPU is drawing is the desktop TBT problem, and a backdrop is never
+           worth an accessibility exception. Everything downstream keys off this
+           rather than off `mode`, so the fallback is one branch and not a
+           scattering of them. */
+        const animate = mode === "live" && !exportSize && !software
+            && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        /* The slab, and how many seeds the shader loops over. Both are baked into
+           the compiled program (the loop bound literally so), which is why a mode
+           change tears the whole scene down and rebuilds it. */
+        const GRID = animate ? Math.min(profile.grid, LIVE_GRID) : profile.grid;
+        const trailLen = animate ? LIVE_LEN : STILL_LEN;
+
+        /* Still gets DPR 2: fill rate is irrelevant for a single frame, and a
+           still image is where aliasing on thousands of hard pillar edges is
+           actually noticeable. A loop pays that cost sixty times a second for a
+           difference nobody can see while it moves, so live caps at 1.5 —
+           ~44% fewer fragments than 2.
 
            An export sets its pixel count outright, so DPR is pinned to 1 and the
            dimensions carry the resolution — otherwise the output size would
            depend on whatever screen happened to run the script. updateStyle is
            false for the same reason: the canvas element's CSS size is irrelevant
            when the pixels are being read rather than displayed. */
-        renderer.setPixelRatio(exportSize ? 1 : Math.min(window.devicePixelRatio, shadows ? 2 : 1));
+        const maxDpr = exportSize ? 1 : animate ? 1.5 : shadows ? 2 : 1;
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxDpr));
         if (exportSize) {
             renderer.setSize(exportSize.w, exportSize.h, false);
         } else {
@@ -394,17 +524,20 @@ const WaveGrid = ({compact = false, variant = null, exportSize = null}) => {
 
         // Orbit from the original's Camera.js: start at (0, r, 0), rotate about X
         // by alpha then about Z by beta. up is -z because straight-down leaves the
-        // default up parallel to the view direction. Called once — this is a fixed
-        // vantage point, not a follow.
-        const alpha = STILL_VIEW.my * ALPHA_RANGE;
-        const beta = STILL_VIEW.mx * BETA_RANGE;
-        camera.position.set(
-            -RADIUS * Math.cos(alpha) * Math.sin(beta),
-            RADIUS * Math.cos(alpha) * Math.cos(beta),
-            RADIUS * Math.sin(alpha),
-        );
+        // default up parallel to the view direction. Still mode calls this once —
+        // a fixed vantage point, not a follow; live re-aims it every frame.
         camera.up.set(0, 0, -1);
-        camera.lookAt(0, 0, 0);
+        const aimCamera = (mx, my) => {
+            const alpha = my * ALPHA_RANGE;
+            const beta = mx * BETA_RANGE;
+            camera.position.set(
+                -RADIUS * Math.cos(alpha) * Math.sin(beta),
+                RADIUS * Math.cos(alpha) * Math.cos(beta),
+                RADIUS * Math.sin(alpha),
+            );
+            camera.lookAt(0, 0, 0);
+        };
+        aimCamera(STILL_VIEW.mx, STILL_VIEW.my);
         scene.add(camera);
 
         // Cooler and dimmer than the original's white 0.5 / 4.0 pair: the floor has
@@ -416,7 +549,12 @@ const WaveGrid = ({compact = false, variant = null, exportSize = null}) => {
         key.position.set(-20, 10, 6);
         if (shadows) {
             key.castShadow = true;
-            key.shadow.mapSize.set(1024, 1024);
+            // 512 while it moves. The map is re-rendered every frame from a full
+            // second pass over all 1600 pillars, and softening (radius 4) blurs
+            // most of the resolution difference away anyway — on a still frame,
+            // where it is drawn once and stared at, the full map is worth it.
+            const shadowMap = animate ? 512 : 1024;
+            key.shadow.mapSize.set(shadowMap, shadowMap);
             key.shadow.radius = 4;
             key.shadow.camera.near = 0.1;
             key.shadow.camera.far = 60;
@@ -438,22 +576,67 @@ const WaveGrid = ({compact = false, variant = null, exportSize = null}) => {
         fill.position.set(10, 5, -3);
         scene.add(fill);
 
-        // --- Seed texture: {x, z, age, strength} per texel, written once ---
-        // null variant = the curated composition; a number = generated (?wave=N).
-        const seeds = variant === null ? STILL : buildSeeds(variant);
-        const seedData = new Float32Array(TRAIL_LEN * 4);
-        seeds.forEach((p, i) => {
-            const o = i * 4;
-            seedData[o] = p.x;
-            seedData[o + 1] = p.z;
-            seedData[o + 2] = p.age;
-            seedData[o + 3] = p.strength;
-        });
+        /* --- Seed texture: {x, z, spawn time, strength} per texel ---
+
+           Still mode writes it once from the composition and never touches it
+           again. Live mode uses it as a ring buffer, overwriting the oldest
+           entry as new ripples arrive. Same layout, same shader, so the still
+           frame is simply the live surface with the clock stopped.
+
+           uTime is 0 in still mode, so a seed's spawn time is minus its age (see
+           the shader's `age` line). Signed, not absolute: an "age" is how long
+           ago it happened, and a clock that never advances makes that a negative
+           timestamp. */
+        const seedData = new Float32Array(trailLen * 4);
         const seedTexture = new THREE.DataTexture(
-            seedData, TRAIL_LEN, 1, THREE.RGBAFormat, THREE.FloatType,
+            seedData, trailLen, 1, THREE.RGBAFormat, THREE.FloatType,
         );
         seedTexture.minFilter = seedTexture.magFilter = THREE.NearestFilter;
         seedTexture.needsUpdate = true;
+
+        let trailHead = 0;
+        let trailCount = 0;
+
+        const pushSeed = (x, z, spawn, strength) => {
+            const o = trailHead * 4;
+            seedData[o] = x;
+            seedData[o + 1] = z;
+            seedData[o + 2] = spawn;
+            seedData[o + 3] = strength;
+            seedTexture.needsUpdate = true;
+            trailHead = (trailHead + 1) % trailLen;
+            trailCount = Math.min(trailCount + 1, trailLen);
+            uniforms.uTrailCount.value = trailCount;
+        };
+
+        // null variant = the curated composition; a number = generated (?wave=N).
+        const seeds = variant === null ? STILL : buildSeeds(variant);
+
+        const rise = animate ? RISE.live : RISE.still;
+
+        // Shared by reference into both shaders, so the depth pass displaces
+        // identically to the visible one.
+        const uniforms = {
+            uTrailTexture: {value: seedTexture},
+            uTrailCount: {value: 0},
+            uTime: {value: 0},
+            uFadeTime: {value: WAVE.fadeTime},
+            uWaveSpeed: {value: WAVE.speed},
+            uWaveFreq: {value: WAVE.frequency},
+            uWaveWidth: {value: WAVE.width},
+            uAmplitude: {value: rise.amplitude},
+            uJitter: {value: WAVE.jitter},
+            uMaxHeight: {value: rise.maxHeight},
+            uCalmCenter: {value: new THREE.Vector2(quiet.cx, quiet.cz)},
+            uCalmRadius: {value: new THREE.Vector2(quiet.rx, quiet.rz)},
+            uCalmDepth: {value: quiet.depth},
+        };
+
+        // Live mode's buffer starts empty and fills from the pointer; the still
+        // one is the composition, written now and never again. The reduced-motion
+        // and software fallbacks land here too — which is the point: they get the
+        // authored frame, not a frozen arbitrary moment of the live one.
+        if (!animate) seeds.forEach((p) => pushSeed(p.x, p.z, -p.age, p.strength));
 
         /* Printed so a variant you like can be copied straight into STILL — the
            whole point of browsing them is being able to keep one. Only ever runs
@@ -461,22 +644,6 @@ const WaveGrid = ({compact = false, variant = null, exportSize = null}) => {
         if (variant !== null) {
             console.log(`wave-grid variant ${variant}\n${JSON.stringify(seeds, null, 4)}`);
         }
-
-        // Shared by reference into both shaders, so the depth pass displaces
-        // identically to the visible one.
-        const uniforms = {
-            uTrailTexture: {value: seedTexture},
-            uFadeTime: {value: WAVE.fadeTime},
-            uWaveSpeed: {value: WAVE.speed},
-            uWaveFreq: {value: WAVE.frequency},
-            uWaveWidth: {value: WAVE.width},
-            uAmplitude: {value: WAVE.amplitude},
-            uJitter: {value: WAVE.jitter},
-            uMaxHeight: {value: WAVE.maxHeight},
-            uCalmCenter: {value: new THREE.Vector2(profile.calm.cx, profile.calm.cz)},
-            uCalmRadius: {value: new THREE.Vector2(profile.calm.rx, profile.calm.rz)},
-            uCalmDepth: {value: profile.calm.depth},
-        };
 
         // --- Instanced pillars ---
         const geometry = new THREE.BoxGeometry(CUBE_W, CUBE_H, CUBE_W);
@@ -488,7 +655,7 @@ const WaveGrid = ({compact = false, variant = null, exportSize = null}) => {
             shader.uniforms.uColorMid = {value: new THREE.Color(COLOR_MID)};
             shader.uniforms.uColorHigh = {value: new THREE.Color(COLOR_HIGH)};
 
-            shader.vertexShader = patchVertexShader(shader.vertexShader);
+            shader.vertexShader = patchVertexShader(shader.vertexShader, trailLen);
 
             shader.fragmentShader = shader.fragmentShader
                 .replace(
@@ -536,7 +703,7 @@ const WaveGrid = ({compact = false, variant = null, exportSize = null}) => {
             depthMaterial = new THREE.MeshDepthMaterial();
             depthMaterial.onBeforeCompile = (shader) => {
                 Object.assign(shader.uniforms, uniforms);
-                shader.vertexShader = patchVertexShader(shader.vertexShader);
+                shader.vertexShader = patchVertexShader(shader.vertexShader, trailLen);
             };
         }
 
@@ -557,13 +724,149 @@ const WaveGrid = ({compact = false, variant = null, exportSize = null}) => {
         mesh.instanceMatrix.needsUpdate = true;
         scene.add(mesh);
 
-        // The whole render budget, spent once.
-        renderer.render(scene, camera);
+        /* ---- Live mode: the pointer feed, the loop, and the gate over it ----
+           None of this is constructed in still mode: the listeners would feed a
+           texture nothing ever re-reads, and the observers would gate a loop that
+           does not exist. */
 
-        /* Re-render on resize — the only thing that can invalidate the frame. The
-           FOV is recomputed rather than just the aspect: the lock is a function of
-           aspect, so keeping its mount-time value would let a resize toward wide
-           re-open the horizontal frustum and bring the grid edge into view. */
+        // Timer, not Clock — Clock is deprecated as of three r183 and warns on
+        // construction. Timer only advances when update() is called, which is
+        // once per rendered frame, so elapsed freezes while the loop is gated off
+        // instead of running on wall time and ageing the whole trail out.
+        const timer = new THREE.Timer();
+
+        // Pointer → ground plane. The wave is computed on world xz and the camera
+        // is tilted with up = -z, so screen position maps to the plane through the
+        // projection, not by any shortcut.
+        const raycaster = new THREE.Raycaster();
+        const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+        const ndc = new THREE.Vector2();
+        const hit = new THREE.Vector3();
+
+        let lastSeed = null;   // world xz of the last ripple, for the spacing test
+        let lastMove = 0;      // when the pointer was last in bounds, for the idle gate
+        let nextIdle = TRAIL.idleEvery;
+        // Camera tilt: a target the pointer sets and a current the loop chases.
+        const view = {mx: STILL_VIEW.mx, my: STILL_VIEW.my};
+        const viewTarget = {mx: STILL_VIEW.mx, my: STILL_VIEW.my};
+
+        const onPointerMove = (e) => {
+            const r = mount.getBoundingClientRect();
+            /* The canvas is pointer-events: none, so the listener has to live on
+               window — which means it fires for movement anywhere on the page.
+               Without this bounds test the grid ripples from a pointer that is
+               nowhere near it, which reads as the surface moving on its own. */
+            if (
+                e.clientX < r.left || e.clientX > r.right ||
+                e.clientY < r.top || e.clientY > r.bottom
+            ) {
+                // Drop the anchor on the way out. Re-entering elsewhere would
+                // otherwise measure the jump across the gap as one huge delta and
+                // fire a max-strength ripple.
+                lastSeed = null;
+                viewTarget.mx = STILL_VIEW.mx;
+                viewTarget.my = STILL_VIEW.my;
+                return;
+            }
+
+            const nx = ((e.clientX - r.left) / r.width) * 2 - 1;
+            const ny = -((e.clientY - r.top) / r.height) * 2 + 1;
+
+            // Around the rest pose, not from zero — see LIVE_SWING.
+            viewTarget.mx = STILL_VIEW.mx + nx * LIVE_SWING;
+            viewTarget.my = STILL_VIEW.my + ny * LIVE_SWING;
+
+            ndc.set(nx, ny);
+            raycaster.setFromCamera(ndc, camera);
+            if (!raycaster.ray.intersectPlane(plane, hit)) return;
+
+            const now = timer.getElapsed();
+            lastMove = now;
+
+            if (!lastSeed) {
+                // First sample after entering: nothing to measure speed against,
+                // so anchor here and let the next move do the work. Firing at full
+                // strength on entry made every pass over the section announce
+                // itself with a slam.
+                lastSeed = {x: hit.x, z: hit.z};
+                return;
+            }
+
+            const d = Math.hypot(hit.x - lastSeed.x, hit.z - lastSeed.z);
+            if (d < TRAIL.spacing) return;
+
+            /* Strength proportional to pointer speed — d is distance since the
+               last ripple, and the spacing test above makes that a rate. A crawl
+               produces almost nothing; the cap stops a fast flick from slamming
+               the whole grid at once. */
+            const strength = Math.min(0.35 + d * 0.55, 1.2);
+            lastSeed = {x: hit.x, z: hit.z};
+            pushSeed(hit.x, hit.z, now, strength);
+        };
+
+        // Leaving the viewport entirely never fires an out-of-bounds pointermove,
+        // so without this the tilt would sit frozen at the exit point.
+        const onDocLeave = () => {
+            lastSeed = null;
+            viewTarget.mx = STILL_VIEW.mx;
+            viewTarget.my = STILL_VIEW.my;
+        };
+
+        /* Ambient ripples, so the grid isn't dead when untouched — and on touch,
+           where there is no hover, this is the entire response. Placed in world
+           units near the centre because that is the only part of the slab the
+           camera can see; a grid-relative spread would spawn most of them
+           off-screen, where they fade before their front arrives. */
+        const idleTick = (t) => {
+            if (t - lastMove < TRAIL.idleAfter) return;
+            if (t < nextIdle) return;
+            pushSeed(
+                (Math.random() * 2 - 1) * TRAIL.idleSpread,
+                (Math.random() * 2 - 1) * TRAIL.idleSpread,
+                t,
+                TRAIL.idleStrength,
+            );
+            nextIdle = t + TRAIL.idleEvery;
+        };
+
+        let frame = null;
+
+        const render = () => {
+            timer.update();
+            const t = timer.getElapsed();
+            uniforms.uTime.value = t;
+
+            idleTick(t);
+
+            view.mx += (viewTarget.mx - view.mx) * LIVE_LERP;
+            view.my += (viewTarget.my - view.my) * LIVE_LERP;
+            aimCamera(view.mx, view.my);
+
+            renderer.render(scene, camera);
+        };
+
+        const loop = () => {
+            render();
+            frame = requestAnimationFrame(loop);
+        };
+
+        if (animate) {
+            window.addEventListener("pointermove", onPointerMove);
+            document.addEventListener("mouseleave", onDocLeave);
+            loop();
+        } else {
+            // The whole render budget, spent once.
+            renderer.render(scene, camera);
+        }
+
+        /* Re-render on resize. In still mode this is the only thing that can
+           invalidate the frame; in live mode the loop redraws anyway, so the
+           render() call at the end is the still path's alone.
+
+           The FOV is recomputed rather than just the aspect: the lock is a
+           function of aspect, so keeping its mount-time value would let a resize
+           toward wide re-open the horizontal frustum and bring the grid edge
+           into view. */
         const onResize = () => {
             // An export is pinned to its requested dimensions — resizing the
             // window mid-capture must not change what gets written to disk.
@@ -573,11 +876,43 @@ const WaveGrid = ({compact = false, variant = null, exportSize = null}) => {
             camera.fov = fovFor(camera.aspect);
             camera.updateProjectionMatrix();
             renderer.setSize(mount.clientWidth, mount.clientHeight);
-            renderer.render(scene, camera);
+            if (!animate) renderer.render(scene, camera);
         };
         window.addEventListener("resize", onResize);
 
+        /* Two gates over one loop: run only while the hero intersects the
+           viewport AND the tab is visible. Either alone leaks frames — a hidden
+           tab keeps intersecting, and a scrolled-past section keeps a visible
+           tab. */
+        let intersecting = true;
+        const syncRunning = () => {
+            if (!animate) return;
+            const shouldRun = intersecting && !document.hidden;
+            if (shouldRun && !frame) {
+                loop();
+            } else if (!shouldRun && frame) {
+                cancelAnimationFrame(frame);
+                frame = null;
+            }
+        };
+
+        const observer = animate
+            ? new IntersectionObserver(([entry]) => {
+                intersecting = entry.isIntersecting;
+                syncRunning();
+            }, {threshold: 0})
+            : null;
+        observer?.observe(mount);
+
+        const onVisibility = () => syncRunning();
+        if (animate) document.addEventListener("visibilitychange", onVisibility);
+
         return () => {
+            if (frame) cancelAnimationFrame(frame);
+            observer?.disconnect();
+            document.removeEventListener("visibilitychange", onVisibility);
+            window.removeEventListener("pointermove", onPointerMove);
+            document.removeEventListener("mouseleave", onDocLeave);
             window.removeEventListener("resize", onResize);
             geometry.dispose();
             material.dispose();
@@ -588,7 +923,7 @@ const WaveGrid = ({compact = false, variant = null, exportSize = null}) => {
                 mount.removeChild(renderer.domElement);
             }
         };
-    }, [compact, variant, exportSize]);
+    }, [compact, variant, exportSize, mode, calm]);
 
     return <div ref={mountRef} style={{position: "absolute", inset: 0}}/>;
 };

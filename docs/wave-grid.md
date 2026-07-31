@@ -2,6 +2,11 @@
 
 > Written 2026-07-31. Covers what shipped in `feat(services): wave-grid still on
 > the hero, with its export pipeline`, and how to make new compositions.
+>
+> **Amended the same day.** `wave-grid.jsx` also has a `mode="live"` now, used by
+> the homepage wave hero. Everything below is about the still mode `/services`
+> ships and is unaffected by it — see [Live mode](#live-mode) at the end, and
+> [homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md) for the why.
 
 ## What it is
 
@@ -18,7 +23,7 @@ that one is a heavy simplification and this is the original.
 | grid | 26² spaced apart | 48² with a 0.01 gap — one solid floor |
 | camera | 3/4 view, fixed | near-overhead, small fixed tilt |
 | shadows | none | real, cast from the displaced silhouette |
-| motion | live, pointer-driven | **none — a single still frame** |
+| motion | live, pointer-driven | **none — a single still frame** (`mode="live"` exists, but not here) |
 
 Only the top half of each box moves, so pillars *stretch* rather than float:
 their bases stay welded into one surface. That, plus the near-overhead camera,
@@ -210,6 +215,53 @@ CLIs as a `.cmd` shim; `execFile` cannot run a batch file, and routing through
 `cmd.exe` means Node cannot safely quote a URL containing `&`, so
 `?export=…&wave=N` gets truncated. The script finds the shim on `PATH` and hands
 its `.js` entry straight to `node`.
+
+## Live mode
+
+`/services` never uses it, and nothing above changes. It is documented here
+because it lives in the same file, and because the one-file decision is the part
+that needs defending.
+
+`mode="live"` (default `"still"`) turns the component back into the interactive
+toy upstream wrote: a pointer trail feeding ripples in, ambient ripples when
+untouched, a camera that tilts with the pointer, and a rAF loop gated by an
+`IntersectionObserver` **and** `visibilitychange` — either alone leaks frames, a
+hidden tab keeps intersecting and a scrolled-past section keeps a visible tab.
+It degrades to a single still frame under `prefers-reduced-motion` and on a
+software rasteriser, so the loop is never the thing that has to be trusted.
+
+**One component, not a fork.** Geometry, shader, colour ramp, quiet zone and
+camera orbit are identical between the two; only the seed source and the presence
+of a loop differ. The shader is the bulk of the file, and two copies of it would
+have drifted within a month.
+
+The trick that keeps it one path: the texel is `{x, z, spawnTime, strength}` and
+the shader computes `age = uTime - spawn`. **Still mode is a stopped clock** —
+`uTime` stays 0 and each seed's spawn is stored as minus its age, so the
+expression is the authored age unchanged. The still frame is literally the live
+surface with the clock stopped, which is also why the export can never drift from
+what the live path draws.
+
+Two things genuinely differ, and both are load-bearing:
+
+| | still | live |
+| --- | --- | --- |
+| amplitude / maxHeight | 1.0 / 0.8 | **0.4 / 0.45** |
+| grid | 48² = 2304 | 40² = 1600 |
+| DPR | 2 | 1.5 |
+| shadow map | 1024 | 512 |
+| trail length | 14 seeds, fixed | 64, a ring buffer |
+
+**The rise is the trap.** The still frame uses roughly double because frozen, a
+low swell reads as an almost-flat floor with a faint tint — the eye needs change
+to read a small height difference. Copy the still values into the live path and
+it looks spiky and over-lit, because the emissive lift in the fragment shader
+keys off height and every passing ripple then peaks it.
+
+The perf column is the other one. The still frame chose DPR 2 and a 1024 shadow
+map *because* it renders exactly once; both are wrong for something drawn sixty
+times a second. Measured on `/preview/home-wave`: median 16.7 ms, p95 17.0 ms
+over 180 frames, shadows on.
 
 ## Known gaps
 

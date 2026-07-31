@@ -7,6 +7,11 @@
 > backdrop is the wave-grid cubes as the technique is actually meant to look:
 > **moving on desktop, a still frame on mobile**. One visual language on both,
 > replacing today's split where desktop gets cubes and mobile gets colour bends.
+>
+> **Status (2026-07-31, second session).** Phases 1, 2 and 4 are shipped —
+> `/preview/home-wave` renders the live grid. Phase 3 (mobile still) and Phase 5
+> (decide and unify) are open, and Phase 3's loader problem is still live: see
+> the warning under it.
 
 ## Where we are
 
@@ -22,6 +27,12 @@ The homepage hero already has everything needed to host a second backdrop:
 So this is mostly **one new variant plus one new route**, not a rebuild.
 
 ## ⚠️ The animated wave grid no longer exists in code
+
+> **Superseded — it exists again.** `wave-grid.jsx` now takes `mode="live"`, and
+> the table below is what it was rebuilt from. Kept because the table is still
+> the reference for what every constant is for and why it is not the upstream
+> value, and because the two rows marked ⚠️ are the trap that outlives the
+> rebuild. The section reads as history from here.
 
 This is the first thing to know, because it changes the size of Phase 1.
 
@@ -60,7 +71,7 @@ frames.
 
 ## Phases
 
-### Phase 1 — Restore a live mode on the wave grid
+### ✅ Phase 1 — Restore a live mode on the wave grid
 
 Extend `wave-grid.jsx` with a `mode` of `"still"` (default, what `/services`
 uses) or `"live"`. **One component, not a fork**: geometry, shader, colour ramp
@@ -87,7 +98,29 @@ if the frame budget does not hold. Measure before deciding.
 **Exit criteria:** `/services?wave=1` still renders identically (regression
 check), and a live mode runs at 60fps on desktop.
 
-### Phase 2 — A `wave` variant on the homepage backdrop
+**Done.** Both criteria met, and the regression check turned out to be provable
+rather than eyeballed: re-running `npm run images:wavegrid` after the refactor
+produced a **byte-identical** `curated.avif`/`curated.webp` (same MD5, clean
+`git status`). The still path renders exactly the same pixels. Frame times on
+`/preview/home-wave`: median 16.7 ms, p95 17.0 ms, max 17.6 ms over 180 frames —
+a locked 60 with no dropped frames, shadows kept on at a 512 map.
+
+Two implementation notes worth keeping:
+
+- **The two modes share one texture layout by making the still frame a stopped
+  clock.** The texel is `{x, z, spawnTime, strength}` and the shader computes
+  `age = uTime - spawn`. Still mode pins `uTime` to 0 and stores each seed's
+  spawn as *minus* its age, so the expression is the authored age unchanged. No
+  second code path, and the still frame is literally the live surface frozen.
+- **Two values in the table above were unrecoverable and are new**, not restored:
+  ripple strength (`min(0.35 + d × 0.55, 1.2)`, `d` = distance since the last
+  ripple, which the 0.35 spacing gate turns into a rate) and the camera swing
+  (`LIVE_SWING` 0.45 of the tilt ranges, *around* `STILL_VIEW` rather than around
+  dead overhead — the rest pose has to be the good one, since that is where it
+  settles the moment the pointer leaves). Tune these first if the motion feels
+  wrong; everything else in the table is the recovered tuning.
+
+### ✅ Phase 2 — A `wave` variant on the homepage backdrop
 
 Add `"wave"` to `VARIANTS` in `hero-backdrop.jsx` and mount the wave grid in
 `live` mode behind it. `?backdrop=wave` then works on the existing homepage
@@ -104,6 +137,24 @@ none. Do not reuse the services values.
 module evaluation on desktop only, because doing it on mobile measured **+1.7 s
 of TBT** — it pulls the three.js parse into the hydration window. Same rule for
 the wave chunk.
+
+**Done.** `VARIANTS` is now `["bends", "cubes", "wave", "none"]`.
+
+- The quiet zone is `HOME_CALM = {cx: -3.6, cz: 0.2, rx: 5.2, rz: 3.0, depth:
+  0.55}` — taller than the services ellipse (rz 3.0 vs 1.9) because the copy here
+  is eyebrow + big headline + paragraph + CTA down the same side, and *shallower*
+  (0.55 vs 0.8) because the `.sectionSharp` mask already fades the canvas across
+  that side; at full depth the two stacked and flattened the left half to a dead
+  plate. Passed as a prop, and it must stay a module constant — `WaveGrid` takes
+  it as an effect dependency and rebuilds the whole scene when it changes.
+- **No second prefetch, deliberately.** What the loader waits on is three.js, and
+  both backdrops share that chunk — warming `cube-grid` already warms the
+  expensive half of `wave`. A second prefetch would fetch only the shader module,
+  on every homepage load, for a variant almost none of them use.
+- `hero.jsx` now keys the sharp treatment off a `SHARP = ["cubes", "wave"]` list
+  rather than `variant === "cubes"`, so wave gets both the crisp mask *and* the
+  capability rail instead of the floating glass cards. Cards on a lattice read as
+  a second grid fighting the first, whichever lattice it is.
 
 ### Phase 3 — Mobile still frame
 
@@ -128,7 +179,7 @@ loader would visibly outstay the content. Either resolve readiness on the image'
 `load` event, or treat the image variant as ready immediately (it is — the markup
 is server-rendered).
 
-### Phase 4 — The second homepage route
+### ✅ Phase 4 — The second homepage route
 
 A thin route rendering the existing sections with the hero forced:
 
@@ -155,6 +206,24 @@ team, `?backdrop=wave` if it is just us.
 `llms.txt`, the metadata validator matrix (all three were touched together in
 `77e05c2`), and `robots`. A preview route that indexes is a duplicate-content
 problem on the homepage itself.
+
+**Done** — `/[locale]/preview/home-wave` was the option taken. Both forms work:
+the route for sending round, `?backdrop=wave` on `/` for a quick A/B without
+navigating away.
+
+`HomePageClient` now takes an optional `backdrop` prop and passes it to `HeroV2`;
+nothing below the hero varies, so the preview is that one prop rather than a
+second copy of the page.
+
+**The SEO exclusion needed no work, and that is worth knowing rather than
+rediscovering.** All three surfaces enumerate their pages explicitly —
+`next-sitemap.config.js` `PAGES`, `scripts/validate-json-ld.mjs` `SITE_PATHS`,
+`llms.txt` — rather than discovering routes from the build output, so an
+undeclared route is already absent from all of them. Verified: `postbuild`
+regenerated the sitemap with the route live and `public/sitemap-0.xml` came back
+unchanged. The page still declares `robots: {index: false, follow: false}` and
+deliberately carries no `JsonLdForPage` and no `generatePageMetadata` — both
+would assert it is canonical, and it is a duplicate of `/` by construction.
 
 ### Phase 5 — Decide and unify
 
