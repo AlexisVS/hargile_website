@@ -140,7 +140,15 @@ const HeroV2 = ({backdrop, label}) => {
     }, [backdropReady, markHeroReady]);
 
     return (
-        <section className={`${styles.section} ${isSharp(variant) ? styles.sectionSharp : ""}`}>
+        <section
+            className={[
+                styles.section,
+                isSharp(variant) ? styles.sectionSharp : "",
+                // On top of sectionSharp, not instead of it: the wave grid wants
+                // the crisp treatment but neither of cube-grid's vertical moves.
+                variant === "wave" ? styles.sectionWave : "",
+            ].filter(Boolean).join(" ")}
+        >
             <div ref={backdropRef} className={styles.backdropHost}>
                 <HeroBackdrop variant={variant}/>
             </div>

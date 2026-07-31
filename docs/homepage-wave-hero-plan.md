@@ -57,6 +57,13 @@ again:
 | `MAX_TRAIL` | pointer trail length | 128 | **64** | loop runs per-vertex, and again in the shadow pass |
 | camera lerp | tilt easing | 0.04/frame | **0.04** | unchanged |
 
+> **Six of these rows are no longer what live mode runs.** The table is what the
+> rebuild started from, and it was right to start there. Then the pace was judged
+> too busy on desktop, so the live mode was slowed as a set — the values are
+> listed under [Pacing](#pacing) below. The table stays because it is still the
+> record of *why* each constant is not the upstream one, and because the ⚠️ rows
+> are unchanged and are still the trap.
+
 **The amplitude difference is the trap.** The still frame uses roughly double,
 because frozen, a low swell reads as an almost-flat floor with a faint tint —
 the eye needs change to read a small height difference. Copying the still values
@@ -120,6 +127,35 @@ Two implementation notes worth keeping:
   settles the moment the pointer leaves). Tune these first if the motion feels
   wrong; everything else in the table is the recovered tuning.
 
+#### Pacing
+
+The recovered tuning ran correctly but read as busy on desktop — ripples
+arriving on top of each other rather than a surface swelling. Live mode was
+slowed as a set (still mode is untouched, and provably so: the re-export stayed
+byte-identical after every one of these):
+
+| Constant | Was | Now | Why |
+| --- | --- | --- | --- |
+| `speed` | 2.2 | **1.4** | the front now takes ~11 s to cross the visible frame rather than ~7 |
+| `fadeTime` | 3.0 | **4.5** | a pair with speed — drop one without the other and every ripple dies before it has travelled |
+| `TRAIL.spacing` | 0.35 | **0.7** | half as many ripples per pointer sweep |
+| `TRAIL.minGap` | — | **0.55 s** | **new.** Distance alone still let a fast flick fire several ripples inside a hundred ms: far apart in space, stacked in time. This is the floor in time |
+| `TRAIL.idleEvery` | 4.0 | **7.0** | each ambient ripple visibly settles before the next arrives — the eye gets somewhere quiet to return to |
+| `TRAIL.idleAfter` | 3.0 | **4.0** | longer before the grid decides you have stopped |
+| `TRAIL.idleStrength` | 0.9 | **0.75** | — |
+| pointer strength | `min(0.35 + d×0.55, 1.2)` | **`min(0.25 + d×0.4, 0.9)`** | capped below 1.0, so a pointer ripple is a swell and not an event |
+| `LIVE_LERP` | 0.04 | **0.025** | ~1.5 s camera settle: the tilt keeps drifting after you stop, which reads as weight rather than as a cursor-follow |
+
+**Two throttles, not one, is the point.** Distance and time gate independently
+and neither subsumes the other — that is the fix for "too many, too close
+together", and it is worth keeping both if these are retuned again.
+
+**`speed`/`fadeTime` had to be split per mode to do this.** They used to be
+shared in `WAVE`; they now live in `MODE.still` / `MODE.live` alongside amplitude
+and maxHeight. The still values are not a starting point to tune from — the STILL
+composition's ages were chosen against speed 2.2 (radius ≈ speed × age) and fade
+3.0, so changing either re-renders the shipped `/services` image.
+
 ### ✅ Phase 2 — A `wave` variant on the homepage backdrop
 
 Add `"wave"` to `VARIANTS` in `hero-backdrop.jsx` and mount the wave grid in
@@ -155,6 +191,17 @@ the wave chunk.
   rather than `variant === "cubes"`, so wave gets both the crisp mask *and* the
   capability rail instead of the floating glass cards. Cards on a lattice read as
   a second grid fighting the first, whichever lattice it is.
+- **`.sectionWave` takes `.sectionSharp` but drops its two vertical moves** —
+  `top: 40px; bottom: -40px` and the `to bottom` mask layer. Both are cube-grid's
+  and neither transfers: cube-grid is separated cubes *with fog*, so it has a far
+  edge that genuinely recedes and the drop plus roll-off read as a board sitting
+  in space. The wave grid is a solid, fog-free floor of near-touching pillars —
+  the same two treatments read as the floor being sliced off under the navbar and
+  dissolving at the bottom. `/services` reached this independently and removed
+  its vertical fade entirely (see the comment in
+  `wave-grid-backdrop.module.scss`); this is that decision applied on this page.
+  The horizontal ramp is re-declared rather than overridden, because `mask-image`
+  is a shorthand for the whole layer list.
 
 ### Phase 3 — Mobile still frame
 

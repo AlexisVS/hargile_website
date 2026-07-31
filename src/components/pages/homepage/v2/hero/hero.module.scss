@@ -130,6 +130,38 @@
   }
 }
 
+/* The wave grid takes the sharp treatment above but not its two vertical moves,
+   which are cube-grid's and don't transfer.
+
+   Both exist because cube-grid is a field of separated cubes with fog: it has a
+   far edge that genuinely recedes, so a 40px drop and a bottom roll-off read as
+   the board sitting in space. The wave grid is a solid floor of near-touching
+   pillars with no fog at all — the same two treatments read as the floor being
+   cut off at the top and dissolving at the bottom, which is the one thing a
+   surface must never look like. /services reached the same conclusion and
+   removed its vertical fade entirely (wave-grid-backdrop.module.scss); this is
+   that decision, applied to the same grid on this page.
+
+   Must come after .sectionSharp: equal specificity, so source order decides. */
+.sectionWave .backdrop {
+  /* Edge to edge. The section already slides up under the navbar
+     (.section:first-child), which is transparent at scroll 0, so inset: 0 puts
+     the grid's top at y=0 and the logo floats over it — a full viewport of
+     floor rather than a strip starting below the bar. */
+  top: 0;
+  bottom: 0;
+
+  /* Horizontal ramp only — the same one .sectionSharp uses, minus the
+     `to bottom` layer it was intersected with. Re-declared rather than
+     overridden per-layer because mask-image is a shorthand for the whole list;
+     the composite modes go back to their defaults for the same reason (with a
+     single layer -webkit's source-in has nothing to compose against). */
+  mask-image: linear-gradient(100deg, transparent 0%, rgba(0, 0, 0, 0.55) 38%, #000 62%);
+  mask-composite: add;
+  -webkit-mask-image: linear-gradient(100deg, transparent 0%, rgba(0, 0, 0, 0.55) 38%, #000 62%);
+  -webkit-mask-composite: source-over;
+}
+
 /* Comparison label — only rendered while several hero variants are stacked. */
 .variantTag {
   position: absolute;

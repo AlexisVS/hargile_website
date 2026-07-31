@@ -247,6 +247,7 @@ Two things genuinely differ, and both are load-bearing:
 | | still | live |
 | --- | --- | --- |
 | amplitude / maxHeight | 1.0 / 0.8 | **0.4 / 0.45** |
+| speed / fadeTime | 2.2 / 3.0 | **1.4 / 4.5** |
 | grid | 48² = 2304 | 40² = 1600 |
 | DPR | 2 | 1.5 |
 | shadow map | 1024 | 512 |
@@ -257,6 +258,14 @@ low swell reads as an almost-flat floor with a faint tint — the eye needs chan
 to read a small height difference. Copy the still values into the live path and
 it looks spiky and over-lit, because the emissive lift in the fragment shader
 keys off height and every passing ripple then peaks it.
+
+**The still frame's speed and fadeTime are not tunable.** The `STILL`
+composition's ages were chosen against speed 2.2 (radius ≈ speed × age) and fade
+3.0 — those two numbers are what that composition *means*, and changing either
+re-renders the shipped image. They sit in `MODE.still` next to the live pair for
+exactly that reason: so a live retune cannot reach them by accident. The check is
+cheap and exact — re-run `npm run images:wavegrid` and confirm `git status` comes
+back clean.
 
 The perf column is the other one. The still frame chose DPR 2 and a 1024 shadow
 map *because* it renders exactly once; both are wrong for something drawn sixty

@@ -142,57 +142,67 @@ const buildSeeds = (variant) => {
     return out;
 };
 
+/* Shape of each ripple, shared by both modes — the parts that describe what a
+   ripple *is* rather than how fast it happens. */
 const WAVE = {
-    /* Shape of each ripple — shared by both modes.
-
-       speed is well under upstream's 6.0, which crosses the frame in under a
-       second and leaves constant motion in the reader's periphery. fadeTime has
-       to rise with it: the fade is on age, so a slower front covers far less
-       ground before it dies. The two are a pair — change one and the ripple
-       either dies before it has travelled or outlives the frame.
-
-       In still mode speed only matters as the multiplier that turns a seed's
-       age into its radius. */
-    speed: 2.2,
     frequency: 1.2,
     width: 3.0,
     jitter: 0.2,
-    fadeTime: 3.0,
 };
 
-/* Rise, per mode — the one constant that must NOT be shared.
+/* Everything that differs by mode. Two of these look like they could be shared
+   and cannot:
 
-   Moving, a low swell is legible because the eye tracks change. Frozen, the same
-   heights read as an almost-flat floor with a faint tint, so the still frame
-   needs roughly double: 0.8 of a 3-unit pillar is a third of its height, enough
-   that the frame reads as pillars standing at visibly different heights without
-   turning the grid into spikes.
+   **Rise.** Moving, a low swell is legible because the eye tracks change.
+   Frozen, the same heights read as an almost-flat floor with a faint tint, so
+   the still frame needs roughly double: 0.8 of a 3-unit pillar is a third of its
+   height, enough to read as pillars standing at visibly different heights
+   without turning the grid into spikes. Copy the still values into the live path
+   and it looks spiky and over-lit, because the emissive lift in the fragment
+   shader keys off height and every passing ripple then peaks it.
 
-   Copying the still values into the live path is the mistake to avoid — it looks
-   spiky and over-lit, because the emissive lift in the fragment shader keys off
-   height and every passing ripple then peaks it. */
-const RISE = {
-    still: {amplitude: 1.0, maxHeight: 0.8},
-    live: {amplitude: 0.4, maxHeight: 0.45},
+   **Speed and fadeTime.** These are a pair in both modes — the fade is on age,
+   so a slower front covers less ground before it dies, and dropping speed
+   without raising fadeTime kills every ripple before it has travelled.
+
+   The still numbers are load-bearing in a way the live ones are not: the STILL
+   composition's ages were chosen against speed 2.2 (radius ≈ speed × age) and
+   fade 3.0, so changing either re-renders the shipped /services image. They are
+   not a starting point to tune from — they are what that composition means.
+
+   Live is slower on purpose: the front now takes ~11 s to cross the visible
+   frame rather than ~7, which is what turns a passing wave into a swell you
+   notice rather than one that crosses your eye. */
+const MODE = {
+    still: {amplitude: 1.0, maxHeight: 0.8, speed: 2.2, fadeTime: 3.0},
+    live: {amplitude: 0.4, maxHeight: 0.45, speed: 1.4, fadeTime: 4.5},
 };
 
-/* Live-mode pointer trail.
+/* Live-mode pointer trail — the pacing dials. All of these exist to keep the
+   surface calm: the failure mode is not "too slow", it is a grid that boils.
 
-   spacing is the minimum world-space gap between consecutive ripples: at
-   upstream's 0.1 a single brisk sweep dumps dozens of overlapping fronts and the
-   whole grid boils. idleAfter/idleEvery keep the surface alive when nothing is
-   moving — at upstream's 1.5s cadence against our 3s fade the grid never rests,
-   so ambient ripples come four seconds apart instead.
+   Two independent throttles on pointer ripples, because one is not enough.
+   `spacing` is a minimum world-space gap (upstream's 0.1 lets a single brisk
+   sweep dump dozens of overlapping fronts), but distance alone still allows a
+   fast flick to fire several within one hundred ms — so `minGap` puts a floor in
+   *time* as well. A sweep then reads as a handful of deliberate swells rather
+   than a burst.
+
+   idleAfter/idleEvery keep the surface alive when nothing is moving. Upstream's
+   1.5 s cadence against a 3 s fade means the grid never rests; at 7 s against a
+   4.5 s fade each ambient ripple has visibly settled before the next arrives,
+   which is the whole point — the eye gets somewhere quiet to return to.
 
    idleSpread is in world units, not grid cells. The camera is zoomed well inside
    the slab (RADIUS 14 against a 40² grid), so a grid-relative spread spawns most
    ambient ripples off-screen, where they fade before their front ever arrives. */
 const TRAIL = {
-    spacing: 0.35,
-    idleAfter: 3.0,
-    idleEvery: 4.0,
+    spacing: 0.7,
+    minGap: 0.55,
+    idleAfter: 4.0,
+    idleEvery: 7.0,
     idleSpread: 5.0,
-    idleStrength: 0.9,
+    idleStrength: 0.75,
     // Ripples die at fadeTime × 4 (exp(-4) ≈ 1.8%), past which a front is still
     // expanding through the grid while contributing nothing but weight to the
     // normalising sum.
@@ -276,11 +286,13 @@ const STILL_VIEW = {mx: -0.55, my: 0.65}; // normalised within the ranges above
    worst of both. The swing is a fraction of the ranges so the tilt reads as the
    surface responding, not as the camera being dragged.
 
-   The chase is a fixed fraction per frame, as upstream: at 60fps it is a ~0.4 s
-   settle, and it is deliberately not made frame-rate-independent because the
-   gate below stops the loop entirely rather than letting it run slow. */
+   The chase is a fixed fraction per frame, as upstream — deliberately not made
+   frame-rate-independent, because the gate below stops the loop entirely rather
+   than letting it run slow. At 0.025/frame that is roughly a 1.5 s settle at
+   60fps: the tilt keeps drifting after you have stopped moving, which is what
+   makes it read as weight rather than as a cursor-follow. */
 const LIVE_SWING = 0.45;
-const LIVE_LERP = 0.04;
+const LIVE_LERP = 0.025;
 
 /* Vertical FOV is only the whole story at the demo's roughly-16:9 full-screen
    box. A hero is much wider than it is tall, and horizontal coverage grows with
@@ -612,7 +624,10 @@ const WaveGrid = ({
         // null variant = the curated composition; a number = generated (?wave=N).
         const seeds = variant === null ? STILL : buildSeeds(variant);
 
-        const rise = animate ? RISE.live : RISE.still;
+        // Keyed off `animate`, not off `mode`: a live mount that fell back to a
+        // still frame must use the still numbers, or the authored composition
+        // renders at live amplitude and reads as a flat floor.
+        const tuning = animate ? MODE.live : MODE.still;
 
         // Shared by reference into both shaders, so the depth pass displaces
         // identically to the visible one.
@@ -620,13 +635,13 @@ const WaveGrid = ({
             uTrailTexture: {value: seedTexture},
             uTrailCount: {value: 0},
             uTime: {value: 0},
-            uFadeTime: {value: WAVE.fadeTime},
-            uWaveSpeed: {value: WAVE.speed},
+            uFadeTime: {value: tuning.fadeTime},
+            uWaveSpeed: {value: tuning.speed},
             uWaveFreq: {value: WAVE.frequency},
             uWaveWidth: {value: WAVE.width},
-            uAmplitude: {value: rise.amplitude},
+            uAmplitude: {value: tuning.amplitude},
             uJitter: {value: WAVE.jitter},
-            uMaxHeight: {value: rise.maxHeight},
+            uMaxHeight: {value: tuning.maxHeight},
             uCalmCenter: {value: new THREE.Vector2(quiet.cx, quiet.cz)},
             uCalmRadius: {value: new THREE.Vector2(quiet.rx, quiet.rz)},
             uCalmDepth: {value: quiet.depth},
@@ -744,6 +759,7 @@ const WaveGrid = ({
         const hit = new THREE.Vector3();
 
         let lastSeed = null;   // world xz of the last ripple, for the spacing test
+        let lastRipple = 0;    // when it was pushed, for the minGap test
         let lastMove = 0;      // when the pointer was last in bounds, for the idle gate
         let nextIdle = TRAIL.idleEvery;
         // Camera tilt: a target the pointer sets and a current the loop chases.
@@ -793,14 +809,21 @@ const WaveGrid = ({
             }
 
             const d = Math.hypot(hit.x - lastSeed.x, hit.z - lastSeed.z);
+            // Distance first, then time. Distance alone lets a fast flick fire
+            // several ripples inside a hundred ms — far apart, so the spacing
+            // test passes, but landing on top of each other in *time*, which is
+            // what reads as the grid reacting nervously rather than swelling.
             if (d < TRAIL.spacing) return;
+            if (now - lastRipple < TRAIL.minGap) return;
 
             /* Strength proportional to pointer speed — d is distance since the
-               last ripple, and the spacing test above makes that a rate. A crawl
+               last ripple, and the two gates above make that a rate. A crawl
                produces almost nothing; the cap stops a fast flick from slamming
-               the whole grid at once. */
-            const strength = Math.min(0.35 + d * 0.55, 1.2);
+               the whole grid at once, and sits below 1.0 so a pointer ripple is
+               a swell rather than an event. */
+            const strength = Math.min(0.25 + d * 0.4, 0.9);
             lastSeed = {x: hit.x, z: hit.z};
+            lastRipple = now;
             pushSeed(hit.x, hit.z, now, strength);
         };
 
