@@ -248,6 +248,7 @@ Two things genuinely differ, and both are load-bearing:
 | --- | --- | --- |
 | amplitude / maxHeight | 1.0 / 0.8 | **0.4 / 0.45** |
 | speed / fadeTime | 2.2 / 3.0 | **1.4 / 4.5** |
+| birth ramp | 0 (seeds are authored at an age) | **0.55 s** |
 | grid | 48² = 2304 | 40² = 1600 |
 | DPR | 2 | 1.5 |
 | shadow map | 1024 | 512 |
@@ -266,6 +267,20 @@ re-renders the shipped image. They sit in `MODE.still` next to the live pair for
 exactly that reason: so a live retune cannot reach them by accident. The check is
 cheap and exact — re-run `npm run images:wavegrid` and confirm `git status` comes
 back clean.
+
+**The birth ramp is what makes the pointer wake continuous.** `exp(-age /
+fadeTime)` is 1.0 at age 0, so without it a ripple is born at full height: every
+spawn pops, and a moving pointer replays that pop once per spawn, which reads as
+the surface *stepping* after the cursor rather than following it. Growing each
+one in over half a second blends consecutive spawns into one wake — and that in
+turn is what lets the trail be dense (spacing 0.2, near upstream's 0.1) without
+the grid boiling. The tempting fix, thinning the trail, makes it worse: what you
+get is not a calmer wake but a coarser stepped one. Calm comes from the ramp and
+a low per-ripple strength, not from firing fewer.
+
+Still mode passes ramp 0, guarded in GLSL as `smoothstep(0.0, max(uRamp,
+0.0001), age)` — every authored seed is at age ≥ 0.8, so it evaluates to exactly
+1.0 and the still frame is untouched (verified by re-export).
 
 The perf column is the other one. The still frame chose DPR 2 and a 1024 shadow
 map *because* it renders exactly once; both are wrong for something drawn sixty

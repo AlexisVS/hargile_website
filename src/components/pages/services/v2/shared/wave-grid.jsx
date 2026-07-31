@@ -172,33 +172,46 @@ const WAVE = {
 
    Live is slower on purpose: the front now takes ~11 s to cross the visible
    frame rather than ~7, which is what turns a passing wave into a swell you
-   notice rather than one that crosses your eye. */
+   notice rather than one that crosses your eye.
+
+   **Ramp** is how long a ripple takes to grow to full height. Still mode passes
+   0 — its seeds are authored *at* an age, never born — while live grows each one
+   in over half a second. See the birth ramp in the shader: it is what makes the
+   pointer wake continuous instead of stepped. */
 const MODE = {
-    still: {amplitude: 1.0, maxHeight: 0.8, speed: 2.2, fadeTime: 3.0},
-    live: {amplitude: 0.4, maxHeight: 0.45, speed: 1.4, fadeTime: 4.5},
+    still: {amplitude: 1.0, maxHeight: 0.8, speed: 2.2, fadeTime: 3.0, ramp: 0},
+    live: {amplitude: 0.4, maxHeight: 0.45, speed: 1.4, fadeTime: 4.5, ramp: 0.55},
 };
 
-/* Live-mode pointer trail — the pacing dials. All of these exist to keep the
-   surface calm: the failure mode is not "too slow", it is a grid that boils.
+/* Live-mode trail. Two separate questions live in here and they pull opposite
+   ways, which is worth stating because tuning one as if it were the other is how
+   this went wrong once already.
 
-   Two independent throttles on pointer ripples, because one is not enough.
-   `spacing` is a minimum world-space gap (upstream's 0.1 lets a single brisk
-   sweep dump dozens of overlapping fronts), but distance alone still allows a
-   fast flick to fire several within one hundred ms — so `minGap` puts a floor in
-   *time* as well. A sweep then reads as a handful of deliberate swells rather
-   than a burst.
+   **Following the pointer wants density.** Upstream spawns every 0.1 world
+   units, and that is why its wake looks like one surface deforming under the
+   cursor. Throttling that to keep the grid calm is the wrong lever: what you get
+   is not a calmer wake, it is a stepped one — each spawn arrives as a discrete
+   event and the surface visibly jumps from one to the next. The lever that
+   actually buys calm without costing continuity is the birth ramp in the shader
+   (`MODE.live.ramp`), which blends consecutive spawns into each other, plus a
+   low per-ripple strength. Dense and gentle, not sparse and strong.
 
-   idleAfter/idleEvery keep the surface alive when nothing is moving. Upstream's
-   1.5 s cadence against a 3 s fade means the grid never rests; at 7 s against a
-   4.5 s fade each ambient ripple has visibly settled before the next arrives,
-   which is the whole point — the eye gets somewhere quiet to return to.
+   `spacing` stays a little above upstream anyway (0.1 → 0.2) and `minGap` caps
+   the rate at ~20/s, because at 0.1 with no floor in time a fast flick fires
+   ripples faster than the ring buffer can retire them.
+
+   **Ambient cadence wants sparseness.** Nothing is chasing a cursor here, so
+   these are free to be slow. Upstream's 1.5 s against a 3 s fade means the grid
+   never rests; at 7 s against a 4.5 s fade each ambient ripple has visibly
+   settled before the next arrives, which is the point — the eye gets somewhere
+   quiet to return to.
 
    idleSpread is in world units, not grid cells. The camera is zoomed well inside
    the slab (RADIUS 14 against a 40² grid), so a grid-relative spread spawns most
    ambient ripples off-screen, where they fade before their front ever arrives. */
 const TRAIL = {
-    spacing: 0.7,
-    minGap: 0.55,
+    spacing: 0.2,
+    minGap: 0.05,
     idleAfter: 4.0,
     idleEvery: 7.0,
     idleSpread: 5.0,
@@ -333,6 +346,7 @@ const patchVertexShader = (vertexShader, trailLen) =>
              uniform float uWaveWidth;
              uniform float uFadeTime;
              uniform float uAmplitude;
+             uniform float uRamp;
              uniform float uJitter;
              uniform float uMaxHeight;
              uniform vec2 uCalmCenter;
@@ -386,7 +400,25 @@ const patchVertexShader = (vertexShader, trailLen) =>
                      float relDist = dist - uWaveSpeed * age;
 
                      float window = exp(-(relDist * relDist) / (uWaveWidth * uWaveWidth));
-                     float fade = exp(-age / uFadeTime);
+
+                     /* Birth ramp — the anti-bounce, and the thing that lets the
+                        pointer trail be dense without the grid boiling.
+
+                        exp(-age / fadeTime) is 1.0 at age 0, so without this a
+                        ripple is born at full height: every spawn pops, and a
+                        moving pointer replays that pop once per spawn, which
+                        reads as the surface stepping after the cursor rather
+                        than following it. Grown in instead, consecutive spawns
+                        overlap into one continuous wake — cube-grid.jsx found
+                        the same thing independently and calls it the same name.
+
+                        max() because still mode passes 0 and smoothstep with
+                        equal edges is undefined; at 0.0001 every authored seed
+                        (min age 0.8) evaluates to exactly 1.0, so the still
+                        frame is untouched. */
+                     float born = smoothstep(0.0, max(uRamp, 0.0001), age);
+
+                     float fade = exp(-age / uFadeTime) * born;
                      float atten = 1.0 / (1.0 + dist * 0.1);
                      float weight = fade * window * atten * td.a;
 
@@ -640,6 +672,7 @@ const WaveGrid = ({
             uWaveFreq: {value: WAVE.frequency},
             uWaveWidth: {value: WAVE.width},
             uAmplitude: {value: tuning.amplitude},
+            uRamp: {value: tuning.ramp},
             uJitter: {value: WAVE.jitter},
             uMaxHeight: {value: tuning.maxHeight},
             uCalmCenter: {value: new THREE.Vector2(quiet.cx, quiet.cz)},
@@ -809,19 +842,19 @@ const WaveGrid = ({
             }
 
             const d = Math.hypot(hit.x - lastSeed.x, hit.z - lastSeed.z);
-            // Distance first, then time. Distance alone lets a fast flick fire
-            // several ripples inside a hundred ms — far apart, so the spacing
-            // test passes, but landing on top of each other in *time*, which is
-            // what reads as the grid reacting nervously rather than swelling.
+            // Distance first, then time — a rate cap, not a thinning device. At
+            // this spacing the distance test is what makes the wake track the
+            // cursor; minGap only stops a flick from outrunning the ring buffer.
             if (d < TRAIL.spacing) return;
             if (now - lastRipple < TRAIL.minGap) return;
 
-            /* Strength proportional to pointer speed — d is distance since the
-               last ripple, and the two gates above make that a rate. A crawl
-               produces almost nothing; the cap stops a fast flick from slamming
-               the whole grid at once, and sits below 1.0 so a pointer ripple is
-               a swell rather than an event. */
-            const strength = Math.min(0.25 + d * 0.4, 0.9);
+            /* Low, and only weakly speed-dependent. With the trail this dense,
+               how *hard* the surface reacts is set by how many ripples overlap,
+               not by any one of them — a sweep already fires several a second,
+               and the shader averages overlapping fronts rather than stacking
+               them. So each ripple stays a nudge; the cap keeps a fast flick
+               from turning the wake into a wall. */
+            const strength = Math.min(0.18 + d * 0.3, 0.6);
             lastSeed = {x: hit.x, z: hit.z};
             lastRipple = now;
             pushSeed(hit.x, hit.z, now, strength);

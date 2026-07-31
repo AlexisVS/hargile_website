@@ -146,9 +146,26 @@ byte-identical after every one of these):
 | pointer strength | `min(0.35 + d×0.55, 1.2)` | **`min(0.25 + d×0.4, 0.9)`** | capped below 1.0, so a pointer ripple is a swell and not an event |
 | `LIVE_LERP` | 0.04 | **0.025** | ~1.5 s camera settle: the tilt keeps drifting after you stop, which reads as weight rather than as a cursor-follow |
 
-**Two throttles, not one, is the point.** Distance and time gate independently
-and neither subsumes the other — that is the fix for "too many, too close
-together", and it is worth keeping both if these are retuned again.
+**Then the pointer response was found to stagger** — the wake stepping from one
+ripple to the next instead of following the cursor. Throttling the trail was the
+wrong lever for calm, and this is the correction:
+
+| Constant | Was | Now | Why |
+| --- | --- | --- | --- |
+| `MODE.live.ramp` | — | **0.55 s** | **the actual fix.** `exp(-age/fadeTime)` is 1.0 at age 0, so every ripple was *born at full height* — each spawn popped, and a moving pointer replayed that pop once per spawn. Grown in instead, consecutive spawns blend into one wake |
+| `TRAIL.spacing` | 0.7 | **0.2** | upstream is 0.1; a dense trail is what makes a wake read as one surface deforming |
+| `TRAIL.minGap` | 0.55 s | **0.05 s** | now a rate cap (~20/s, so a flick can't outrun the ring buffer), not a thinning device |
+| pointer strength | `min(0.25 + d×0.4, 0.9)` | **`min(0.18 + d×0.3, 0.6)`** | with the trail dense, how hard the surface reacts is set by how many ripples overlap, not by any one — so each is a nudge |
+
+**The two questions in `TRAIL` pull opposite ways, and that is the lesson.**
+Following the pointer wants *density*; ambient cadence wants *sparseness*. Tuning
+the first as if it were the second is what produced the stagger. The lever that
+buys calm without costing continuity is the birth ramp plus low per-ripple
+strength — dense and gentle, not sparse and strong. The ambient dials
+(`idleEvery` 7 s, `idleAfter` 4 s) were right and are unchanged.
+
+`cube-grid.jsx` found the ramp independently and calls it the same thing — "the
+anti-bounce". Worth reading its comment before touching either.
 
 **`speed`/`fadeTime` had to be split per mode to do this.** They used to be
 shared in `WAVE`; they now live in `MODE.still` / `MODE.live` alongside amplitude
