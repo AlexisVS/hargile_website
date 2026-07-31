@@ -19,23 +19,25 @@ const CubeGrid = dynamic(() => import("./cube-grid"), {ssr: false});
 // of that shader is how they'd stop having one.
 const WaveGrid = dynamic(() => import("@/components/pages/services/v2/shared/wave-grid"), {ssr: false});
 
-/* Desktop only: warm the cube-grid chunk at module evaluation rather than
-   after mount + the useHeroVariant effect — the three.js download is what the
-   branded loader spends most of its life waiting on, and Turbopack dedupes
-   this against the dynamic() load above. Deliberately NOT done for the mobile
-   ColorBends variant: under a throttled CPU the earlier fetch pulls the
-   three.js parse/execute forward into the hydration window, which measured as
-   +1.7 s of mobile TBT — the lazy mount path keeps that work after TTI.
-   (A ?backdrop= override can still load the other variant later; that's the
-   debug path, not the cold-load path.)
+/* Desktop only: warm the wave chunk at module evaluation rather than after
+   mount — the three.js download is what the branded loader spends most of its
+   life waiting on, and Turbopack dedupes this against the dynamic() load above.
 
-   Not repeated for the wave chunk, and it doesn't need to be: what the loader
-   waits on is three.js itself, and the two backdrops share that chunk — warming
-   cube-grid warms the expensive half of wave too. Adding a second prefetch would
-   only fetch the shader module, and would do it on every homepage load for a
-   variant almost none of them use. */
+   Deliberately NOT done below the breakpoint, and the reason is stronger now
+   than it was: there is no canvas down there at all, only the still image, so
+   prefetching three.js on a phone would download ~150 kB to render nothing.
+   Even when mobile did mount a canvas, the earlier fetch pulled the three.js
+   parse/execute forward into the hydration window and measured as +1.7 s of
+   mobile TBT.
+
+   This used to warm ./cube-grid. It warms the wave grid now because that is
+   what the homepage actually renders — the two share the three.js chunk, so the
+   expensive half was covered either way, but warming the module the page is
+   about to import saves a round trip and no longer fetches a variant nothing
+   uses. (A ?backdrop= override can still load the others later; that's the
+   debug path, not the cold-load path.) */
 if (typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches) {
-    import("./cube-grid");
+    import("@/components/pages/services/v2/shared/wave-grid");
 }
 
 /* The homepage's own quiet zone — deliberately NOT the /services ellipse.

@@ -76,7 +76,7 @@ wrong place on the other.
 
 | | `/services` | homepage wave hero |
 | --- | --- | --- |
-| route | `/services` | `/preview/home-wave` (also `/?backdrop=wave`) |
+| route | `/services` | **`/`** — it is the homepage default now (`/preview/home-wave` still works, and is identical) |
 | desktop | **the still image** | **live canvas**, ≥1024px |
 | mobile | the still image | **the still image**, <1024px |
 | image | `curated.{avif,webp}` | `home.{avif,webp}` |
@@ -405,9 +405,9 @@ Two things worth knowing before anyone "fixes" this back:
   anything in `wave-grid.jsx`: re-run both exports and confirm `git status` is
   clean — if a file changed, either the change was unintended or the image needs
   committing.
-- **Three homepage backdrop variants are alive at once** (`bends`, `cubes`,
-  `wave`). That is Phase 5 of
-  [homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md) and is meant to be
-  resolved, not left: the current mobile-bends/desktop-cubes split is the
-  inconsistency the wave hero exists to remove, and a third option makes it worse
-  until one is chosen.
+- **`bends` and `cubes` still exist behind `?backdrop=`.** The homepage default
+  is `wave` at every width now, so no visitor reaches them — but they are two
+  unused WebGL backdrops plus a vendored library (`src/components/vendor/color-bends/`)
+  and the `.floatCard` styles, kept alive only as comparison tools. Deleting them
+  is the last piece of Phase 5 in
+  [homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md).

@@ -8,11 +8,12 @@
 > **moving on desktop, a still frame on mobile**. One visual language on both,
 > replacing today's split where desktop gets cubes and mobile gets colour bends.
 >
-> **Status (2026-07-31, second session).** Phases 1–4 are shipped:
-> `/preview/home-wave` runs the live grid on desktop and serves an exported still
-> below 1024px, and the loader bug the plan warned about is fixed. **Phase 5
-> (decide and unify) is the only one open** — three variants are alive right now,
-> which is one more than the plan says should be.
+> **Status (2026-07-31, second session).** Phases 1–4 shipped, and Phase 5 is
+> **decided**: Mihai picked the wave hero, so `/` now serves it at every width —
+> live canvas on desktop, exported still below 1024px, and the capability rail
+> instead of the glass cards on both. What is left of Phase 5 is only the
+> *deletion* of the `bends`/`cubes` variants, which still exist behind
+> `?backdrop=`.
 >
 > For the day-to-day loop — browsing compositions, exporting either page's image,
 > moving a quiet zone — see [wave-grid.md](./wave-grid.md); it now covers both
@@ -323,7 +324,7 @@ unchanged. The page still declares `robots: {index: false, follow: false}` and
 deliberately carries no `JsonLdForPage` and no `generatePageMetadata` — both
 would assert it is canonical, and it is a duplicate of `/` by construction.
 
-### Phase 5 — Decide and unify
+### 🟡 Phase 5 — Decide and unify
 
 Once compared, either promote the wave hero to `/` and delete the `bends`/`cubes`
 variants, or drop it. **Do not leave three variants alive indefinitely** — the
@@ -332,6 +333,35 @@ this is meant to remove, and a third option makes it worse until it is resolved.
 
 If promoted: `ColorBends` and `cube-grid.jsx` lose their only callers, and
 `src/components/vendor/color-bends/` can go with them.
+
+**Decided, half-done.** Mihai picked the wave hero after comparing. `/` now
+serves it at every width — `DEFAULT_VARIANT = "wave"` in `hero.jsx`, no viewport
+branch at all. **The shipped design is one thing everywhere; the deletion is
+not done.** `bends` and `cubes` survive only behind `?backdrop=`, as comparison
+tools rather than as things a visitor can reach. Whether to delete them outright
+is the remaining call — see the next-session prompt.
+
+Two consequences of dropping the viewport branch, both load-bearing:
+
+- **The capability rail became the treatment at every width.** That was the
+  actual styling complaint: below 1024px the hero rendered `.floatCard` glass
+  panels — 20px `backdrop-filter`, a border, a gradient fill — while desktop
+  rendered the hairline spine with no fill at all. Two unrelated objects either
+  side of a breakpoint, same page, same content. Now there is one.
+- **The rail is server-rendered, so its reveals had to leave Framer Motion.**
+  It was desktop-only before, mounting after hydration, which is why its
+  `initial={{opacity: 0}}` never reached the SSR HTML. As the default it would
+  have — reintroducing exactly the defect the h1 and the glass cards were each
+  fixed for: capability copy invisible to anything that doesn't run JS. The
+  reveals are CSS keyframes now (`railDraw`, `capItemIn`, `capDotIn`), with the
+  per-row stagger passed as a `--cap-delay` custom property so the markup stays a
+  plain `<ul>`. Verified in the served HTML: rail copy present, no inline
+  `opacity: 0`.
+
+The desktop prefetch was also repointed from `./cube-grid` to the wave grid — and
+it stays desktop-only for a stronger reason than before: below 1024px there is no
+canvas at all now, so prefetching three.js on a phone would download ~150 kB to
+render nothing.
 
 ## Open questions
 

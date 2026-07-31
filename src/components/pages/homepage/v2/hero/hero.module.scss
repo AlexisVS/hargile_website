@@ -405,6 +405,17 @@
      than competing with the eyebrow. */
   align-self: flex-start;
   margin-top: 40px;
+
+  animation: heroRevealFade 0.8s ease-out 0.25s both;
+
+  /* Below the two-column layout the rail is no longer a right-hand column —
+     it stacks under the copy and spans the measure, the same way the glass
+     cards used to. */
+  @media (max-width: 768px) {
+    max-width: 100%;
+    min-width: min(300px, 100%);
+    margin-top: 8px;
+  }
 }
 
 /* Column header — same technical-marker register as the eyebrow, one size
@@ -441,6 +452,23 @@
     rgba(150, 185, 249, 0.35) 55%,
     rgba(150, 185, 249, 0) 100%
   );
+
+  /* Draws downward, once. In CSS rather than motion's `scaleY` for the reason
+     the copy block above already is: this branch is now what the server
+     renders, and a serialized inline `opacity: 0` / `scaleY(0)` hides the whole
+     capability column from anything that doesn't run JS. Same defect the h1 and
+     the old glass cards were each fixed for — it just moved here when the rail
+     stopped being desktop-only. */
+  animation: railDraw 0.9s ease-in-out 0.45s both;
+}
+
+@keyframes railDraw {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
 }
 
 .capList {
@@ -452,10 +480,24 @@
   gap: 30px;
 }
 
-/* Rows hang off the spine; the indent clears the dot + line. */
+/* Rows hang off the spine; the indent clears the dot + line.
+   Each ignites as the line reaches it — the stagger is the delay below, set
+   per row in hero.jsx via a custom property so the markup stays a plain list. */
 .capItem {
   position: relative;
   padding-left: 32px;
+  animation: capItemIn 0.5s ease-out var(--cap-delay, 0s) both;
+}
+
+@keyframes capItemIn {
+  from {
+    opacity: 0.01;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* Node on the spine — the glass cards' luminous marker, centred on the line
@@ -469,6 +511,34 @@
   border-radius: 50%;
   background: #96b9f9;
   box-shadow: 0 0 12px rgba(150, 185, 249, 0.8);
+  animation: capDotIn 0.35s ease-out var(--cap-delay, 0s) both;
+}
+
+@keyframes capDotIn {
+  from {
+    opacity: 0.01;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* One switch for the whole column: opacity only, no travel, no draw-on. The
+   spine has to end up at scaleY(1) rather than simply not animating — with
+   `both` fill and no animation it would sit at its from-state forever. */
+@media (prefers-reduced-motion: reduce) {
+  .rail,
+  .capItem,
+  .capDot {
+    animation-name: heroRevealFade;
+  }
+
+  .railLine {
+    animation: none;
+    transform: scaleY(1);
+  }
 }
 
 .capBody {

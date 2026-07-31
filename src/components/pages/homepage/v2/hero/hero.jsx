@@ -1,7 +1,6 @@
 "use client";
 
 import {useEffect, useRef, useState} from "react";
-import {motion, useReducedMotion} from "motion/react";
 import {useTranslations} from "next-intl";
 import CtaLink from "@/components/ui/cta-link/cta-link";
 import styles from "./hero.module.scss";
@@ -22,32 +21,35 @@ const CARDS = [
 const SHARP = ["cubes", "wave"];
 const isSharp = (variant) => SHARP.includes(variant);
 
-/* Cubes are a desktop treatment: they're pointer-driven (touch only ever sees
-   idle ripples) and the WebGL cost is real on phones. Below the breakpoint the
-   hero falls back to the color bends. matchMedia can't run during render (server
-   and first client render have to agree), so the variant starts null — meaning
-   *unresolved* — and HeroBackdrop renders nothing until the effect lands it.
-   Starting at "bends" instead made every desktop load mount ColorBends for a
-   beat before flipping to cubes: its chunk was fetched for nothing and the
-   gradient was visibly on screen on a hard refresh. Waiting costs one frame,
-   and the backdrops are ssr:false dynamic imports, so nothing visible has
-   loaded that early either way.
-   A `backdrop` prop or ?backdrop=<key> URL param still forces a variant. */
+/* The hero backdrop is the wave grid at every width — chosen over cubes and
+   colour bends after comparing them side by side on /preview/home-wave.
+
+   **No viewport branch here any more, and that is the point.** This used to
+   resolve cubes above 1024px and colour bends below, which meant two unrelated
+   designs on one page: a lattice on desktop, a drifting gradient on a phone.
+   The wave grid answers the split inside itself — a live canvas on desktop and
+   its own exported still below 1024px (see hero-backdrop.jsx) — so the *design*
+   is the same everywhere and only the frame rate changes.
+
+   Dropping the branch also lets the variant be known during render rather than
+   after an effect, which is what makes the capability rail server-renderable.
+   That mattered: the rail was desktop-only before, so its motion.* reveals never
+   reached the SSR HTML. Now they would have, complete with inline `opacity: 0` —
+   the same defect the h1 and the glass cards were each fixed for. They are CSS
+   keyframes instead.
+
+   A `backdrop` prop or ?backdrop=<key> still forces a variant, for comparisons.
+   That is a debug path: it lands after hydration, and nothing else depends on
+   it. */
+const DEFAULT_VARIANT = "wave";
+
 const useHeroVariant = (override) => {
-    const [variant, setVariant] = useState(override ?? null);
+    const [variant, setVariant] = useState(override ?? DEFAULT_VARIANT);
 
     useEffect(() => {
         if (override) return;
         const q = new URLSearchParams(window.location.search).get("backdrop");
-        if (q && VARIANTS.includes(q)) {
-            setVariant(q);
-            return;
-        }
-        const mq = window.matchMedia("(min-width: 1024px)");
-        const sync = () => setVariant(mq.matches ? "cubes" : "bends");
-        sync();
-        mq.addEventListener("change", sync);
-        return () => mq.removeEventListener("change", sync);
+        if (q && VARIANTS.includes(q)) setVariant(q);
     }, [override]);
 
     return variant;
@@ -155,15 +157,14 @@ const useBackdropReady = (containerRef, variant) => {
 
 const HeroV2 = ({backdrop, label}) => {
     const t = useTranslations("pages.homepage.sections.hero.v2");
-    const reducedMotion = useReducedMotion();
     const variant = useHeroVariant(backdrop);
     const backdropRef = useRef(null);
     const backdropReady = useBackdropReady(backdropRef, variant);
 
     // Tell the full-screen loader (layout level) the hero has painted, so it can
-    // draw its ring to completion and dismiss. On mobile the backdrop is the
-    // lighter color-bends canvas; useBackdropReady waits for whichever canvas the
-    // active variant mounts, so this fires correctly on both mobile and desktop.
+    // draw its ring to completion and dismiss. On mobile the backdrop is an
+    // <img>, not a canvas at all; useBackdropReady waits for whichever of the two
+    // the active variant mounts, so this fires correctly on both.
     const {markHeroReady} = useHeroLoading();
     useEffect(() => {
         if (backdropReady) markHeroReady();
@@ -214,54 +215,46 @@ const HeroV2 = ({backdrop, label}) => {
                 </div>
 
                 {isSharp(variant) ? (
-                    /* Against the cube grid, floating cards fight the geometry — so
-                       the services read as ONE object instead: a labelled column
-                       where a vertical light spine threads three luminous dots (the
-                       same marker as the glass cards' .cardDot). The spine draws on
-                       once at load and each node ignites with its row as the line
-                       reaches it — a single one-shot reveal, then stillness. The
-                       column stays transparent so the cubes read through it. Not
-                       links — it states what we provide, it doesn't navigate. */
-                    <motion.div
-                        className={styles.rail}
-                        initial={{opacity: 0}}
-                        animate={{opacity: 1}}
-                        transition={{duration: 0.8, ease: "easeOut", delay: 0.25}}
-                    >
+                    /* Against a lattice, floating cards fight the geometry — so the
+                       services read as ONE object instead: a labelled column where
+                       a vertical light spine threads three luminous dots. The spine
+                       draws on once at load and each node ignites with its row as
+                       the line reaches it — a single one-shot reveal, then
+                       stillness. The column stays transparent so the grid reads
+                       through it. Not links — it states what we provide, it doesn't
+                       navigate.
+
+                       This is the treatment at *every* width now. The glass cards
+                       below are what the sub-1024px hero used to get, and having two
+                       unrelated objects either side of a breakpoint — one a 20px
+                       backdrop-filter panel with a border, the other a hairline with
+                       no fill — was exactly the inconsistency the wave hero exists to
+                       remove. Same page, same content, one design. */
+                    <div className={styles.rail}>
                         <p className={styles.railLabel}>{t("cardsLabel")}</p>
                         <div className={styles.railBody}>
-                            <motion.span
-                                className={styles.railLine}
-                                aria-hidden="true"
-                                initial={reducedMotion ? {opacity: 0} : {scaleY: 0}}
-                                animate={reducedMotion ? {opacity: 1} : {scaleY: 1}}
-                                transition={{duration: 0.9, ease: "easeInOut", delay: 0.45}}
-                            />
+                            <span className={styles.railLine} aria-hidden="true"/>
                             <ul className={styles.capList}>
                                 {CARDS.map((card, i) => (
-                                    <motion.li
+                                    <li
                                         key={card.key}
                                         className={styles.capItem}
-                                        initial={reducedMotion ? {opacity: 0} : {opacity: 0, x: 14}}
-                                        animate={{opacity: 1, x: 0}}
-                                        transition={{duration: 0.5, ease: "easeOut", delay: 0.55 + i * 0.22}}
+                                        /* The only thing that varies per row. Everything
+                                           else about the reveal lives in the stylesheet —
+                                           see the note on .railLine for why none of this
+                                           is motion.* any more. */
+                                        style={{"--cap-delay": `${0.55 + i * 0.22}s`}}
                                     >
-                                        <motion.span
-                                            className={styles.capDot}
-                                            aria-hidden="true"
-                                            initial={reducedMotion ? {opacity: 0} : {opacity: 0, scale: 0.4}}
-                                            animate={{opacity: 1, scale: 1}}
-                                            transition={{duration: 0.35, ease: "easeOut", delay: 0.55 + i * 0.22}}
-                                        />
+                                        <span className={styles.capDot} aria-hidden="true"/>
                                         <span className={styles.capBody}>
                                             <span className={styles.capTitle}>{t(`cards.${card.key}.title`)}</span>
                                             <span className={styles.capText}>{t(`cards.${card.key}.text`)}</span>
                                         </span>
-                                    </motion.li>
+                                    </li>
                                 ))}
                             </ul>
                         </div>
-                    </motion.div>
+                    </div>
                 ) : (
                     /* Fade-in in CSS (hero.module.scss), not motion: this branch is
                        the one that ships in the SSR HTML, and a serialized

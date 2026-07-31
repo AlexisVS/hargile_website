@@ -11,9 +11,9 @@
 > | --- | --- | --- |
 > | GEO phase 1 | `main`, prod | ✅ terminé (`v0.21.0`/`v0.21.1`) |
 > | Session M4 — les 6 pages | `main`, **non poussé, non déployé** | codé et commité |
-> | Hero wave-grid | `feat/services-faq-redesign`, **poussé** | phases 1–4 faites, phase 5 ouverte |
+> | Hero wave-grid | `feat/services-faq-redesign`, **poussé** | phases 1–5 faites ; reste à choisir si on supprime `bends`/`cubes` |
 >
-> ### ✅ 2026-07-31 — hero wave-grid animé : phases 1 à 4 (branche poussée, non fusionnée)
+> ### ✅ 2026-07-31 — hero wave-grid animé : phases 1 à 5 (branche poussée, non fusionnée)
 >
 > Branche `feat/services-faq-redesign`, poussée sur origin jusqu'à `11e1c34`.
 > **Ni fusionnée, ni taguée, ni déployée** — consigne habituelle de Mihai.
@@ -74,25 +74,93 @@
 > - 390×844 : image servie, aucun canvas monté, loader parti. 1440×900 : canvas.
 > - `next build` OK, sitemap régénéré inchangé, lint à la baseline de 4.
 >
+> ### ✅ Phase 5 — tranchée en séance : le hero wave est promu sur `/`
+>
+> Mihai a comparé et choisi. `/` sert la grille wave **à toutes les largeurs** —
+> `DEFAULT_VARIANT = "wave"` dans `hero.jsx`, plus aucune branche de viewport.
+> Le rail de capacités remplace donc les cartes de verre partout, ce qui était la
+> deuxième demande : sous 1024px le hero rendait `.floatCard` (backdrop-filter
+> 20px, bordure, dégradé) pendant que le desktop rendait le filet sans fond. Deux
+> objets sans rapport de part et d'autre d'un breakpoint ; il n'y en a plus qu'un.
+>
+> Conséquence à connaître avant de toucher au rail : **il est maintenant rendu
+> côté serveur**, donc ses reveals ne sont plus du `motion.*`. Ils étaient
+> desktop-only et montaient après l'hydratation ; en devenant le défaut, leur
+> `initial={{opacity: 0}}` serait parti dans le HTML SSR — exactement le défaut
+> corrigé deux fois déjà (le h1, puis les cartes). Ce sont des keyframes CSS
+> (`railDraw`, `capItemIn`, `capDotIn`), le décalage par ligne passe par une
+> custom property `--cap-delay`. Vérifié dans le HTML servi : copie présente,
+> aucun `opacity: 0` inline.
+>
 > ### 👉 Par quoi commencer la prochaine session
 >
-> 1. **Phase 5 — décider et unifier.** C'est **le** point ouvert, et c'est un
->    choix de goût, donc celui de Mihai. Trois fonds de hero coexistent
->    aujourd'hui (`bends`, `cubes`, `wave`) : un de plus qu'au départ, alors que
->    ce chantier existait pour *supprimer* l'incohérence desktop/mobile. Comparer
->    `/` et `/preview/home-wave` côte à côte, choisir, puis supprimer les deux
->    autres variantes plutôt que les laisser vivre.
-> 2. **Un contrôle d'une commande, non fait** : `npm run images:wavegrid`
->    (cible `/services`, sans flag) n'a pas été relancé depuis que la signature
->    de `capture()` a changé dans le script. La cible `home` a tourné et exerce
->    le même code, donc le risque est faible mais non vérifié. `npm run
->    images:wavegrid && git status --short public/` : sortie vide = c'est bon.
-> 3. **Si la composition de la homepage ne plaît pas** : `?wave=N` sur
->    `/preview/home-wave` fait défiler les variantes (rendu **fixe**, pas live —
->    le mode live ignore la table de graines), puis
->    `npm run images:wavegrid:home N`. Tout est dans `wave-grid.md`.
-> 4. **Ensuite seulement**, et au go de Mihai : fusion de la branche, puis
->    reprendre les points M4 encore ouverts ci-dessous.
+> #### 1. Essayer une autre image fixe pour le hero (demande de Mihai)
+>
+> L'image servie sous 1024px est `public/images/wave-grid/home.{avif,webp}`,
+> exportée depuis la composition **`curated`** — la même table de graines que
+> `/services`, qui n'a jamais été composée pour l'ellipse de calme de la
+> homepage. C'est donc le premier endroit où chercher mieux.
+>
+> La boucle complète est dans [`wave-grid.md`](./wave-grid.md) (« Making a new
+> composition ») ; en résumé, et **dans cet ordre** :
+>
+> ```
+> npm run dev
+> # 1. feuilleter — sur la homepage, PAS sur /services : la même graine ne donne
+> #    pas la même image, chaque page est amortie par une ellipse différente
+> open http://localhost:3000/?backdrop=wave&wave=1     # puis 2, 3, 12, 34…
+>
+> # 2. exporter celles qui plaisent (60-90 s chacune, encodage AVIF)
+> npm run images:wavegrid:home 12 34
+>
+> # 3. comparer les fichiers produits, puis pointer HOME_IMAGE
+> #    (hero-backdrop.jsx) sur celui qu'on garde : "home-wave-12"
+> ```
+>
+> Trois pièges, tous déjà rencontrés :
+>
+> - **`?wave=N` rend une image FIXE, pas la grille vivante.** Feuilleter des
+>   compositions, c'est feuilleter des tables de graines, et le mode live ignore
+>   la table — il remplit sa traînée au pointeur. Un `?wave=7` en live ne
+>   montrerait rien de la composition 7.
+> - **Une composition n'est pas transportable entre les deux pages.** Toujours
+>   feuilleter sur la page qu'on exporte.
+> - **Si le problème est *où* tombe la bande sombre** et non où tombe la lumière,
+>   le levier est l'ellipse (`HOME_CALM`), pas les graines — voir la note sous
+>   `CALM` : déplacer des graines ne peut pas faire ce travail, chaque ondulation
+>   allume un anneau d'environ 6 unités de large.
+>
+> Pour garder une composition générée de façon lisible plutôt que cachée derrière
+> un numéro : la console imprime son tableau de graines sous `?wave=N`. ⚠️ Mais
+> `STILL` est **partagé** avec `/services` — le recopier dedans change aussi
+> l'image de `/services`. Si les deux pages veulent des tables différentes, c'est
+> le moment de rendre `STILL` propre à chaque page, pas de basculer l'une puis
+> l'autre.
+>
+> #### 2. Finir la phase 5 : supprimer ou garder `bends` / `cubes` ?
+>
+> Plus aucun visiteur ne les atteint (ils ne vivent que derrière `?backdrop=`),
+> donc l'incohérence visible est réglée. Restent deux fonds WebGL inutilisés, la
+> lib vendorisée `src/components/vendor/color-bends/`, et les styles
+> `.floatCard` / `.visual`. **Décision de Mihai** :
+>
+> - *supprimer* → `cube-grid.jsx`, `ColorBends`, `vendor/color-bends/`, les
+>   variantes dans `VARIANTS`, et les styles de cartes ; le code rétrécit, on perd
+>   la comparaison ;
+> - *garder* → laisser les outils de comparaison, et l'écrire dans
+>   `wave-grid.md` pour que ça ne repasse pas pour un oubli.
+>
+> #### 3. Un contrôle d'une commande, toujours non fait
+>
+> `npm run images:wavegrid` (cible `/services`, sans flag) n'a pas été relancé
+> depuis que la signature de `capture()` a changé dans le script. La cible `home`
+> a tourné et exerce le même code, donc le risque est faible mais non vérifié.
+> `npm run images:wavegrid && git status --short public/` : sortie vide = bon.
+>
+> #### 4. Ensuite seulement
+>
+> Au go de Mihai : fusion de la branche, puis les points M4 encore ouverts
+> ci-dessous.
 >
 > ### ✅ 2026-07-30 (soir) — session M4 : les 6 pages sont construites (non déployées)
 >
