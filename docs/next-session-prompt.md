@@ -3,9 +3,96 @@
 > Fichier à copier-coller tel quel en ouverture de session. C'est **la** source
 > unique : les sections « Prompt de reprise » de `homepage-performance-plan.md`
 > et `homepage-code-review-plan.md` renvoient ici pour éviter la dérive.
-> Dernière mise à jour : 2026-07-30 (fin de session M4). **La phase 1 du GEO
-> est terminée (`v0.21.0`/`v0.21.1` en prod) ; la session M4 (ENG-91/92) est
-> CODÉE et COMMITÉE sur main, non poussée, non déployée.**
+> Dernière mise à jour : 2026-07-31 (fin de session « hero wave »).
+>
+> **Trois chantiers en vol, à ne pas confondre :**
+>
+> | Chantier | Où | État |
+> | --- | --- | --- |
+> | GEO phase 1 | `main`, prod | ✅ terminé (`v0.21.0`/`v0.21.1`) |
+> | Session M4 — les 6 pages | `main`, **non poussé, non déployé** | codé et commité |
+> | Hero wave-grid | `feat/services-faq-redesign`, **poussé** | phases 1–4 faites, phase 5 ouverte |
+>
+> ### ✅ 2026-07-31 — hero wave-grid animé : phases 1 à 4 (branche poussée, non fusionnée)
+>
+> Branche `feat/services-faq-redesign`, poussée sur origin jusqu'à `11e1c34`.
+> **Ni fusionnée, ni taguée, ni déployée** — consigne habituelle de Mihai.
+> Plan de référence : [`docs/homepage-wave-hero-plan.md`](./homepage-wave-hero-plan.md).
+> Boucle d'usage quotidienne : [`docs/wave-grid.md`](./wave-grid.md).
+>
+> Le point de départ : la version *animée* de la grille n'existait plus dans le
+> code — construite animée, réécrite en image fixe, et l'animée jamais commitée.
+> Elle a été reconstruite à partir des constantes notées dans le plan.
+>
+> Ce qui existe maintenant :
+>
+> - **`wave-grid.jsx` a deux modes**, `still` (ce que `/services` livre) et
+>   `live`, dans **un seul composant**. Le texel est `{x, z, spawnTime, strength}`
+>   et le shader calcule `age = uTime - spawn` ; en mode still `uTime` reste à 0
+>   et le spawn d'une graine est simplement moins son âge — l'image fixe est donc
+>   littéralement la surface vivante, horloge arrêtée. C'est ce qui empêche les
+>   deux de diverger.
+> - **`/preview/home-wave`** : la vraie homepage avec `backdrop="wave"` forcé
+>   (un prop sur `HomePageClient`, pas une copie de la page). `noindex`, sans
+>   JSON-LD ni `generatePageMetadata` — c'est un doublon de `/` par construction.
+>   `/?backdrop=wave` fait le même A/B sans quitter la homepage.
+> - **Canvas au-dessus de 1024px, image exportée en dessous** — même langage
+>   visuel sur les deux, ce qui est exactement ce que ce hero doit démontrer
+>   contre le partage actuel cubes-desktop / bends-mobile.
+> - **La homepage a son propre export** (`home.avif`, 22 kB), distinct de
+>   `curated.*` : ellipse de calme et colonne de copie différentes, donc une
+>   image faite pour l'une place sa bande sombre au mauvais endroit sur l'autre.
+> - **Le bug du loader annoncé dans le plan était réel** : `useBackdropReady`
+>   guettait un `<canvas>`, qu'un `<img>` ne satisfait jamais. Corrigé ; la
+>   branche image attend `complete`/`load`/`error` — « prêt dès l'apparition »
+>   aurait renvoyé le loader sur un hero encore vide.
+>
+> Deux corrections demandées par Mihai en séance, gardées ici parce qu'elles
+> décrivent des pièges et pas seulement des réglages :
+>
+> - **Plein cadre.** `.sectionSharp` décale le canvas de 40px et le dissout en
+>   bas ; les deux viennent de `cube-grid`, qui a du brouillard et donc un bord
+>   lointain qui recule vraiment. La grille wave est un sol plein sans
+>   brouillard : les mêmes traitements se lisent comme un sol tranché sous la
+>   navbar. `.sectionWave` garde le reste et supprime les deux. `/services`
+>   avait tiré la même conclusion de son côté.
+> - **Le sillage saccadait.** `exp(-age / fadeTime)` vaut 1.0 à l'âge 0, donc
+>   chaque ondulation naissait à pleine hauteur et « popait ». La rampe de
+>   naissance (`MODE.live.ramp`, 0.55 s) les fond les unes dans les autres —
+>   `cube-grid.jsx` avait trouvé la même chose et l'appelle « anti-bounce ».
+>   Éclaircir la traînée pour calmer l'ensemble est le mauvais levier : on
+>   obtient un sillage plus grossier, pas plus calme.
+>
+> Vérifications faites (pas seulement supposées) :
+>
+> - **Non-régression `/services` prouvée à l'octet** : après chaque changement,
+>   `npm run images:wavegrid` reproduit `curated.avif`/`curated.webp`
+>   à l'identique, `git status` propre. C'est le contrôle à refaire après toute
+>   retouche de `wave-grid.jsx`.
+> - 60 fps verrouillé, ombres activées : médiane 16,7 ms, p95 17,0 ms sur
+>   180 frames.
+> - 390×844 : image servie, aucun canvas monté, loader parti. 1440×900 : canvas.
+> - `next build` OK, sitemap régénéré inchangé, lint à la baseline de 4.
+>
+> ### 👉 Par quoi commencer la prochaine session
+>
+> 1. **Phase 5 — décider et unifier.** C'est **le** point ouvert, et c'est un
+>    choix de goût, donc celui de Mihai. Trois fonds de hero coexistent
+>    aujourd'hui (`bends`, `cubes`, `wave`) : un de plus qu'au départ, alors que
+>    ce chantier existait pour *supprimer* l'incohérence desktop/mobile. Comparer
+>    `/` et `/preview/home-wave` côte à côte, choisir, puis supprimer les deux
+>    autres variantes plutôt que les laisser vivre.
+> 2. **Un contrôle d'une commande, non fait** : `npm run images:wavegrid`
+>    (cible `/services`, sans flag) n'a pas été relancé depuis que la signature
+>    de `capture()` a changé dans le script. La cible `home` a tourné et exerce
+>    le même code, donc le risque est faible mais non vérifié. `npm run
+>    images:wavegrid && git status --short public/` : sortie vide = c'est bon.
+> 3. **Si la composition de la homepage ne plaît pas** : `?wave=N` sur
+>    `/preview/home-wave` fait défiler les variantes (rendu **fixe**, pas live —
+>    le mode live ignore la table de graines), puis
+>    `npm run images:wavegrid:home N`. Tout est dans `wave-grid.md`.
+> 4. **Ensuite seulement**, et au go de Mihai : fusion de la branche, puis
+>    reprendre les points M4 encore ouverts ci-dessous.
 >
 > ### ✅ 2026-07-30 (soir) — session M4 : les 6 pages sont construites (non déployées)
 >
@@ -39,7 +126,7 @@
 >   hors `v2/`, homepage v1) sont toujours là, orphelins — nettoyage possible
 >   mais non fait.
 >
-> ### 👉 Par quoi commencer la prochaine session
+> ### 📌 Points M4 encore ouverts (plus le point de départ — voir le 👉 plus haut)
 >
 > 1. **Revue visuelle par Mihai** : `npm run build && npm run start`, puis les
 >    6 URLs ci-dessus sur `http://localhost:3000` (FR) et `/en/...` (EN), deux
