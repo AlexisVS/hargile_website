@@ -1,6 +1,9 @@
-/* Poster hero — the headline is the whole visual: no backdrop, no WebGL (the
-   hero loader only covers / and /contact). Same tokens as inner-hero, one step
-   larger and stacked instead of split.
+/* Poster hero — same tokens as inner-hero, one step larger and stacked instead
+   of split. A `backdrop` node is optional and slots in behind .container:
+   /services passes the WebGL wave grid, /faq passes nothing and the headline is
+   the whole visual there. Either way this is not a loader-covered route — the
+   hero loader only runs on / and /contact, so the copy must never depend on the
+   canvas having painted.
 
    No bottom hairline: whatever follows opens with its own border-top (the offer
    rows, the first FAQ chapter), and two lines 1px apart would read as a mistake. */
@@ -9,8 +12,40 @@
   position: relative;
   /* Full-bleed out of .content-container, like every v2 section. */
   margin-inline: calc(50% - 50vw);
+  /* The backdrop is inset: 0, so nothing should escape — but its canvas is sized
+     from clientWidth and a fractional viewport can round it a pixel wide. */
+  overflow: hidden;
   /* Top clears the fixed navbar — no offset comes from the layout. */
   padding: clamp(148px, 17vw, 236px) 0 clamp(52px, 7vw, 96px);
+
+  /* No eyebrow (/services): the marker row and its clamp(28px, 4vw, 52px)
+     margin are gone, so the headline has already risen ~60px on its own. This
+     is the small extra step on top of that — a step, not a halving, because
+     the floor still has to clear the fixed navbar. */
+  &.tight {
+    padding-top: clamp(126px, 14vw, 196px);
+
+    /* Slide up under the navbar, exactly as the homepage hero does. Navbar is
+       already transparent at scroll 0 and only frosts once you scroll — the dark
+       band at the top was never the bar itself, it was the in-flow Spacer the
+       navbar renders to reserve its height (navbar.jsx). Cancelling it is what
+       lets the grid start at y=0 and sit *behind* the logo rather than below it. */
+    margin-top: calc(-1 * var(--navbar-height, 68px));
+
+    /* Full viewport, so the WebGL surface reads as a floor filling the screen
+       rather than as a strip sized to the copy. Measured from y=0 thanks to the
+       negative margin above, so this is a true 100vh of grid, not 100vh plus a
+       navbar's worth. svh not vh: on mobile vh is the tallest-possible viewport,
+       so the section would sit taller than what's actually visible and push the
+       hand-off below the fold on first paint. min-, not height — the copy still
+       sets the floor if it ever outgrows this. */
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    /* Centres the copy in what's left after the navbar clearance, instead of
+       leaving it parked at the top with the extra height dumped underneath. */
+    justify-content: center;
+  }
 
   h1,
   p {
@@ -19,6 +54,12 @@
 }
 
 .container {
+  /* Above the backdrop layer, which is z-index: 0 on the same stacking context. */
+  position: relative;
+  z-index: 1;
+  /* .tight makes .hero a column flex container, where a block child would
+     otherwise stretch; this keeps the measure identical in both variants. */
+  width: 100%;
   max-width: var(--container-max);
   margin: 0 auto;
   padding: 0 var(--container-gutter);
@@ -120,6 +161,19 @@
 
 .body {
   animation-delay: 0.18s;
+}
+
+/* Without the marker the title is the first step, so the 0.09s that used to
+   follow the eyebrow now just delays the whole hero against nothing. Pull each
+   step up one slot and keep the 0.09s spacing. */
+.tight {
+  .title {
+    animation-delay: 0s;
+  }
+
+  .body {
+    animation-delay: 0.09s;
+  }
 }
 
 @keyframes posterHeroReveal {

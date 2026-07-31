@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "images:portfolio": "node scripts/optimize-portfolio-images.mjs",
+    "images:wavegrid": "node scripts/export-wave-grid.mjs",
     "seo:jsonld": "node scripts/validate-json-ld.mjs",
     "seo:indexnow": "node scripts/indexnow-ping.mjs",
     "postbuild": "next-sitemap"
