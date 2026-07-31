@@ -549,7 +549,20 @@ const WaveGrid = ({
         }
         if (shadows) {
             renderer.shadowMap.enabled = true;
-            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            /* Type left at its default, PCFShadowMap.
+
+               This used to set PCFSoftShadowMap, which as of three r184 is
+               deprecated: WebGLShadowMap.render() warns and immediately
+               reassigns itself to PCFShadowMap, once per rendered frame — so on
+               the live grid it was sixty warnings a second. Nothing about the
+               output changes by dropping it, because the reassignment happened
+               before the first shadow pass and therefore before any material
+               was compiled with a SHADOWMAP_TYPE_* define. What shipped was
+               always PCF. (Confirmed by re-export: byte-identical.)
+
+               key.shadow.radius below is still doing its job — three's PCF path
+               is a 5-tap Vogel disk with `radius = shadowRadius * texelSize.x`,
+               so the softening is a PCF feature, not a PCFSoft one. */
         }
         mount.appendChild(renderer.domElement);
 

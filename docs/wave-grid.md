@@ -287,6 +287,25 @@ map *because* it renders exactly once; both are wrong for something drawn sixty
 times a second. Measured on `/preview/home-wave`: median 16.7 ms, p95 17.0 ms
 over 180 frames, shadows on.
 
+## Shadow map type: leave it alone
+
+`renderer.shadowMap.type` is deliberately **not set**. It used to be
+`PCFSoftShadowMap`, which as of three r184 is deprecated —
+`WebGLShadowMap.render()` warns and immediately reassigns itself to
+`PCFShadowMap`, *once per rendered frame*. On a still frame that is one warning;
+on the live grid it was sixty a second.
+
+Two things worth knowing before anyone "fixes" this back:
+
+- **Nothing about the output changed by dropping it.** The reassignment happened
+  before the first shadow pass, and therefore before any material was compiled
+  with a `SHADOWMAP_TYPE_*` define — so what shipped was always PCF. Proven by
+  re-export: byte-identical.
+- **`key.shadow.radius = 4` is still doing its job.** The softening is a PCF
+  feature, not a PCFSoft one — three's PCF path is a 5-tap Vogel disk with
+  `radius = shadowRadius * texelSize.x`. Dropping the radius *would* change the
+  look; dropping the type did not.
+
 ## Known gaps
 
 - **Not verified on a real phone.** The image path removes the perf question, but
