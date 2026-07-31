@@ -12,9 +12,9 @@
 
   /* Only the first hero slides up under the fixed navbar, so its WebGL backdrop
      reaches the very top (the navbar is transparent at scroll 0 and frosts the
-     canvas rather than sitting as a black band above it). Stacked comparison
-     heroes keep their own box — a negative margin on each would pull them up
-     over the previous one. .container re-adds the offset as padding. */
+     canvas rather than sitting as a black band above it). Scoped to :first-child
+     so a second hero on the same page would keep its own box rather than being
+     pulled up over the one above. .container re-adds the offset as padding. */
   &:first-child {
     margin-top: calc(-1 * var(--navbar-height, 68px));
   }
@@ -34,37 +34,42 @@
   display: contents;
 }
 
-/* WebGL backdrop canvas — the hero's only backdrop layer.
-   Fills the whole hero: a horizontal falloff (not a radial cutout) keeps the
-   canvas edge-to-edge while easing it back behind the headline, so the copy side
-   stays legible without leaving the top of the section flat black. */
+/* The wave grid — the hero's only backdrop layer.
+
+   Edge to edge, and full opacity with a straight linear fade rather than the
+   soft wash a gradient backdrop wants, so the geometry stays sharp.
+
+   Three rules used to live here: a soft two-axis wash for the colour-bends
+   variant, a `.sectionSharp` override that shifted the canvas down 40px and
+   dissolved its bottom edge for the cube grid, and a `.sectionWave` override
+   that undid both. Only the last one was ever reachable, so this is it, flat.
+   The 40px drop and the bottom roll-off were cube-grid's and don't transfer:
+   that was a field of separated cubes with fog, so it had a far edge that
+   genuinely recedes and the treatment read as a board sitting in space. The wave
+   grid is a solid floor of near-touching pillars with no fog at all — the same
+   two moves read as the floor being cut off under the navbar and dissolving at
+   the bottom, which is the one thing a surface must never look like. /services
+   reached the same conclusion independently (wave-grid-backdrop.module.scss).
+
+   inset: 0 rather than a strip below the bar because the section already slides
+   up under the navbar (.section:first-child), which is transparent at scroll 0 —
+   so the grid's top is at y=0 and the logo floats over a full viewport of
+   floor. */
 .backdrop {
   position: absolute;
   inset: 0;
   pointer-events: none;
   opacity: 1;
-  /* The canvas renders with alpha, so a band's trough is transparent, not black and
+  /* The canvas renders with alpha, so a trough is transparent, not black, and
      never bottoms out on its own. This is the floor the troughs actually land on.
-     Matched to $background-dark: the masks thin this element over the copy side,
+     Matched to $background-dark: the mask thins this element over the copy side,
      so anything but the page base bleeds through as a visible tint seam. */
   background: #080c16;
-  /* Holds the bands back behind the headline only. Since the orb and dot grid are
-     gone there's nothing underneath left to reveal, so this now fades in fast and
-     stays opaque across the whole band side — anywhere it sits mid-way, it thins
-     both the canvas and its black backing, which costs the bands the contrast the
-     shader just gained. */
-  mask-image: linear-gradient(
-    100deg,
-    rgba(0, 0, 0, 0.62) 0%,
-    rgba(0, 0, 0, 0.92) 30%,
-    #000 46%
-  );
-  -webkit-mask-image: linear-gradient(
-    100deg,
-    rgba(0, 0, 0, 0.62) 0%,
-    rgba(0, 0, 0, 0.92) 30%,
-    #000 46%
-  );
+
+  /* Horizontal ramp only — holds the grid back behind the copy without leaving
+     the top of the section flat black. */
+  mask-image: linear-gradient(100deg, transparent 0%, rgba(0, 0, 0, 0.55) 38%, #000 62%);
+  -webkit-mask-image: linear-gradient(100deg, transparent 0%, rgba(0, 0, 0, 0.55) 38%, #000 62%);
 
   canvas {
     display: block;
@@ -72,98 +77,10 @@
     height: 100% !important;
   }
 
-  @media (max-width: 768px) {
-    /* Copy overlays the bands entirely at this width — hold it back further than
-       desktop, but not so far that the brand colour disappears again. */
-    opacity: 0.72;
-    /* The desktop mask fades left→right because that's where the headline sits;
-       on a phone the headline is at the top, so a band could run straight across
-       it. Turn the fade vertical and hold it hard: the bands drift with shader
-       time and their load phase puts one right on the title, so the title zone
-       has to stay near-black at every phase — the colour only comes up to real
-       presence below the copy, around it rather than on top of it. */
-    mask-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.08) 0%,
-      rgba(0, 0, 0, 0.2) 40%,
-      #000 64%
-    );
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.08) 0%,
-      rgba(0, 0, 0, 0.2) 40%,
-      #000 64%
-    );
-  }
-}
-
-/* Crisp variants (cube grid): full opacity and a straight linear fade rather
-   than the soft wash the gradient backdrops want, so the geometry stays sharp.
-
-   Two masks, intersected: the horizontal one holds the grid back behind the copy,
-   the vertical one dissolves it into the page at the top and bottom edges. Without
-   the second, the canvas — which is inset:0 inside the section — ends at full
-   opacity on a dead straight line, which reads as the grid being sliced off rather
-   than receding. mask-composite multiplies the two so each keeps its own axis. */
-.sectionSharp .backdrop {
-  opacity: 1;
-  /* Real margin, not a fade: the canvas shifts down as a whole (top and bottom
-     move together), keeping its original height — same camera framing, same
-     grid size. 40px is the balance point: the dense cube band rises up behind
-     the hero copy (text sits in the middle of the field), while the board's
-     fog-faded far edge still keeps clear daylight under the navbar. The
-     overhang past the section is fully transparent (the vertical mask ends at
-     97%) and pointer-events: none. */
-  top: 40px;
-  bottom: -40px;
-  mask-image:
-    linear-gradient(100deg, transparent 0%, rgba(0, 0, 0, 0.55) 38%, #000 62%),
-    linear-gradient(to bottom, #000 0%, #000 62%, transparent 97%);
-  mask-composite: intersect;
-  -webkit-mask-image:
-    linear-gradient(100deg, transparent 0%, rgba(0, 0, 0, 0.55) 38%, #000 62%),
-    linear-gradient(to bottom, #000 0%, #000 62%, transparent 97%);
-  -webkit-mask-composite: source-in;
-
-  @media (max-width: 768px) {
-    opacity: 0.75;
-  }
-}
-
-/* The wave grid takes the sharp treatment above but not its two vertical moves,
-   which are cube-grid's and don't transfer.
-
-   Both exist because cube-grid is a field of separated cubes with fog: it has a
-   far edge that genuinely recedes, so a 40px drop and a bottom roll-off read as
-   the board sitting in space. The wave grid is a solid floor of near-touching
-   pillars with no fog at all — the same two treatments read as the floor being
-   cut off at the top and dissolving at the bottom, which is the one thing a
-   surface must never look like. /services reached the same conclusion and
-   removed its vertical fade entirely (wave-grid-backdrop.module.scss); this is
-   that decision, applied to the same grid on this page.
-
-   Must come after .sectionSharp: equal specificity, so source order decides. */
-.sectionWave .backdrop {
-  /* Edge to edge. The section already slides up under the navbar
-     (.section:first-child), which is transparent at scroll 0, so inset: 0 puts
-     the grid's top at y=0 and the logo floats over it — a full viewport of
-     floor rather than a strip starting below the bar. */
-  top: 0;
-  bottom: 0;
-
-  /* Horizontal ramp only — the same one .sectionSharp uses, minus the
-     `to bottom` layer it was intersected with. Re-declared rather than
-     overridden per-layer because mask-image is a shorthand for the whole list;
-     the composite modes go back to their defaults for the same reason (with a
-     single layer -webkit's source-in has nothing to compose against). */
-  mask-image: linear-gradient(100deg, transparent 0%, rgba(0, 0, 0, 0.55) 38%, #000 62%);
-  mask-composite: add;
-  -webkit-mask-image: linear-gradient(100deg, transparent 0%, rgba(0, 0, 0, 0.55) 38%, #000 62%);
-  -webkit-mask-composite: source-over;
-
   /* Below the canvas breakpoint the copy spans the full width, so a horizontal
      falloff has nowhere left to hide the grid — drop the mask and lean on
-     opacity instead. Same conclusion /services reached at its own breakpoint. */
+     opacity instead. Same conclusion /services reached at its own breakpoint.
+     This is also where the exported still is served instead of the canvas. */
   @media (max-width: 1023px) {
     mask-image: none;
     -webkit-mask-image: none;
@@ -185,25 +102,6 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
-}
-
-/* Comparison label — only rendered while several hero variants are stacked. */
-.variantTag {
-  position: absolute;
-  top: calc(var(--navbar-height, 68px) + 18px);
-  right: 24px;
-  z-index: 2;
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(150, 185, 249, 0.35);
-  background: rgba(10, 10, 18, 0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #96b9f9;
 }
 
 .container {
@@ -384,16 +282,17 @@
 
 /* CTA buttons come from the shared CtaLink component (components/ui/cta-link). */
 
-/* --- Capability column (cube-grid variant) ---
+/* --- Capability column ---
    One composed object, not three rows: a labelled column where a vertical
-   light spine threads three luminous dots — the same marker the glass cards
-   use (.cardDot), so desktop and mobile share a signature. The spine draws on
-   once at load (motion handles the scaleY) and each node ignites as the line
-   reaches it. No boxes and no fills, so the cubes read through; no hover
-   states — these are statements, not links.
-   Legibility still comes from the type: each row carries a tight dark halo
-   (see .capTitle / .capText) that darkens only the pixels around the glyphs.
-   The cubes keep moving right up to the letterforms. */
+   light spine threads three luminous dots. The spine draws on once at load and
+   each node ignites as the line reaches it. No boxes and no fills, so the grid
+   reads through; no hover states — these are statements, not links. The
+   alternative, three glass panels floating over the backdrop, was what the
+   sub-1024px hero used to render; it is gone (see hero.jsx), so this is the
+   treatment at every width.
+   Legibility comes from the type, not from a fill: each row carries a tight
+   dark halo (see .capTitle / .capText) that darkens only the pixels around the
+   glyphs. The grid keeps moving right up to the letterforms. */
 
 .rail {
   flex: 1 1 340px;
@@ -409,8 +308,7 @@
   animation: heroRevealFade 0.8s ease-out 0.25s both;
 
   /* Below the two-column layout the rail is no longer a right-hand column —
-     it stacks under the copy and spans the measure, the same way the glass
-     cards used to. */
+     it stacks under the copy and spans the measure. */
   @media (max-width: 768px) {
     max-width: 100%;
     min-width: min(300px, 100%);
@@ -500,8 +398,8 @@
   }
 }
 
-/* Node on the spine — the glass cards' luminous marker, centred on the line
-   and on the title's first line of text. */
+/* Node on the spine — centred on the line and on the title's first line of
+   text. */
 .capDot {
   position: absolute;
   left: 0;
@@ -548,9 +446,9 @@
   min-width: 0;
 }
 
-/* The halos are what make this readable over moving cubes — tight and dark, so they
-   sit right against the glyphs instead of fogging the grid. Two stacked shadows: a
-   near one for edge contrast, a wider one to knock back a bright cube crest passing
+/* The halos are what make this readable over the moving grid — tight and dark, so
+   they sit right against the glyphs instead of fogging it. Two stacked shadows: a
+   near one for edge contrast, a wider one to knock back a bright crest passing
    behind. .section's `text-shadow: none` only targets h1/p, so these spans keep it. */
 
 .capTitle {
@@ -558,9 +456,9 @@
   font-weight: 600;
   font-size: 18px;
   letter-spacing: -0.01em;
-  /* The index above carries the brand blue now — the title goes back to near-white
-     for contrast against the cubes. Halo stays a touch heavier than .capText's:
-     it's the largest type over the busiest part of the grid. */
+  /* The label above carries the brand blue — the title goes back to near-white
+     for contrast against the grid. Halo stays a touch heavier than .capText's:
+     it's the largest type over the busiest part of the surface. */
   color: #f2f4f8;
   text-shadow:
     0 1px 3px rgba(0, 0, 0, 1),
@@ -579,242 +477,3 @@
     0 2px 10px rgba(0, 0, 0, 0.7);
 }
 
-/* --- Right-side capability cards --- */
-
-.visual {
-  /* Same 0.8 s / 0.25 s delay the motion props used, moved to CSS for the same
-     reason as the copy above: this branch is what the server renders, so an
-     inline `opacity: 0` here hid the capability blurbs from non-JS clients.
-     Opacity only, so it already IS the reduced-motion form. */
-  animation: heroRevealFade 0.8s ease-out 0.25s both;
-  flex: 1 1 340px;
-  max-width: 420px;
-  min-width: 300px;
-  position: relative;
-  /* Tall enough that the three cards clear each other with even gaps — the offsets
-     below are tuned to this height, so they move together. */
-  height: 520px;
-
-  /* Below this the absolute offsets stop working: they're fixed px, but the cards
-     grow as their text wraps to more lines, so they end up overlapping. Drop out of
-     absolute positioning entirely and let a flex column own the spacing — it can't
-     collide regardless of copy length or locale. */
-  @media (max-width: 768px) {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    height: auto;
-    min-width: min(300px, 100%);
-    max-width: 100%;
-  }
-}
-
-.floatCard {
-  position: absolute;
-  width: 232px;
-  box-sizing: border-box;
-  padding: 20px 22px;
-  border-radius: 14px;
-
-  /* Lit glass: bright enough to hold its own against the bands, still translucent.
-     The fill is a gradient rather than a flat tint — brighter at the top-left where
-     the border catches light, settling into the page's blue-black at the bottom, so
-     the card reads as a lit surface instead of a uniform panel.
-     Kept blue-tinted rather than white: a white scrim over the blue backdrop is what
-     made the earlier version read as grey plastic. */
-  background: linear-gradient(
-    155deg,
-    rgba(56, 74, 122, 0.5) 0%,
-    rgba(24, 33, 58, 0.62) 48%,
-    rgba(12, 17, 32, 0.72) 100%
-  );
-  /* Mild saturate this time — enough to keep the bands' colour alive through the
-     glass, well short of the 160% that pushed them to neon. */
-  backdrop-filter: blur(20px) saturate(115%);
-  -webkit-backdrop-filter: blur(20px) saturate(115%);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-
-  /* Ambient shadow to seat it, plus a top inner highlight for the glass edge. */
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
-
-  /* These drift continuously over a backdrop-filter, which is the expensive case —
-     promoting them keeps the blur from being recomposited against the canvas every
-     frame, which is what shows up as stutter. */
-  will-change: transform;
-
-  /* 769-1023 : ColorBends anime sous les trois cartes, et un backdrop-filter
-     dont le fond change à chaque frame se recompose à chaque frame — geler le
-     drift des cartes n'y changerait rien, c'est le canvas qui invalide le blur.
-     Dans cette bande on passe en panneau teinté : même gradient, opacité
-     montée pour compenser l'absence de verre. Au-dessus d'un gradient mouvant
-     la différence est discrète ; le tradeoff est documenté dans
-     docs/homepage-performance-plan.md (phase 3). */
-  @media (min-width: 769px) and (max-width: 1023px) {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    background: linear-gradient(
-      155deg,
-      rgba(56, 74, 122, 0.72) 0%,
-      rgba(24, 33, 58, 0.82) 48%,
-      rgba(12, 17, 32, 0.9) 100%
-    );
-  }
-
-  @media (max-width: 768px) {
-    /* The flex column above owns placement now — clear the absolute offsets the
-       variant classes set, or they'd still apply. */
-    position: static;
-    width: 100%;
-    inset: auto;
-    /* Nothing animates here — don't hold a compositing layer per card. */
-    will-change: auto;
-  }
-}
-
-/* Offsets only — the shared look lives in .floatCard. Widths are deliberately equal
-   now; the staggered left/right offsets carry the composition, and three different
-   widths just read as unaligned.
-
-   Timing: a soft symmetric curve with no flat ends, so the drift never parks at an
-   extreme the way ease-in-out does. Long, coprime durations and offset delays mean
-   the three tracks don't line up on a beat you can follow.
-
-   Animations are cleared on mobile: in the flex column a translate would drift each
-   card out of its own gap. */
-
-/* Vertical rhythm: a two-line card runs ~130px tall at this width, and the drift
-   moves each one ±14px. Spacing them 200px apart keeps ~40px of clear air between
-   neighbours even when two drift toward each other. A third line of text would eat
-   that margin — if the copy grows, raise the 200px step and .visual's height
-   together. */
-
-.floatCardA {
-  top: 0;
-  left: 0;
-  animation: floatA 13s cubic-bezier(0.37, 0.15, 0.63, 0.85) infinite;
-
-  @media (max-width: 768px) {
-    animation: none;
-  }
-}
-
-.floatCardB {
-  top: 200px;
-  right: 0;
-  animation: floatB 17s cubic-bezier(0.37, 0.15, 0.63, 0.85) infinite -3.5s;
-
-  @media (max-width: 768px) {
-    animation: none;
-  }
-}
-
-.floatCardC {
-  top: 400px;
-  left: 40px;
-  animation: floatC 19s cubic-bezier(0.37, 0.15, 0.63, 0.85) infinite -7s;
-
-  @media (max-width: 768px) {
-    animation: none;
-  }
-}
-
-.cardDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #96b9f9;
-  box-shadow: 0 0 12px rgba(150, 185, 249, 0.8);
-}
-
-.cardTitle {
-  font-family: var(--font-headings);
-  font-weight: 600;
-  font-size: 16px;
-  letter-spacing: -0.01em;
-  margin-top: 14px;
-  color: #f2f4f8;
-}
-
-.cardText {
-  font-size: 13.5px;
-  /* 300 was too fine to hold up once the size went up — at this scale the thin
-     weight reads as blurry against the backdrop rather than light. */
-  font-weight: 350;
-  color: rgba(237, 237, 237, 0.66);
-  margin-top: 5px;
-  line-height: 1.55;
-}
-
-/* One keyframe per card, each drifting on both axes with its steps at uneven
-   positions. The old pair of single-axis 0/50/100 tracks was what read as
-   mechanical: two cards shared a track, the turn landed on the same beat every
-   cycle, and ease-in-out came to a full stop at each end. Prime-ish durations
-   (13/17/19s) keep the three from resynchronising into a visible pattern. */
-
-@keyframes floatA {
-  0% {
-    transform: translate(0, 0);
-  }
-  27% {
-    transform: translate(4px, -9px);
-  }
-  58% {
-    transform: translate(-3px, -14px);
-  }
-  81% {
-    transform: translate(-5px, -6px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
-}
-
-@keyframes floatB {
-  0% {
-    transform: translate(0, 0);
-  }
-  31% {
-    transform: translate(-5px, 7px);
-  }
-  62% {
-    transform: translate(3px, 12px);
-  }
-  84% {
-    transform: translate(5px, 4px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
-}
-
-@keyframes floatC {
-  0% {
-    transform: translate(0, 0);
-  }
-  23% {
-    transform: translate(-4px, -6px);
-  }
-  54% {
-    transform: translate(5px, -11px);
-  }
-  79% {
-    transform: translate(3px, 5px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .floatCard {
-    will-change: auto;
-  }
-
-  .floatCardA,
-  .floatCardB,
-  .floatCardC {
-    animation: none;
-  }
-}

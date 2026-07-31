@@ -30,8 +30,10 @@ const ValuesV2 = () => {
                         {ambition}
                     </p>
                 )}
-                {/* Value cards — same lit-glass card + luminous dot as the hero's
-                    capability cards on mobile (.floatCard / .cardDot) */}
+                {/* Value cards — lit glass with a luminous dot. This used to be
+                    shared with the hero's sub-1024px capability cards; those are
+                    gone (the hero is one rail at every width now), so this
+                    section owns the recipe. */}
                 <div className={styles.values}>
                     {values.map((v, i) => (
                         <div

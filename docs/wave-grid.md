@@ -76,7 +76,7 @@ wrong place on the other.
 
 | | `/services` | homepage wave hero |
 | --- | --- | --- |
-| route | `/services` | **`/`** — it is the homepage default now (`/preview/home-wave` still works, and is identical) |
+| route | `/services` | **`/`** — the hero's only backdrop |
 | desktop | **the still image** | **live canvas**, ≥1024px |
 | mobile | the still image | **the still image**, <1024px |
 | image | `curated.{avif,webp}` | `home.{avif,webp}` |
@@ -85,7 +85,7 @@ wrong place on the other.
 | export command | `npm run images:wavegrid` | `npm run images:wavegrid:home` |
 
 `/services` is still everywhere because its grid never moves at all. The homepage
-moves on desktop and freezes on mobile — same cubes, same colour, same
+moves on desktop and freezes on mobile — same grid, same colour, same
 composition language on both, which is the split the homepage wave hero exists to
 introduce.
 
@@ -102,10 +102,19 @@ no generated seeds, and on `/services` no three.js at all.
 | `/services?bg=wave-7` | a different exported still, to compare |
 | `/services?wave=7` | composition 7 rendered **live** in WebGL, with a picker |
 | `/services?export=2560x1600` | live render at fixed size — what the script drives |
-| `/preview/home-wave` | canvas on desktop, `home.{avif,webp}` below 1024px |
-| `/preview/home-wave?wave=7` | composition 7 as a **still** frame, for picking |
+| `/` | canvas on desktop, `home.{avif,webp}` below 1024px |
+| `/?wave=7` | composition 7 as a **still** frame, for picking |
 | `/preview/home-wave?export=2560x1600` | fixed-size render — what the script drives |
-| `/?backdrop=wave` | the same hero on the real homepage, for an A/B |
+
+Two notes on that last row:
+
+- **`/preview/home-wave` renders the same hero as `/`**, from the same component.
+  It exists only because the export script cannot drive `/` — `agent-browser
+  open` never returns there. Do not delete it as a duplicate; see phase 6 in
+  [homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md).
+- The `?backdrop=<key>` switch, for comparing the wave grid against the cube grid
+  and the colour bends, is gone. The wave grid won and became the hero's only
+  backdrop, so there is nothing left to switch to.
 
 Two differences on the homepage worth knowing:
 
@@ -138,7 +147,7 @@ npm run dev
 open http://localhost:3000/services?wave=1
 
 # homepage hero
-open http://localhost:3000/preview/home-wave?wave=1
+open http://localhost:3000/?wave=1
 ```
 
 On `/services` a picker appears top-right: `← wave 1 → random`. On the homepage
@@ -369,7 +378,7 @@ Still mode passes ramp 0, guarded in GLSL as `smoothstep(0.0, max(uRamp,
 
 The perf column is the other one. The still frame chose DPR 2 and a 1024 shadow
 map *because* it renders exactly once; both are wrong for something drawn sixty
-times a second. Measured on `/preview/home-wave`: median 16.7 ms, p95 17.0 ms
+times a second. Measured on the homepage hero: median 16.7 ms, p95 17.0 ms
 over 180 frames, shadows on.
 
 ## Shadow map type: leave it alone
@@ -405,9 +414,12 @@ Two things worth knowing before anyone "fixes" this back:
   anything in `wave-grid.jsx`: re-run both exports and confirm `git status` is
   clean — if a file changed, either the change was unintended or the image needs
   committing.
-- **`bends` and `cubes` still exist behind `?backdrop=`.** The homepage default
-  is `wave` at every width now, so no visitor reaches them — but they are two
-  unused WebGL backdrops plus a vendored library (`src/components/vendor/color-bends/`)
-  and the `.floatCard` styles, kept alive only as comparison tools. Deleting them
-  is the last piece of Phase 5 in
-  [homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md).
+- **There is no second backdrop to fall back to any more.** `bends` and `cubes`
+  were deleted once the wave grid became the default at every width (phase 6 in
+  [homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md)), along with
+  the `?backdrop=` switch and the `.floatCard` hero styles. If a change to
+  `wave-grid.jsx` breaks the homepage hero, the homepage has no backdrop —
+  `git show 09ddb03` is the archive, not the codebase.
+  Two things did **not** go, both for reasons that are easy to miss:
+  `src/components/vendor/color-bends/` is still live on `/contact`, and
+  `/preview/home-wave` is still what the export script drives.

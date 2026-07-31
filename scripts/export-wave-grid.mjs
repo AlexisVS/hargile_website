@@ -23,10 +23,10 @@
 // For /services, point DEFAULT_IMAGE in wave-grid-backdrop.jsx at whichever one
 // you keep; for the homepage, HOME_IMAGE in hero-backdrop.jsx.
 //
-// The homepage target renders through the live hero, not through a dedicated
-// export page. That is deliberate: the exported image has to be the composition
-// the live canvas draws, and a second mounting of WaveGrid is exactly how the
-// two would drift apart.
+// Neither target uses a dedicated export component. That is deliberate: the
+// exported image has to be the composition the live canvas draws, and a second
+// mounting of WaveGrid is exactly how the two would drift apart. The homepage
+// target's route renders the real homepage for the same reason.
 //
 // Requires agent-browser (npm i -g agent-browser) — a headless browser is
 // unavoidable for WebGL, and this keeps a ~300 MB Puppeteer download out of the
@@ -52,7 +52,16 @@ const ORIGIN = process.env.EXPORT_ORIGIN ?? "http://localhost:3000";
 const OUT_DIR = path.join("public", "images", "wave-grid");
 
 /* Where each page's grid lives, and what its files are called.
-   `curated` is the name of the hand-composed default; variants get a suffix. */
+   `curated` is the name of the hand-composed default; variants get a suffix.
+
+   ⚠️ The homepage target drives /preview/home-wave and NOT `/`, even though the
+   two render the same hero from the same component. Repointing it at `/` was
+   tried and reverted: `agent-browser open` never returned on `/` and no image
+   was written, where the preview route captures in about half a minute. The
+   likely difference is the branded loader overlay, which HeroLoadingProvider
+   mounts on `/` and `/contact` only — but the cause was not pinned down. So the
+   preview route is load-bearing for this script; do not delete it as a duplicate
+   of `/` without re-testing this. */
 const TARGETS = {
     services: {path: "/services", curated: "curated", variant: (v) => `wave-${v}`},
     home: {path: "/preview/home-wave", curated: "home", variant: (v) => `home-wave-${v}`},

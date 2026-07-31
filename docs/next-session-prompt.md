@@ -3,7 +3,7 @@
 > Fichier à copier-coller tel quel en ouverture de session. C'est **la** source
 > unique : les sections « Prompt de reprise » de `homepage-performance-plan.md`
 > et `homepage-code-review-plan.md` renvoient ici pour éviter la dérive.
-> Dernière mise à jour : 2026-07-31 (fin de session « hero wave »).
+> Dernière mise à jour : 2026-07-31 (fin de session « hero wave », phase 6).
 >
 > **Trois chantiers en vol, à ne pas confondre :**
 >
@@ -11,7 +11,7 @@
 > | --- | --- | --- |
 > | GEO phase 1 | `main`, prod | ✅ terminé (`v0.21.0`/`v0.21.1`) |
 > | Session M4 — les 6 pages | `main`, **non poussé, non déployé** | codé et commité |
-> | Hero wave-grid | `feat/services-faq-redesign`, **poussé** | phases 1–5 faites ; reste à choisir si on supprime `bends`/`cubes` |
+> | Hero wave-grid | `feat/services-faq-redesign`, **poussé** | phases 1–6 faites ; reste l'image fixe (yeux de Mihai) puis la fusion |
 >
 > ### ✅ 2026-07-31 — hero wave-grid animé : phases 1 à 5 (branche poussée, non fusionnée)
 >
@@ -72,7 +72,8 @@
 > - 60 fps verrouillé, ombres activées : médiane 16,7 ms, p95 17,0 ms sur
 >   180 frames.
 > - 390×844 : image servie, aucun canvas monté, loader parti. 1440×900 : canvas.
-> - `next build` OK, sitemap régénéré inchangé, lint à la baseline de 4.
+> - `next build` OK, sitemap régénéré inchangé, lint à la baseline de 4
+>   (⚠️ la phase 6 l'a depuis ramenée à 2 — voir plus haut).
 >
 > ### ✅ Phase 5 — tranchée en séance : le hero wave est promu sur `/`
 >
@@ -92,10 +93,80 @@
 > custom property `--cap-delay`. Vérifié dans le HTML servi : copie présente,
 > aucun `opacity: 0` inline.
 >
+> ### ✅ 2026-07-31 (suite) — phase 6 : les variantes de comparaison sont supprimées
+>
+> Mihai a laissé le choix garder/supprimer à l'assistant. **Supprimé.** La
+> comparaison avait déjà eu lieu et été tranchée ; ce qui restait, c'était deux
+> fonds WebGL et une *deuxième mise en page de hero* qu'aucun visiteur ne pouvait
+> atteindre — soit exactement la forme du problème que tout ce chantier existait
+> pour supprimer. `git show 09ddb03` archive mieux qu'un import mort.
+>
+> **Deux points sur lesquels le cadrage de la session précédente (le 👉 qui était
+> ici) se trompait, tous deux trouvés dans le code et pas dans les docs :**
+>
+> - **`src/components/vendor/color-bends/` ne part PAS.** Le point 2 la listait
+>   comme supprimable avec la variante `bends`. Elle est **vivante sur
+>   `/contact`** (`contact-form.jsx`, derrière `BendsBackdrop`) et n'a jamais été
+>   seulement une variante de hero. Seule la branche `bends` du hero est partie.
+> - **Le gros du gain, c'est le hero lui-même.** Sans `bends` ni `cubes`,
+>   `isSharp(variant)` est toujours vrai : la branche des cartes de verre
+>   (`.visual`, `.floatCard`, les trois keyframes de dérive `floatA/B/C`,
+>   `.cardDot`/`.cardTitle`/`.cardText`) était du markup inatteignable et
+>   ~240 lignes de feuille de style morte. `.sectionSharp` et `.sectionWave` se
+>   sont effondrées dans `.backdrop` pour la même raison : trois règles en
+>   cascade dont seule la dernière s'appliquait.
+>
+> Sont partis : `cube-grid.jsx` ; les branches `bends`/`cubes`, `BEND_COLORS` et
+> `usePortrait` de `hero-backdrop.jsx` ; `VARIANTS`, `DEFAULT_VARIANT`,
+> `useHeroVariant`, `SHARP`/`isSharp`, les props `backdrop`/`label` et la branche
+> cartes de `hero.jsx` ; `.sectionSharp`, `.sectionWave`, `.variantTag` et tout le
+> bloc cartes de `hero.module.scss` ; et la prop `backdrop` de `HomePageClient`.
+>
+> ### ⚠️ `/preview/home-wave` a été supprimée, puis remise — à lire avant de la resupprimer
+>
+> Elle avait tout de la victime évidente suivante : sa raison d'être était la
+> comparaison, la comparaison est finie, et elle rend maintenant exactement ce que
+> rend `/` — un doublon `noindex` par construction. Elle est donc partie, et la
+> cible `home` de `scripts/export-wave-grid.mjs` a été repointée sur `/`.
+>
+> **Ça ne marche pas, et le repointage a été annulé.** Sur `/`,
+> `agent-browser open` ne rend jamais la main — deux tentatives, cinq minutes
+> chacune, aucune image écrite — là où la route de preview capture en une
+> trentaine de secondes. Pire : le premier blocage a coincé la session du
+> navigateur, après quoi même la capture `/services` (pourtant connue bonne) s'est
+> bloquée jusqu'à ce que les processus Chrome headless orphelins soient tués.
+>
+> La cause n'a **pas** été identifiée. Le candidat le plus probable est le loader
+> de marque, que `HeroLoadingProvider` monte sur `/` et `/contact` uniquement et
+> que la route de preview n'affiche donc jamais — c'est la seule différence de
+> comportement entre les deux pages. Mais c'est une hypothèse, pas un constat.
+>
+> Donc la route reste, avec une justification nouvelle : **c'est la surface
+> d'export, plus une preview.** Elle porte `npm run images:wavegrid:home`, qui
+> fabrique l'image du hero sous 1024px et dont le point 1 ci-dessous a besoin. La
+> route et le `TARGETS` du script portent chacun une note qui le dit.
+>
+> Vérifié, pas supposé :
+>
+> - `npm run images:wavegrid` reproduit `curated.avif`/`curated.webp` à l'octet
+>   (`git status --short public/` vide). **Ça clôt aussi le contrôle d'une
+>   commande qui traînait** depuis le changement de signature de `capture()` —
+>   c'était le point 3 de l'ancien 👉.
+> - `npm run images:wavegrid:home` reproduit `home.avif`/`home.webp` à l'octet
+>   via la route restaurée.
+> - `next build` OK ; `next-sitemap` régénère à l'identique.
+> - **Lint : de la baseline de 4 erreurs à 2.** Deux des quatre étaient des
+>   `react-hooks/set-state-in-effect` dans `hero.jsx`, dans les effets de
+>   résolution de variante qui n'existent plus. ⚠️ **La baseline est 2
+>   maintenant** — les mentions « baseline de 4 » plus bas décrivent l'état
+>   d'avant cette session. Les deux restantes sont dans `mvp-studio.jsx` et
+>   `Footer.jsx`.
+>
 > ### 👉 Par quoi commencer la prochaine session
 >
 > #### 1. Essayer une autre image fixe pour le hero (demande de Mihai)
 >
+> **C'est le seul point qui demande les yeux de Mihai, et il n'a pas bougé.**
 > L'image servie sous 1024px est `public/images/wave-grid/home.{avif,webp}`,
 > exportée depuis la composition **`curated`** — la même table de graines que
 > `/services`, qui n'a jamais été composée pour l'ellipse de calme de la
@@ -108,7 +179,7 @@
 > npm run dev
 > # 1. feuilleter — sur la homepage, PAS sur /services : la même graine ne donne
 > #    pas la même image, chaque page est amortie par une ellipse différente
-> open http://localhost:3000/?backdrop=wave&wave=1     # puis 2, 3, 12, 34…
+> open http://localhost:3000/?wave=1     # puis 2, 3, 12, 34…
 >
 > # 2. exporter celles qui plaisent (60-90 s chacune, encodage AVIF)
 > npm run images:wavegrid:home 12 34
@@ -116,6 +187,11 @@
 > # 3. comparer les fichiers produits, puis pointer HOME_IMAGE
 > #    (hero-backdrop.jsx) sur celui qu'on garde : "home-wave-12"
 > ```
+>
+> ⚠️ Deux URL ont changé avec la phase 6 : on feuillette sur `/?wave=N`
+> (`?backdrop=` n'existe plus), mais **l'export passe toujours par
+> `/preview/home-wave`** — voir l'encadré ci-dessus, la route est repartie puis
+> revenue.
 >
 > Trois pièges, tous déjà rencontrés :
 >
@@ -137,27 +213,16 @@
 > le moment de rendre `STILL` propre à chaque page, pas de basculer l'une puis
 > l'autre.
 >
-> #### 2. Finir la phase 5 : supprimer ou garder `bends` / `cubes` ?
+> #### 2. Une revue visuelle du hero, à deux largeurs
 >
-> Plus aucun visiteur ne les atteint (ils ne vivent que derrière `?backdrop=`),
-> donc l'incohérence visible est réglée. Restent deux fonds WebGL inutilisés, la
-> lib vendorisée `src/components/vendor/color-bends/`, et les styles
-> `.floatCard` / `.visual`. **Décision de Mihai** :
+> Rien ne devrait avoir bougé à l'écran : tout ce qui est supprimé était
+> inatteignable, et la fusion `.sectionSharp`/`.sectionWave` → `.backdrop` a été
+> faite en gardant règle par règle ce qui gagnait réellement dans la cascade
+> (au-dessus de 1024px : `inset: 0`, masque horizontal seul, opacité 1 ; en
+> dessous : pas de masque, opacité 0,6). Mais c'est du CSS refondu à la main, donc
+> ça se regarde : `/` à 1440x900 et à 390x844.
 >
-> - *supprimer* → `cube-grid.jsx`, `ColorBends`, `vendor/color-bends/`, les
->   variantes dans `VARIANTS`, et les styles de cartes ; le code rétrécit, on perd
->   la comparaison ;
-> - *garder* → laisser les outils de comparaison, et l'écrire dans
->   `wave-grid.md` pour que ça ne repasse pas pour un oubli.
->
-> #### 3. Un contrôle d'une commande, toujours non fait
->
-> `npm run images:wavegrid` (cible `/services`, sans flag) n'a pas été relancé
-> depuis que la signature de `capture()` a changé dans le script. La cible `home`
-> a tourné et exerce le même code, donc le risque est faible mais non vérifié.
-> `npm run images:wavegrid && git status --short public/` : sortie vide = bon.
->
-> #### 4. Ensuite seulement
+> #### 3. Ensuite seulement
 >
 > Au go de Mihai : fusion de la branche, puis les points M4 encore ouverts
 > ci-dessous.
@@ -182,7 +247,8 @@
 >   service ; `FAQPage.mainEntity` sur `/faq` construit depuis `pages.faq.items`
 >   (source unique HTML + markup). **Sortie des 3 anciennes pages vérifiée
 >   byte-identique.** `npm run seo:jsonld -- --site` : 18/18 URLs à 0 erreur,
->   contrôle négatif passé. Lint : baseline 4 inchangée.
+>   contrôle négatif passé. Lint : baseline 4 inchangée (⚠️ 2 depuis la
+>   phase 6 — voir plus haut).
 > - Les 8 points de couture sont faits : redirect `services` retiré de `gone`
 >   (`next.config.mjs`), ROUTES +6, `seo.pages.*` fr+en (le `ServicePage`
 >   invalide → `CollectionPage`), sitemap 18 URLs, SITE_PATHS +6, llms.txt

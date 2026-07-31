@@ -35,9 +35,10 @@
 }
 
 /* --- Value cards: 3 + 2 layout via flex-wrap.
-   Same lit-glass recipe as the hero's capability cards (.floatCard in
-   hero.module.scss) so the two sections read as one card system; keep the two
-   in sync if the recipe changes. --- */
+   The lit-glass recipe used to be shared with the hero's .floatCard; the hero
+   dropped its cards for a single capability rail at every width, so this is now
+   the only place it lives. The dot (.cardDot) is still the same marker the
+   hero's rail uses (.capDot) — that signature is deliberately shared. --- */
 
 .values {
   margin-top: 64px;

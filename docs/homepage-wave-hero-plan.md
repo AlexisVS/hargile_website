@@ -8,18 +8,24 @@
 > **moving on desktop, a still frame on mobile**. One visual language on both,
 > replacing today's split where desktop gets cubes and mobile gets colour bends.
 >
-> **Status (2026-07-31, second session).** Phases 1–4 shipped, and Phase 5 is
-> **decided**: Mihai picked the wave hero, so `/` now serves it at every width —
-> live canvas on desktop, exported still below 1024px, and the capability rail
-> instead of the glass cards on both. What is left of Phase 5 is only the
-> *deletion* of the `bends`/`cubes` variants, which still exist behind
-> `?backdrop=`.
+> **Status (2026-07-31, third session).** Phases 1–6 shipped. Mihai picked the
+> wave hero, so `/` serves it at every width — live canvas on desktop, exported
+> still below 1024px, capability rail instead of glass cards on both — and phase
+> 6 then removed everything the comparison had needed: the `bends` and `cubes`
+> variants, the variant switcher, and the hero's glass-card branch. **The hero
+> now has exactly one backdrop and one layout.** `/preview/home-wave` survives,
+> but as the export script's target rather than as a preview — see phase 6.
 >
 > For the day-to-day loop — browsing compositions, exporting either page's image,
 > moving a quiet zone — see [wave-grid.md](./wave-grid.md); it now covers both
 > pages side by side.
 
 ## Where we are
+
+> **Superseded — this describes the starting point, not the code.** Phase 6
+> removed the switcher this section is about: there is no `backdrop` prop, no
+> `?backdrop=`, and no `VARIANTS` any more. Kept because it is what the plan was
+> written against; the line reference below no longer resolves.
 
 The homepage hero already has everything needed to host a second backdrop:
 
@@ -324,22 +330,15 @@ unchanged. The page still declares `robots: {index: false, follow: false}` and
 deliberately carries no `JsonLdForPage` and no `generatePageMetadata` — both
 would assert it is canonical, and it is a duplicate of `/` by construction.
 
-### 🟡 Phase 5 — Decide and unify
+### ✅ Phase 5 — Decide and unify
 
 Once compared, either promote the wave hero to `/` and delete the `bends`/`cubes`
 variants, or drop it. **Do not leave three variants alive indefinitely** — the
-current split (bends on mobile, cubes on desktop) is precisely the inconsistency
+old split (bends on mobile, cubes on desktop) is precisely the inconsistency
 this is meant to remove, and a third option makes it worse until it is resolved.
 
-If promoted: `ColorBends` and `cube-grid.jsx` lose their only callers, and
-`src/components/vendor/color-bends/` can go with them.
-
-**Decided, half-done.** Mihai picked the wave hero after comparing. `/` now
-serves it at every width — `DEFAULT_VARIANT = "wave"` in `hero.jsx`, no viewport
-branch at all. **The shipped design is one thing everywhere; the deletion is
-not done.** `bends` and `cubes` survive only behind `?backdrop=`, as comparison
-tools rather than as things a visitor can reach. Whether to delete them outright
-is the remaining call — see the next-session prompt.
+**Done.** Mihai picked the wave hero after comparing. `/` serves it at every
+width — no viewport branch at all.
 
 Two consequences of dropping the viewport branch, both load-bearing:
 
@@ -362,6 +361,72 @@ The desktop prefetch was also repointed from `./cube-grid` to the wave grid — 
 it stays desktop-only for a stronger reason than before: below 1024px there is no
 canvas at all now, so prefetching three.js on a phone would download ~150 kB to
 render nothing.
+
+### ✅ Phase 6 — Delete the comparison scaffolding
+
+Mihai left the keep-or-delete call to the assistant. **Deleted.** The comparison
+had already happened and been decided; what remained was two WebGL backdrops and
+a second hero layout that no visitor could reach, which is the exact shape of the
+problem this whole plan existed to remove. `git show 09ddb03` is a better archive
+than a dead import.
+
+Two things the earlier framing of this decision got wrong, both found in the code
+rather than in the docs:
+
+- **`src/components/vendor/color-bends/` does NOT go.** Phase 5's note above and
+  the next-session prompt both listed it as removable with the `bends` variant.
+  It is live on `/contact` (`contact-form.jsx`, behind `BendsBackdrop`) and was
+  never only a hero variant. Only the hero's `bends` branch was removed.
+- **The hero itself collapsed, and that was the bulk of the win.** With `bends`
+  and `cubes` gone, `isSharp(variant)` is always true, so the glass-card branch
+  — `.visual`, `.floatCard`, three `floatA/B/C` drift keyframes, `.cardDot` /
+  `.cardTitle` / `.cardText` — was unreachable markup and ~240 lines of dead
+  stylesheet. `.sectionSharp` and `.sectionWave` collapsed into `.backdrop` for
+  the same reason: three cascading rules where only the last was ever applied.
+
+What went, in full: `cube-grid.jsx`; the `bends`/`cubes` branches, `BEND_COLORS`
+and `usePortrait` in `hero-backdrop.jsx`; `VARIANTS`, `DEFAULT_VARIANT`,
+`useHeroVariant`, `SHARP`/`isSharp`, the `backdrop` and `label` props and the
+glass-card branch in `hero.jsx`; `.sectionSharp`, `.sectionWave`, `.variantTag`
+and the whole card block in `hero.module.scss`; and the `backdrop` prop on
+`HomePageClient`.
+
+### ⚠️ `/preview/home-wave` was deleted, then put back — read this before deleting it again
+
+It looked like the obvious next casualty. Its stated purpose was comparison, the
+comparison was over, and it now renders exactly what `/` renders — a noindex
+duplicate by construction. So it went, and `scripts/export-wave-grid.mjs` had its
+`home` target repointed at `/` to compensate.
+
+**That did not work, and the repoint was reverted.** Driving `/` left
+`agent-browser open` waiting indefinitely — two attempts, five minutes each, no
+image written — where the preview route captures in about half a minute. Worse,
+the first hang wedged the browser session, after which even the known-good
+`/services` capture hung until the orphaned headless Chrome processes were killed;
+that is what made this take a while to see clearly.
+
+The cause was **not** pinned down. The most likely candidate is the branded
+loader overlay, which `HeroLoadingProvider` mounts on `/` and `/contact` only and
+which the preview route therefore never shows — it is the one behavioural
+difference between the two pages. But that is a hypothesis, not a finding.
+
+So the route stays, re-justified: **it is the export surface, not a preview.**
+It is load-bearing for `npm run images:wavegrid:home`, which is how the
+sub-1024px hero image is made and which the still-image loop still needs. Both
+the route and the script's `TARGETS` carry a note saying so.
+
+Verified, not assumed:
+
+- `npm run images:wavegrid` reproduces `curated.avif`/`curated.webp` byte-for-byte
+  (`git status --short public/` empty). This also closes the one-command check
+  that had been outstanding since `capture()`'s signature changed.
+- `npm run images:wavegrid:home` reproduces `home.avif`/`home.webp` byte-for-byte
+  through the restored route.
+- `next build` passes; `next-sitemap` regenerates unchanged.
+- **Lint dropped from the baseline of 4 errors to 2.** Two of the four were
+  `react-hooks/set-state-in-effect` in `hero.jsx`, in the variant-resolution
+  effects that no longer exist. **The baseline is 2 now** — the remaining two are
+  in `mvp-studio.jsx` and `Footer.jsx` and are untouched by this work.
 
 ## Open questions
 

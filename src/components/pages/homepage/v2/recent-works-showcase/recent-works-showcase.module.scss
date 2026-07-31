@@ -99,8 +99,10 @@
 
 /* --- Cartes projet ----------------------------------------- */
 
-/* Same lit-glass recipe as the hero/values cards (.floatCard in hero.module.scss)
-   so the three card families read as one system. The image owns the top of the
+/* Same lit-glass recipe as the values cards (.card in values.module.scss) so the
+   two card families read as one system. It was three: the hero had .floatCard
+   below 1024px, but the hero is one capability rail at every width now and its
+   cards are gone. The image owns the top of the
    card, so the gradient lives on .cardBody — that's the visible glass surface,
    with the bright light-catch corner emerging right under the media edge.
    No backdrop-filter here: the rail scrolls on transform, and re-blurring every
