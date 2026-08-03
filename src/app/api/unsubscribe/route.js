@@ -14,10 +14,12 @@
 // generates the links (chatseo-workspace/scripts/make-unsubscribe-link.mjs).
 // No token, no action: prevents forged opt-outs and email enumeration.
 //
-// Storage: the durable target is Dorian's Postgres suppression_list (posted to
-// SUPPRESSION_API_URL when configured). Until it exists, every opt-out fires an
-// alert email via Resend so nothing is ever lost. If NEITHER channel succeeds
-// we answer 500 — losing an opt-out is worse than asking the client to retry.
+// Storage: opt-outs are written to core.suppression_list through the
+// access-layer (SUPPRESSION_API_URL + X-API-Key). That service is deliberately
+// not exposed to the internet, so the URL is its in-cluster address and only
+// resolves from a pod. The Resend alert email is a secondary channel, kept
+// until the wiring is verified in production. If NEITHER channel succeeds we
+// answer 500 — losing an opt-out is worse than asking the client to retry.
 
 import { NextResponse } from "next/server";
 import crypto from "node:crypto";
@@ -107,10 +109,13 @@ async function recordOptOut(email, source) {
         headers: {
           "Content-Type": "application/json",
           ...(SUPPRESSION_API_KEY
-            ? { Authorization: `Bearer ${SUPPRESSION_API_KEY}` }
+            ? { "X-API-Key": SUPPRESSION_API_KEY }
             : {}),
         },
         body: JSON.stringify({ email, reason: "unsubscribe", source }),
+        // 201 on first record, 200 on replay — both fine. A hung call must not
+        // stall the mail client's one-click POST.
+        signal: AbortSignal.timeout(5000),
       });
       recorded = res.ok;
       if (!res.ok)
