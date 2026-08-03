@@ -42,8 +42,10 @@ const FaqAccordion = ({items, reveal, headingLevel: Heading = "h3", defaultOpenI
                 const panelId = `${baseId}-a${i}`;
                 const revealProps = reveal ? reveal(Math.min(i, 8)) : {};
 
+                /* The row wrapper carries no class: it held the hairline that
+                   is gone, and is now just the grid child .list spaces. */
                 return (
-                    <div key={q} className={styles.item} {...revealProps}>
+                    <div key={q} {...revealProps}>
                         <Heading className={styles.q}>
                             <button
                                 type="button"
