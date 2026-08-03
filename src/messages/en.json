@@ -209,7 +209,7 @@
       "hero": {
         "eyebrow": "FAQ",
         "title": "The questions we actually get asked.",
-        "answer": "HARGILE is an independent web studio in Saint-Gilles, Brussels, building custom web applications for SMEs. Here are direct answers to the questions prospects ask us most: cost, timelines, code ownership, technology and maintenance. Missing yours? Write to us."
+        "answer": "HARGILE is an independent web studio in Saint-Gilles, Brussels, building custom web applications for SMEs. Here are direct answers to the questions asked before choosing an agency: how much a custom application costs in Belgium, how long it takes, agency or freelancer, and who owns the code at the end. Missing yours? Write to us."
       },
       "groups": {
         "project": "Project & timelines",
@@ -218,76 +218,94 @@
       },
       "items": [
         {
+          "id": "agence",
+          "group": "project",
+          "q": "How do you choose a web agency in Brussels to build a custom application?",
+          "a": "Three things can be checked before you sign. Who actually writes the code: at HARGILE, design and development are done in-house in Saint-Gilles, never subcontracted. How the price is set: during scoping, before the project starts, and it does not move afterwards. And who owns the code at the end: you do. The rest — references, availability, working language — fits in one call."
+        },
+        {
           "id": "process",
           "group": "project",
-          "q": "How does a project with HARGILE unfold?",
+          "q": "How does a custom web development project unfold, from scoping to launch?",
           "a": "Always in the same order: a scoping phase where we define scope, priorities and price together; the design of flows and screens; development, with regular check-ins; testing; launch. Everything is done in-house by the same team, and you have one direct contact from start to finish."
         },
         {
           "id": "delai",
           "group": "project",
-          "q": "How long does it take to build a web application?",
+          "q": "How long does it take to build a custom web application for an SME?",
           "a": "It depends on the scope — and the scope is fixed during scoping, not discovered along the way. The most concrete benchmark: our MVP offer delivers a complete, usable product in 30 days. A showcase site can be faster; a richer business application takes several months, in planned stages."
+        },
+        {
+          "id": "mvp-30",
+          "group": "project",
+          "q": "Is it really possible to build an MVP in 30 days?",
+          "a": "Yes, on one condition: the scope is frozen before we start. Week 1, scoping and design; weeks 2 and 3, development; week 4, testing and launch. What comes out is a real product, live, usable by real users — not a mockup. Anything that does not fit inside the 30 days is priced separately, and comes after."
         },
         {
           "id": "start",
           "group": "project",
-          "q": "What should we prepare before contacting you?",
+          "q": "What should you prepare before contacting a web agency about a custom project?",
           "a": "Nothing is required: your idea and your business reality are enough. Examples of sites you like, known constraints or an existing system to take over all help — but turning all that into a clear scope is exactly what the scoping phase is for."
         },
         {
           "id": "langues",
           "group": "project",
-          "q": "Where are you based, and in which languages do you work?",
+          "q": "Where is HARGILE based, and do you work in both French and English?",
           "a": "In Saint-Gilles, Brussels — Rue Sterckx 5. We work in French and English, and we regularly ship multilingual sites, like La Marquisette (trilingual) or this very site (French and English)."
         },
         {
           "id": "cout",
           "group": "budget",
-          "q": "How much does a custom web application cost in Belgium?",
+          "q": "How much does it cost to build a custom web application for an SME in Belgium?",
           "a": "There is no honest one-size-fits-all rate: the price depends on the scope. Our commitment is about the method: the price is set during scoping, announced before the project starts, and it does not move — no time-based billing, no surprise overruns. For a first product, the 30-day MVP offer comes at a fixed price."
         },
         {
           "id": "prix-fixe",
           "group": "budget",
-          "q": "How is a fixed price possible on custom work?",
-          "a": "Because the scope is frozen before we start: scoping defines precisely what will be delivered, and the price matches that scope. If a new idea appears mid-project, it is priced separately and you decide whether to add it — the initial price does not change."
+          "q": "Can you get a fixed price for custom development, with no time-based billing?",
+          "a": "Yes — and it works because the scope is frozen before we start: scoping defines precisely what will be delivered, and the price matches that scope. If a new idea appears mid-project, it is priced separately and you decide whether to add it — the initial price does not change."
+        },
+        {
+          "id": "freelance",
+          "group": "budget",
+          "q": "Should an SME hire a web agency or a freelance developer?",
+          "a": "A freelancer is often the right call for a well-scoped job that needs a single skill. A team becomes useful when design, development and deployment move in parallel, and when someone still has to be there in two years. HARGILE is an independent studio: one direct contact like a freelancer, a team behind it to ship and maintain."
         },
         {
           "id": "propriete",
           "group": "budget",
-          "q": "Who owns the code at the end of the project?",
+          "q": "Who owns the source code at the end of a web development project?",
           "a": "You do. Code and data are yours on delivery: you can host elsewhere, hand the next step to another team, or keep going with us. You stay by choice, never out of necessity."
         },
         {
           "id": "stack",
           "group": "tech",
-          "q": "Which technologies do you work with?",
+          "q": "Which technologies do you use to build a custom web application?",
           "a": "Modern, proven web technologies — notably React and Next.js: this very site is built with that framework. The precise choice is made during scoping, based on your project and your existing systems — never the other way around."
         },
         {
           "id": "wordpress",
           "group": "tech",
-          "q": "Custom or WordPress: what should an SME choose?",
+          "q": "Should an SME choose WordPress or custom development for its website?",
           "a": "WordPress makes sense for publishing content on a tight budget. Custom becomes the right choice when your site has to do something: booking, selling, business processes — or when a generic theme holds your image back. Ecole du Bonheur came with a generic WordPress; we turned it into a digital experience worthy of its project."
         },
         {
           "id": "maintenance",
           "group": "tech",
-          "q": "What happens after launch?",
-          "a": "The site is not left on its own: we maintain what we ship — updates, security, evolutions. Maintenance is offered separately, with no obligation: since you own the code, you remain free to entrust it to whomever you want."
+          "q": "Who maintains a website after it goes live?",
+          "a": "We do, if you want us to — the site is not left on its own: we maintain what we ship, updates, security and evolutions. Maintenance is offered separately, with no obligation: since you own the code, you remain free to entrust it to whomever you want."
         },
         {
           "id": "seo-inclus",
           "group": "tech",
-          "q": "Is SEO included in a web project?",
+          "q": "Is SEO included in a web development project?",
           "a": "The foundations, yes, always: clean structure, speed, structured data, machine-readable content — everything that makes a site able to rank well. The ongoing visibility work (content, rank tracking, AI citations) is what our dedicated SEO offer is for."
         },
         {
           "id": "ia-projets",
           "group": "tech",
-          "q": "Do you integrate AI into web projects?",
-          "a": "When it changes the outcome, yes: automation, smart search, making your data work. And when it adds nothing to your case, we tell you — an AI integration must justify itself with a measurable result, not with a trend."
+          "q": "When does integrating AI actually make sense in an SME's web project?",
+          "a": "When it changes the outcome: automating repetitive tasks, smart search, making your data work. And when it adds nothing to your case, we tell you — an AI integration must justify itself with a measurable result, not with a trend."
         }
       ],
       "more": {
@@ -1220,14 +1238,14 @@
         "title": "Contact HARGILE | Expert Digital Solutions Team"
       },
       "faq": {
-        "description": "Direct answers to the questions prospects really ask: the cost of a custom application, timelines, technologies, code ownership, maintenance, custom vs WordPress.",
+        "description": "How much a custom web application costs for an SME in Belgium, how long it takes, agency or freelancer, WordPress or custom, who owns the code: 15 direct answers from a Brussels web studio.",
         "og": {
-          "description": "How much it costs, how long it takes, who owns the code: straight answers from a Brussels web studio.",
+          "description": "How much it costs, how long it takes, agency or freelancer, who owns the code: straight answers from a Brussels web studio.",
           "imageAlt": "HARGILE FAQ",
-          "title": "FAQ: cost, timelines, code ownership | HARGILE"
+          "title": "Custom web development FAQ: cost, timelines, ownership | HARGILE"
         },
         "schemaType": "FAQPage",
-        "title": "FAQ: cost, timelines, code ownership | HARGILE"
+        "title": "Custom web development FAQ: cost, timelines, ownership | HARGILE"
       },
       "home": {
         "description": "Custom web development, AI integration & digital marketing for SMEs. Grow your business online with HARGILE.",

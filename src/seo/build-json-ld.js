@@ -29,6 +29,13 @@ const SERVICE_NODES = {
     "services.mvp": {serviceType: "MVP development"},
 };
 
+/* The four offers as /services lists them, in the sales order the page renders
+   (offers-index.jsx OFFERS) — position in the ItemList has to match what a
+   reader sees, or the markup describes a different page. Keys index both
+   ROUTES and pages.services.index.offers, so the listed name is the visible
+   row title rather than a fifth restatement of it. */
+const SERVICES_INDEX = ["web", "ia", "seo", "mvp"];
+
 // Builds the JSON-LD object for a given locale + pagePath.
 // Returns null if SEO translations cannot be loaded (graceful fallback).
 export async function buildJsonLd({locale, pagePath}) {
@@ -148,6 +155,27 @@ export async function buildJsonLd({locale, pagePath}) {
                 name: q,
                 acceptedAnswer: {"@type": "Answer", text: a},
             }));
+        }
+
+        /* A CollectionPage that collects nothing is the same dead markup as a
+           FAQPage without its questions: /services declared the type but never
+           said what it indexed, so the hub and the four Service nodes it links
+           to were four unrelated pages to a crawler. The ItemList is the join.
+           Names come from the visible row titles, URLs from ROUTES — both
+           already single-sourced, so this cannot drift from the page. */
+        if (pagePath === "services") {
+            const offersT = await getTranslations({locale, namespace: "pages.services.index.offers"});
+            pageNode.mainEntity = {
+                "@type": "ItemList",
+                itemListOrder: "https://schema.org/ItemListOrderAscending",
+                numberOfItems: SERVICES_INDEX.length,
+                itemListElement: SERVICES_INDEX.map((key, i) => ({
+                    "@type": "ListItem",
+                    position: i + 1,
+                    name: offersT(`${key}.title`),
+                    url: localeUrl(locale, ROUTES[`services.${key}`]),
+                })),
+            };
         }
 
         const extraNodes = [];

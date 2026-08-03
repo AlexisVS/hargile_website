@@ -60,7 +60,13 @@ const ProofStrip = () => {
                                 <div className={styles.media}>
                                     <Image
                                         src={project.image}
-                                        alt={project.title}
+                                        /* The client name alone described the
+                                           card, not the image. These are site
+                                           screenshots, so the alt says so and
+                                           carries the sector the subtitle
+                                           already names — same source, so it
+                                           cannot drift from the caption. */
+                                        alt={`${project.title} — ${portfolioT(project.subtitleKey)}`}
                                         fill
                                         sizes="(max-width: 720px) 100vw, 30vw"
                                         className={styles.img}

@@ -209,7 +209,7 @@
       "hero": {
         "eyebrow": "FAQ",
         "title": "Les questions qu'on nous pose vraiment.",
-        "answer": "HARGILE est un studio web indépendant à Saint-Gilles (Bruxelles) qui développe des applications web sur mesure pour les PME. Voici les réponses aux questions que les prospects nous posent le plus : coût, délais, propriété du code, technologies et maintenance. Il manque la vôtre ? Écrivez-nous."
+        "answer": "HARGILE est un studio web indépendant à Saint-Gilles (Bruxelles) qui développe des applications web sur mesure pour les PME. Voici les réponses directes aux questions posées avant de choisir une agence : combien coûte une application sur mesure en Belgique, en combien de temps, agence ou freelance, et à qui appartient le code à la fin. Il manque la vôtre ? Écrivez-nous."
       },
       "groups": {
         "project": "Projet & délais",
@@ -218,76 +218,94 @@
       },
       "items": [
         {
+          "id": "agence",
+          "group": "project",
+          "q": "Comment choisir une agence web à Bruxelles pour développer une application sur mesure ?",
+          "a": "Trois points se vérifient avant de signer. Qui écrit réellement le code : chez HARGILE, le design et le développement sont faits en interne à Saint-Gilles, jamais sous-traités. Comment le prix est arrêté : au cadrage, avant le début du projet, et il ne bouge plus ensuite. Et à qui appartient le code à la fin : à vous. Le reste — références, disponibilité, langue de travail — tient en un appel."
+        },
+        {
           "id": "process",
           "group": "project",
-          "q": "Comment se déroule un projet avec HARGILE ?",
+          "q": "Comment se déroule un projet de développement web sur mesure, du cadrage à la mise en ligne ?",
           "a": "Toujours dans le même ordre : un cadrage où l'on définit ensemble périmètre, priorités et prix ; le design des parcours et des écrans ; le développement, avec des points d'étape réguliers ; les tests ; la mise en ligne. Tout est fait en interne, par la même équipe, et vous avez un interlocuteur direct du début à la fin."
         },
         {
           "id": "delai",
           "group": "project",
-          "q": "Combien de temps faut-il pour développer une application web ?",
+          "q": "Combien de temps faut-il pour développer une application web sur mesure pour une PME ?",
           "a": "Cela dépend du périmètre — et le périmètre est fixé au cadrage, pas découvert en route. Le repère le plus concret : notre offre MVP livre un produit complet et utilisable en 30 jours. Un site vitrine peut aller plus vite ; une application métier plus riche prend plusieurs mois, par étapes planifiées."
+        },
+        {
+          "id": "mvp-30",
+          "group": "project",
+          "q": "Est-il vraiment possible de développer un MVP en 30 jours ?",
+          "a": "Oui, à une condition : le périmètre est figé avant de commencer. Semaine 1, cadrage et design ; semaines 2 et 3, développement ; semaine 4, tests et mise en ligne. Ce qui sort au bout est un produit réel, en ligne, utilisable par de vrais utilisateurs — pas une maquette. Ce qui n'entre pas dans les 30 jours est chiffré séparément, et vient ensuite."
         },
         {
           "id": "start",
           "group": "project",
-          "q": "Que faut-il préparer avant de nous contacter ?",
+          "q": "Que faut-il préparer avant de contacter une agence web pour un projet sur mesure ?",
           "a": "Rien d'obligatoire : votre idée et votre réalité métier suffisent. Si vous avez des exemples de sites que vous aimez, des contraintes connues ou un existant à reprendre, c'est utile — mais c'est précisément le rôle du cadrage de transformer tout ça en périmètre clair."
         },
         {
           "id": "langues",
           "group": "project",
-          "q": "Où êtes-vous basés, et en quelles langues travaillez-vous ?",
+          "q": "Où est basée HARGILE, et travaillez-vous en français et en anglais ?",
           "a": "À Saint-Gilles, à Bruxelles — Rue Sterckx 5. Nous travaillons en français et en anglais, et nous livrons régulièrement des sites multilingues, comme La Marquisette (trilingue) ou ce site-ci (français et anglais)."
         },
         {
           "id": "cout",
           "group": "budget",
-          "q": "Combien coûte une application web sur mesure en Belgique ?",
+          "q": "Combien coûte le développement d'une application web sur mesure pour une PME en Belgique ?",
           "a": "Il n'y a pas de tarif unique honnête : le prix dépend du périmètre. Notre engagement porte sur la méthode : le prix est fixé au cadrage, annoncé avant le début du projet, et il ne bouge pas — pas de facturation au temps passé ni de dépassement surprise. Pour un premier produit, l'offre MVP en 30 jours est à prix fixe."
         },
         {
           "id": "prix-fixe",
           "group": "budget",
-          "q": "Comment un prix fixe est-il possible sur du sur-mesure ?",
-          "a": "Parce que le périmètre est figé avant de commencer : le cadrage définit précisément ce qui sera livré, et le prix correspond à ce périmètre. Si une idée nouvelle apparaît en cours de projet, elle est chiffrée séparément et vous décidez de l'ajouter ou non — le prix initial, lui, ne change pas."
+          "q": "Peut-on obtenir un prix fixe pour un développement sur mesure, sans facturation au temps passé ?",
+          "a": "Oui, et c'est possible parce que le périmètre est figé avant de commencer : le cadrage définit précisément ce qui sera livré, et le prix correspond à ce périmètre. Si une idée nouvelle apparaît en cours de projet, elle est chiffrée séparément et vous décidez de l'ajouter ou non — le prix initial, lui, ne change pas."
+        },
+        {
+          "id": "freelance",
+          "group": "budget",
+          "q": "Faut-il choisir une agence web ou un développeur freelance pour un projet de PME ?",
+          "a": "Un freelance est souvent le bon choix pour une mission cadrée qui ne demande qu'une seule compétence. Une équipe devient utile quand le design, le développement et la mise en production avancent en parallèle, et quand quelqu'un doit encore être là dans deux ans. HARGILE est un studio indépendant : un interlocuteur direct comme chez un freelance, une équipe derrière pour livrer et maintenir."
         },
         {
           "id": "propriete",
           "group": "budget",
-          "q": "À qui appartient le code à la fin du projet ?",
+          "q": "À qui appartient le code source à la fin d'un projet de développement web ?",
           "a": "À vous. Code et données vous appartiennent à la livraison : vous pouvez héberger ailleurs, confier la suite à une autre équipe, ou continuer avec nous. Vous restez par choix, jamais par contrainte."
         },
         {
           "id": "stack",
           "group": "tech",
-          "q": "Avec quelles technologies travaillez-vous ?",
+          "q": "Quelles technologies utilisez-vous pour développer une application web sur mesure ?",
           "a": "Des technologies web modernes et éprouvées — React et Next.js notamment : c'est avec ce framework que ce site est construit. Le choix précis se fait au cadrage, en fonction de votre projet et de votre existant, jamais l'inverse."
         },
         {
           "id": "wordpress",
           "group": "tech",
-          "q": "Sur-mesure ou WordPress : que choisir pour une PME ?",
+          "q": "Faut-il choisir WordPress ou un développement sur mesure pour le site d'une PME ?",
           "a": "WordPress est pertinent pour publier du contenu avec un budget serré. Le sur-mesure devient le bon choix quand votre site doit faire quelque chose : réservation, vente, processus métier — ou quand le thème générique freine votre image. L'Ecole du Bonheur est venue avec un WordPress générique ; nous l'avons transformé en expérience digitale à la hauteur de son projet."
         },
         {
           "id": "maintenance",
           "group": "tech",
-          "q": "Que se passe-t-il après la mise en ligne ?",
-          "a": "Le site ne part pas à l'abandon : nous maintenons ce que nous livrons — mises à jour, sécurité, évolutions. La maintenance est proposée séparément, sans obligation : comme vous êtes propriétaire du code, vous restez libre de la confier à qui vous voulez."
+          "q": "Qui assure la maintenance d'un site web après sa mise en ligne ?",
+          "a": "Nous, si vous le souhaitez — le site ne part pas à l'abandon : nous maintenons ce que nous livrons, mises à jour, sécurité et évolutions. La maintenance est proposée séparément, sans obligation : comme vous êtes propriétaire du code, vous restez libre de la confier à qui vous voulez."
         },
         {
           "id": "seo-inclus",
           "group": "tech",
-          "q": "Le référencement est-il inclus dans un projet web ?",
+          "q": "Le référencement naturel (SEO) est-il inclus dans un projet de développement web ?",
           "a": "Les fondations, oui, d'office : structure propre, vitesse, données structurées, contenu lisible par les moteurs — tout ce qui fait qu'un site peut être bien référencé. Le travail de visibilité continu (contenu, suivi des positions, citations par les IA) fait l'objet de notre offre SEO dédiée."
         },
         {
           "id": "ia-projets",
           "group": "tech",
-          "q": "Intégrez-vous de l'IA dans les projets web ?",
-          "a": "Quand elle change le résultat, oui : automatisation, recherche intelligente, exploitation de vos données. Et quand elle n'apporte rien à votre cas, nous vous le disons — une intégration IA doit se justifier par un résultat mesurable, pas par la tendance."
+          "q": "Quand l'intégration d'une IA a-t-elle vraiment du sens dans un projet web de PME ?",
+          "a": "Quand elle change le résultat : automatisation des tâches répétitives, recherche intelligente, exploitation de vos données. Et quand elle n'apporte rien à votre cas, nous vous le disons — une intégration IA doit se justifier par un résultat mesurable, pas par la tendance."
         }
       ],
       "more": {
@@ -1220,14 +1238,14 @@
         "title": "Contactez HARGILE | Équipe d'Experts en Solutions Digitales"
       },
       "faq": {
-        "description": "Les réponses aux questions que nos prospects posent vraiment : coût d'une application sur mesure, délais, technologies, propriété du code, maintenance, sur-mesure ou WordPress.",
+        "description": "Combien coûte une application web sur mesure pour une PME en Belgique, en combien de temps, agence ou freelance, WordPress ou sur-mesure, à qui appartient le code : 15 réponses directes d'un studio web bruxellois.",
         "og": {
-          "description": "Combien ça coûte, combien de temps, à qui appartient le code : les réponses directes d'un studio web bruxellois.",
+          "description": "Combien ça coûte, combien de temps, agence ou freelance, à qui appartient le code : les réponses directes d'un studio web bruxellois.",
           "imageAlt": "FAQ HARGILE",
-          "title": "FAQ : coût, délais, propriété du code | HARGILE"
+          "title": "FAQ développement web sur mesure : coût, délais, code | HARGILE"
         },
         "schemaType": "FAQPage",
-        "title": "FAQ : coût, délais, propriété du code | HARGILE"
+        "title": "FAQ développement web sur mesure : coût, délais, code | HARGILE"
       },
       "home": {
         "description": "Développement web sur mesure, intégration IA et marketing digital pour PME. Transformez votre présence en ligne avec HARGILE.",
