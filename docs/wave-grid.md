@@ -101,9 +101,15 @@ composed at the aspect it is served at.
 
 `home-phone.*` was unshipped for two sessions because the only render was a black
 column; both causes were framing and both are fixed. See phase 7 in
-[homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md) for the diagnosis, and
-`HOME_RELIEF_PHONE` for why its `radius` is a **measured** 34 rather than the 26
-the frustum maths predicted.
+[homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md) for the diagnosis.
+
+⚠️ **The phone frame is deliberately coarser than the wide one — about eight
+pillars across against fifteen.** That is a decision, not drift: at phone size,
+matching the wide frame's density makes a busy mosaic that competes with the
+copy. The phone still decorates and suggests depth; it does not reproduce the
+desktop grid. `radius` in `HOME_RELIEF_PHONE` is the dial, and the count is
+counted off the exported image — every value derived from the frustum maths has
+been wrong.
 
 ## ⚠️ Exports that "hang" are an agent-browser session collision
 

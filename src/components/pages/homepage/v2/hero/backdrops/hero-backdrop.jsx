@@ -106,18 +106,23 @@ const HOME_CALM_PHONE = {cx: 0, cz: 0.2, rx: 5.4, rz: 4.6, depth: 0.7};
 
    Two separate things, and only doing both reads as 3D:
 
-   - **radius** pulls the camera back, from 14 to 34. This one is not optional:
+   - **radius** pulls the camera back, from 14 to 22. This one is not optional:
      at the default distance a phone aspect sees only world x ±2.3, about six
      pillars across the whole screen, which reads as a few flat slabs rather than
      as a grid at all. See WaveGrid's prop docs for why distance rather than a
      wider field of view.
 
-     26 was the first value here, derived from the FOV maths rather than
-     measured, and the render disagreed with the maths: it predicted eleven
-     pillars across and delivered nine, still coarse enough to read as slabs. 34
-     measures at about twelve, which is where the ripple arcs start being legible
-     as arcs — the wide frame shows fifteen, and matching that character is the
-     point. Counted off the exported image; don't re-derive it from the frustum.
+     ⚠️ **This is a decoration dial, not a fidelity dial, and it was set wrong
+     twice by treating it as one.** 26 came from the frustum maths (predicted
+     eleven pillars across, delivered nine). 34 was then chosen to match the wide
+     frame's fifteen, on the reasoning that both heroes should read as the same
+     object. Mihai rejected that on sight: at phone size fifteen pillars is a
+     busy mosaic competing with the copy, and the phone's job here is to decorate
+     and suggest depth, not to reproduce the desktop grid. 22 gives about eight —
+     big enough to read as objects, few enough to stay out of the way.
+
+     So: count pillars on the exported image rather than deriving them, and judge
+     the count against the phone frame, not against `home.*`.
    - **maxHeight** raises the clamp, so overlapping ripples stack into genuinely
      taller pillars instead of all flattening at the same ceiling. Amplitude is
      left alone: raising it instead makes every ripple taller, including the ones
@@ -128,9 +133,18 @@ const HOME_CALM_PHONE = {cx: 0, cz: 0.2, rx: 5.4, rz: 4.6, depth: 0.7};
      is. A phone frame can afford more tilt than a wide one because the grid edge
      enters a narrow frustum much later.
 
+     ⚠️ **But more tilt is not more depth, and past a point it is less.** With
+     big pillars at radius 22 the obvious move for "make it read 3D" is to push
+     `mx` toward its −1 limit. Rendered, that goes the wrong way: sides face away
+     from the key light, so the extra side area that appears is *dark* area. The
+     frame dims overall and the lit tops that carry the accent colour shrink.
+     −0.2 with `maxHeight` left at 1.05 beat −0.9 at 1.35 outright. Depth here
+     comes from the pillars being large enough to have visible edges at all, not
+     from rotating further off vertical.
+
    Still inside WaveGrid's ±1 normalised range, which caps at ±5.4°/±9°; past it
    the frustum points out across the grid toward its boundary. */
-const HOME_RELIEF_PHONE = {radius: 34, maxHeight: 1.05, view: {mx: -0.2, my: 0.95}};
+const HOME_RELIEF_PHONE = {radius: 22, maxHeight: 1.05, view: {mx: -0.2, my: 0.95}};
 
 /* The exported still, for viewports that don't get the canvas. Its own file, not
    the /services one: that image was composed against a different quiet ellipse

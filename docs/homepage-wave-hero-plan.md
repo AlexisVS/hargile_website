@@ -480,18 +480,38 @@ Fixed by adding `radius` to `relief` and re-deriving the quiet zone as a
 full width, so there is no side for the light to arrive from and it has to come
 from above and below instead.
 
-**Verified, and the FOV maths were wrong.** `radius: 26` was an estimate from the
-frustum, predicting ~11 pillars across. The render disagreed: nine, still coarse
-enough to read as slabs rather than as a grid. **34 measures at about twelve**,
-which is where the ripple arcs become legible as arcs — the wide frame shows
-fifteen, and matching that character is the point. The estimates further up the
-scale (30 → ~13, 34 → ~14) came from the same maths and should be treated as
-equally unreliable; count pillars on the exported image instead.
+**Verified — and `radius` turned out to be a taste dial, not a fidelity one.**
+
+The maths were wrong first: `radius: 26` predicted ~11 pillars across and
+rendered nine. It was then raised to **34** (~12 across) to match the wide
+frame's fifteen, on the reasoning that both heroes should read as the same
+object. **Mihai rejected that on sight** — at phone size a dozen-plus pillars is
+a busy mosaic competing with the copy. The phone frame's job is to decorate and
+suggest depth, not to reproduce the desktop grid.
+
+Settled at **22, about eight pillars across**: big enough to read as objects,
+few enough to stay out of the way. His words for it: "a nice mix of big cubes and
+readability".
+
+Two things to carry forward:
+
+- Count pillars on the exported image; every estimate derived from the frustum
+  (26 → 11, 30 → 13, 34 → 14) has been wrong.
+- Judge the count against the *phone* frame, not against `home.*`. Matching the
+  wide frame's density is what produced the rejected version.
 
 The quiet band itself needed no change: the render shows it spanning the full
 width across the vertical middle with light arriving top and bottom, which is
-what `HOME_CALM_PHONE` was re-derived to do. `home-phone.{avif,webp}` (17 kB /
-29 kB) is committed and both `<source>` elements are live.
+what `HOME_CALM_PHONE` was re-derived to do. `home-phone.{avif,webp}` (13 kB /
+24 kB) is committed and both `<source>` elements are live.
+
+**`view` was tried as the "make it 3D" dial and rejected.** With big pillars, the
+obvious move is to push `mx` toward its −1 limit so more pillar *side* shows.
+Rendered, it goes the wrong way: sides face away from the key light, so the extra
+side area is dark area — the frame dims and the lit tops carrying the accent
+colour shrink. `{mx: -0.2, my: 0.95}` at `maxHeight` 1.05 beat `{mx: -0.9}` at
+1.35 outright. Depth comes from pillars being large enough to have visible edges,
+not from rotating further off vertical.
 
 ### 🔧 The export script and agent-browser sessions
 

@@ -206,14 +206,24 @@
 > **bande horizontale** — sur un téléphone la copie occupe presque toute la
 > largeur, la lumière doit donc venir du haut et du bas, pas du côté.
 >
-> **Rendu, regardé, livré.** `home-phone.{avif,webp}` (17 kB / 29 kB) est commité
+> **Rendu, regardé, livré.** `home-phone.{avif,webp}` (13 kB / 24 kB) est commité
 > et les deux `<source>` sont actifs dans `hero-backdrop.jsx`.
 >
-> ⚠️ `radius` vaut **34**, pas 26. 26 venait du calcul de champ et le rendu l'a
-> démenti : il annonçait ~11 piliers de large, il en donnait 9 — encore des
-> dalles. 34 en mesure ~12, et c'est là que les arcs d'ondulation redeviennent
-> lisibles (le cadre large en montre 15). **Chiffre compté sur l'image exportée ;
-> ne pas le recalculer depuis le frustum.**
+> ⚠️ `radius` vaut **22** — soit ~8 piliers de large, et c'est un réglage de
+> **goût, pas de fidélité**. 26 venait du calcul de champ (annoncé ~11, rendu 9).
+> Puis 34 (~12) pour coller aux 15 du cadre large, en se disant que les deux
+> heros doivent lire comme le même objet : **refusé à vue par Mihai** — à taille
+> téléphone, une douzaine de piliers fait une mosaïque qui concurrence la copie.
+> Le cadre téléphone décore et suggère la profondeur, il ne reproduit pas la
+> grille desktop. Ses mots : « a nice mix of big cubes and readability ».
+>
+> ⚠️ `view` a aussi été testé comme levier « rendre ça 3D » et **rejeté** :
+> pousser `mx` vers −1 montre plus de *flancs*, mais les flancs sont dans l'ombre
+> — l'image s'assombrit et les dessus allumés qui portent l'accent rétrécissent.
+> `{mx: -0.2}` à `maxHeight` 1.05 bat `{mx: -0.9}` à 1.35.
+>
+> **Compter les piliers sur l'image exportée, jamais depuis le frustum — et les
+> juger sur le cadre téléphone, pas sur `home.*`.**
 >
 > ### 🔧 Sessions agent-browser — la vraie cause des « exports qui pendent »
 >
