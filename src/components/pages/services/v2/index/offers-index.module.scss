@@ -1,11 +1,14 @@
-/* Four square cells, full width, no rules and no fills.
+/* Four typographic bands, full measure, hairline-separated.
 
-   What is gone, and why: the numerals (four items do not need counting), the
-   sticky spine (it crossfaded the title of the row beside it), and every
-   hairline (a 2×2 grid with 32px of gap is already four things, not one).
-   The cell is told apart from its neighbour by space, and shown to be
-   interactive by the spotlight — which is the site's one pointer surface and
-   the only thing here that paints. */
+   What is gone, and why: the 2×2 grid (four boxes of equal size gave the four
+   offers equal voice, and shrank every name to fit a quarter of the page), the
+   per-cell spotlight (a fill under a name that already carries the identity
+   ramp is one surface too many), and the fixed square min-height. What is left
+   is a rule, a number, a name at full width and a promise in the margin.
+
+   Sizing is set in clamp()/vw and measured in ch, never in px tuned to the
+   current French words — "Applications web sur mesure" and "SEO" share this
+   layout, and so will their English counterparts. */
 
 .head {
   max-width: 62ch;
@@ -29,44 +32,71 @@
   margin: 18px 0 0;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(16px, 2vw, 32px);
+/* The set is closed top and bottom: border-top here, border-bottom on each
+   band. Four bands, five rules — the section reads as a table of contents,
+   which is what it is. */
+.bands {
+  border-top: 1px solid rgba(255, 255, 255, 0.11);
 }
 
-/* A floor, not a fixed ratio. A hard aspect-ratio forced the copy to the top of
-   the box and the deliverables to the bottom, which is what put a hole in the
-   middle of every cell. The min-height keeps the four reading as squares at the
-   widths where they are side by side, and the grid row equalises them anyway —
-   so the content can set the height and the rhythm inside stays tight. */
-.cell {
+.band {
+  position: relative;
+  display: block;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+  padding: clamp(30px, 4vw, 64px) 0;
+}
+
+/* Number left, chevron right. The mirror flips the row rather than restyling
+   it, so there is one label rule for all four bands. */
+.label {
   display: flex;
-  flex-direction: column;
-  min-height: clamp(280px, 25vw, 400px);
-  padding: clamp(28px, 2.8vw, 48px);
-  padding-bottom: clamp(64px, 5vw, 92px);
-  box-sizing: border-box;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 clamp(14px, 1.6vw, 26px);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(237, 237, 237, 0.55);
 }
 
-/* The offer name is the whole point of the cell, so it is sized like it: the
-   two-column layout had halved the measure and the title had quietly shrunk
-   with it, ending up level with its own description. */
-.title {
+.index {
+  font-variant-numeric: tabular-nums;
+}
+
+.chevron {
+  display: block;
+  color: #96b9f9;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+
+  svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* The name takes the container. line-height under 1 because at this size the
+   default leading opens a hole between the two lines of a long offer name. */
+.name {
   font-family: var(--font-headings);
   font-weight: 700;
-  font-size: clamp(30px, 3.4vw, 52px);
-  letter-spacing: -0.025em;
-  line-height: 1.04;
+  font-size: clamp(40px, 7.6vw, 124px);
+  letter-spacing: -0.04em;
+  line-height: 0.92;
   margin: 0;
-  max-width: 15ch;
   color: #ededed;
-  transition: color 0.32s ease, transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Stretches the anchor's hit area over the whole cell: one anchor, one focus
-   stop, and the accessible name stays the offer title. */
-.cellLink {
+/* Stretches the anchor's hit area over the whole band: one anchor, one focus
+   stop, and the accessible name stays the offer title.
+
+   font: inherit is load-bearing, not tidiness. The global sheet gives every <a>
+   a fluid body size (_typography.scss puts `a` on the type scale), which beats
+   the inherited h2 size and collapses a 110px name back to 16px — the anchor is
+   inside the heading, so the heading's own font-size never reaches the text. */
+.bandLink {
+  font: inherit;
   color: inherit;
   text-decoration: none;
 
@@ -79,27 +109,47 @@
 
   &:focus-visible {
     outline: 2px solid rgba(150, 185, 249, 0.7);
-    outline-offset: 4px;
+    outline-offset: 6px;
   }
 }
 
-.promise {
-  font-size: 16px;
-  font-weight: 300;
-  color: rgba(237, 237, 237, 0.68);
-  line-height: 1.55;
-  margin: 18px 0 0;
-  max-width: 38ch;
+/* The moving part, and the one that carries the identity ramp — inline-block so
+   the gradient maps onto the glyphs rather than an empty container box, and so
+   the transform has a box to act on. Same stops as the poster hero and the
+   inner hero: one ramp on the site. */
+.drift {
+  display: inline-block;
+  /* Long names break themselves rather than being broken by a <br> we would
+     have to keep per language: "Applications web sur mesure" lands on two even
+     lines, "SEO" stays on one. */
+  text-wrap: balance;
+  background: linear-gradient(135deg, #ffffff 30%, #dce7fd 68%, #96b9f9 105%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-bottom: 0.08em;
+  will-change: transform;
 }
 
-/* Follows the promise directly. It used to be margin-top: auto, pinned to the
-   floor of a fixed-ratio box, which opened a gap wider than the copy on either
-   side of it — the three lines read as a separate block rather than as the
-   detail of the promise above them. Stacked rather than wrapped: there is
-   height to spend here and width to save. */
+/* The promise sits at the far edge from the name — the band is read in two
+   moves, not one. 46ch is a measure, so it holds whatever the language does to
+   the sentence. */
+.aside {
+  max-width: 46ch;
+  margin: clamp(22px, 2.6vw, 40px) 0 0;
+}
+
+.promise {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.66);
+  line-height: 1.75;
+  margin: 0;
+}
+
 .deliverables {
   list-style: none;
-  margin: 20px 0 0;
+  margin: 16px 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -125,57 +175,88 @@
   }
 }
 
-.chevron {
-  position: absolute;
-  right: clamp(28px, 2.8vw, 48px);
-  bottom: clamp(28px, 2.8vw, 48px);
-  color: #96b9f9;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+/* Everything above this line is the phone layout: one column, one alignment.
+   The two-margin composition — promise pushed to the far edge, even bands
+   mirrored — only exists where there is width for it. Written as min-width
+   rather than undone in a max-width block so nothing has to out-specify itself
+   later, and so the chevron hover has one origin per breakpoint, not two. */
+@media (min-width: 769px) {
+  /* Odd bands: name at the left edge, promise at the right. */
+  .aside {
+    margin-left: auto;
+  }
 
-  svg {
-    display: block;
-    width: 18px;
-    height: 18px;
+  /* Even bands run the other way. The label row reverses so the chevron leads
+     at the left, the glyph turns with it, the name is set right, and the
+     promise moves to the opposite margin. */
+  .mirror {
+    .label {
+      flex-direction: row-reverse;
+    }
+
+    .chevron {
+      transform: rotate(180deg);
+    }
+
+    .name {
+      text-align: right;
+    }
+
+    .aside {
+      margin-left: 0;
+      margin-right: auto;
+      text-align: right;
+    }
+
+    .deliverables li {
+      padding-left: 0;
+      padding-right: 16px;
+    }
+
+    .deliverables li::before {
+      left: auto;
+      right: 0;
+    }
+  }
+
+  /* One gesture, and only one: the chevron leaves the band by 8px, outward on
+     both sides. :has() carries the same state to keyboard focus so a tab stop
+     is not a lesser affordance than a pointer. */
+  @media (hover: hover) and (pointer: fine) {
+    .band:hover .chevron,
+    .band:has(.bandLink:focus-visible) .chevron {
+      transform: translateX(8px);
+    }
+
+    /* Rotated first, so the local +8px points left on screen. */
+    .mirror:hover .chevron,
+    .mirror:has(.bandLink:focus-visible) .chevron {
+      transform: rotate(180deg) translateX(8px);
+    }
   }
 }
 
-/* One gesture, two parts. :has() carries the same state to keyboard focus so a
-   tab stop is not a lesser affordance than a pointer. */
-@media (hover: hover) and (pointer: fine) {
-  .cell:hover .title,
-  .cell:has(.cellLink:focus-visible) .title {
-    color: #b8cdfb;
-    transform: translateX(6px);
+/* Phone: the name drops to two lines at its own size and the drift narrows to
+   12px in useScrollDrift, at this same breakpoint. */
+@media (max-width: 768px) {
+  .name {
+    font-size: clamp(38px, 11.5vw, 56px);
+    letter-spacing: -0.03em;
   }
 
-  .cell:hover .chevron,
-  .cell:has(.cellLink:focus-visible) .chevron {
-    transform: translateX(6px);
-  }
-}
-
-/* One column: a square that spans the full width is a hole, so the cell goes
-   back to its content height and the chevron rejoins the flow. */
-@media (max-width: 900px) {
-  .grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: clamp(28px, 6vw, 44px);
-  }
-
-  .cell {
-    min-height: 0;
-    padding: 0;
-  }
-
-  .chevron {
-    position: static;
-    margin-top: 22px;
+  .aside {
+    max-width: 44ch;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .title,
   .chevron {
     transition: none;
+  }
+
+  /* useScrollDrift never attaches here, so the name is already at rest — this
+     only guards a transform left behind by a media-query change mid-session. */
+  .drift {
+    transform: none;
   }
 }
