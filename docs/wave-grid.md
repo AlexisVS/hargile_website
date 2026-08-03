@@ -92,13 +92,13 @@ meaning the same thing.
 
 [wf]: ../src/components/pages/services/v2/shared/wave-frame.js
 
-| | `/services` | homepage wave hero |
+| | the poster hero (`/services`, `/faq`) | homepage wave hero |
 | --- | --- | --- |
-| route | `/services` | **`/`** — the hero's only backdrop |
+| route | `/services` **and `/faq`** — same component, same layout | **`/`** — the hero's only backdrop |
 | desktop | **the still image** | **live canvas**, ≥1024px |
 | mobile / tablet | the still image (the wide one, cropped) | **a still composed for that band**, <1024px |
-| image | `wave-7.*` + `wave-7-phone.*` + `wave-7-tablet.*` | `home.*` + `home-phone.*` + `home-tablet.*` |
-| pointed at by | `DEFAULT_IMAGE` / `PHONE_IMAGE` / `TABLET_IMAGE` in [`wave-grid-backdrop.jsx`][wgb] | `HOME_IMAGE` / `PHONE_IMAGE` / `TABLET_IMAGE` in [`hero-backdrop.jsx`][hb] |
+| image | `/services`: `wave-7.*` + `-phone` + `-tablet`<br>`/faq`: `wave-70.*` + `-phone` + `-tablet` | `home.*` + `home-phone.*` + `home-tablet.*` |
+| pointed at by | the **`composition`** prop on `WaveGridBackdrop` — one name, three frames derived ([`wave-grid-backdrop.jsx`][wgb]) | `HOME_IMAGE` / `PHONE_IMAGE` / `TABLET_IMAGE` in [`hero-backdrop.jsx`][hb] |
 | quiet zone | `CALM` in [`wave-grid.jsx`][wg], `CALM_PHONE` / `CALM_TABLET` in [`wave-grid-backdrop.jsx`][wgb] | `HOME_CALM`, `HOME_CALM_PHONE`, `HOME_CALM_TABLET` in [`hero-backdrop.jsx`][hb] |
 | export command | `npm run images:wavegrid 7`, `…:svc-phone 7`, `…:svc-tablet 7` | `npm run images:wavegrid:home`, `…:phone`, `…:tablet` |
 
@@ -393,10 +393,16 @@ project's dependencies for a script that runs a handful of times a year.
 
 ### 3. Ship it
 
-Point the page's constant at the filename you kept:
+Point the page at the composition you kept:
 
-- `/services` → `DEFAULT_IMAGE` in [`wave-grid-backdrop.jsx`][wgb]
+- `/services` → `DEFAULT_COMPOSITION` in [`wave-grid-backdrop.jsx`][wgb]
+- `/faq` → the `composition` prop at its call site in `FaqPageClient.jsx`
 - homepage → `HOME_IMAGE` in [`hero-backdrop.jsx`][hb]
+
+⚠️ For the two poster-hero pages that is **one name, not three** — `wave-70`
+gets you `wave-70-phone` and `wave-70-tablet` for free, so a composition can
+never ship half-swapped. It also means all three files must exist before you
+point at it.
 
 Commit the `.avif` and `.webp` — they are build outputs, but they are the shipped
 asset, and nothing regenerates them at build time.

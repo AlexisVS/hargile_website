@@ -23,9 +23,16 @@
 //
 // Output: public/images/wave-grid/{curated,wave-7,home,home-wave-7,home-phone,
 //         home-tablet,…}.{avif,webp}
-// For /services, point DEFAULT_IMAGE in wave-grid-backdrop.jsx at whichever one
-// you keep; for the homepage, HOME_IMAGE / PHONE_IMAGE / TABLET_IMAGE in
+// For the poster hero, point the `composition` prop on WaveGridBackdrop at the
+// base name you keep — `wave-70` derives its own -phone and -tablet frames, so
+// one name ships all three (/services takes DEFAULT_COMPOSITION, /faq passes
+// its own). For the homepage, HOME_IMAGE / PHONE_IMAGE / TABLET_IMAGE in
 // hero-backdrop.jsx.
+//
+// The `services*` targets write page-neutral names (`wave-70`, not
+// `wave-70-faq`) because a composition belongs to a QUIET ZONE, not to a page,
+// and /services and /faq share theirs. That is why exporting a /faq image
+// through --page=services is correct rather than a shortcut.
 //
 // `home`, `phone` and `tablet` are the SAME hero at three aspects, and all three
 // are shipped — none is a fallback for another. Re-export ALL THREE when the

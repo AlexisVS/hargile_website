@@ -7,6 +7,88 @@
 > particular "Adding a frame for a new aspect band", which is the method this
 > plan assumes.
 
+## ✅ EXÉCUTÉ le 2026-08-03 — steps 1, 2 and 4; step 3 taken as **(B)**
+
+Steps 1 and 2 are two props on `FaqPageClient`, plus the comments that went stale
+with them. The plan's central bet paid: the layout is shared, so the quiet zone,
+the band edges and the relief all carry over and **no new quiet zone was
+derived**.
+
+**Step 3 went to (B) on Mihai's call — `/faq` runs its own composition,
+`wave-70`, against `/services`' `wave-7`.** He picked it off the `?wave=` switch.
+
+### What (B) actually cost, against what this plan predicted
+
+The plan said (B) costs "three exports and three filenames (`wave-N-faq*`), and
+needs three `TARGETS` entries". **The `TARGETS` part was wrong.** The export
+script already parameterises on the variant — `wave-${v}`, `wave-${v}-phone`,
+`wave-${v}-tablet` — and those names describe the *composition*, not the page. So
+the existing `services*` targets wrote all three frames of variant 70 with no
+script change at all:
+
+```
+node scripts/export-wave-grid.mjs --page=services 70          # wave-70        22 kB
+node scripts/export-wave-grid.mjs --page=services-phone 70    # wave-70-phone   9 kB
+node scripts/export-wave-grid.mjs --page=services-tablet 70   # wave-70-tablet 12 kB
+```
+
+⚠️ Run them **one at a time** — concurrent exports collide on the browser daemon.
+And note the script still drives `/services` for a `/faq` image, which is correct
+for exactly the reason the plan gave: the composition depends only on the quiet
+zone and the requested aspect, and both are identical. **No `/faq` export route
+was added.**
+
+The wiring is a `composition` prop on `WaveGridBackdrop`, defaulting to
+`wave-7`. **One name, three frames derived** (`framesOf`), because that is how
+the export names its output — listing the three separately would let a
+half-finished re-export ship two frames of one composition and one of another.
+
+### Measured, not assumed
+
+Both pages probed at 390 / 640 / 641 / 860 / 861 / 1440:
+
+- **Each page serves its own composition and they switch frames at the same
+  edges** — `/faq` gets `wave-70-phone` to 640, `wave-70-tablet` to 860,
+  `wave-70` above; `/services` the `wave-7` set at the same boundaries.
+- **`/services` is unchanged**, and `git status public/` proves it: the six
+  `wave-70*` files are added, no existing export is modified.
+- **The hero box is identical between the pages**: same section height, same
+  `padding-top`, same `min-height`, same container left edge and width, and the
+  copy block's vertical centre matches to the pixel (459/459 at 390, 486/486 at
+  768, 500/500 at 1440).
+- ⚠️ **The `h1`'s own `top` and `width` still differ, and that is correct.**
+  `.title` is `width: fit-content` (the gradient has to map onto glyphs, not an
+  empty box) and `.hero.tight` is `justify-content: center`, so a longer headline
+  is a wider box that starts higher. `/faq` runs two lines against `/services`'
+  one. **Do not "fix" this by measuring the h1** — measure `.container`, which is
+  what the two pages actually share. It nearly got read as drift.
+- Build OK, lint at its baseline of 2.
+
+The `images:wavegrid` byte-identity control was **not** run, deliberately: it
+guards changes to `wave-grid.jsx`, and this change did not touch it.
+
+### ⚠️ What flipping compositions at the narrow frames taught
+
+An intermediate reading — "wave 70 is flat at tablet and phone" — was **wrong**,
+and the way it was wrong is worth keeping. Seven compositions were rendered at
+390 and 768 (7, 12, 19, 23, 41, 58, 70) and they are all similarly calm there:
+below 860px the quiet band covers most of a one-column screen, so the seed table
+has very little room left to differentiate. **Compositions are chosen on the wide
+frame; the narrow frames mostly follow.**
+
+The false reading came from comparing 70's *live canvas* against wave-7's
+*encoded export*, which sits slightly punchier. **Compare like with like** — live
+against live, or export against export.
+
+Two things left for Mihai's eyes, neither touched:
+
+- The `01/02/03` numerals of `FaqIndex` sit over the lit mass on the wide frame,
+  which is the weakest contrast on the page. If it bothers him the lever is the
+  **quiet zone**, not the seeds — see the note under `CALM`.
+- At 390px the third `FaqIndex` row sits under the cookie banner. That is the
+  banner overlaying a full-height hero, it clears on dismissal, and it predates
+  this change.
+
 ## The headline finding: this is small
 
 **`PosterHero` is already shared by both pages.**
@@ -67,6 +149,10 @@ it:** load `/faq` at 390, 768 and 1440 and confirm the dark band lands on the
 headline and answer exactly as it does on `/services`.
 
 ### 3. Decide whether `/faq` should look *identical* or merely *matched*
+
+> ✅ **Settled: (B).** Mihai chose a distinct composition, `wave-70`. The costing
+> below overstated it — see the EXECUTED section: no `TARGETS` entries and no
+> `-faq` filenames were needed. Kept as written for the reasoning.
 
 This is Mihai's call and the only real design decision in the plan.
 

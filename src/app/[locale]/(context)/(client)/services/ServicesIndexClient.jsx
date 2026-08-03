@@ -16,8 +16,8 @@ export default function ServicesIndexClient() {
             <PosterHero
                 /* No eyebrow here on purpose: it read "Services" directly above a
                    headline on the /services route, so it labelled the page twice.
-                   /faq still runs one. The key stays in the messages files — this
-                   is a layout call, not a copy deletion. */
+                   /faq dropped its own to match. The key stays in the messages
+                   files — this is a layout call, not a copy deletion. */
                 title={t("hero.title")}
                 answer={t("hero.answer")}
                 aside={<HeroStats/>}

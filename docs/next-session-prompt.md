@@ -265,18 +265,51 @@
 > `wave-export` et ferme avec `close` et non `close --all`. ⚠️ **Deux exports
 > simultanés se collisionneraient encore entre eux — les enchaîner.**
 >
-> ### 🎯 La demande de Mihai pour la prochaine session : le hero de /faq
+> ### ✅ 2026-08-03 — le hero de /faq est aligné sur /services (commité, non poussé)
 >
-> **C'est le point de départ, avant tout ce qui suit.** Aligner le hero `/faq`
-> sur celui de `/services` — positionnement, taille, design — et **sans eyebrow**.
+> Demande de Mihai : positionnement, taille, design — et **sans eyebrow**. Fait
+> en deux props sur `FaqPageClient` (l'eyebrow retiré, `WaveGridBackdrop`
+> ajouté), plus les commentaires devenus faux ailleurs. Relevé complet dans
+> [`faq-hero-plan.md`](./faq-hero-plan.md), section « EXÉCUTÉ ».
 >
-> Plan complet, déjà écrit et vérifié contre le code :
-> [`faq-hero-plan.md`](./faq-hero-plan.md). Le résumé qui change tout : **`PosterHero`
-> est déjà partagé par les deux pages**, l'eyebrow y est déjà optionnel et
-> entraîne `.tight` avec lui, et une fois l'eyebrow retiré les deux heros ont une
-> géométrie de copie **identique** — donc les trois images `wave-7*` s'appliquent
-> telles quelles, zéro export. Deux lignes, plus une décision de goût (réutiliser
-> `wave-7` ou lui donner sa propre variante).
+> **Et `/faq` a sa propre composition : `wave-70`** (choix de Mihai au `?wave=`),
+> contre `wave-7` sur `/services`. Trois exports (22/12/9 kB), **aucune entrée
+> `TARGETS` ajoutée et aucune route `/faq`** : le script est déjà paramétré par
+> le numéro de variante et continue de piloter `/services`, ce qui est correct
+> puisque la zone calme et l'aspect demandé sont identiques. Le câblage est une
+> prop `composition` sur `WaveGridBackdrop` — **un nom, trois cadres dérivés**
+> (`wave-70`, `wave-70-phone`, `wave-70-tablet`), comme les nomme l'export.
+>
+> ⚠️ **Les compositions se choisissent sur le cadre large.** Sept variantes
+> feuilletées à 390 et 768 : elles s'y ressemblent toutes, parce que sous 860px
+> la bande calme couvre presque tout un écran à une colonne et il ne reste
+> presque rien à différencier. Un premier verdict « wave 70 est plat en étroit »
+> était **faux** — il comparait le canvas *live* de 70 à l'export *encodé* de
+> wave-7. **Comparer à égal : live avec live, export avec export.**
+>
+> Le pari du plan a tenu et il a été **mesuré, pas supposé** : `img.currentSrc`
+> est identique sur les deux pages aux six largeurs testées (390/640/641/860/861/
+> 1440), et la boîte du hero aussi — même hauteur de section, même `padding-top`,
+> même `min-height`, même gouttière, et le **centre vertical du bloc de copie
+> coïncide au pixel** (459/459, 486/486, 500/500).
+>
+> ⚠️ **Le `top` et la largeur du `h1` diffèrent toujours entre les deux pages, et
+> c'est normal** — `.title` est en `width: fit-content` et `.hero.tight` centre
+> verticalement, donc un titre plus long est une boîte plus large qui commence
+> plus haut. `/faq` fait deux lignes contre une sur `/services`. **Mesurer
+> `.container`, jamais le `h1`** : c'est le `h1` qui a failli faire conclure à une
+> dérive alors qu'il n'y en avait pas.
+>
+> **Reste pour les yeux de Mihai** : les `01/02/03` de `FaqIndex` tombent sur la
+> masse éclairée du cadre large, c'est le contraste le plus faible de la page. Si
+> ça gêne, le levier est la **zone calme**, pas les graines (voir la note sous
+> `CALM`).
+>
+> ℹ️ Conséquence : **plus aucun appelant ne passe `eyebrow`** à `PosterHero`. La
+> prop est gardée volontairement (elle porte `.tight` avec elle, et c'est un choix
+> de goût qui peut se retourner) — c'est écrit sur le composant. Ne pas la
+> supprimer au nom de la règle « pas de bouton sans appelant » de la phase 6 sans
+> demander à Mihai.
 >
 > ### 👉 Ensuite, ce qui restait ouvert
 >

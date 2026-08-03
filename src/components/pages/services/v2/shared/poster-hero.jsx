@@ -11,15 +11,18 @@
    headline. Dropping it also drops the top padding a step (.tight): the marker
    was part of what held the headline down from the navbar, so keeping the
    original offset would leave the hero top-heavy with nothing in the gap.
+   ⚠️ Neither hub page passes one today — /faq dropped its own to line up with
+   /services. The prop is kept because that pairing is a taste call of Mihai's
+   that can flip, and it is the branch that carries .tight with it.
 
    The answer paragraph stays the first *content* in the DOM after the H1: it
    is the extraction unit AI answer engines lift (docs/geo-plan.md, Phase 2).
 
    No hooks on purpose — the entry reveal is pure CSS, so nothing here forces a
    client boundary and the SSR HTML never carries opacity: 0. `backdrop` takes
-   an already-mounted node for the same reason: /services passes the WebGL wave
-   grid, /faq passes nothing, and neither the dynamic import nor the "use
-   client" it needs lands in here. */
+   an already-mounted node for the same reason: both hub pages pass the wave
+   grid, and neither the dynamic import nor the "use client" it needs lands in
+   here. */
 
 import styles from "./poster-hero.module.scss";
 

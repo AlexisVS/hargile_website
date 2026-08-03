@@ -5,7 +5,20 @@ import {useEffect, useState, useSyncExternalStore} from "react";
 import {useWaveFrame} from "./wave-frame";
 import styles from "./wave-grid-backdrop.module.scss";
 
-/* Backdrop for the services hero.
+/* Backdrop for the poster hero — /services and /faq both mount it.
+
+   The two share the LAYOUT and differ in the COMPOSITION, and the distinction
+   is the whole reason this file serves both. Once /faq dropped its eyebrow the
+   heroes had identical copy geometry — same component, same 100svh box, same
+   measure, same 860px stack point — so the quiet zones, the band edges and the
+   relief below are correct for both pages and are shared. What is NOT shared is
+   which seed table gets rendered inside them: /services runs wave 7, /faq runs
+   wave 70, passed as `composition`.
+
+   ⚠️ That sharing is a property of the layout, not a general licence. The
+   homepage keeps its own everything because its quiet zone is somewhere else
+   entirely — a composition is only portable between pages whose copy sits in
+   the same place, and these two are the only such pair.
 
    What ships is a still image, not WebGL. The grid was always a single frame
    that never changes, and three.js costs ~150KB gzipped plus the main-thread
@@ -37,17 +50,28 @@ const IMAGE_DIR = "/images/wave-grid";
    phone to 1.6 on a desktop, a 3.5x spread. One 1.6:1 frame cropped across that
    showed a phone roughly its middle 29%, about four enormous pillars.
 
-   `wave-7` rather than `curated`: Mihai picked it off the ?bg= compare switch.
-   The phone and tablet renders are the same composition — the export passes
-   &wave=7 — so all three frames are variant 7 seen at three shapes, not three
-   different compositions.
+   A composition is ONE name and the three frames are derived from it, because
+   that is exactly how export-wave-grid.mjs names what it writes: `wave-70`,
+   `wave-70-phone`, `wave-70-tablet`. Listing the three separately would let a
+   half-finished re-export ship as two frames of one composition and one of
+   another — the failure the suffix-last naming exists to make visible.
 
-   Changing these means exporting first; the files have to exist in
-   public/images/wave-grid. See docs/wave-grid.md, "Adding a frame for a new
-   aspect band". */
-const DEFAULT_IMAGE = "wave-7";
-const PHONE_IMAGE = "wave-7-phone";
-const TABLET_IMAGE = "wave-7-tablet";
+   ⚠️ The three frames of a composition are NOT interchangeable and none is a
+   fallback for another: each is laid out for its own aspect. Re-export all three
+   when a page changes composition. See docs/wave-grid.md, "Adding a frame for a
+   new aspect band".
+
+   Both hub pages picked theirs off the ?wave= switch — /services runs 7, /faq
+   runs 70. ⚠️ Those numbers are the only thing that differs between the pages'
+   backdrops: the quiet zone, the frames and the band edges are shared, because
+   the two heroes have identical copy geometry (see the header comment). */
+const DEFAULT_COMPOSITION = "wave-7";
+
+const framesOf = (composition) => ({
+    wide: composition,
+    phone: `${composition}-phone`,
+    tablet: `${composition}-tablet`,
+});
 
 /* Band edges, and they are NOT the homepage's.
 
@@ -128,6 +152,10 @@ const RELIEF_FOR = {phone: RELIEF_PHONE, tablet: RELIEF_TABLET, wide: null};
      /services?wave=7            → composition 7 rendered live, for picking
      /services?export=2560x1600  → live render at fixed size, for the script
 
+   They answer on /faq too, since it is the same component — harmless, and the
+   export script has no reason to use it: both pages render the same frame for a
+   given aspect, so /services stays the one surface the script drives.
+
    Not useSearchParams: that would opt the whole route into dynamic rendering to
    support debug flags. useSyncExternalStore rather than read-in-effect because
    that is what this is — external state sampled once — and it takes a server
@@ -137,7 +165,7 @@ const subscribeToUrl = () => () => {};
 const readParams = () => window.location.search;
 const readParamsOnServer = () => "";
 
-const useUrlSwitches = (search) => {
+const useUrlSwitches = (search, composition) => {
     const params = new URLSearchParams(search);
 
     const rawWave = params.get("wave");
@@ -154,7 +182,11 @@ const useUrlSwitches = (search) => {
     return {
         variant: Number.isFinite(wave) ? wave : null,
         exportSize: m ? {w: Number(m[1]), h: Number(m[2])} : null,
-        image: pinned ? rawBg : DEFAULT_IMAGE,
+        /* ?bg= names one file outright, so it replaces the wide frame rather
+           than the composition — the per-frame sources are dropped below when
+           it is set, which is what makes it show that one file everywhere. */
+        image: pinned ? rawBg : framesOf(composition).wide,
+        frames: framesOf(composition),
         /* Whether ?bg= asked for one specific file. The per-frame <source>
            elements are dropped when it did, so the compare switch shows the file
            you named at every width instead of quietly swapping in a phone
@@ -186,10 +218,10 @@ const VariantPicker = ({variant}) => {
     );
 };
 
-const WaveGridBackdrop = () => {
+const WaveGridBackdrop = ({composition = DEFAULT_COMPOSITION}) => {
     const compact = useCompact();
     const search = useSyncExternalStore(subscribeToUrl, readParams, readParamsOnServer);
-    const {variant, exportSize, image, pinned} = useUrlSwitches(search);
+    const {variant, exportSize, image, frames, pinned} = useUrlSwitches(search, composition);
     const frame = useWaveFrame({exportSize, phoneMax: PHONE_MAX, tabletMax: TABLET_MAX});
 
     const live = variant !== null || exportSize !== null;
@@ -222,22 +254,22 @@ const WaveGridBackdrop = () => {
                             <>
                                 <source
                                     media={`(max-width: ${PHONE_MAX}px)`}
-                                    srcSet={`${IMAGE_DIR}/${PHONE_IMAGE}.avif`}
+                                    srcSet={`${IMAGE_DIR}/${frames.phone}.avif`}
                                     type="image/avif"
                                 />
                                 <source
                                     media={`(max-width: ${PHONE_MAX}px)`}
-                                    srcSet={`${IMAGE_DIR}/${PHONE_IMAGE}.webp`}
+                                    srcSet={`${IMAGE_DIR}/${frames.phone}.webp`}
                                     type="image/webp"
                                 />
                                 <source
                                     media={`(max-width: ${TABLET_MAX}px)`}
-                                    srcSet={`${IMAGE_DIR}/${TABLET_IMAGE}.avif`}
+                                    srcSet={`${IMAGE_DIR}/${frames.tablet}.avif`}
                                     type="image/avif"
                                 />
                                 <source
                                     media={`(max-width: ${TABLET_MAX}px)`}
-                                    srcSet={`${IMAGE_DIR}/${TABLET_IMAGE}.webp`}
+                                    srcSet={`${IMAGE_DIR}/${frames.tablet}.webp`}
                                     type="image/webp"
                                 />
                             </>
