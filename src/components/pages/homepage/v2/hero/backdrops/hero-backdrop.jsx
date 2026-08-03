@@ -1,7 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import {useCallback, useEffect, useState, useSyncExternalStore} from "react";
+import {useCallback, useState, useSyncExternalStore} from "react";
+import {useWaveFrame} from "@/components/pages/services/v2/shared/wave-frame";
 import styles from "../hero.module.scss";
 
 /* The hero's backdrop: the wave grid, and only the wave grid.
@@ -259,53 +260,13 @@ const useWaveSwitches = () => {
     };
 };
 
-/* Which of the three frames we're drawing: "phone", "tablet" or "wide". Only
-   "wide" gets the live canvas; the other two get their exported still.
-
-   An export is answered from the ASPECT it asked for rather than from a flag of
-   its own, and that is the load-bearing part. The export and a browser window at
-   the same shape have to resolve to the same composition — if they could
-   disagree, they eventually would, which is the drift these switches are wired
-   into this component to avoid. A flag can disagree with the preview; an aspect
-   cannot. So `?wave=N` at tablet width previews exactly what
-   `npm run images:wavegrid:tablet N` writes.
-
-   The thresholds are the aspects halfway between the three exports (0.46, 0.8
-   and 1.6 — see PHONE/TABLET/WIDE in export-wave-grid.mjs), so each export lands
-   well inside its own band rather than near an edge. */
-const frameForAspect = (w, h) => {
-    const aspect = w / h;
-    if (aspect < 0.6) return "phone";
-    if (aspect < 1.15) return "tablet";
-    return "wide";
-};
-
-/* Null means *unresolved*, and nothing renders until the effect lands.
-   Defaulting to any of the three instead would mount the wrong one for a beat —
-   below the canvas breakpoint that means paying for the three.js parse we are
-   trying to avoid, which is the entire point of the still.
-
-   Two queries rather than one: they partition the range at exactly PHONE_MAX and
-   TABLET_MAX, which are the same edges the <source> media queries use. */
-const useFrame = (exportSize) => {
-    const [frame, setFrame] = useState(null);
-
-    useEffect(() => {
-        const phone = window.matchMedia(`(max-width: ${PHONE_MAX}px)`);
-        const tablet = window.matchMedia(`(max-width: ${TABLET_MAX}px)`);
-        const sync = () => setFrame(phone.matches ? "phone" : tablet.matches ? "tablet" : "wide");
-        sync();
-        phone.addEventListener("change", sync);
-        tablet.addEventListener("change", sync);
-        return () => {
-            phone.removeEventListener("change", sync);
-            tablet.removeEventListener("change", sync);
-        };
-    }, []);
-
-    if (exportSize) return frameForAspect(exportSize.w, exportSize.h);
-    return frame;
-};
+/* Frame resolution lives in wave-frame.js — /services needs the same rule with
+   different edges, and a second copy of it is how the two would stop meaning the
+   same thing. Only "wide" gets the live canvas here; the other two get their
+   exported still. See that file for why exports resolve by aspect and windows by
+   width. */
+const useFrame = (exportSize) =>
+    useWaveFrame({exportSize, phoneMax: PHONE_MAX, tabletMax: TABLET_MAX});
 
 /* Per-frame overrides, looked up by frame name. The values are the module
    constants above, so what reaches WaveGrid is a stable reference — which it

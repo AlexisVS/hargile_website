@@ -66,24 +66,54 @@ So the export is made at exactly 1.6:1 (`REF_ASPECT`), and the crop *reproduces*
 the camera rather than approximating it. No per-breakpoint image set is needed,
 including portrait.
 
-## Two pages, four images
+## Two pages, three frames each, six images
 
-The grid is on two heroes and **each needs its own export** — and the homepage
-needs three, one per aspect band. They are not interchangeable: the quiet zone is
-tuned per layout (`/services` has one paragraph in a left column, the homepage has
-eyebrow + headline + paragraph + CTA down the same side, and below 1024px that
-becomes a single full-width column), so an image made for one puts its dark band
-in the wrong place on the other.
+Both heroes now run the same three-frame structure — phone, tablet, wide — and
+**every one of the six is its own export**. They are not interchangeable: the
+quiet zone is tuned per layout (`/services` has one paragraph in a left column,
+the homepage has eyebrow + headline + paragraph + CTA down the same side, and
+below each page's one-column breakpoint both become a single full-width column),
+so an image made for one puts its dark band in the wrong place on the other.
+
+**The band edges differ per page and that is deliberate**, because they are
+layout facts rather than a shared convention:
+
+| | phone | tablet | wide |
+| --- | --- | --- | --- |
+| homepage | ≤640 | 641–1023 | ≥1024 — **canvas**, image only if WebGL fails |
+| `/services` | ≤640 | 641–860 | ≥861 — image, always |
+
+`/services` switches at **860** because that is where its hero stops being two
+columns; the homepage switches at **1024** because that is where it starts
+affording a canvas. The shared part is the rule, not the numbers:
+[`wave-frame.js`][wf] holds `frameForAspect` and `useWaveFrame`, and each page
+passes its own edges in. A second copy of that rule is how the two would stop
+meaning the same thing.
+
+[wf]: ../src/components/pages/services/v2/shared/wave-frame.js
 
 | | `/services` | homepage wave hero |
 | --- | --- | --- |
 | route | `/services` | **`/`** — the hero's only backdrop |
 | desktop | **the still image** | **live canvas**, ≥1024px |
 | mobile / tablet | the still image (the wide one, cropped) | **a still composed for that band**, <1024px |
-| image | `curated.{avif,webp}` | three: `home-phone.*` ≤640, `home-tablet.*` 641–1023, `home.*` past that |
-| pointed at by | `DEFAULT_IMAGE` in [`wave-grid-backdrop.jsx`][wgb] | `HOME_IMAGE` / `PHONE_IMAGE` / `TABLET_IMAGE` in [`hero-backdrop.jsx`][hb] |
-| quiet ellipse | `CALM` in [`wave-grid.jsx`][wg] | `HOME_CALM`, `HOME_CALM_PHONE`, `HOME_CALM_TABLET` in [`hero-backdrop.jsx`][hb] |
-| export command | `npm run images:wavegrid` | `npm run images:wavegrid:home`, `…:phone`, `…:tablet` |
+| image | `wave-7.*` + `wave-7-phone.*` + `wave-7-tablet.*` | `home.*` + `home-phone.*` + `home-tablet.*` |
+| pointed at by | `DEFAULT_IMAGE` / `PHONE_IMAGE` / `TABLET_IMAGE` in [`wave-grid-backdrop.jsx`][wgb] | `HOME_IMAGE` / `PHONE_IMAGE` / `TABLET_IMAGE` in [`hero-backdrop.jsx`][hb] |
+| quiet zone | `CALM` in [`wave-grid.jsx`][wg], `CALM_PHONE` / `CALM_TABLET` in [`wave-grid-backdrop.jsx`][wgb] | `HOME_CALM`, `HOME_CALM_PHONE`, `HOME_CALM_TABLET` in [`hero-backdrop.jsx`][hb] |
+| export command | `npm run images:wavegrid 7`, `…:svc-phone 7`, `…:svc-tablet 7` | `npm run images:wavegrid:home`, `…:phone`, `…:tablet` |
+
+⚠️ **`/services` ships variant 7, not `curated`.** Mihai picked it off the `?bg=`
+compare switch. All three of its frames pass `&wave=7`, so they are one
+composition at three shapes — and genuinely so: `buildSeeds` rejects against the
+module constant `CALM`, **not** against the per-frame quiet zone passed in, so
+the seed table is identical across the three. Only the damping differs.
+
+That also explains why the `/services` phone frame is dimmer than the homepage's:
+`buildSeeds` deliberately leans the light rightward (seeds run to x +9.5, and the
+left half is thinned) for a two-column desktop hero, while a phone frame only
+sees x ±3.7. Most of that light is off-frame by construction. On the page it
+reads correctly — the copy sits on the dark band — but do not expect the raw
+export to look like the homepage's.
 
 `/services` is still everywhere because its grid never moves at all. The homepage
 moves on desktop and freezes on mobile — same grid, same colour, same
@@ -321,9 +351,11 @@ the quiet zone are fixed across every variant.
 With the dev server still running, in another terminal:
 
 ```
-# /services
+# /services — all three frames, and the variant number must match on all three
+npm run images:wavegrid 7               # wide      → wave-7.*
+npm run images:wavegrid:svc-phone 7     # ≤640      → wave-7-phone.*
+npm run images:wavegrid:svc-tablet 7    # 641–860   → wave-7-tablet.*
 npm run images:wavegrid                 # the curated composition  → curated.*
-npm run images:wavegrid 7 32            # variants 7 and 32        → wave-7.*, wave-32.*
 
 # homepage hero
 npm run images:wavegrid:home            # the curated composition  → home.*
@@ -582,12 +614,12 @@ Two things worth knowing before anyone "fixes" this back:
   many live contexts). `onUnavailable` only fires at construction, so a lost
   context leaves a blank canvas rather than falling back. Handling it means a
   `webglcontextlost` listener and deciding whether to wait for a restore.
-- **`/services` still has only the wide frame.** It serves `curated.*` at every
-  width, so on a phone `cover` keeps its middle ~29% and shows about four
-  enormous pillars. The homepage now has the machinery to fix this (three
-  targets, an aspect-derived frame, per-frame quiet zones) and `/services` has
-  none of it — it would need its own `compact`/phone quiet zone and export
-  targets, which is real work, not a config change.
+- **The image count is now six, and nothing enforces re-exporting all of them.**
+  This is the standing risk of the whole approach. `curated.*` and `wave-32.*`
+  are alternates on top, so the directory holds eight files of which six ship.
+  After touching `wave-grid.jsx`, re-run every target and confirm `git status` is
+  clean — that check has now caught nothing twice, which is the point of running
+  it rather than a reason to stop.
 - **The export depends on the exporting machine having a GPU.** Checked during
   the phone export: headless Chrome reported `ANGLE (NVIDIA GeForce GTX 1650,
   D3D11)`, so `isSoftwareRenderer` is false and the shadow pass runs. On a

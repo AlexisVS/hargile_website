@@ -9,6 +9,8 @@
     "lint": "eslint .",
     "images:portfolio": "node scripts/optimize-portfolio-images.mjs",
     "images:wavegrid": "node scripts/export-wave-grid.mjs",
+    "images:wavegrid:svc-phone": "node scripts/export-wave-grid.mjs --page=services-phone",
+    "images:wavegrid:svc-tablet": "node scripts/export-wave-grid.mjs --page=services-tablet",
     "images:wavegrid:home": "node scripts/export-wave-grid.mjs --page=home",
     "images:wavegrid:phone": "node scripts/export-wave-grid.mjs --page=phone",
     "images:wavegrid:tablet": "node scripts/export-wave-grid.mjs --page=tablet",

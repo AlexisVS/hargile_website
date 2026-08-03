@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import {useEffect, useState, useSyncExternalStore} from "react";
+import {useWaveFrame} from "./wave-frame";
 import styles from "./wave-grid-backdrop.module.scss";
 
 /* Backdrop for the services hero.
@@ -28,9 +29,39 @@ const WaveGrid = dynamic(() => import("./wave-grid"), {ssr: false});
 
 const IMAGE_DIR = "/images/wave-grid";
 
-/* Which exported composition ships. Change this to switch the hero's look —
-   the file has to exist in public/images/wave-grid, so export it first. */
-const DEFAULT_IMAGE = "curated";
+/* Which exported composition ships, and at which frame.
+
+   Three files, not one, for the reason the homepage found: `object-fit: cover`
+   reproduces the camera's own reframing over a modest range of aspects, but this
+   hero is 100svh so its aspect IS the viewport's — measured from 0.462 on a
+   phone to 1.6 on a desktop, a 3.5x spread. One 1.6:1 frame cropped across that
+   showed a phone roughly its middle 29%, about four enormous pillars.
+
+   `wave-7` rather than `curated`: Mihai picked it off the ?bg= compare switch.
+   The phone and tablet renders are the same composition — the export passes
+   &wave=7 — so all three frames are variant 7 seen at three shapes, not three
+   different compositions.
+
+   Changing these means exporting first; the files have to exist in
+   public/images/wave-grid. See docs/wave-grid.md, "Adding a frame for a new
+   aspect band". */
+const DEFAULT_IMAGE = "wave-7";
+const PHONE_IMAGE = "wave-7-phone";
+const TABLET_IMAGE = "wave-7-tablet";
+
+/* Band edges, and they are NOT the homepage's.
+
+   860 is this hero's own one-column breakpoint — the width where the copy stops
+   being a left-hand column and spans the full measure, which is exactly when the
+   quiet ellipse stops being the right shape and has to become a band. It is also
+   where wave-grid-backdrop.module.scss drops the horizontal mask, so the frame
+   and its treatment change together.
+
+   640 splits the one-column range in two, because the aspects inside it are not
+   one frame's worth: measured, this hero runs 0.462 at 390x844 and 1.229 at
+   860x700. */
+const PHONE_MAX = 640;
+const TABLET_MAX = 860;
 
 /* Matches the hero's own one-column breakpoint, so the reframed grid and the
    stacked copy layout always change together. Only consulted by the live WebGL
@@ -39,7 +70,7 @@ const useCompact = () => {
     const [compact, setCompact] = useState(false);
 
     useEffect(() => {
-        const mq = window.matchMedia("(max-width: 860px)");
+        const mq = window.matchMedia(`(max-width: ${TABLET_MAX}px)`);
         const sync = () => setCompact(mq.matches);
         sync();
         mq.addEventListener("change", sync);
@@ -48,6 +79,47 @@ const useCompact = () => {
 
     return compact;
 };
+
+/* The one-column quiet zones — bands, not the ellipse.
+
+   CALM (wave-grid.jsx) is tuned to a paragraph sitting in the LEFT column of a
+   two-column hero, so its centre is off to one side. Below 860px this hero has
+   one full-width column: eyebrow, headline, paragraph and the stats row all run
+   down the middle with nothing beside them, so there is no side for the light to
+   arrive from and it has to come from above and below instead.
+
+   The numbers are the homepage's, and deliberately so. Both heroes are the same
+   shape below their one-column breakpoint — a single centred column on a 100svh
+   box — and the grid is meant to read as the same object on both pages. Derived
+   the same way, from each frame's own world extents: below REF_ASPECT the
+   vertical FOV is pinned at 40°, so visible height is 0.728·R and width is that
+   times the aspect. At radius 22 / 0.46:1 that is x ±3.70, z ±8.00; at radius
+   18 / 0.8:1 it is x ±5.24, z ±6.55. Both rx values sit past their frame edge so
+   the damping never shows a rim.
+
+   depth 0.7 rather than CALM's 0.8: below 860px the layer already drops to
+   --grid-opacity 0.6 with no mask (wave-grid-backdrop.module.scss), so the same
+   damp lands on an already-quieter surface. */
+const CALM_PHONE = {cx: 0, cz: 0.2, rx: 5.4, rz: 4.6, depth: 0.7};
+const CALM_TABLET = {cx: 0, cz: 0.2, rx: 7.0, rz: 3.8, depth: 0.7};
+
+/* Relief per frame, also the homepage's values and for the same reason.
+
+   radius is the dial: 22 puts about eight pillars across a phone, 18 about
+   eleven at tablet, against fifteen on the wide frame. The count rising with the
+   frame is intentional — the screen grows, the count grows with it, and the
+   pillars stay roughly the size they are on a phone.
+
+   ⚠️ Two traps recorded on the homepage's copies of these, both found by
+   rendering: the frustum maths consistently over-predict the pillar count (count
+   them on the export instead), and pushing `view.mx` toward -1 to "make it read
+   3D" goes the wrong way, because the extra pillar side it reveals is side
+   facing away from the key light. Do not re-derive either here. */
+const RELIEF_PHONE = {radius: 22, maxHeight: 1.05, view: {mx: -0.2, my: 0.95}};
+const RELIEF_TABLET = {radius: 18, maxHeight: 1.05, view: {mx: -0.2, my: 0.95}};
+
+const CALM_FOR = {phone: CALM_PHONE, tablet: CALM_TABLET, wide: null};
+const RELIEF_FOR = {phone: RELIEF_PHONE, tablet: RELIEF_TABLET, wide: null};
 
 /* URL switches, all authoring-only and all absent in normal use:
 
@@ -76,11 +148,18 @@ const useUrlSwitches = (search) => {
 
     const rawBg = params.get("bg");
 
+    // Filename-safe only — this value reaches a src attribute.
+    const pinned = Boolean(rawBg) && /^[a-z0-9-]{1,40}$/i.test(rawBg);
+
     return {
         variant: Number.isFinite(wave) ? wave : null,
         exportSize: m ? {w: Number(m[1]), h: Number(m[2])} : null,
-        // Filename-safe only — this value reaches a src attribute.
-        image: rawBg && /^[a-z0-9-]{1,40}$/i.test(rawBg) ? rawBg : DEFAULT_IMAGE,
+        image: pinned ? rawBg : DEFAULT_IMAGE,
+        /* Whether ?bg= asked for one specific file. The per-frame <source>
+           elements are dropped when it did, so the compare switch shows the file
+           you named at every width instead of quietly swapping in a phone
+           render below 640px. */
+        pinned,
     };
 };
 
@@ -110,17 +189,59 @@ const VariantPicker = ({variant}) => {
 const WaveGridBackdrop = () => {
     const compact = useCompact();
     const search = useSyncExternalStore(subscribeToUrl, readParams, readParamsOnServer);
-    const {variant, exportSize, image} = useUrlSwitches(search);
+    const {variant, exportSize, image, pinned} = useUrlSwitches(search);
+    const frame = useWaveFrame({exportSize, phoneMax: PHONE_MAX, tabletMax: TABLET_MAX});
 
     const live = variant !== null || exportSize !== null;
+
+    // Unresolved frame — render nothing rather than guessing. See wave-frame.js.
+    if (live && frame === null) return null;
 
     return (
         <>
             <div className={styles.backdrop} aria-hidden="true">
                 {live ? (
-                    <WaveGrid compact={compact} variant={variant} exportSize={exportSize}/>
+                    <WaveGrid
+                        compact={compact}
+                        variant={variant}
+                        exportSize={exportSize}
+                        calm={CALM_FOR[frame]}
+                        relief={RELIEF_FOR[frame]}
+                    />
                 ) : (
                     <picture>
+                        {/* The two one-column frames, phone first — <picture> takes
+                            the first matching <source>, so the wide one below would
+                            otherwise win everywhere.
+
+                            Skipped entirely when ?bg= pins an image: that switch
+                            exists to compare one specific file, and silently serving
+                            a different one at narrow widths would defeat it. Compare
+                            phone framing with ?wave=N at phone width instead. */}
+                        {pinned ? null : (
+                            <>
+                                <source
+                                    media={`(max-width: ${PHONE_MAX}px)`}
+                                    srcSet={`${IMAGE_DIR}/${PHONE_IMAGE}.avif`}
+                                    type="image/avif"
+                                />
+                                <source
+                                    media={`(max-width: ${PHONE_MAX}px)`}
+                                    srcSet={`${IMAGE_DIR}/${PHONE_IMAGE}.webp`}
+                                    type="image/webp"
+                                />
+                                <source
+                                    media={`(max-width: ${TABLET_MAX}px)`}
+                                    srcSet={`${IMAGE_DIR}/${TABLET_IMAGE}.avif`}
+                                    type="image/avif"
+                                />
+                                <source
+                                    media={`(max-width: ${TABLET_MAX}px)`}
+                                    srcSet={`${IMAGE_DIR}/${TABLET_IMAGE}.webp`}
+                                    type="image/webp"
+                                />
+                            </>
+                        )}
                         {/* AVIF first, WebP fallback. The fallback is required, not
                             belt-and-braces: browserslist allows edge >= 111 and Edge
                             only shipped AVIF in 121. */}

@@ -98,6 +98,21 @@ const OUT_DIR = path.join("public", "images", "wave-grid");
    of `/` without re-testing this. */
 const TARGETS = {
     services: {path: "/services", size: WIDE, curated: "curated", variant: (v) => `wave-${v}`},
+    /* /services at the two one-column frames. Same route, same aspect-driven
+       switch as the homepage pair below — wave-grid-backdrop.jsx reads the
+       requested aspect through useWaveFrame and picks its band quiet zone.
+
+       The variant suffix goes LAST (`wave-7-phone`, not `phone-wave-7`) so all
+       three frames of one composition sort together in the directory listing,
+       which is how you notice one of them wasn't re-exported. */
+    "services-phone": {
+        path: "/services", size: PHONE,
+        curated: "curated-phone", variant: (v) => `wave-${v}-phone`,
+    },
+    "services-tablet": {
+        path: "/services", size: TABLET,
+        curated: "curated-tablet", variant: (v) => `wave-${v}-tablet`,
+    },
     home: {path: "/preview/home-wave", size: WIDE, curated: "home", variant: (v) => `home-wave-${v}`},
     /* Same route as `home` — the composition switch is the export ASPECT, not a
        flag. hero-backdrop.jsx maps the requested aspect onto one of three
