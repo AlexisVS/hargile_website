@@ -50,7 +50,12 @@
    offer instead of on a line under it. */
 .row {
   display: grid;
-  grid-template-columns: minmax(0, auto) minmax(0, 1fr) 16px;
+  /* Fixed name column rather than `auto`: sized to content, each promise
+     started wherever its offer's name happened to end, so the three ran down a
+     ragged left edge. The offer names are the scan target and the promises are
+     the aside — they need one column each. The clamp keeps the name off the
+     promise as the type scales with the viewport (.name is itself a clamp). */
+  grid-template-columns: minmax(0, clamp(260px, 24vw, 340px)) minmax(0, 1fr) 16px;
   align-items: baseline;
   gap: 8px 24px;
   padding: 22px 0;
