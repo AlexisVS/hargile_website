@@ -16,6 +16,7 @@ import {
     NavItem,
     PageContainer,
     Paragraph,
+    PrintStyles,
     Section,
     SectionTitle,
     Sidebar,
@@ -39,8 +40,28 @@ export default function PrivacyPolicyPageClient() {
         setMenuOpen(false);
     };
 
+    /* Both buttons go through the browser's own print pipeline. "Download as
+       PDF" only differs by the document title, which is what Chrome and Safari
+       pre-fill as the filename when the destination is Save as PDF. */
+    const printPolicy = (fileName) => {
+        const previousTitle = document.title;
+
+        const restore = () => {
+            document.title = previousTitle;
+            window.removeEventListener("afterprint", restore);
+        };
+
+        if (fileName) {
+            document.title = fileName;
+            window.addEventListener("afterprint", restore);
+        }
+
+        window.print();
+    };
+
     return (
-        <PageContainer>
+        <PageContainer id="privacy-policy-print-root">
+            <PrintStyles/>
             <ContentWrapper>
                 <Header>
                     <div>
@@ -148,177 +169,161 @@ export default function PrivacyPolicyPageClient() {
                 </Sidebar>
 
                 <MainContent>
-                    {activeSection === "termsConditions" && (
-                        <Section id="terms">
-                            <SectionTitle>
-                                1. {t("sections.termsConditions.title")}
-                            </SectionTitle>
-                            <Paragraph>{t("sections.termsConditions.welcome")}</Paragraph>
+                    <Section id="terms" $active={activeSection === "termsConditions"}>
+                        <SectionTitle>
+                            1. {t("sections.termsConditions.title")}
+                        </SectionTitle>
+                        <Paragraph>{t("sections.termsConditions.welcome")}</Paragraph>
 
-                            <SubSectionTitle>
-                                1.1 {t("sections.termsConditions.intellectualProperty.title")}
-                            </SubSectionTitle>
-                            <Paragraph>
-                                {t("sections.termsConditions.intellectualProperty.content")}
-                            </Paragraph>
+                        <SubSectionTitle>
+                            1.1 {t("sections.termsConditions.intellectualProperty.title")}
+                        </SubSectionTitle>
+                        <Paragraph>
+                            {t("sections.termsConditions.intellectualProperty.content")}
+                        </Paragraph>
 
-                            <SubSectionTitle>
-                                1.2 {t("sections.termsConditions.liability.title")}
-                            </SubSectionTitle>
-                            <Paragraph>
-                                {t("sections.termsConditions.liability.content")}
-                            </Paragraph>
-                        </Section>
-                    )}
+                        <SubSectionTitle>
+                            1.2 {t("sections.termsConditions.liability.title")}
+                        </SubSectionTitle>
+                        <Paragraph>
+                            {t("sections.termsConditions.liability.content")}
+                        </Paragraph>
+                    </Section>
 
-                    {activeSection === "privacyPolicy" && (
-                        <Section id="privacy">
-                            <SectionTitle>
-                                2. {t("sections.privacyPolicy.title")}
-                            </SectionTitle>
-                            <Paragraph>{t("sections.privacyPolicy.introduction")}</Paragraph>
+                    <Section id="privacy" $active={activeSection === "privacyPolicy"}>
+                        <SectionTitle>
+                            2. {t("sections.privacyPolicy.title")}
+                        </SectionTitle>
+                        <Paragraph>{t("sections.privacyPolicy.introduction")}</Paragraph>
 
-                            <SubSectionTitle>
-                                2.1 {t("sections.privacyPolicy.dataCollection.title")}
-                            </SubSectionTitle>
-                            <Paragraph>
-                                {t("sections.privacyPolicy.dataCollection.content")}
-                            </Paragraph>
+                        <SubSectionTitle>
+                            2.1 {t("sections.privacyPolicy.dataCollection.title")}
+                        </SubSectionTitle>
+                        <Paragraph>
+                            {t("sections.privacyPolicy.dataCollection.content")}
+                        </Paragraph>
 
-                            <SubSectionTitle>
-                                2.2 {t("sections.privacyPolicy.dataUsage.title")}
-                            </SubSectionTitle>
-                            <Paragraph>
-                                {t("sections.privacyPolicy.dataUsage.content")}
-                            </Paragraph>
-                            <BulletList>
-                                <BulletItem>
-                                    {t("sections.privacyPolicy.dataUsage.purposes.services")}
-                                </BulletItem>
-                                <BulletItem>
-                                    {t("sections.privacyPolicy.dataUsage.purposes.transactions")}
-                                </BulletItem>
-                                <BulletItem>
-                                    {t("sections.privacyPolicy.dataUsage.purposes.responses")}
-                                </BulletItem>
-                            </BulletList>
-                        </Section>
-                    )}
+                        <SubSectionTitle>
+                            2.2 {t("sections.privacyPolicy.dataUsage.title")}
+                        </SubSectionTitle>
+                        <Paragraph>
+                            {t("sections.privacyPolicy.dataUsage.content")}
+                        </Paragraph>
+                        <BulletList>
+                            <BulletItem>
+                                {t("sections.privacyPolicy.dataUsage.purposes.services")}
+                            </BulletItem>
+                            <BulletItem>
+                                {t("sections.privacyPolicy.dataUsage.purposes.transactions")}
+                            </BulletItem>
+                            <BulletItem>
+                                {t("sections.privacyPolicy.dataUsage.purposes.responses")}
+                            </BulletItem>
+                        </BulletList>
+                    </Section>
 
-                    {activeSection === "cookies" && (
-                        <Section id="cookies">
-                            <SectionTitle>3. {t("sections.cookies.title")}</SectionTitle>
-                            <Paragraph>{t("sections.cookies.introduction")}</Paragraph>
+                    <Section id="cookies" $active={activeSection === "cookies"}>
+                        <SectionTitle>3. {t("sections.cookies.title")}</SectionTitle>
+                        <Paragraph>{t("sections.cookies.introduction")}</Paragraph>
 
-                            <SubSectionTitle>
-                                3.1 {t("sections.cookies.types.title")}
-                            </SubSectionTitle>
-                            <BulletList>
-                                <BulletItem>{t("sections.cookies.types.essential")}</BulletItem>
-                                <BulletItem>{t("sections.cookies.types.analytics")}</BulletItem>
-                                <BulletItem>
-                                    {t("sections.cookies.types.functional")}
-                                </BulletItem>
-                                <BulletItem>
-                                    {t("sections.cookies.types.advertising")}
-                                </BulletItem>
-                            </BulletList>
+                        <SubSectionTitle>
+                            3.1 {t("sections.cookies.types.title")}
+                        </SubSectionTitle>
+                        <BulletList>
+                            <BulletItem>{t("sections.cookies.types.essential")}</BulletItem>
+                            <BulletItem>{t("sections.cookies.types.analytics")}</BulletItem>
+                            <BulletItem>
+                                {t("sections.cookies.types.functional")}
+                            </BulletItem>
+                            <BulletItem>
+                                {t("sections.cookies.types.advertising")}
+                            </BulletItem>
+                        </BulletList>
 
-                            <SubSectionTitle>
-                                3.2 {t("sections.cookies.control.title")}
-                            </SubSectionTitle>
-                            <Paragraph>{t("sections.cookies.control.content")}</Paragraph>
-                        </Section>
-                    )}
+                        <SubSectionTitle>
+                            3.2 {t("sections.cookies.control.title")}
+                        </SubSectionTitle>
+                        <Paragraph>{t("sections.cookies.control.content")}</Paragraph>
+                    </Section>
 
-                    {activeSection === "userRights" && (
-                        <Section id="rights">
-                            <SectionTitle>4. {t("sections.userRights.title")}</SectionTitle>
-                            <Paragraph>{t("sections.userRights.introduction")}</Paragraph>
-                            <BulletList>
-                                <BulletItem>
-                                    {t("sections.userRights.rights.access")}
-                                </BulletItem>
-                                <BulletItem>
-                                    {t("sections.userRights.rights.rectification")}
-                                </BulletItem>
-                                <BulletItem>
-                                    {t("sections.userRights.rights.erasure")}
-                                </BulletItem>
-                                <BulletItem>
-                                    {t("sections.userRights.rights.restriction")}
-                                </BulletItem>
-                                <BulletItem>
-                                    {t("sections.userRights.rights.portability")}
-                                </BulletItem>
-                                <BulletItem>
-                                    {t("sections.userRights.rights.objection")}
-                                </BulletItem>
-                                <BulletItem>
-                                    {t("sections.userRights.rights.complaint")}
-                                </BulletItem>
-                            </BulletList>
-                        </Section>
-                    )}
+                    <Section id="rights" $active={activeSection === "userRights"}>
+                        <SectionTitle>4. {t("sections.userRights.title")}</SectionTitle>
+                        <Paragraph>{t("sections.userRights.introduction")}</Paragraph>
+                        <BulletList>
+                            <BulletItem>
+                                {t("sections.userRights.rights.access")}
+                            </BulletItem>
+                            <BulletItem>
+                                {t("sections.userRights.rights.rectification")}
+                            </BulletItem>
+                            <BulletItem>
+                                {t("sections.userRights.rights.erasure")}
+                            </BulletItem>
+                            <BulletItem>
+                                {t("sections.userRights.rights.restriction")}
+                            </BulletItem>
+                            <BulletItem>
+                                {t("sections.userRights.rights.portability")}
+                            </BulletItem>
+                            <BulletItem>
+                                {t("sections.userRights.rights.objection")}
+                            </BulletItem>
+                            <BulletItem>
+                                {t("sections.userRights.rights.complaint")}
+                            </BulletItem>
+                        </BulletList>
+                    </Section>
 
-                    {activeSection === "prospection" && (
-                        <Section id="prospection">
-                            <SectionTitle>5. {t("sections.prospection.title")}</SectionTitle>
-                            <Paragraph>{t("sections.prospection.introduction")}</Paragraph>
+                    <Section id="prospection" $active={activeSection === "prospection"}>
+                        <SectionTitle>5. {t("sections.prospection.title")}</SectionTitle>
+                        <Paragraph>{t("sections.prospection.introduction")}</Paragraph>
 
-                            <SubSectionTitle>
-                                5.1 {t("sections.prospection.source.title")}
-                            </SubSectionTitle>
-                            <Paragraph>{t("sections.prospection.source.content")}</Paragraph>
+                        <SubSectionTitle>
+                            5.1 {t("sections.prospection.source.title")}
+                        </SubSectionTitle>
+                        <Paragraph>{t("sections.prospection.source.content")}</Paragraph>
 
-                            <SubSectionTitle>
-                                5.2 {t("sections.prospection.legalBasis.title")}
-                            </SubSectionTitle>
-                            <Paragraph>{t("sections.prospection.legalBasis.content")}</Paragraph>
+                        <SubSectionTitle>
+                            5.2 {t("sections.prospection.legalBasis.title")}
+                        </SubSectionTitle>
+                        <Paragraph>{t("sections.prospection.legalBasis.content")}</Paragraph>
 
-                            <SubSectionTitle>
-                                5.3 {t("sections.prospection.optOut.title")}
-                            </SubSectionTitle>
-                            <Paragraph>{t("sections.prospection.optOut.content")}</Paragraph>
+                        <SubSectionTitle>
+                            5.3 {t("sections.prospection.optOut.title")}
+                        </SubSectionTitle>
+                        <Paragraph>{t("sections.prospection.optOut.content")}</Paragraph>
 
-                            <SubSectionTitle>
-                                5.4 {t("sections.prospection.retention.title")}
-                            </SubSectionTitle>
-                            <Paragraph>{t("sections.prospection.retention.content")}</Paragraph>
-                        </Section>
-                    )}
+                        <SubSectionTitle>
+                            5.4 {t("sections.prospection.retention.title")}
+                        </SubSectionTitle>
+                        <Paragraph>{t("sections.prospection.retention.content")}</Paragraph>
+                    </Section>
 
-                    {activeSection === "contactUs" && (
-                        <Section id="contact">
-                            <SectionTitle>6. {t("sections.contactUs.title")}</SectionTitle>
-                            <Paragraph>{t("sections.contactUs.content")}</Paragraph>
-                        </Section>
-                    )}
+                    <Section id="contact" $active={activeSection === "contactUs"}>
+                        <SectionTitle>6. {t("sections.contactUs.title")}</SectionTitle>
+                        <Paragraph>{t("sections.contactUs.content")}</Paragraph>
+                    </Section>
 
-                    {activeSection === "international" && (
-                        <Section id="international">
-                            <SectionTitle>
-                                7. {t("sections.international.title")}
-                            </SectionTitle>
-                            <Paragraph>{t("sections.international.content")}</Paragraph>
-                        </Section>
-                    )}
+                    <Section id="international" $active={activeSection === "international"}>
+                        <SectionTitle>
+                            7. {t("sections.international.title")}
+                        </SectionTitle>
+                        <Paragraph>{t("sections.international.content")}</Paragraph>
+                    </Section>
 
-                    {activeSection === "contactSupport" && (
-                        <Section id="contact-us">
-                            <SectionTitle>
-                                8. {t("sections.contactSupport.title")}
-                            </SectionTitle>
-                            <Paragraph>{t("sections.contactSupport.content")}</Paragraph>
-                        </Section>
-                    )}
+                    <Section id="contact-us" $active={activeSection === "contactSupport"}>
+                        <SectionTitle>
+                            8. {t("sections.contactSupport.title")}
+                        </SectionTitle>
+                        <Paragraph>{t("sections.contactSupport.content")}</Paragraph>
+                    </Section>
 
                     <ActionButtons aria-label={'Action buttons'}>
-                        <ActionButton>
+                        <ActionButton type="button" onClick={() => printPolicy(t("pdfFileName"))}>
                             <FileText size={18}/>
                             {t("downloadPDF")}
                         </ActionButton>
-                        <ActionButton>
+                        <ActionButton type="button" onClick={() => printPolicy()}>
                             <Printer size={18}/>
                             {t("print")}
                         </ActionButton>

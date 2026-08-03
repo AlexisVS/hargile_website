@@ -1,4 +1,59 @@
-import styled from "styled-components";
+import styled, {createGlobalStyle} from "styled-components";
+
+/* Mounted only by the privacy-policy page, so these rules never reach any other
+   route. Printing a legal page has to escape the site chrome: the navbar, the
+   footer and the floating contact button would otherwise each claim ink, and
+   the dark theme would print white text on a black flood. */
+export const PrintStyles = createGlobalStyle`
+    @media print {
+        @page {
+            margin: 16mm;
+        }
+
+        /* Everything keeps its box but stops painting; the policy is then
+           lifted out of the flow so the hidden chrome costs no sheets. */
+        body * {
+            visibility: hidden;
+        }
+
+        #privacy-policy-print-root,
+        #privacy-policy-print-root * {
+            visibility: visible;
+        }
+
+        #privacy-policy-print-root {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        html,
+        body {
+            background: #fff !important;
+            overflow: visible !important;
+        }
+
+        /* The policy is lifted out of the flow, so the chrome's reserved height
+           would otherwise trail a blank sheet behind it. */
+        .page-content {
+            min-height: 0;
+        }
+
+        .content-container {
+            padding: 0;
+        }
+
+        #privacy-policy-print-root,
+        #privacy-policy-print-root *,
+        #privacy-policy-print-root *::before {
+            color: #111 !important;
+            background: none !important;
+            box-shadow: none !important;
+            text-shadow: none !important;
+        }
+    }
+`;
 
 export const PageContainer = styled.div`
     min-height: 100vh;
@@ -10,6 +65,12 @@ export const PageContainer = styled.div`
        of .content-container's side padding so the inner container's gutters
        line up exactly with the homepage's. */
     margin-inline: calc(50% - 50vw);
+
+    @media print {
+        min-height: 0;
+        overflow: visible;
+        margin-inline: 0;
+    }
 `;
 
 export const ContentWrapper = styled.div`
@@ -26,6 +87,12 @@ export const ContentWrapper = styled.div`
         display: grid;
         grid-template-columns: 280px 1fr;
         gap: 2rem;
+    }
+
+    @media print {
+        display: block;
+        max-width: none;
+        padding: 0;
     }
 `;
 
@@ -89,6 +156,10 @@ export const MenuButton = styled.button`
     @media (min-width: 768px) {
         display: none;
     }
+
+    @media print {
+        display: none;
+    }
 `;
 
 export const Sidebar = styled.aside`
@@ -105,6 +176,11 @@ export const Sidebar = styled.aside`
         top: 2rem;
         max-height: calc(100vh - 4rem);
         overflow-y: auto;
+    }
+
+    /* The in-page nav is dead weight on paper: every section is printed. */
+    @media print {
+        display: none !important;
     }
 `;
 
@@ -141,12 +217,24 @@ export const NavItem = styled.a`
 // Main content section
 export const MainContent = styled.main``;
 
+/* Every section stays mounted and the inactive ones are hidden in CSS rather
+   than unmounted, so a print run can reveal the whole policy — the reader
+   asked for the document, not for the tab they happened to leave open. */
 export const Section = styled.section`
     background: linear-gradient(155deg, rgba(56, 74, 122, 0.22), rgba(24, 33, 58, 0.35), rgba(12, 17, 32, 0.55));
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 14px;
     padding: 2rem;
     margin-bottom: 2rem;
+    display: ${(props) => (props.$active ? "block" : "none")};
+
+    @media print {
+        display: block;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        margin-bottom: 2.5rem;
+    }
 `;
 
 export const SectionTitle = styled.h2.attrs({
@@ -195,6 +283,10 @@ export const ActionButtons = styled.div`
     gap: 1rem;
     justify-content: center;
     margin-top: 2rem;
+
+    @media print {
+        display: none;
+    }
 `;
 
 export const ActionButton = styled.button`
