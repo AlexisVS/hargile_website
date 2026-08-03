@@ -40,16 +40,15 @@
   min-width: 0;
 }
 
-/* The frame the reference gives each card: a hairline and 14px of air, no fill,
-   no radius on the outer box — the radius stays on the image inside it. */
+/* No frame. The card was a hairline box wrapped around 14px of air wrapped
+   around a second hairline box around the image — two rectangles drawn to say
+   "this screenshot is one item", which the grid was already saying. The
+   screenshot is the card now. */
 .card {
   display: block;
   height: 100%;
   box-sizing: border-box;
-  padding: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
   text-decoration: none;
-  transition: border-color 0.3s ease;
 
   &:focus-visible {
     outline: 2px solid rgba(150, 185, 249, 0.7);
@@ -62,8 +61,6 @@
   aspect-ratio: 16 / 10;
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  transition: border-color 0.3s ease;
 }
 
 .img {
@@ -101,19 +98,13 @@
     transform: perspective(900px)
       rotateX(calc(var(--ty, 0) * -4deg))
       rotateY(calc(var(--tx, 0) * 4deg));
-    transition: transform 0.15s ease-out, border-color 0.3s ease;
+    transition: transform 0.15s ease-out;
   }
 
-  .card:hover {
-    border-color: rgba(255, 255, 255, 0.2);
-  }
-
+  /* Two of the four hover parts were the frames brightening. What is left is
+     the image and the client name, which is what the pointer is aimed at. */
   .card:hover .img {
     transform: scale(1.04);
-  }
-
-  .card:hover .media {
-    border-color: rgba(255, 255, 255, 0.18);
   }
 
   .card:hover .client {

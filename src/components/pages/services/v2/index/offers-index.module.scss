@@ -1,30 +1,18 @@
-/* Offer rows + numeral spine.
+/* Four square cells, full width, no rules and no fills.
 
-   The row is a three-part flex line — small numeral, copy block, chevron —
-   separated from the next only by a hairline, and pushed right by its own
-   --indent. Nothing is a card and nothing is filled; the spotlight (shared
-   .spot) is the only surface that lights up.
+   What is gone, and why: the numerals (four items do not need counting), the
+   sticky spine (it crossfaded the title of the row beside it), and every
+   hairline (a 2×2 grid with 32px of gap is already four things, not one).
+   The cell is told apart from its neighbour by space, and shown to be
+   interactive by the spotlight — which is the site's one pointer surface and
+   the only thing here that paints. */
 
-   Hover is one gesture applied to four parts at once: the hairline brightens,
-   the title slides, the numeral warms, the chevron nudges — all transform and
-   opacity. */
-
-.layout {
-  display: grid;
-  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
-  gap: clamp(24px, 4vw, 72px);
-  align-items: start;
+.head {
+  max-width: 62ch;
+  margin-bottom: clamp(48px, 5vw, 84px);
 }
 
-/* Holds while its rows scroll under it. 16vh matches the reference; the max()
-   keeps it clear of the fixed navbar on short viewports. */
-.spine {
-  position: sticky;
-  top: max(96px, 16vh);
-  align-self: start;
-}
-
-.spineKicker {
+.kicker {
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.32em;
@@ -33,92 +21,52 @@
   margin: 0;
 }
 
-/* The one moving part on the page. Crossfade only — a numeral that slid or
-   counted would be reporting scroll position, which nobody asked for. */
-.spineNum {
-  display: block;
-  margin-top: 14px;
-  background: linear-gradient(135deg, #ffffff 30%, #dce7fd 68%, #96b9f9 105%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: spineIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.spineLabel {
-  font-family: var(--font-headings);
-  font-weight: 600;
-  font-size: clamp(18px, 1.6vw, 24px);
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-  color: rgba(237, 237, 237, 0.72);
-  margin: 10px 0 0;
-  animation: spineIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.spineText {
-  font-size: 15px;
+.lead {
+  font-size: clamp(17px, 1.5vw, 21px);
   font-weight: 300;
-  color: rgba(237, 237, 237, 0.55);
-  line-height: 1.6;
-  margin: 28px 0 0;
-  max-width: 34ch;
+  color: rgba(237, 237, 237, 0.7);
+  line-height: 1.55;
+  margin: 18px 0 0;
 }
 
-@keyframes spineIn {
-  from {
-    opacity: 0.01;
-  }
-  to {
-    opacity: 1;
-  }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 32px);
 }
 
-.rows {
+/* A floor, not a fixed ratio. A hard aspect-ratio forced the copy to the top of
+   the box and the deliverables to the bottom, which is what put a hole in the
+   middle of every cell. The min-height keeps the four reading as squares at the
+   widths where they are side by side, and the grid row equalises them anyway —
+   so the content can set the height and the rhythm inside stays tight. */
+.cell {
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  min-height: clamp(280px, 25vw, 400px);
+  padding: clamp(28px, 2.8vw, 48px);
+  padding-bottom: clamp(64px, 5vw, 92px);
+  box-sizing: border-box;
 }
 
-.row {
-  position: relative;
-  display: flex;
-  align-items: baseline;
-  gap: clamp(16px, 2.4vw, 40px);
-  flex-wrap: wrap;
-  padding: clamp(30px, 4vw, 54px) clamp(16px, 2vw, 32px) clamp(30px, 4vw, 54px) var(--indent, 0px);
-  border-top: 1px solid rgba(255, 255, 255, 0.09);
-  transition: border-color 0.3s ease;
-}
-
-.num {
-  flex: 0 0 auto;
-  font-family: var(--font-headings);
-  font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 0.14em;
-  color: #96b9f9;
-}
-
-.main {
-  flex: 1 1 300px;
-  min-width: 0;
-}
-
+/* The offer name is the whole point of the cell, so it is sized like it: the
+   two-column layout had halved the measure and the title had quietly shrunk
+   with it, ending up level with its own description. */
 .title {
   font-family: var(--font-headings);
   font-weight: 700;
-  font-size: clamp(26px, 3vw, 44px);
-  letter-spacing: -0.02em;
-  line-height: 1.08;
+  font-size: clamp(30px, 3.4vw, 52px);
+  letter-spacing: -0.025em;
+  line-height: 1.04;
   margin: 0;
+  max-width: 15ch;
   color: #ededed;
   transition: color 0.32s ease, transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Stretches the anchor's hit area over the whole row: one anchor, one focus
+/* Stretches the anchor's hit area over the whole cell: one anchor, one focus
    stop, and the accessible name stays the offer title. */
-.rowLink {
+.cellLink {
   color: inherit;
   text-decoration: none;
 
@@ -136,21 +84,26 @@
 }
 
 .promise {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 300;
   color: rgba(237, 237, 237, 0.68);
-  line-height: 1.6;
-  margin: 14px 0 0;
-  max-width: 52ch;
+  line-height: 1.55;
+  margin: 18px 0 0;
+  max-width: 38ch;
 }
 
+/* Follows the promise directly. It used to be margin-top: auto, pinned to the
+   floor of a fixed-ratio box, which opened a gap wider than the copy on either
+   side of it — the three lines read as a separate block rather than as the
+   detail of the promise above them. Stacked rather than wrapped: there is
+   height to spend here and width to save. */
 .deliverables {
   list-style: none;
-  margin: 18px 0 0;
+  margin: 20px 0 0;
   padding: 0;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px 22px;
+  flex-direction: column;
+  gap: 7px;
   font-size: 13px;
   font-weight: 400;
   line-height: 1.5;
@@ -173,8 +126,9 @@
 }
 
 .chevron {
-  flex: 0 0 auto;
-  align-self: center;
+  position: absolute;
+  right: clamp(28px, 2.8vw, 48px);
+  bottom: clamp(28px, 2.8vw, 48px);
   color: #96b9f9;
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -185,65 +139,43 @@
   }
 }
 
-/* One gesture, four parts. :has() carries the same state to keyboard focus so a
+/* One gesture, two parts. :has() carries the same state to keyboard focus so a
    tab stop is not a lesser affordance than a pointer. */
 @media (hover: hover) and (pointer: fine) {
-  .row:hover,
-  .row:has(.rowLink:focus-visible) {
-    border-color: rgba(255, 255, 255, 0.16);
-  }
-
-  .row:hover .title,
-  .row:has(.rowLink:focus-visible) .title {
+  .cell:hover .title,
+  .cell:has(.cellLink:focus-visible) .title {
     color: #b8cdfb;
-    transform: translateX(8px);
+    transform: translateX(6px);
   }
 
-  .row:hover .chevron,
-  .row:has(.rowLink:focus-visible) .chevron {
-    transform: translateX(8px);
+  .cell:hover .chevron,
+  .cell:has(.cellLink:focus-visible) .chevron {
+    transform: translateX(6px);
   }
 }
 
-/* One column: the spine loses its point once nothing scrolls past it, so it
-   becomes a plain heading over the list and the giant numeral steps down. */
+/* One column: a square that spans the full width is a hole, so the cell goes
+   back to its content height and the chevron rejoins the flow. */
 @media (max-width: 900px) {
-  .layout {
+  .grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: clamp(28px, 5vw, 44px);
+    gap: clamp(28px, 6vw, 44px);
   }
 
-  .spine {
+  .cell {
+    min-height: 0;
+    padding: 0;
+  }
+
+  .chevron {
     position: static;
-  }
-
-  .spineNum,
-  .spineLabel {
-    display: none;
-  }
-
-  .spineText {
-    margin-top: 14px;
-    max-width: 60ch;
-  }
-
-  .row {
-    --indent: 0px;
-
-    padding-left: 0;
-    padding-right: 0;
+    margin-top: 22px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .row,
   .title,
   .chevron {
     transition: none;
-  }
-
-  .spineNum,
-  .spineLabel {
-    animation: none;
   }
 }
