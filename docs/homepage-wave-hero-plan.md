@@ -505,6 +505,18 @@ width across the vertical middle with light arriving top and bottom, which is
 what `HOME_CALM_PHONE` was re-derived to do. `home-phone.{avif,webp}` (13 kB /
 24 kB) is committed and both `<source>` elements are live.
 
+**A third frame followed, for 641–1023px.** That band had no composition of its
+own and borrowed `home.*` — a two-column layout cropped into a nearly-square
+window, its quiet zone down the left while the hero there has already stacked
+into one full-width column. Extending `home-phone.*` up into it was measured and
+rejected: at 0.8:1 `cover` keeps only the middle ~40% of the 0.46:1 phone render,
+which is exactly its quiet band, so it renders as a dead plate. `home-tablet.*`
+is composed at 1600x2000 with `radius: 18` (~11 pillars, between the phone's
+eight and the wide frame's fifteen) and its own band-shaped quiet zone sized from
+its own world extents. Frame selection moved from a boolean to
+`frameForAspect` — exports answer from the aspect they asked for, windows from
+their width, so a preview can never disagree with an export.
+
 **`view` was tried as the "make it 3D" dial and rejected.** With big pillars, the
 obvious move is to push `mx` toward its −1 limit so more pillar *side* shows.
 Rendered, it goes the wrong way: sides face away from the key light, so the extra

@@ -19,14 +19,17 @@
 //   node scripts/export-wave-grid.mjs --page=home     # homepage hero, wide
 //   node scripts/export-wave-grid.mjs --page=home 7   # homepage, variant 7
 //   node scripts/export-wave-grid.mjs --page=phone    # homepage hero, phone frame
+//   node scripts/export-wave-grid.mjs --page=tablet   # homepage hero, 641-1023px band
 //
-// Output: public/images/wave-grid/{curated,wave-7,home,home-wave-7,home-phone,…}
-//         .{avif,webp}
+// Output: public/images/wave-grid/{curated,wave-7,home,home-wave-7,home-phone,
+//         home-tablet,…}.{avif,webp}
 // For /services, point DEFAULT_IMAGE in wave-grid-backdrop.jsx at whichever one
-// you keep; for the homepage, HOME_IMAGE / PHONE_IMAGE in hero-backdrop.jsx.
+// you keep; for the homepage, HOME_IMAGE / PHONE_IMAGE / TABLET_IMAGE in
+// hero-backdrop.jsx.
 //
-// `home` and `phone` are the SAME hero at two aspects, and both are shipped —
-// the phone one is not a fallback. Re-export both when the composition changes.
+// `home`, `phone` and `tablet` are the SAME hero at three aspects, and all three
+// are shipped — none is a fallback for another. Re-export ALL THREE when the
+// composition changes.
 //
 // Neither target uses a dedicated export component. That is deliberate: the
 // exported image has to be the composition the live canvas draws, and a second
@@ -62,6 +65,23 @@ const WIDE = {w: 2560, h: 1600};
    tallest common ratio, so shorter phones crop slightly rather than letterbox. */
 const PHONE = {w: 1170, h: 2532};
 
+/* The 641-1023px band: tablets and half-screen desktop windows. It used to
+   borrow the wide frame, which is a two-column composition cropped by `cover`
+   into a nearly-square window — the quiet zone ends up down the left while the
+   layout there has already stacked into one full-width column, so the copy sits
+   half over dark and half over lit.
+
+   The phone frame cannot cover it either, and that was measured rather than
+   assumed: at 0.8:1 `cover` keeps only the middle ~40% of the 0.46:1 phone
+   render, and that middle is exactly its quiet band — all the light lives in the
+   top and bottom thirds and is cropped away. It renders as a dead plate.
+
+   0.8:1 is the geometric mean of the band's measured extremes: the hero
+   backdrop runs 0.695 at 820x1180 and 0.938 at 1000x700, so this splits the
+   worst-case crop evenly rather than favouring one end. 1600x2000 is ~2x at the
+   768px-wide end and ~1.6x at the 1000px end. */
+const TABLET = {w: 1600, h: 2000};
+
 const ORIGIN = process.env.EXPORT_ORIGIN ?? "http://localhost:3000";
 const OUT_DIR = path.join("public", "images", "wave-grid");
 
@@ -80,12 +100,13 @@ const TARGETS = {
     services: {path: "/services", size: WIDE, curated: "curated", variant: (v) => `wave-${v}`},
     home: {path: "/preview/home-wave", size: WIDE, curated: "home", variant: (v) => `home-wave-${v}`},
     /* Same route as `home` — the composition switch is the export ASPECT, not a
-       flag. hero-backdrop.jsx picks the phone quiet zone and relief when the
-       requested height exceeds its width, which is the same rule a narrow
-       browser window follows, so `?wave=N` at phone width previews exactly what
-       this writes. A dedicated flag could disagree with the preview; an aspect
-       cannot. */
+       flag. hero-backdrop.jsx maps the requested aspect onto one of three
+       frames (see frameForAspect there), which is the same rule a browser window
+       at that width follows, so `?wave=N` at phone or tablet width previews
+       exactly what these write. A dedicated flag could disagree with the
+       preview; an aspect cannot. */
     phone: {path: "/preview/home-wave", size: PHONE, curated: "home-phone", variant: (v) => `home-phone-${v}`},
+    tablet: {path: "/preview/home-wave", size: TABLET, curated: "home-tablet", variant: (v) => `home-tablet-${v}`},
 };
 
 // The page renders with alpha so the CSS background shows through; flattened

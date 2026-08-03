@@ -87,6 +87,24 @@ const HOME_CALM = {cx: -3.6, cz: 0.2, rx: 5.2, rz: 3.0, depth: 0.8};
    lands on an already-quieter surface. */
 const HOME_CALM_PHONE = {cx: 0, cz: 0.2, rx: 5.4, rz: 4.6, depth: 0.7};
 
+/* The 641-1023px band's quiet zone. A band like the phone's, not an ellipse like
+   the wide frame's: the hero has already stacked into one full-width column by
+   this width, so there is again no side for the light to arrive from.
+
+   Sized from this frame's own world extents, which is the mistake
+   HOME_CALM_PHONE made the first time. Below REF_ASPECT the vertical FOV is
+   pinned at 40°, so visible height is 2·R·tan20° = 0.728·R and visible width is
+   that times the aspect. At HOME_RELIEF_TABLET's radius 18 and 0.8:1 that is
+   x ±5.24, z ±6.55 — hence rx 7.0 (past the frame edge, so the damping never
+   shows a rim) and rz 3.8, which holds the same band-to-frame proportion the
+   phone uses (0.58 of the half-height) and ramps out by z ≈ 5.1 via RIM_OUT,
+   leaving the top and bottom fifths lit.
+
+   depth 0.7 matches the phone rather than the wide frame's 0.8, for the reason
+   the phone has it: .backdrop drops to opacity 0.6 with no mask below 1024px
+   (hero.module.scss), and this band is on that side of the breakpoint. */
+const HOME_CALM_TABLET = {cx: 0, cz: 0.2, rx: 7.0, rz: 3.8, depth: 0.7};
+
 /* The colour ramp is deliberately NOT overridden here.
 
    It was, briefly — a more saturated mid, on the theory that the homepage hero
@@ -146,6 +164,19 @@ const HOME_CALM_PHONE = {cx: 0, cz: 0.2, rx: 5.4, rz: 4.6, depth: 0.7};
    the frustum points out across the grid toward its boundary. */
 const HOME_RELIEF_PHONE = {radius: 22, maxHeight: 1.05, view: {mx: -0.2, my: 0.95}};
 
+/* Relief for the 641-1023px band. Same treatment as the phone, one step less of
+   it: this frame is physically wider, so it can carry more pillars before they
+   stop reading as objects.
+
+   radius 18 puts about eleven across, sitting between the phone's eight and the
+   wide frame's fifteen — the screen grows, the pillar count grows with it, and
+   the pillars themselves stay roughly the size they are on a phone. `maxHeight`
+   and `view` are the phone's values unchanged, because those were settled by
+   rendering rather than by frame size: see the two warnings on
+   HOME_RELIEF_PHONE, which apply here in full. In particular do not reach for
+   more tilt to make this read deeper. */
+const HOME_RELIEF_TABLET = {radius: 18, maxHeight: 1.05, view: {mx: -0.2, my: 0.95}};
+
 /* The exported still, for viewports that don't get the canvas. Its own file, not
    the /services one: that image was composed against a different quiet ellipse
    and a different hero aspect, so reusing it would put the dark band in the wrong
@@ -164,10 +195,21 @@ const HOME_IMAGE = "home";
    every phone. Both causes were framing, and both are fixed on
    HOME_CALM_PHONE and HOME_RELIEF_PHONE. */
 const PHONE_IMAGE = "home-phone";
-/* Where the phone render takes over from the wide one. Matches the <source>
-   media query below; both have to move together or a viewport gets the image
-   composed for the other one. */
+/* Served between PHONE_MAX and the canvas breakpoint. Added because that band
+   had no composition of its own and borrowed the wide one, which is a
+   two-column layout cropped into a nearly-square window — its quiet zone runs
+   down the left while the hero there has already stacked into one full-width
+   column, so the copy sat half over dark and half over lit.
+   Extending PHONE_IMAGE upward instead was measured and rejected: see
+   HOME_CALM_TABLET. */
+const TABLET_IMAGE = "home-tablet";
+
+/* Where each render takes over. These match the <source> media queries below,
+   and TABLET_MAX matches the 1023px breakpoint hero.module.scss drops the
+   canvas mask at — all of them have to move together, or a viewport gets an
+   image composed for a frame it isn't. */
 const PHONE_MAX = 640;
+const TABLET_MAX = 1023;
 
 /* Authoring switches, all absent in normal use:
 
@@ -207,51 +249,61 @@ const useWaveSwitches = () => {
     };
 };
 
-/* Which side of the canvas/image split we're on. Three states, not two: null
-   means *unresolved*, and nothing renders until the effect lands. Defaulting to
-   either side instead would mount the wrong one for a beat — on phones that
-   means paying for the three.js parse we are trying to avoid, which is the
-   entire point of the still.
+/* Which of the three frames we're drawing: "phone", "tablet" or "wide". Only
+   "wide" gets the live canvas; the other two get their exported still.
 
-   1024 matches the breakpoint the stylesheet drops the canvas mask at, so the
-   backdrop and its treatment change together. */
-const useWide = () => {
-    const [wide, setWide] = useState(null);
+   An export is answered from the ASPECT it asked for rather than from a flag of
+   its own, and that is the load-bearing part. The export and a browser window at
+   the same shape have to resolve to the same composition — if they could
+   disagree, they eventually would, which is the drift these switches are wired
+   into this component to avoid. A flag can disagree with the preview; an aspect
+   cannot. So `?wave=N` at tablet width previews exactly what
+   `npm run images:wavegrid:tablet N` writes.
 
-    useEffect(() => {
-        const mq = window.matchMedia("(min-width: 1024px)");
-        const sync = () => setWide(mq.matches);
-        sync();
-        mq.addEventListener("change", sync);
-        return () => mq.removeEventListener("change", sync);
-    }, []);
-
-    return wide;
+   The thresholds are the aspects halfway between the three exports (0.46, 0.8
+   and 1.6 — see PHONE/TABLET/WIDE in export-wave-grid.mjs), so each export lands
+   well inside its own band rather than near an edge. */
+const frameForAspect = (w, h) => {
+    const aspect = w / h;
+    if (aspect < 0.6) return "phone";
+    if (aspect < 1.15) return "tablet";
+    return "wide";
 };
 
-/* Whether the canvas, when one is mounted, is drawing the phone frame.
+/* Null means *unresolved*, and nothing renders until the effect lands.
+   Defaulting to any of the three instead would mount the wrong one for a beat —
+   below the canvas breakpoint that means paying for the three.js parse we are
+   trying to avoid, which is the entire point of the still.
 
-   Deliberately derived rather than passed as its own URL flag. The phone export
-   and a narrow-window preview have to be the same composition — if they could
-   disagree, they eventually would, which is the same drift the export switches
-   are wired into this component to avoid. So one rule decides both: an export
-   uses the aspect it was asked for, and everything else uses the viewport.
-
-   Returns null while unresolved, for the same reason useWide does. */
-const usePhoneFrame = (exportSize) => {
-    const [narrow, setNarrow] = useState(null);
+   Two queries rather than one: they partition the range at exactly PHONE_MAX and
+   TABLET_MAX, which are the same edges the <source> media queries use. */
+const useFrame = (exportSize) => {
+    const [frame, setFrame] = useState(null);
 
     useEffect(() => {
-        const mq = window.matchMedia(`(max-width: ${PHONE_MAX}px)`);
-        const sync = () => setNarrow(mq.matches);
+        const phone = window.matchMedia(`(max-width: ${PHONE_MAX}px)`);
+        const tablet = window.matchMedia(`(max-width: ${TABLET_MAX}px)`);
+        const sync = () => setFrame(phone.matches ? "phone" : tablet.matches ? "tablet" : "wide");
         sync();
-        mq.addEventListener("change", sync);
-        return () => mq.removeEventListener("change", sync);
+        phone.addEventListener("change", sync);
+        tablet.addEventListener("change", sync);
+        return () => {
+            phone.removeEventListener("change", sync);
+            tablet.removeEventListener("change", sync);
+        };
     }, []);
 
-    if (exportSize) return exportSize.h > exportSize.w;
-    return narrow;
+    if (exportSize) return frameForAspect(exportSize.w, exportSize.h);
+    return frame;
 };
+
+/* Per-frame overrides, looked up by frame name. The values are the module
+   constants above, so what reaches WaveGrid is a stable reference — which it
+   must be, since both props are effect dependencies that rebuild the scene.
+   `wide` maps to null relief: the wide frame is what WaveGrid's own defaults are
+   tuned for. */
+const CALM_FOR = {phone: HOME_CALM_PHONE, tablet: HOME_CALM_TABLET, wide: HOME_CALM};
+const RELIEF_FOR = {phone: HOME_RELIEF_PHONE, tablet: HOME_RELIEF_TABLET, wide: null};
 
 /* WaveGrid's `compact` profile is deliberately never used here. It reframes the
    grid for a narrow canvas, and on this page there is no narrow canvas: below
@@ -272,8 +324,7 @@ const usePhoneFrame = (exportSize) => {
    Desktop moves, mobile does not. */
 const WaveSurface = () => {
     const {variant: wave, exportSize} = useWaveSwitches();
-    const wide = useWide();
-    const phoneFrame = usePhoneFrame(exportSize);
+    const frame = useFrame(exportSize);
 
     /* Both authoring switches force a *still* canvas at any width: an export
        must capture one frame, and browsing compositions with ?wave=N is
@@ -283,22 +334,22 @@ const WaveSurface = () => {
 
     if (authored) {
         // Unresolved only on the ?wave= path; an export answers from its size.
-        if (phoneFrame === null) return null;
+        if (frame === null) return null;
         return (
             <WaveGrid
                 mode="still"
                 variant={wave}
                 exportSize={exportSize}
-                calm={phoneFrame ? HOME_CALM_PHONE : HOME_CALM}
-                relief={phoneFrame ? HOME_RELIEF_PHONE : null}
+                calm={CALM_FOR[frame]}
+                relief={RELIEF_FOR[frame]}
             />
         );
     }
 
-    // Unresolved viewport — render neither rather than guessing. See useWide.
-    if (wide === null) return null;
+    // Unresolved viewport — render nothing rather than guessing. See useFrame.
+    if (frame === null) return null;
 
-    if (wide) return <WaveGrid mode="live" calm={HOME_CALM}/>;
+    if (frame === "wide") return <WaveGrid mode="live" calm={HOME_CALM}/>;
 
     return (
         <picture>
@@ -319,9 +370,28 @@ const WaveSurface = () => {
                 srcSet={`${IMAGE_DIR}/${PHONE_IMAGE}.webp`}
                 type="image/webp"
             />
-            {/* AVIF first, WebP fallback. The fallback is required, not
+            {/* The 641-1023px band. Its own composition, for the same reason
+                the phone has one: see TABLET_IMAGE. */}
+            <source
+                media={`(max-width: ${TABLET_MAX}px)`}
+                srcSet={`${IMAGE_DIR}/${TABLET_IMAGE}.avif`}
+                type="image/avif"
+            />
+            <source
+                media={`(max-width: ${TABLET_MAX}px)`}
+                srcSet={`${IMAGE_DIR}/${TABLET_IMAGE}.webp`}
+                type="image/webp"
+            />
+            {/* The wide pair. With the two above covering everything up to
+                TABLET_MAX, and the canvas taking over past it, this is now only
+                reachable if the canvas branch stops running — no WebGL, or the
+                breakpoints drift apart. Kept as that safety net, not as a
+                width the site actually serves it at.
+
+                AVIF first, WebP fallback. The fallback is required, not
                 belt-and-braces: browserslist allows edge >= 111 and Edge only
-                shipped AVIF in 121. */}
+                shipped AVIF in 121 — and the same is true of the two pairs
+                above, which is why each frame ships both formats. */}
             <source srcSet={`${IMAGE_DIR}/${HOME_IMAGE}.avif`} type="image/avif"/>
             <img
                 className={styles.waveStill}

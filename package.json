@@ -11,6 +11,7 @@
     "images:wavegrid": "node scripts/export-wave-grid.mjs",
     "images:wavegrid:home": "node scripts/export-wave-grid.mjs --page=home",
     "images:wavegrid:phone": "node scripts/export-wave-grid.mjs --page=phone",
+    "images:wavegrid:tablet": "node scripts/export-wave-grid.mjs --page=tablet",
     "seo:jsonld": "node scripts/validate-json-ld.mjs",
     "seo:indexnow": "node scripts/indexnow-ping.mjs",
     "postbuild": "next-sitemap"

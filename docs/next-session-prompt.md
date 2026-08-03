@@ -225,6 +225,31 @@
 > **Compter les piliers sur l'image exportée, jamais depuis le frustum — et les
 > juger sur le cadre téléphone, pas sur `home.*`.**
 >
+> ### ✅ Et un troisième cadre : `home-tablet.*` (641–1023px)
+>
+> La bande 641–1023px (tablettes, fenêtre desktop en demi-écran) n'avait pas de
+> composition à elle et empruntait `home.*` : une mise en page deux colonnes
+> recadrée dans une fenêtre presque carrée, dont la zone calme court sur la
+> gauche alors que le hero y est **déjà passé en une seule colonne pleine
+> largeur** — la copie se retrouvait moitié sur du sombre, moitié sur de
+> l'éclairé.
+>
+> ⚠️ **Étendre `home-phone.*` vers le haut ne marche pas, et c'est mesuré, pas
+> supposé** : à 0,8:1 le `cover` ne garde que les ~40% du milieu du rendu 0,46:1,
+> et ce milieu est exactement sa bande calme. Toute la lumière est dans les tiers
+> haut et bas, donc recadrée — il ne reste qu'une plaque morte.
+>
+> D'où un export dédié à 1600x2000 (0,8:1 = la moyenne géométrique des extrêmes
+> mesurés de la bande : 0,695 à 820x1180 et 0,938 à 1000x700), `radius: 18`
+> (~11 piliers, entre les 8 du téléphone et les 15 du large) et une zone calme en
+> bande dimensionnée sur **ses** unités monde à lui (x ±5,24, z ±6,55).
+>
+> Le choix du cadre passe par `frameForAspect` dans `hero-backdrop.jsx` : un
+> export répond depuis l'aspect demandé, une fenêtre depuis sa largeur. Donc
+> `?wave=N` à une largeur donnée prévisualise exactement ce que l'export
+> correspondant écrit. **Il y a maintenant quatre images à réexporter** quand la
+> composition bouge : `curated`, `home`, `home-phone`, `home-tablet`.
+>
 > ### 🔧 Sessions agent-browser — la vraie cause des « exports qui pendent »
 >
 > Beaucoup de temps perdu sur des exports sans sortie. Ce n'était **ni la page ni

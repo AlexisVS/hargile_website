@@ -79,10 +79,10 @@ wrong place on the other.
 | route | `/services` | **`/`** — the hero's only backdrop |
 | desktop | **the still image** | **live canvas**, ≥1024px |
 | mobile | the still image | **the still image**, <1024px |
-| image | `curated.{avif,webp}` | `home.{avif,webp}`, and `home-phone.*` ≤640px |
-| pointed at by | `DEFAULT_IMAGE` in [`wave-grid-backdrop.jsx`][wgb] | `HOME_IMAGE` / `PHONE_IMAGE` in [`hero-backdrop.jsx`][hb] |
-| quiet ellipse | `CALM` in [`wave-grid.jsx`][wg] | `HOME_CALM`, `HOME_CALM_PHONE` in [`hero-backdrop.jsx`][hb] |
-| export command | `npm run images:wavegrid` | `npm run images:wavegrid:home`, `…:phone` |
+| image | `curated.{avif,webp}` | three: `home-phone.*` ≤640, `home-tablet.*` 641–1023, `home.*` past that |
+| pointed at by | `DEFAULT_IMAGE` in [`wave-grid-backdrop.jsx`][wgb] | `HOME_IMAGE` / `PHONE_IMAGE` / `TABLET_IMAGE` in [`hero-backdrop.jsx`][hb] |
+| quiet ellipse | `CALM` in [`wave-grid.jsx`][wg] | `HOME_CALM`, `HOME_CALM_PHONE`, `HOME_CALM_TABLET` in [`hero-backdrop.jsx`][hb] |
+| export command | `npm run images:wavegrid` | `npm run images:wavegrid:home`, `…:phone`, `…:tablet` |
 
 `/services` is still everywhere because its grid never moves at all. The homepage
 moves on desktop and freezes on mobile — same grid, same colour, same
@@ -91,17 +91,44 @@ introduce.
 
 [hb]: ../src/components/pages/homepage/v2/hero/backdrops/hero-backdrop.jsx
 
-## Two exports per page is now three files, and all three ship
+## The homepage ships three frames, and none is a fallback for another
 
-`/services` has `curated.*`; the homepage has `home.*` (wide) and `home-phone.*`
-(≤640px). The phone one is **not a fallback and not a crop** — `object-fit:
-cover` keeps roughly the middle 29% of the wide frame at 390x844, so a phone was
-being shown a slice of a composition laid out for a frame it never sees. It is
-composed at the aspect it is served at.
+`/services` has `curated.*`. The homepage has three, each composed at the aspect
+it is served at:
+
+| file | served | export aspect | pillars across |
+| --- | --- | --- | --- |
+| `home-phone.*` | ≤640px | 1170x2532 (0.46) | ~8 |
+| `home-tablet.*` | 641–1023px | 1600x2000 (0.80) | ~11 |
+| `home.*` | past 1024px, if the canvas can't run | 2560x1600 (1.60) | ~15 |
+
+**None of them is a crop of another, and that is the whole point.** `object-fit:
+cover` reproduces the camera's own reframing over a modest range of aspects, but
+not across a 3.5× spread: at 390x844 it keeps roughly the middle 29% of the wide
+frame, so a phone was being shown a slice of a composition laid out for a frame
+it never sees.
+
+The pillar counts rise with the frame deliberately — the screen grows, the count
+grows with it, and the pillars themselves stay roughly the size they are on a
+phone. See the ⚠️ below on why that is a taste decision rather than a derived
+one.
 
 `home-phone.*` was unshipped for two sessions because the only render was a black
 column; both causes were framing and both are fixed. See phase 7 in
 [homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md) for the diagnosis.
+
+`home-tablet.*` came later, and the band it fills is worth knowing about because
+it is the one nobody looks at: 641–1023px is a tablet or a half-screen desktop
+window, and it used to borrow `home.*`. That is a two-column composition cropped
+into a nearly-square window — its quiet zone runs down the left while the hero
+there has *already stacked into one full-width column*, so the copy sat half over
+dark and half over lit.
+
+⚠️ **Extending `home-phone.*` upward instead does not work, and it was measured
+rather than assumed.** At 0.8:1 `cover` keeps only the middle ~40% of the 0.46:1
+phone render — and that middle is exactly its quiet band. All of its light lives
+in the top and bottom thirds and gets cropped away, leaving a dead plate. A tall
+composition cannot be re-used at a squarer aspect, in either direction.
 
 ⚠️ **The phone frame is deliberately coarser than the wide one — about eight
 pillars across against fifteen.** That is a decision, not drift: at phone size,
@@ -147,9 +174,10 @@ no generated seeds, and on `/services` no three.js at all.
 | `/services?bg=wave-7` | a different exported still, to compare |
 | `/services?wave=7` | composition 7 rendered **live** in WebGL, with a picker |
 | `/services?export=2560x1600` | live render at fixed size — what the script drives |
-| `/` | canvas on desktop, `home.{avif,webp}` below 1024px |
-| `/?wave=7` | composition 7 as a **still** frame, for picking |
+| `/` | canvas ≥1024px, `home-tablet.*` 641–1023, `home-phone.*` ≤640 |
+| `/?wave=7` | composition 7 as a **still** frame, for picking — **in whichever of the three frames the window's width selects** |
 | `/preview/home-wave?export=2560x1600` | fixed-size render — what the script drives |
+| `/preview/home-wave?export=1600x2000` | the tablet frame, from its aspect alone |
 
 Two notes on that last row:
 
@@ -231,14 +259,18 @@ npm run images:wavegrid 7 32            # variants 7 and 32        → wave-7.*,
 npm run images:wavegrid:home            # the curated composition  → home.*
 npm run images:wavegrid:home 7 32       # variants 7 and 32        → home-wave-7.*, home-wave-32.*
 npm run images:wavegrid:phone           # the SAME hero at 1170x2532 → home-phone.*
+npm run images:wavegrid:tablet          # the SAME hero at 1600x2000 → home-tablet.*
 ```
 
-The phone target is the same route and the same composition switch — only the
-requested aspect differs, and `hero-backdrop.jsx` picks the phone quiet band and
-relief whenever the requested height exceeds its width. That is the same rule a
-narrow browser window follows, so `?wave=N` at phone width previews exactly what
-the export writes. **Re-run it alongside `:home` whenever the composition
-changes**, and run the two one after the other, never at once.
+All three homepage targets are the same route and the same composition switch —
+only the requested aspect differs. `hero-backdrop.jsx` maps that aspect onto one
+of three frames (`frameForAspect`), which is the same rule a browser window at
+that shape follows, so `?wave=N` at phone or tablet width previews exactly what
+the matching export writes. A dedicated flag could disagree with the preview; an
+aspect cannot.
+
+⚠️ **Re-run all three whenever the composition changes**, and run them one after
+the other, never at once — see the session note above.
 
 Output lands in `public/images/wave-grid/`. The two targets write under different
 names on purpose, so exporting one can never overwrite the other's shipped
@@ -455,11 +487,15 @@ Two things worth knowing before anyone "fixes" this back:
 
 ## Known gaps
 
-- **Not verified on a real phone.** The homepage now serves a still composed at
-  1170×2532 rather than a crop of the wide frame, and it has been looked at as an
-  image — but only in a desktop browser at phone width. `/services` still serves
-  the wide export at every width, so its portrait framing remains reasoned about
-  rather than seen.
+- **Not verified on real hardware.** The homepage's three frames have each been
+  rendered, looked at, and checked resolving at their own breakpoints — but in a
+  desktop browser at simulated sizes, never on a real phone or tablet.
+- **`/services` still has only the wide frame.** It serves `curated.*` at every
+  width, so on a phone `cover` keeps its middle ~29% and shows about four
+  enormous pillars. The homepage now has the machinery to fix this (three
+  targets, an aspect-derived frame, per-frame quiet zones) and `/services` has
+  none of it — it would need its own `compact`/phone quiet zone and export
+  targets, which is real work, not a config change.
 - **The export depends on the exporting machine having a GPU.** Checked during
   the phone export: headless Chrome reported `ANGLE (NVIDIA GeForce GTX 1650,
   D3D11)`, so `isSoftwareRenderer` is false and the shadow pass runs. On a
@@ -470,11 +506,13 @@ Two things worth knowing before anyone "fixes" this back:
   pixels at the bottom edge — deliberate, so the grid does not visibly end, but
   worth a look.
 - **The exported images are build artefacts in git.** They must be re-exported
-  whenever the composition changes, and there are two of them now. That is what
-  the script is for, but nothing enforces it. The cheap check after touching
-  anything in `wave-grid.jsx`: re-run both exports and confirm `git status` is
-  clean — if a file changed, either the change was unintended or the image needs
-  committing.
+  whenever the composition changes, and there are **four** of them now
+  (`curated`, `home`, `home-phone`, `home-tablet`). That is what the script is
+  for, but nothing enforces it, and the count is the problem: forgetting one
+  leaves a single breakpoint band showing a stale composition, which is exactly
+  the kind of thing nobody notices. The cheap check after touching anything in
+  `wave-grid.jsx`: re-run all four exports and confirm `git status` is clean — if
+  a file changed, either the change was unintended or the image needs committing.
 - **There is no second backdrop to fall back to any more.** `bends` and `cubes`
   were deleted once the wave grid became the default at every width (phase 6 in
   [homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md)), along with
