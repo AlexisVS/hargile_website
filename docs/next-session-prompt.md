@@ -265,7 +265,11 @@
 > `wave-export` et ferme avec `close` et non `close --all`. ⚠️ **Deux exports
 > simultanés se collisionneraient encore entre eux — les enchaîner.**
 >
-> ### ✅ 2026-08-03 — le hero de /faq est aligné sur /services (commité, non poussé)
+> ### ✅ 2026-08-03 — le hero de /faq est aligné sur /services (poussé, non fusionné)
+>
+> Branche `feat/services-faq-redesign`, poussée jusqu'à `62a2f30`. **Ni fusionnée,
+> ni taguée, ni déployée** — et pousser est sûr : seul un tag `v*` déclenche un
+> déploiement (voir « Comment le déploiement marche »).
 >
 > Demande de Mihai : positionnement, taille, design — et **sans eyebrow**. Fait
 > en deux props sur `FaqPageClient` (l'eyebrow retiré, `WaveGridBackdrop`
@@ -300,10 +304,19 @@
 > `.container`, jamais le `h1`** : c'est le `h1` qui a failli faire conclure à une
 > dérive alors qu'il n'y en avait pas.
 >
-> **Reste pour les yeux de Mihai** : les `01/02/03` de `FaqIndex` tombent sur la
-> masse éclairée du cadre large, c'est le contraste le plus faible de la page. Si
-> ça gêne, le levier est la **zone calme**, pas les graines (voir la note sous
-> `CALM`).
+> **Et l'index de chapitres du hero a été refait dans la foulée** (`62a2f30`) :
+> plus de numéros `01/02/03`, plus de filets entre les lignes, titres plus gros et
+> plus gras (clamp 17–21px / 600, police des titres). C'était la demande de Mihai,
+> et ça a réglé au passage le seul problème de contraste de la page : les numéros
+> alignés à droite tombaient pile sur la masse éclairée de la grille, donc le seul
+> accent de la ligne était aussi ce qui avait le moins de contraste derrière lui.
+> Sans eux l'index revient entièrement sur la partie sombre.
+>
+> ⚠️ Les numéros **ne sont pas supprimés** — `faq-groups.jsx` les affiche toujours
+> dans le corps de page, sur fond plat, et `FAQ_GROUPS.num` existe pour ça. Le
+> filet vertical entre la réponse et l'aside est **volontairement gardé** : il
+> vit sur `.aside` dans `poster-hero.module.scss`, que `/services` partage pour
+> son bloc de stats.
 >
 > ℹ️ Conséquence : **plus aucun appelant ne passe `eyebrow`** à `PosterHero`. La
 > prop est gardée volontairement (elle porte `.tight` avec elle, et c'est un choix
