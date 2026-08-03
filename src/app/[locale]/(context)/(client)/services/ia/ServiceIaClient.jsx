@@ -5,6 +5,7 @@ import PosterHero from "@/components/pages/services/v2/shared/poster-hero";
 import UseCases from "@/components/pages/services/v2/ia/use-cases";
 import Honesty from "@/components/pages/services/v2/ia/honesty";
 import MiniFaq from "@/components/pages/services/v2/shared/mini-faq";
+import SiblingOffers from "@/components/pages/services/v2/shared/sibling-offers";
 import CtaBand from "@/components/pages/services/v2/shared/cta-band";
 import WaveGridBackdrop from "@/components/pages/services/v2/shared/wave-grid-backdrop";
 
@@ -30,6 +31,7 @@ export default function ServiceIaClient() {
             <UseCases/>
             <Honesty/>
             <MiniFaq namespace="pages.services.detail.ia.faq"/>
+            <SiblingOffers current="ia"/>
             <CtaBand/>
         </>
     );

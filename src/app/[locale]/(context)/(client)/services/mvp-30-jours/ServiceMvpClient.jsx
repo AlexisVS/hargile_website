@@ -8,6 +8,7 @@ import Included from "@/components/pages/services/v2/mvp/included";
 import FixedPrice from "@/components/pages/services/v2/mvp/fixed-price";
 import ProofCase from "@/components/pages/services/v2/shared/proof-case";
 import MiniFaq from "@/components/pages/services/v2/shared/mini-faq";
+import SiblingOffers from "@/components/pages/services/v2/shared/sibling-offers";
 import CtaBand from "@/components/pages/services/v2/shared/cta-band";
 import WaveGridBackdrop from "@/components/pages/services/v2/shared/wave-grid-backdrop";
 
@@ -37,6 +38,7 @@ export default function ServiceMvpClient() {
             <FixedPrice/>
             <ProofCase namespace="pages.services.detail.mvp" project={MARQUISETTE}/>
             <MiniFaq namespace="pages.services.detail.mvp.faq"/>
+            <SiblingOffers current="mvp"/>
             <CtaBand/>
         </>
     );

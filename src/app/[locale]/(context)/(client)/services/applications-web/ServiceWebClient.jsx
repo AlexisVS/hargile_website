@@ -5,6 +5,7 @@ import PosterHero from "@/components/pages/services/v2/shared/poster-hero";
 import MadeInHouse from "@/components/pages/services/v2/web/made-in-house";
 import CaseStudies from "@/components/pages/services/v2/web/case-studies";
 import MiniFaq from "@/components/pages/services/v2/shared/mini-faq";
+import SiblingOffers from "@/components/pages/services/v2/shared/sibling-offers";
 import CtaBand from "@/components/pages/services/v2/shared/cta-band";
 import WaveGridBackdrop from "@/components/pages/services/v2/shared/wave-grid-backdrop";
 
@@ -30,6 +31,7 @@ export default function ServiceWebClient() {
             <MadeInHouse/>
             <CaseStudies/>
             <MiniFaq namespace="pages.services.detail.web.faq"/>
+            <SiblingOffers current="web"/>
             <CtaBand/>
         </>
     );

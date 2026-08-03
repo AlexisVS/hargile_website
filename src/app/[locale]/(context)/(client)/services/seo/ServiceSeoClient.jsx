@@ -7,6 +7,7 @@ import Process from "@/components/pages/services/v2/seo/process";
 import MetaProof from "@/components/pages/services/v2/seo/meta-proof";
 import ProofCase from "@/components/pages/services/v2/shared/proof-case";
 import MiniFaq from "@/components/pages/services/v2/shared/mini-faq";
+import SiblingOffers from "@/components/pages/services/v2/shared/sibling-offers";
 import CtaBand from "@/components/pages/services/v2/shared/cta-band";
 import WaveGridBackdrop from "@/components/pages/services/v2/shared/wave-grid-backdrop";
 
@@ -35,6 +36,7 @@ export default function ServiceSeoClient() {
             <MetaProof/>
             <ProofCase namespace="pages.services.detail.seo" project={VENIZI}/>
             <MiniFaq namespace="pages.services.detail.seo.faq"/>
+            <SiblingOffers current="seo"/>
             <CtaBand/>
         </>
     );

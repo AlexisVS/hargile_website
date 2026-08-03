@@ -1095,6 +1095,10 @@
         "proofCase": {
           "label": "Preuve",
           "linkLabel": "Voir le projet"
+        },
+        "siblings": {
+          "title": "Les autres offres",
+          "all": "Voir les quatre offres"
         }
       }
     },
