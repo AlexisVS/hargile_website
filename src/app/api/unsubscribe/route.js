@@ -17,19 +17,14 @@
 // Storage: opt-outs are written to core.suppression_list through the
 // access-layer (SUPPRESSION_API_URL + X-API-Key). That service is deliberately
 // not exposed to the internet, so the URL is its in-cluster address and only
-// resolves from a pod. The Resend alert email is a secondary channel, kept
-// until the wiring is verified in production. If NEITHER channel succeeds we
-// answer 500 — losing an opt-out is worse than asking the client to retry.
+// resolves from a pod. It is now the single durable channel: if the write does
+// not land we answer 500, because losing an opt-out is worse than asking the
+// mail client to retry.
 
 import { NextResponse } from "next/server";
 import crypto from "node:crypto";
-import { Resend } from "resend";
 
 const SECRET = process.env.UNSUBSCRIBE_SECRET;
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const ALERT_TO =
-  process.env.UNSUBSCRIBE_ALERT_TO || process.env.CONTACT_FORM_TO_EMAIL;
-const ALERT_FROM = process.env.CONTACT_FORM_FROM_EMAIL;
 const SUPPRESSION_API_URL = process.env.SUPPRESSION_API_URL;
 const SUPPRESSION_API_KEY = process.env.SUPPRESSION_API_KEY;
 
@@ -96,57 +91,43 @@ const invalidPage = () =>
      — votre demande sera traitée immédiatement.</p>`
   );
 
-// Records the opt-out. Returns true as soon as ONE durable channel succeeded.
+// Records the opt-out in core.suppression_list. Returns false if it did not
+// land, so the caller can make the mail client retry rather than lose it.
 async function recordOptOut(email, source) {
   // IMPORTANT: Keep — pod logs are the last-resort trace of every opt-out.
   console.log(`[API /api/unsubscribe] opt-out: ${email} (${source})`);
-  let recorded = false;
 
-  if (SUPPRESSION_API_URL) {
-    try {
-      const res = await fetch(SUPPRESSION_API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(SUPPRESSION_API_KEY
-            ? { "X-API-Key": SUPPRESSION_API_KEY }
-            : {}),
-        },
-        body: JSON.stringify({ email, reason: "unsubscribe", source }),
-        // 201 on first record, 200 on replay — both fine. A hung call must not
-        // stall the mail client's one-click POST.
-        signal: AbortSignal.timeout(5000),
-      });
-      recorded = res.ok;
-      if (!res.ok)
-        console.error(
-          `[API /api/unsubscribe] suppression API answered ${res.status}`
-        );
-    } catch (error) {
-      console.error("[API /api/unsubscribe] suppression API error:", error);
-    }
+  if (!SUPPRESSION_API_URL) {
+    console.error(
+      // IMPORTANT: Keep for startup diagnostics
+      "CRITICAL WARNING (API /api/unsubscribe): SUPPRESSION_API_URL not set. Opt-outs are NOT recorded."
+    );
+    return false;
   }
 
-  if (RESEND_API_KEY && ALERT_FROM && ALERT_TO) {
-    try {
-      const resend = new Resend(RESEND_API_KEY);
-      const { error } = await resend.emails.send({
-        from: `Désinscription prospection <${ALERT_FROM}>`,
-        to: [ALERT_TO],
-        subject: `Désinscription : ${email}`,
-        text: `${email} s'est désinscrit de la prospection (${source}, ${new Date().toISOString()}).\n\nÀ reporter dans la suppression_list — ne plus JAMAIS contacter cette adresse.`,
-      });
-      if (error) {
-        console.error("[API /api/unsubscribe] Resend alert error:", error);
-      } else {
-        recorded = true;
-      }
-    } catch (error) {
-      console.error("[API /api/unsubscribe] Resend alert error:", error);
+  try {
+    const res = await fetch(SUPPRESSION_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(SUPPRESSION_API_KEY ? { "X-API-Key": SUPPRESSION_API_KEY } : {}),
+      },
+      body: JSON.stringify({ email, reason: "unsubscribe", source }),
+      // 201 on first record, 200 on replay — both fine. A hung call must not
+      // stall the mail client's one-click POST.
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) {
+      console.error(
+        `[API /api/unsubscribe] suppression API answered ${res.status}`
+      );
+      return false;
     }
+    return true;
+  } catch (error) {
+    console.error("[API /api/unsubscribe] suppression API error:", error);
+    return false;
   }
-
-  return recorded;
 }
 
 export async function GET(req) {
