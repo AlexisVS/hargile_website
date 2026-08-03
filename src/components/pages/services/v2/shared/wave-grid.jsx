@@ -523,7 +523,14 @@ const patchVertexShader = (vertexShader, trailLen) =>
    ⚠️ Like `calm`, `relief` must be a **stable reference** — a module constant,
    not an inline literal. It is an effect dependency, and the effect tears down
    and rebuilds the whole scene; a fresh object per render would rebuild it on
-   every render. */
+   every render.
+
+   `onUnavailable` fires once if the WebGL context cannot be created, so a caller
+   that has a still image can swap to it instead of showing an empty layer. It is
+   deliberately NOT subject to the stable-reference rule above — it is held in a
+   ref and kept out of the dependency list, so an inline arrow is fine. Optional:
+   omit it and a failure is silent, which is what /services wants, having no
+   canvas in its shipped path to begin with. */
 const WaveGrid = ({
     compact = false,
     variant = null,
@@ -531,8 +538,18 @@ const WaveGrid = ({
     mode = "still",
     calm = null,
     relief = null,
+    onUnavailable = null,
 }) => {
     const mountRef = useRef(null);
+
+    /* Held in a ref rather than read from the closure, so it can stay out of the
+       effect's dependency list. That list rebuilds the entire scene, and a caller
+       passing an inline arrow — the natural thing to write — would rebuild it on
+       every render. This way the callback can be as unstable as the caller likes. */
+    const onUnavailableRef = useRef(onUnavailable);
+    useEffect(() => {
+        onUnavailableRef.current = onUnavailable;
+    }, [onUnavailable]);
 
     // Rebuilds on breakpoint, variant or mode change — grid extent, FOV, the
     // shader's loop bound and the seed texture are all baked in at construction.
@@ -555,7 +572,17 @@ const WaveGrid = ({
                 preserveDrawingBuffer: exportSize !== null,
             });
         } catch {
-            return; // No WebGL — the hero stands on its own, the layer just stays empty.
+            /* No WebGL — blocked, blocklisted driver, or too many live contexts.
+
+               Tell the caller rather than just leaving an empty layer. That
+               silence used to be the whole failure mode: the homepage returns
+               this component at >=1024px and never falls through to its
+               <picture>, so a desktop without WebGL got a hero with no backdrop
+               at all while a perfectly good wide still sat unused in /public.
+               Callers that have nothing to fall back to (/services) simply pass
+               no handler and get the old behaviour. */
+            onUnavailableRef.current?.();
+            return;
         }
 
         /* Shadows are what give a dark, near-overhead pillar field its form: with

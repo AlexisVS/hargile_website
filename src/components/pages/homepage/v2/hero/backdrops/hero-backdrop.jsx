@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import {useEffect, useState, useSyncExternalStore} from "react";
+import {useCallback, useEffect, useState, useSyncExternalStore} from "react";
 import styles from "../hero.module.scss";
 
 /* The hero's backdrop: the wave grid, and only the wave grid.
@@ -336,6 +336,16 @@ const WaveSurface = () => {
     const {variant: wave, exportSize} = useWaveSwitches();
     const frame = useFrame(exportSize);
 
+    /* Set once if WaveGrid reports it could not create a WebGL context, which
+       drops the wide frame through to the <picture> below and serves home.*
+       instead of leaving the hero backdropless.
+
+       A one-way latch on purpose: WebGL being unavailable is a property of the
+       browser and driver, not a transient state, so there is nothing to recover
+       from and re-trying would only mean building the scene twice. */
+    const [canvasFailed, setCanvasFailed] = useState(false);
+    const handleUnavailable = useCallback(() => setCanvasFailed(true), []);
+
     /* Both authoring switches force a *still* canvas at any width: an export
        must capture one frame, and browsing compositions with ?wave=N is
        browsing seeded still frames — live mode ignores the seed table entirely
@@ -359,7 +369,12 @@ const WaveSurface = () => {
     // Unresolved viewport — render nothing rather than guessing. See useFrame.
     if (frame === null) return null;
 
-    if (frame === "wide") return <WaveGrid mode="live" calm={HOME_CALM}/>;
+    /* The wide frame is a canvas — unless it can't be. On failure this falls
+       through to the <picture>, where the unconditional wide <source> is the one
+       that matches at these widths. */
+    if (frame === "wide" && !canvasFailed) {
+        return <WaveGrid mode="live" calm={HOME_CALM} onUnavailable={handleUnavailable}/>;
+    }
 
     return (
         <picture>
@@ -392,27 +407,20 @@ const WaveSurface = () => {
                 srcSet={`${IMAGE_DIR}/${TABLET_IMAGE}.webp`}
                 type="image/webp"
             />
-            {/* ⚠️ The wide pair is effectively DEAD, and saying so is the point.
+            {/* The wide pair, and it is genuinely reachable — but by only one
+                route, which is worth stating because it looked reachable by a
+                different one for a while and wasn't.
 
-                This <picture> is only reached when frame is "phone" or "tablet";
-                "wide" returns the canvas above and never falls through. The two
-                pairs above already cover every width up to TABLET_MAX, so the
-                unconditional <source> here can only win for a browser below
-                1024px that supports neither AVIF nor WebP — which would then be
-                handed a .webp by the <img> anyway. There is no such browser in
-                our browserslist.
+                It is NOT "what desktop gets". Desktop gets the canvas; this
+                <picture> is skipped entirely at >=1024px. It is what desktop
+                gets when the canvas *cannot start* — WaveGrid reports that
+                through onUnavailable, the wide branch above stops returning a
+                canvas, and this is then the first <source> that matches, since
+                the phone and tablet media queries both fail past 1023px.
 
-                It is NOT a no-WebGL fallback, which is what it looks like: if
-                WebGL fails at >=1024px, WaveGrid renders an empty mount and this
-                element is never mounted at all. Giving the desktop a real image
-                fallback would mean WaveGrid signalling failure upward, which it
-                does not do today. See "Known gaps" in docs/wave-grid.md.
-
-                Left in place rather than deleted because it is the <img>'s src
-                and <picture> requires one. AVIF first, WebP fallback throughout:
-                that pairing is required on the two live frames above, not
-                belt-and-braces — browserslist allows edge >= 111 and Edge only
-                shipped AVIF in 121. */}
+                Before that signal existed, a desktop without WebGL got an empty
+                mount and no backdrop at all, while home.* sat unused in /public:
+                the fallback was present, correct, and unreachable. */}
             <source srcSet={`${IMAGE_DIR}/${HOME_IMAGE}.avif`} type="image/avif"/>
             <img
                 className={styles.waveStill}

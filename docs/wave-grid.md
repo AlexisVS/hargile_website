@@ -560,17 +560,28 @@ Two things worth knowing before anyone "fixes" this back:
 - **Not verified on real hardware.** The homepage's three frames have each been
   rendered, looked at, and checked resolving at their own breakpoints — but in a
   desktop browser at simulated sizes, never on a real phone or tablet.
-- **`home.*` is no longer served to anyone, and the desktop has no image
-  fallback.** Once the tablet frame took the 641–1023px band, the wide export
-  stopped being reachable: the `<picture>` is only rendered for the phone and
-  tablet frames, and `wide` returns the canvas without falling through. So
-  `home.{avif,webp}` are committed, re-exported and never requested.
-  The trap is that this *looks* like a no-WebGL fallback and isn't — if WebGL
-  fails at ≥1024px, `WaveGrid` leaves an empty mount and the `<picture>` is never
-  mounted at all. Giving desktop a real fallback means `WaveGrid` signalling
-  failure upward, which it does not do. Until then `home.*` is the wide
-  composition of record and nothing more; keep exporting it so it does not rot,
-  or decide deliberately to drop it.
+- ~~**`home.*` is no longer served to anyone.**~~ **Fixed.** For one commit it
+  wasn't: once the tablet frame took the 641–1023px band, the wide export became
+  unreachable, because the `<picture>` is only rendered for the phone and tablet
+  frames and `wide` returned the canvas without falling through. A desktop
+  without WebGL therefore got an empty mount and no backdrop at all, while a
+  perfectly good wide still sat unused in `/public` — the fallback was present,
+  correct, and unreachable.
+
+  `WaveGrid` now takes an **`onUnavailable`** callback, fired when the WebGL
+  context cannot be created. The homepage latches it and stops returning a
+  canvas, which drops the wide frame through to the `<picture>` where the
+  unconditional `<source>` is the one that matches past 1023px. Verified by
+  forcing the constructor to throw: at 1280px the canvas disappears and
+  `home.avif` (2560×1600) is served in its place.
+
+  `/services` passes no handler and is unaffected — it has no canvas in its
+  shipped path to fall back from.
+
+  ⚠️ Still uncovered: **context *loss* after a successful start** (GPU reset, too
+  many live contexts). `onUnavailable` only fires at construction, so a lost
+  context leaves a blank canvas rather than falling back. Handling it means a
+  `webglcontextlost` listener and deciding whether to wait for a restore.
 - **`/services` still has only the wide frame.** It serves `curated.*` at every
   width, so on a phone `cover` keeps its middle ~29% and shows about four
   enormous pillars. The homepage now has the machinery to fix this (three
