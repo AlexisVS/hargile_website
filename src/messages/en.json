@@ -221,7 +221,7 @@
           "id": "agence",
           "group": "project",
           "q": "How do you choose a web agency in Brussels to build a custom application?",
-          "a": "Three things can be checked before you sign. Who actually writes the code: at HARGILE, design and development are done in-house in Saint-Gilles, never subcontracted. How the price is set: during scoping, before the project starts, and it does not move afterwards. And who owns the code at the end: you do. The rest — references, availability, working language — fits in one call."
+          "a": "Three things can be checked before you sign. Who actually writes the code: at HARGILE, design and development are done in-house in Brussels, never subcontracted. How the price is set: during scoping, before the project starts, and it does not move afterwards. And who owns the code at the end: you do. The rest — references, availability, working language — fits in one call."
         },
         {
           "id": "process",
@@ -250,8 +250,8 @@
         {
           "id": "langues",
           "group": "project",
-          "q": "Where is HARGILE based, and do you work in both French and English?",
-          "a": "In Saint-Gilles, Brussels — Rue Sterckx 5. We work in French and English, and we regularly ship multilingual sites, like La Marquisette (trilingual) or this very site (French and English)."
+          "q": "Where is HARGILE based, and do you work with SMEs across Belgium?",
+          "a": "In Saint-Gilles, Brussels. We work with SMEs all over Belgium: on site when meeting in person actually serves the project, remotely the rest of the time — being close is a matter of availability, not kilometres. Our two working languages are French and English, and multilingual sites are routine: La Marquisette is trilingual, this one exists in French and English."
         },
         {
           "id": "cout",

@@ -221,7 +221,7 @@
           "id": "agence",
           "group": "project",
           "q": "Comment choisir une agence web à Bruxelles pour développer une application sur mesure ?",
-          "a": "Trois points se vérifient avant de signer. Qui écrit réellement le code : chez HARGILE, le design et le développement sont faits en interne à Saint-Gilles, jamais sous-traités. Comment le prix est arrêté : au cadrage, avant le début du projet, et il ne bouge plus ensuite. Et à qui appartient le code à la fin : à vous. Le reste — références, disponibilité, langue de travail — tient en un appel."
+          "a": "Trois points se vérifient avant de signer. Qui écrit réellement le code : chez HARGILE, le design et le développement sont faits en interne à Bruxelles, jamais sous-traités. Comment le prix est arrêté : au cadrage, avant le début du projet, et il ne bouge plus ensuite. Et à qui appartient le code à la fin : à vous. Le reste — références, disponibilité, langue de travail — tient en un appel."
         },
         {
           "id": "process",
@@ -250,8 +250,8 @@
         {
           "id": "langues",
           "group": "project",
-          "q": "Où est basée HARGILE, et travaillez-vous en français et en anglais ?",
-          "a": "À Saint-Gilles, à Bruxelles — Rue Sterckx 5. Nous travaillons en français et en anglais, et nous livrons régulièrement des sites multilingues, comme La Marquisette (trilingue) ou ce site-ci (français et anglais)."
+          "q": "Où est basée HARGILE, et travaillez-vous avec des PME partout en Belgique ?",
+          "a": "À Saint-Gilles, dans Bruxelles. Nous travaillons avec des PME partout en Belgique : sur place quand la rencontre sert à quelque chose, à distance le reste du temps — la proximité se joue sur la disponibilité, pas sur les kilomètres. Nos deux langues de travail sont le français et l'anglais, et les sites multilingues sont une habitude : La Marquisette est trilingue, celui-ci existe en français et en anglais."
         },
         {
           "id": "cout",
