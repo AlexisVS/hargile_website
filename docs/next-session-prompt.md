@@ -267,13 +267,18 @@
 >
 > ### 👉 Par quoi commencer la prochaine session
 >
-> #### 1. Essayer une autre image fixe pour le hero (demande de Mihai)
+> #### 1. Essayer une autre composition pour les stills du hero
 >
-> **C'est le seul point qui demande les yeux de Mihai, et il n'a pas bougé.**
-> L'image servie sous 1024px est `public/images/wave-grid/home.{avif,webp}`,
-> exportée depuis la composition **`curated`** — la même table de graines que
-> `/services`, qui n'a jamais été composée pour l'ellipse de calme de la
-> homepage. C'est donc le premier endroit où chercher mieux.
+> ⚠️ **Mis à jour le 2026-08-03 — la description ci-dessous a changé.** Sous
+> 1024px on ne sert plus `home.*` mais **deux** images composées pour leur bande :
+> `home-phone.*` (≤640) et `home-tablet.*` (641–1023). `home.*` n'est en fait plus
+> servi à personne (voir « Known gaps » dans [`wave-grid.md`](./wave-grid.md)).
+>
+> Le cadrage des trois a été validé à l'œil par Mihai. Ce qui n'a **jamais** été
+> revu, c'est la **table de graines** : les trois sortent toujours de la
+> composition `curated`, la même que `/services`, qui n'a jamais été composée pour
+> les zones calmes de la homepage. C'est donc là qu'il reste à chercher mieux —
+> et c'est le point qui demande les yeux de Mihai.
 >
 > La boucle complète est dans [`wave-grid.md`](./wave-grid.md) (« Making a new
 > composition ») ; en résumé, et **dans cet ordre** :
@@ -285,10 +290,12 @@
 > open http://localhost:3000/?wave=1     # puis 2, 3, 12, 34…
 >
 > # 2. exporter celles qui plaisent (60-90 s chacune, encodage AVIF)
-> npm run images:wavegrid:home 12 34
+> #    ⚠️ feuilleter à la LARGEUR du cadre visé : la fenêtre choisit le cadre
+> npm run images:wavegrid:phone 12 34     # → home-phone-12.*, home-phone-34.*
+> npm run images:wavegrid:tablet 12       # → home-tablet-12.*
 >
-> # 3. comparer les fichiers produits, puis pointer HOME_IMAGE
-> #    (hero-backdrop.jsx) sur celui qu'on garde : "home-wave-12"
+> # 3. comparer les fichiers produits, puis pointer PHONE_IMAGE / TABLET_IMAGE
+> #    (hero-backdrop.jsx) sur celui qu'on garde : "home-phone-12"
 > ```
 >
 > ⚠️ Deux URL ont changé avec la phase 6 : on feuillette sur `/?wave=N`
@@ -328,14 +335,16 @@
 > bouger. Les deux `<source>` sont désormais actifs et doivent rester **en
 > premier** dans le `<picture>` — voir la note sur `PHONE_IMAGE`.
 >
-> #### 3. Une revue visuelle du hero, à deux largeurs
+> #### 3. Une revue visuelle du hero, à **trois** largeurs
 >
 > Rien ne devrait avoir bougé à l'écran : tout ce qui est supprimé était
 > inatteignable, et la fusion `.sectionSharp`/`.sectionWave` → `.backdrop` a été
 > faite en gardant règle par règle ce qui gagnait réellement dans la cascade
 > (au-dessus de 1024px : `inset: 0`, masque horizontal seul, opacité 1 ; en
 > dessous : pas de masque, opacité 0,6). Mais c'est du CSS refondu à la main, donc
-> ça se regarde : `/` à 1440x900 et à 390x844.
+> ça se regarde : `/` à **1440x900, 820x1180 et 390x844** — une par cadre. La
+> largeur du milieu est celle qu'on ne regarde jamais, et c'est précisément celle
+> qui a servi la mauvaise composition pendant deux sessions.
 >
 > #### 4. Ensuite seulement
 >

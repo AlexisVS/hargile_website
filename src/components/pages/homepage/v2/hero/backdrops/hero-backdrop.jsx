@@ -77,10 +77,20 @@ const HOME_CALM = {cx: -3.6, cz: 0.2, rx: 5.2, rz: 3.0, depth: 0.8};
    ⚠️ These numbers are derived from the phone framing, not from the wide one,
    and the first version of this constant got that wrong: it used rx 3.4 when the
    entire visible half-width was 2.3, so it damped the screen edge to edge and
-   exported a black column. With HOME_RELIEF_PHONE's radius 26 the visible extent
-   is about x ±4.4, z ±9.5 — hence rx 5.4 (past the frame edge, so the damping
-   never shows a rim) and rz 4.6 (the copy band; RIM_OUT 1.35 ramps it out by
-   z ≈ 6.2, leaving the top and bottom thirds lit).
+   exported a black column.
+
+   At HOME_RELIEF_PHONE's radius 22 the visible extent is x ±3.70, z ±8.00 (below
+   REF_ASPECT the vertical FOV is pinned at 40°, so height is 2·R·tan20° = 0.728·R
+   and width is that times the aspect). Hence rx 5.4 — comfortably past the frame
+   edge, so the damping never shows a rim — and rz 4.6, which is 0.58 of the
+   half-height and ramps out via RIM_OUT 1.35 by z ≈ 6.2, leaving the top and
+   bottom fifths lit.
+
+   rx and rz were first derived at radius 26 (x ±4.37, z ±9.46) and deliberately
+   left alone when the radius came down to 22: both are ratios that still hold at
+   the tighter framing, and re-deriving them would have changed the composition
+   Mihai approved. If the radius moves again, check them against the formula
+   above rather than assuming they still clear the frame.
 
    depth is 0.7 rather than the wide frame's 0.8: below 1024px .backdrop already
    drops to opacity 0.6 with no mask at all (hero.module.scss), so the same damp
@@ -382,16 +392,27 @@ const WaveSurface = () => {
                 srcSet={`${IMAGE_DIR}/${TABLET_IMAGE}.webp`}
                 type="image/webp"
             />
-            {/* The wide pair. With the two above covering everything up to
-                TABLET_MAX, and the canvas taking over past it, this is now only
-                reachable if the canvas branch stops running — no WebGL, or the
-                breakpoints drift apart. Kept as that safety net, not as a
-                width the site actually serves it at.
+            {/* ⚠️ The wide pair is effectively DEAD, and saying so is the point.
 
-                AVIF first, WebP fallback. The fallback is required, not
-                belt-and-braces: browserslist allows edge >= 111 and Edge only
-                shipped AVIF in 121 — and the same is true of the two pairs
-                above, which is why each frame ships both formats. */}
+                This <picture> is only reached when frame is "phone" or "tablet";
+                "wide" returns the canvas above and never falls through. The two
+                pairs above already cover every width up to TABLET_MAX, so the
+                unconditional <source> here can only win for a browser below
+                1024px that supports neither AVIF nor WebP — which would then be
+                handed a .webp by the <img> anyway. There is no such browser in
+                our browserslist.
+
+                It is NOT a no-WebGL fallback, which is what it looks like: if
+                WebGL fails at >=1024px, WaveGrid renders an empty mount and this
+                element is never mounted at all. Giving the desktop a real image
+                fallback would mean WaveGrid signalling failure upward, which it
+                does not do today. See "Known gaps" in docs/wave-grid.md.
+
+                Left in place rather than deleted because it is the <img>'s src
+                and <picture> requires one. AVIF first, WebP fallback throughout:
+                that pairing is required on the two live frames above, not
+                belt-and-braces — browserslist allows edge >= 111 and Edge only
+                shipped AVIF in 121. */}
             <source srcSet={`${IMAGE_DIR}/${HOME_IMAGE}.avif`} type="image/avif"/>
             <img
                 className={styles.waveStill}

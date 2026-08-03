@@ -8,8 +8,22 @@
 > **moving on desktop, a still frame on mobile**. One visual language on both,
 > replacing today's split where desktop gets cubes and mobile gets colour bends.
 >
-> **Status (2026-08-03, fourth session).** Phases 1–7 shipped — phase 7 closed
-> when the phone still was finally rendered, looked at and served. Mihai picked the
+> **Status (2026-08-03, fourth session).** Phases 1–7 shipped. Phase 7 closed when
+> the phone still was finally rendered, looked at and served, and then went one
+> step further: the hero now has **three** frames, one per aspect band
+> (`home-phone.*` ≤640, `home-tablet.*` 641–1023, canvas past that).
+>
+> **The method changed more than the code did, and that is the durable part.**
+> Three separate values in this document were derived from frustum maths and all
+> three were wrong when rendered. The working loop is now: measure the real
+> backdrop box in a browser → compose at the geometric mean of the band's
+> extremes → simulate the `cover` crop with sharp and *look at it* → derive the
+> quiet zone from that frame's own world extents → count pillars on the export.
+> It is written up as **"Adding a frame for a new aspect band"** in
+> [wave-grid.md](./wave-grid.md); read that before touching a composition, not
+> this file.
+>
+> Mihai picked the
 > wave hero, so `/` serves it at every width — live canvas on desktop, exported
 > still below 1024px, capability rail instead of glass cards on both — and phase
 > 6 then removed everything the comparison had needed: the `bends` and `cubes`

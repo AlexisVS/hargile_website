@@ -66,19 +66,20 @@ So the export is made at exactly 1.6:1 (`REF_ASPECT`), and the crop *reproduces*
 the camera rather than approximating it. No per-breakpoint image set is needed,
 including portrait.
 
-## Two pages, two images
+## Two pages, four images
 
-The grid is on two heroes and **each needs its own export**. They are not
-interchangeable: the quiet ellipse is tuned per layout (`/services` has one
-paragraph in a left column, the homepage has eyebrow + headline + paragraph +
-CTA down the same side), so an image made for one puts its dark band in the
-wrong place on the other.
+The grid is on two heroes and **each needs its own export** — and the homepage
+needs three, one per aspect band. They are not interchangeable: the quiet zone is
+tuned per layout (`/services` has one paragraph in a left column, the homepage has
+eyebrow + headline + paragraph + CTA down the same side, and below 1024px that
+becomes a single full-width column), so an image made for one puts its dark band
+in the wrong place on the other.
 
 | | `/services` | homepage wave hero |
 | --- | --- | --- |
 | route | `/services` | **`/`** — the hero's only backdrop |
 | desktop | **the still image** | **live canvas**, ≥1024px |
-| mobile | the still image | **the still image**, <1024px |
+| mobile / tablet | the still image (the wide one, cropped) | **a still composed for that band**, <1024px |
 | image | `curated.{avif,webp}` | three: `home-phone.*` ≤640, `home-tablet.*` 641–1023, `home.*` past that |
 | pointed at by | `DEFAULT_IMAGE` in [`wave-grid-backdrop.jsx`][wgb] | `HOME_IMAGE` / `PHONE_IMAGE` / `TABLET_IMAGE` in [`hero-backdrop.jsx`][hb] |
 | quiet ellipse | `CALM` in [`wave-grid.jsx`][wg] | `HOME_CALM`, `HOME_CALM_PHONE`, `HOME_CALM_TABLET` in [`hero-backdrop.jsx`][hb] |
@@ -206,6 +207,75 @@ That is deliberate. The exported image has to be the composition the live canvas
 draws, and the only way to guarantee it is for both to come out of the same call
 site with the same `HOME_CALM`. A second mounting of `WaveGrid` somewhere else is
 exactly how the two would quietly drift apart.
+
+## Adding a frame for a new aspect band
+
+Three frames exist because three bands needed them, and the third one was built
+by following the mistakes of the first two rather than by re-deriving anything.
+If a fourth is ever needed, this is the order that works. It is deliberately
+measure-first: every step that was skipped the first time cost a session.
+
+**1. Measure the band, don't assume it.** The hero's backdrop box is not the
+viewport — it has its own height. Read it at both ends of the range:
+
+```js
+// in the browser, at each width you care about
+const bd = document.querySelector('picture img, canvas').closest('div');
+const r = bd.getBoundingClientRect();
+r.width / r.height
+```
+
+For 641–1023px this gave 0.695 at 820x1180 and 0.938 at 1000x700 — the backdrop
+was *taller* than the viewport at both, which no amount of reasoning would have
+produced.
+
+**2. Compose at the geometric mean of the extremes**, not at one end and not at
+a device's nominal ratio. `sqrt(0.695 × 0.938) ≈ 0.807`, hence 1600x2000. That
+splits the worst-case `cover` crop evenly instead of making one end of the band
+pay for the other.
+
+**3. Check whether an existing frame could cover it — by rendering the crop, not
+by thinking about it.** This takes seconds and has changed the answer twice:
+
+```js
+// what object-fit: cover will actually show
+await sharp('public/images/wave-grid/home-phone.webp')
+    .resize({width: 540, height: 480, fit: 'cover'})
+    .png().toFile('/tmp/preview.png');
+```
+
+Then *look at the file*. Extending `home-phone.*` up into the tablet band looked
+obviously right and rendered as a dead plate — `cover` keeps the middle of a tall
+frame, and the middle of these compositions is the quiet band by construction.
+
+**4. Derive the quiet zone from the new frame's own world extents.** Below
+`REF_ASPECT` the vertical FOV is pinned at 40°, so:
+
+```
+visible height = 2 · R · tan(20°) = 0.728 · R
+visible width  = 0.728 · R · aspect
+```
+
+`rx` must exceed the visible half-width or the damping shows a rim; `rz` sets the
+copy band and `RIM_OUT` ramps it out at 1.35× that. **Sizing a quiet zone from
+another frame's extents is what exported a black column** — it is the single most
+expensive mistake in this file's history.
+
+**5. Pick `radius` by counting pillars on a render.** Not from the frustum maths,
+which have now been wrong three times (26 → predicted 11, delivered 9). Density
+is a taste dial, not a fidelity one: eight on a phone, eleven at tablet, fifteen
+wide. Judge it against the frame you are in, never against `home.*`.
+
+**6. Wire it up in three places, and they must agree**: a `TARGETS` entry in the
+export script, the aspect thresholds in `frameForAspect`, and the `<source>`
+media queries. The thresholds are aspects and the media queries are widths on
+purpose — an export answers from the shape it asked for, a window from its width,
+so a `?wave=N` preview can never disagree with what the export writes.
+
+**7. Verify the handoffs**, not just the render. Load the page at both sides of
+every breakpoint and read `img.currentSrc` — an off-by-one between `TABLET_MAX`
+and a media query leaves one pixel column of viewport serving the wrong
+composition, and nothing else will tell you.
 
 ## Making a new composition
 
@@ -490,6 +560,17 @@ Two things worth knowing before anyone "fixes" this back:
 - **Not verified on real hardware.** The homepage's three frames have each been
   rendered, looked at, and checked resolving at their own breakpoints — but in a
   desktop browser at simulated sizes, never on a real phone or tablet.
+- **`home.*` is no longer served to anyone, and the desktop has no image
+  fallback.** Once the tablet frame took the 641–1023px band, the wide export
+  stopped being reachable: the `<picture>` is only rendered for the phone and
+  tablet frames, and `wide` returns the canvas without falling through. So
+  `home.{avif,webp}` are committed, re-exported and never requested.
+  The trap is that this *looks* like a no-WebGL fallback and isn't — if WebGL
+  fails at ≥1024px, `WaveGrid` leaves an empty mount and the `<picture>` is never
+  mounted at all. Giving desktop a real fallback means `WaveGrid` signalling
+  failure upward, which it does not do. Until then `home.*` is the wide
+  composition of record and nothing more; keep exporting it so it does not rot,
+  or decide deliberately to drop it.
 - **`/services` still has only the wide frame.** It serves `curated.*` at every
   width, so on a phone `cover` keeps its middle ~29% and shows about four
   enormous pillars. The homepage now has the machinery to fix this (three
