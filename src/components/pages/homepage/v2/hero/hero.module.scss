@@ -268,14 +268,34 @@
   flex-wrap: wrap;
   margin-top: 38px;
 
-  /* Phones: keep both pills on one row instead of stacking. The tighter gap
-     and padding buy the room — both labels fit down to ~340px wide. */
+  /* Phones: keep both pills on one row instead of stacking — by scaling the
+     pill with the viewport rather than holding one fixed size and hoping.
+
+     The previous version pinned padding at 20px and forced `flex-wrap: nowrap`,
+     on the claim that both labels fit down to ~340px. Measured, they don't:
+     `Nous contacter` is 170.3px and `Portfolio` 120.6px, so the pair needs
+     302.9px against a content box of 92vw - 40px. That runs out at ~373px, which
+     means it was clipping on any 360px Android, not just on tiny phones. And
+     because .section hides the spill rather than scrolling it, the failure was
+     silent: no horizontal scrollbar, the Portfolio pill just lost its right end.
+
+     Every clamp below is a no-op at the top of this range — at 640px they
+     resolve to exactly the old 12px / 20px / 15px, so nothing moves at the
+     widths that already worked. At 320px they resolve to 8px / 12.8px / 13px,
+     bringing the pair to ~244px inside a 254px box.
+
+     ⚠️ `flex-wrap` is deliberately left at the block's default (wrap). The
+     clamps are what keep both pills on one row; wrapping is the safety net for
+     the case they can't absorb — a longer translation, a third CTA. Forcing
+     nowrap is precisely what turned "stacks a little early" into "spills off
+     the screen", because `white-space: nowrap` on .cta means a flex item that
+     cannot wrap also cannot shrink. */
   @media (max-width: 640px) {
-    flex-wrap: nowrap;
-    gap: 12px;
+    gap: clamp(8px, 2.5vw, 12px);
 
     a {
-      padding-inline: 20px;
+      padding-inline: clamp(12px, 4vw, 20px);
+      font-size: clamp(13px, 3.6vw, 15px);
     }
   }
 }
