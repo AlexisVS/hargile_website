@@ -265,7 +265,20 @@
 > `wave-export` et ferme avec `close` et non `close --all`. ⚠️ **Deux exports
 > simultanés se collisionneraient encore entre eux — les enchaîner.**
 >
-> ### 👉 Par quoi commencer la prochaine session
+> ### 🎯 La demande de Mihai pour la prochaine session : le hero de /faq
+>
+> **C'est le point de départ, avant tout ce qui suit.** Aligner le hero `/faq`
+> sur celui de `/services` — positionnement, taille, design — et **sans eyebrow**.
+>
+> Plan complet, déjà écrit et vérifié contre le code :
+> [`faq-hero-plan.md`](./faq-hero-plan.md). Le résumé qui change tout : **`PosterHero`
+> est déjà partagé par les deux pages**, l'eyebrow y est déjà optionnel et
+> entraîne `.tight` avec lui, et une fois l'eyebrow retiré les deux heros ont une
+> géométrie de copie **identique** — donc les trois images `wave-7*` s'appliquent
+> telles quelles, zéro export. Deux lignes, plus une décision de goût (réutiliser
+> `wave-7` ou lui donner sa propre variante).
+>
+> ### 👉 Ensuite, ce qui restait ouvert
 >
 > #### 1. Essayer une autre composition pour les stills du hero
 >
