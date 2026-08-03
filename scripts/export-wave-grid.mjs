@@ -16,6 +16,7 @@
 //   npm run dev                                       # in another terminal
 //   node scripts/export-wave-grid.mjs                 # /services, curated
 //   node scripts/export-wave-grid.mjs 7 32            # /services, variants 7 and 32
+//   node scripts/export-wave-grid.mjs --page=contact 7   # contact form backdrop
 //   node scripts/export-wave-grid.mjs --page=home     # homepage hero, wide
 //   node scripts/export-wave-grid.mjs --page=home 7   # homepage, variant 7
 //   node scripts/export-wave-grid.mjs --page=phone    # homepage hero, phone frame
@@ -119,6 +120,27 @@ const TARGETS = {
     "services-tablet": {
         path: "/services", size: TABLET,
         curated: "curated-tablet", variant: (v) => `wave-${v}-tablet`,
+    },
+    /* The contact form's backdrop. A third page with its own frames rather than
+       a fourth consumer of the `services*` ones, and the reason is the quiet
+       zone as always: /services and /faq and the four detail pages share one
+       because they share a copy geometry, while /contact damps nothing at all
+       (the form covers the frame — see contact-backdrop.jsx). A render with the
+       hero's quiet ellipse baked in would put a dead patch under the form's
+       left-hand labels.
+
+       Measured, the box runs the same aspects as the heroes — 0.462 at 390x844,
+       0.800 at 800x1000, 1.521 at 1440x900 — because both are viewport boxes.
+       So PHONE/TABLET/WIDE are reused as-is; only the seeds and the damping
+       differ. */
+    contact: {path: "/contact", size: WIDE, curated: "contact", variant: (v) => `contact-${v}`},
+    "contact-phone": {
+        path: "/contact", size: PHONE,
+        curated: "contact-phone", variant: (v) => `contact-${v}-phone`,
+    },
+    "contact-tablet": {
+        path: "/contact", size: TABLET,
+        curated: "contact-tablet", variant: (v) => `contact-${v}-tablet`,
     },
     home: {path: "/preview/home-wave", size: WIDE, curated: "home", variant: (v) => `home-wave-${v}`},
     /* Same route as `home` — the composition switch is the export ASPECT, not a
