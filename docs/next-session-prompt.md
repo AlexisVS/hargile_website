@@ -190,7 +190,7 @@
 >   avec l'override plutôt que de rester un bouton sans appelant — la règle même
 >   que la phase 6 a appliquée aux variantes.
 >
-> ### ⚠️ L'image téléphone n'est PAS livrée, et c'est délibéré
+> ### ✅ L'image téléphone est livrée (2026-08-03)
 >
 > Le premier rendu `home-phone` était une colonne noire avec six énormes piliers.
 > Deux causes, toutes deux de cadrage :
@@ -202,16 +202,18 @@
 > 2. **`HOME_CALM_PHONE` était dimensionnée sur les unités du cadre large**
 >    (`rx 3.4` contre une demi-largeur visible de 2,3) : tout l'écran amorti.
 >
-> Corrigé en ajoutant `radius` à `relief` (14 → 26 : x ±4,4, z ±9,5, ~11 piliers)
-> et en refaisant la zone calme en **bande horizontale** — sur un téléphone la
-> copie occupe presque toute la largeur, la lumière doit donc venir du haut et du
-> bas, pas du côté.
+> Corrigé en ajoutant `radius` à `relief` et en refaisant la zone calme en
+> **bande horizontale** — sur un téléphone la copie occupe presque toute la
+> largeur, la lumière doit donc venir du haut et du bas, pas du côté.
 >
-> **Non vérifié.** La version corrigée n'a pas été rendue ni regardée, donc le
-> `<source>` qui servirait `home-phone.*` est **commenté** dans
-> `hero-backdrop.jsx` et aucune image n'est commitée. Le décommenter sans un bon
-> rendu met un hero noir sur tous les téléphones. `radius: 26` est une estimation
-> issue du calcul de champ, pas une mesure.
+> **Rendu, regardé, livré.** `home-phone.{avif,webp}` (17 kB / 29 kB) est commité
+> et les deux `<source>` sont actifs dans `hero-backdrop.jsx`.
+>
+> ⚠️ `radius` vaut **34**, pas 26. 26 venait du calcul de champ et le rendu l'a
+> démenti : il annonçait ~11 piliers de large, il en donnait 9 — encore des
+> dalles. 34 en mesure ~12, et c'est là que les arcs d'ondulation redeviennent
+> lisibles (le cadre large en montre 15). **Chiffre compté sur l'image exportée ;
+> ne pas le recalculer depuis le frustum.**
 >
 > ### 🔧 Sessions agent-browser — la vraie cause des « exports qui pendent »
 >
@@ -279,17 +281,17 @@
 > le moment de rendre `STILL` propre à chaque page, pas de basculer l'une puis
 > l'autre.
 >
-> #### 2. Finir le cadre téléphone (30 s d'export, puis les yeux)
+> #### 2. ~~Finir le cadre téléphone~~ — fait le 2026-08-03
 >
 > ```
 > npm run dev
 > npm run images:wavegrid:phone     # écrit home-phone.{avif,webp}
 > ```
 >
-> Puis **regarder le fichier**. S'il est bon : décommenter les deux `<source>` de
-> `hero-backdrop.jsx` (voir la note sur `PHONE_IMAGE`, qui dit aussi pourquoi ils
-> doivent rester en premier dans le `<picture>`). S'il est encore trop zoomé,
-> `radius` dans `HOME_RELIEF_PHONE` est le seul chiffre à bouger.
+> Reste la boucle si la composition change : exporter, **regarder le fichier**,
+> et si c'est trop zoomé, `radius` dans `HOME_RELIEF_PHONE` est le seul chiffre à
+> bouger. Les deux `<source>` sont désormais actifs et doivent rester **en
+> premier** dans le `<picture>` — voir la note sur `PHONE_IMAGE`.
 >
 > #### 3. Une revue visuelle du hero, à deux largeurs
 >

@@ -8,7 +8,8 @@
 > **moving on desktop, a still frame on mobile**. One visual language on both,
 > replacing today's split where desktop gets cubes and mobile gets colour bends.
 >
-> **Status (2026-07-31, third session).** Phases 1–6 shipped, phase 7 part-done. Mihai picked the
+> **Status (2026-08-03, fourth session).** Phases 1–7 shipped — phase 7 closed
+> when the phone still was finally rendered, looked at and served. Mihai picked the
 > wave hero, so `/` serves it at every width — live canvas on desktop, exported
 > still below 1024px, capability rail instead of glass cards on both — and phase
 > 6 then removed everything the comparison had needed: the `bends` and `cubes`
@@ -428,7 +429,7 @@ Verified, not assumed:
   effects that no longer exist. **The baseline is 2 now** — the remaining two are
   in `mvp-studio.jsx` and `Footer.jsx` and are untouched by this work.
 
-### 🟡 Phase 7 — Steering the composition instead of shuffling seeds
+### ✅ Phase 7 — Steering the composition instead of shuffling seeds
 
 Mihai's call, and the right one: `?wave=N` is a *rejection sampler* that already
 knows about the quiet ellipse, so flipping through seeds only ever explores
@@ -461,7 +462,7 @@ constraints, not the dice.
   an oversight.** The prop went with the override rather than being left as a
   knob with no caller — the same rule phase 6 applied to the backdrop variants.
 
-**Open, and the reason the phone image is not shipped:**
+**Closed 2026-08-03 — the phone image ships.**
 
 The first `home-phone` render came out as a black column with about six enormous
 pillars, and both causes were framing, not seeds:
@@ -474,18 +475,23 @@ pillars, and both causes were framing, not seeds:
 2. **`HOME_CALM_PHONE` was sized from the wide frame's world extents.** `rx 3.4`
    against a visible half-width of 2.3 damped the screen edge to edge.
 
-Fixed by adding `radius` to `relief` (14 → 26 for the phone, giving x ±4.4,
-z ±9.5, ~11 pillars) and re-deriving the quiet zone as a **horizontal band**
-rather than an ellipse — on a phone the copy spans nearly the full width, so
-there is no side for the light to arrive from and it has to come from above and
-below instead.
+Fixed by adding `radius` to `relief` and re-deriving the quiet zone as a
+**horizontal band** rather than an ellipse — on a phone the copy spans nearly the
+full width, so there is no side for the light to arrive from and it has to come
+from above and below instead.
 
-**Not verified.** The fixed version has not been rendered and looked at, so the
-`<source>` that would serve `home-phone.*` is commented out in `hero-backdrop.jsx`
-and no image is committed. Uncommenting it without a good render puts a black
-hero on every phone. `radius: 26` is an estimate from the FOV maths, not a
-measurement — 30 gives ~13 pillars, 34 ~14, and past that the perspective
-flattens enough that the tilt stops reading as relief.
+**Verified, and the FOV maths were wrong.** `radius: 26` was an estimate from the
+frustum, predicting ~11 pillars across. The render disagreed: nine, still coarse
+enough to read as slabs rather than as a grid. **34 measures at about twelve**,
+which is where the ripple arcs become legible as arcs — the wide frame shows
+fifteen, and matching that character is the point. The estimates further up the
+scale (30 → ~13, 34 → ~14) came from the same maths and should be treated as
+equally unreliable; count pillars on the exported image instead.
+
+The quiet band itself needed no change: the render shows it spanning the full
+width across the vertical middle with light arriving top and bottom, which is
+what `HOME_CALM_PHONE` was re-derived to do. `home-phone.{avif,webp}` (17 kB /
+29 kB) is committed and both `<source>` elements are live.
 
 ### 🔧 The export script and agent-browser sessions
 

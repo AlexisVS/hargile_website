@@ -106,11 +106,18 @@ const HOME_CALM_PHONE = {cx: 0, cz: 0.2, rx: 5.4, rz: 4.6, depth: 0.7};
 
    Two separate things, and only doing both reads as 3D:
 
-   - **radius** pulls the camera back, from 14 to 26. This one is not optional:
+   - **radius** pulls the camera back, from 14 to 34. This one is not optional:
      at the default distance a phone aspect sees only world x ±2.3, about six
      pillars across the whole screen, which reads as a few flat slabs rather than
-     as a grid at all. At 26 it is x ±4.4, roughly eleven. See WaveGrid's prop
-     docs for why distance rather than a wider field of view.
+     as a grid at all. See WaveGrid's prop docs for why distance rather than a
+     wider field of view.
+
+     26 was the first value here, derived from the FOV maths rather than
+     measured, and the render disagreed with the maths: it predicted eleven
+     pillars across and delivered nine, still coarse enough to read as slabs. 34
+     measures at about twelve, which is where the ripple arcs start being legible
+     as arcs — the wide frame shows fifteen, and matching that character is the
+     point. Counted off the exported image; don't re-derive it from the frustum.
    - **maxHeight** raises the clamp, so overlapping ripples stack into genuinely
      taller pillars instead of all flattening at the same ceiling. Amplitude is
      left alone: raising it instead makes every ripple taller, including the ones
@@ -123,7 +130,7 @@ const HOME_CALM_PHONE = {cx: 0, cz: 0.2, rx: 5.4, rz: 4.6, depth: 0.7};
 
    Still inside WaveGrid's ±1 normalised range, which caps at ±5.4°/±9°; past it
    the frustum points out across the grid toward its boundary. */
-const HOME_RELIEF_PHONE = {radius: 26, maxHeight: 1.05, view: {mx: -0.2, my: 0.95}};
+const HOME_RELIEF_PHONE = {radius: 34, maxHeight: 1.05, view: {mx: -0.2, my: 0.95}};
 
 /* The exported still, for viewports that don't get the canvas. Its own file, not
    the /services one: that image was composed against a different quiet ellipse
@@ -136,19 +143,12 @@ const HOME_IMAGE = "home";
    wide export is 1.6:1 and object-fit: cover keeps roughly its middle 29% at
    390x844, so a phone was being shown a slice of a composition laid out for a
    frame it never sees. This one is composed at the aspect it is served at. */
-/* ⚠️ NOT SERVED YET — one line of JSX away, deliberately not taken.
-
-   The <source> that would use this is commented out below, because the only
-   home-phone.* render produced so far was wrong: the camera was over-zoomed and
-   the quiet zone damped the frame edge to edge, so the export was a black column
-   with about six giant pillars. Shipping that would put a black hero on every
-   phone. The framing bug is fixed (see HOME_RELIEF_PHONE), but the fixed version
-   has not been rendered and looked at.
-
-   To finish: `npm run images:wavegrid:phone`, LOOK at the file, then uncomment
-   the two <source> elements below. Everything else — the quiet band, the relief
-   override, the export target, the npm script, the aspect-derived preview — is
-   already in place. */
+/* Rendered, looked at, and served. It was not for a while: the first
+   home-phone.* export was a black column with about six giant pillars — the
+   camera over-zoomed and the quiet zone damping the frame edge to edge — so the
+   <source> elements below sat commented out rather than putting a black hero on
+   every phone. Both causes were framing, and both are fixed on
+   HOME_CALM_PHONE and HOME_RELIEF_PHONE. */
 const PHONE_IMAGE = "home-phone";
 /* Where the phone render takes over from the wide one. Matches the <source>
    media query below; both have to move together or a viewport gets the image
@@ -290,11 +290,11 @@ const WaveSurface = () => {
         <picture>
             {/* Phone render — a different composition, not a crop. Its media
                 query must match PHONE_MAX, which is what the canvas branch above
-                switches on. Disabled until a good render exists; see PHONE_IMAGE.
+                switches on.
 
-                Note it must stay FIRST when re-enabled: <picture> takes the first
-                matching <source>, so a later one never wins.
-
+                These two must stay FIRST: <picture> takes the first matching
+                <source>, so the wide AVIF below would otherwise win at every
+                width and the phone render would never be served. */}
             <source
                 media={`(max-width: ${PHONE_MAX}px)`}
                 srcSet={`${IMAGE_DIR}/${PHONE_IMAGE}.avif`}
@@ -305,7 +305,6 @@ const WaveSurface = () => {
                 srcSet={`${IMAGE_DIR}/${PHONE_IMAGE}.webp`}
                 type="image/webp"
             />
-            */}
             {/* AVIF first, WebP fallback. The fallback is required, not
                 belt-and-braces: browserslist allows edge >= 111 and Edge only
                 shipped AVIF in 121. */}

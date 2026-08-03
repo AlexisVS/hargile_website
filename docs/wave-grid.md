@@ -79,10 +79,10 @@ wrong place on the other.
 | route | `/services` | **`/`** — the hero's only backdrop |
 | desktop | **the still image** | **live canvas**, ≥1024px |
 | mobile | the still image | **the still image**, <1024px |
-| image | `curated.{avif,webp}` | `home.{avif,webp}` |
-| pointed at by | `DEFAULT_IMAGE` in [`wave-grid-backdrop.jsx`][wgb] | `HOME_IMAGE` in [`hero-backdrop.jsx`][hb] |
-| quiet ellipse | `CALM` in [`wave-grid.jsx`][wg] | `HOME_CALM` in [`hero-backdrop.jsx`][hb] |
-| export command | `npm run images:wavegrid` | `npm run images:wavegrid:home` |
+| image | `curated.{avif,webp}` | `home.{avif,webp}`, and `home-phone.*` ≤640px |
+| pointed at by | `DEFAULT_IMAGE` in [`wave-grid-backdrop.jsx`][wgb] | `HOME_IMAGE` / `PHONE_IMAGE` in [`hero-backdrop.jsx`][hb] |
+| quiet ellipse | `CALM` in [`wave-grid.jsx`][wg] | `HOME_CALM`, `HOME_CALM_PHONE` in [`hero-backdrop.jsx`][hb] |
+| export command | `npm run images:wavegrid` | `npm run images:wavegrid:home`, `…:phone` |
 
 `/services` is still everywhere because its grid never moves at all. The homepage
 moves on desktop and freezes on mobile — same grid, same colour, same
@@ -91,17 +91,19 @@ introduce.
 
 [hb]: ../src/components/pages/homepage/v2/hero/backdrops/hero-backdrop.jsx
 
-## Two exports per page is now three files, and one is not shipped
+## Two exports per page is now three files, and all three ship
 
-`/services` has `curated.*`; the homepage has `home.*` (wide) and, once it is
-rendered and looked at, `home-phone.*`. The phone one is **not a fallback and not
-a crop** — `object-fit: cover` keeps roughly the middle 29% of the wide frame at
-390x844, so a phone was being shown a slice of a composition laid out for a frame
-it never sees. It is composed at the aspect it is served at.
+`/services` has `curated.*`; the homepage has `home.*` (wide) and `home-phone.*`
+(≤640px). The phone one is **not a fallback and not a crop** — `object-fit:
+cover` keeps roughly the middle 29% of the wide frame at 390x844, so a phone was
+being shown a slice of a composition laid out for a frame it never sees. It is
+composed at the aspect it is served at.
 
-⚠️ **`home-phone.*` is not committed and its `<source>` is commented out.** The
-only render produced so far was a black column; see phase 7 in
-[homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md).
+`home-phone.*` was unshipped for two sessions because the only render was a black
+column; both causes were framing and both are fixed. See phase 7 in
+[homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md) for the diagnosis, and
+`HOME_RELIEF_PHONE` for why its `radius` is a **measured** 34 rather than the 26
+the frustum maths predicted.
 
 ## ⚠️ Exports that "hang" are an agent-browser session collision
 
@@ -119,6 +121,14 @@ agent-browser close --all
 The script now uses its own `wave-export` session, so it cannot collide with
 hand-run `agent-browser`. **Two exports at once still would — run them one after
 the other.**
+
+It also no longer hangs *silently*. Every `agent-browser` call is bounded at 120 s
+(`COMMAND_TIMEOUT`); a whole capture takes about thirty, so the timeout only ever
+fires on this wedge, and when it does it prints the two cleanup commands above.
+Before that, `execFile` had no timeout at all: a wedged daemon left the script
+sitting there having printed its header and nothing else, which reads as "the
+export is slow" — the AVIF encode genuinely is — or as "the page is broken", and
+both send you looking in the wrong place.
 
 ## URL switches
 
@@ -214,7 +224,15 @@ npm run images:wavegrid 7 32            # variants 7 and 32        → wave-7.*,
 # homepage hero
 npm run images:wavegrid:home            # the curated composition  → home.*
 npm run images:wavegrid:home 7 32       # variants 7 and 32        → home-wave-7.*, home-wave-32.*
+npm run images:wavegrid:phone           # the SAME hero at 1170x2532 → home-phone.*
 ```
+
+The phone target is the same route and the same composition switch — only the
+requested aspect differs, and `hero-backdrop.jsx` picks the phone quiet band and
+relief whenever the requested height exceeds its width. That is the same rule a
+narrow browser window follows, so `?wave=N` at phone width previews exactly what
+the export writes. **Re-run it alongside `:home` whenever the composition
+changes**, and run the two one after the other, never at once.
 
 Output lands in `public/images/wave-grid/`. The two targets write under different
 names on purpose, so exporting one can never overwrite the other's shipped
@@ -431,9 +449,17 @@ Two things worth knowing before anyone "fixes" this back:
 
 ## Known gaps
 
-- **Not verified on a real phone.** Both pages' image paths have been checked in
-  a browser at 390×844, which removes the perf question, but the composition at a
-  real portrait aspect on real hardware has still only been reasoned about.
+- **Not verified on a real phone.** The homepage now serves a still composed at
+  1170×2532 rather than a crop of the wide frame, and it has been looked at as an
+  image — but only in a desktop browser at phone width. `/services` still serves
+  the wide export at every width, so its portrait framing remains reasoned about
+  rather than seen.
+- **The export depends on the exporting machine having a GPU.** Checked during
+  the phone export: headless Chrome reported `ANGLE (NVIDIA GeForce GTX 1650,
+  D3D11)`, so `isSoftwareRenderer` is false and the shadow pass runs. On a
+  machine without one it would fall back to SwiftShader, `shadows` would be
+  false, and the export would silently come out flatter than the committed
+  images. Nothing checks for this.
 - **The offers index butts hard onto the grid.** Its `border-top` lands on lit
   pixels at the bottom edge — deliberate, so the grid does not visibly end, but
   worth a look.

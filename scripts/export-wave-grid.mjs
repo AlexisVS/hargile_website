@@ -140,15 +140,39 @@ const BIN = findBrowser();
    is in the middle of. */
 const SESSION = "wave-export";
 
+/* No single agent-browser command should take two minutes. A whole capture runs
+   in about thirty seconds, so this only ever fires on the wedge described under
+   SESSION — and firing is the entire point.
+
+   Without it, a wedged daemon makes `open` wait forever: execFile has no default
+   timeout, so the script sits there having printed its header and nothing else.
+   That reads as "the export is slow" (the AVIF encode genuinely is) or as "the
+   page is broken", and both send you looking in the wrong place. It cost a
+   session once already. Fail loudly instead, and say what to do about it. */
+const COMMAND_TIMEOUT = 120_000;
+
 const browser = async (...args) => {
     if (!BIN) throw new Error("agent-browser not found. Install it with: npm i -g agent-browser");
     try {
         // 20 MB: a 2560x1600 PNG data URL runs to about 3.3 MB, well past the default.
-        const {stdout} = await run(BIN.cmd, [...BIN.pre, "--session", SESSION, ...args], {maxBuffer: 20 * 1024 * 1024});
+        const {stdout} = await run(BIN.cmd, [...BIN.pre, "--session", SESSION, ...args], {
+            maxBuffer: 20 * 1024 * 1024,
+            timeout: COMMAND_TIMEOUT,
+        });
         return stdout;
     } catch (error) {
         if (error.code === "ENOENT") {
             throw new Error("agent-browser not found. Install it with: npm i -g agent-browser");
+        }
+        // execFile marks a timeout kill with `killed`, not with a code.
+        if (error.killed) {
+            throw new Error(
+                `agent-browser ${args[0]} timed out after ${COMMAND_TIMEOUT / 1000}s.\n`
+                + "Almost always an orphaned daemon rather than the page. Clear it with:\n"
+                + "  agent-browser close --all\n"
+                + "then kill any chrome.exe whose command line contains agent-browser-chrome-\n"
+                + "(a temp profile dir — never your own browser), and run this again alone.",
+            );
         }
         throw error;
     }
