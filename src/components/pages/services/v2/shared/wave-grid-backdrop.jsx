@@ -5,20 +5,23 @@ import {useEffect, useState, useSyncExternalStore} from "react";
 import {useWaveFrame} from "./wave-frame";
 import styles from "./wave-grid-backdrop.module.scss";
 
-/* Backdrop for the poster hero — /services and /faq both mount it.
+/* Backdrop for the poster hero — all six M4 pages mount it: /services, /faq and
+   the four service detail pages under /services/*.
 
-   The two share the LAYOUT and differ in the COMPOSITION, and the distinction
-   is the whole reason this file serves both. Once /faq dropped its eyebrow the
-   heroes had identical copy geometry — same component, same 100svh box, same
-   measure, same 860px stack point — so the quiet zones, the band edges and the
-   relief below are correct for both pages and are shared. What is NOT shared is
-   which seed table gets rendered inside them: /services runs wave 7, /faq runs
-   wave 70, passed as `composition`.
+   The six share the LAYOUT and differ in the COMPOSITION, and the distinction
+   is the whole reason this file serves them all. Once /faq dropped its eyebrow
+   the heroes had identical copy geometry — same component, same 100svh box,
+   same measure, same 860px stack point — so the quiet zones, the band edges and
+   the relief below are correct for every one of them and are shared. The detail
+   pages joined that geometry rather than getting their own. What is NOT shared
+   is which seed table gets rendered inside it, passed as `composition`: one
+   number per page, six distinct frames.
 
    ⚠️ That sharing is a property of the layout, not a general licence. The
    homepage keeps its own everything because its quiet zone is somewhere else
    entirely — a composition is only portable between pages whose copy sits in
-   the same place, and these two are the only such pair.
+   the same place, which here means "pages using poster-hero with no eyebrow and
+   no geometry overrides", and nothing else on the site qualifies.
 
    What ships is a still image, not WebGL. The grid was always a single frame
    that never changes, and three.js costs ~150KB gzipped plus the main-thread
@@ -61,10 +64,11 @@ const IMAGE_DIR = "/images/wave-grid";
    when a page changes composition. See docs/wave-grid.md, "Adding a frame for a
    new aspect band".
 
-   Both hub pages picked theirs off the ?wave= switch — /services runs 7, /faq
-   runs 70. ⚠️ Those numbers are the only thing that differs between the pages'
-   backdrops: the quiet zone, the frames and the band edges are shared, because
-   the two heroes have identical copy geometry (see the header comment). */
+   Every page picked its number off the ?wave= switch — /services runs 7, /faq
+   runs 70, and the four detail pages run their own. ⚠️ Those numbers are the
+   only thing that differs between the pages' backdrops: the quiet zone, the
+   frames and the band edges are shared, because the six heroes have identical
+   copy geometry (see the header comment). */
 const DEFAULT_COMPOSITION = "wave-7";
 
 const framesOf = (composition) => ({
@@ -152,9 +156,10 @@ const RELIEF_FOR = {phone: RELIEF_PHONE, tablet: RELIEF_TABLET, wide: null};
      /services?wave=7            → composition 7 rendered live, for picking
      /services?export=2560x1600  → live render at fixed size, for the script
 
-   They answer on /faq too, since it is the same component — harmless, and the
-   export script has no reason to use it: both pages render the same frame for a
-   given aspect, so /services stays the one surface the script drives.
+   They answer on the other five routes too, since it is the same component —
+   harmless, and the export script has no reason to use them: every page renders
+   the same frame for a given aspect, so /services stays the one surface the
+   script drives. Browse compositions there for the same reason.
 
    Not useSearchParams: that would opt the whole route into dynamic rendering to
    support debug flags. useSyncExternalStore rather than read-in-effect because
