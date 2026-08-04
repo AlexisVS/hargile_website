@@ -94,19 +94,38 @@ const TABLET_MAX = 860;
    this tall cannot be cleared AND leave a fully-lit rim. */
 const CALM_WIDE = {cx: 0, cz: 0, rx: 9.6, rz: 3.3, depth: 0.96};
 
-/* Phone and tablet, where the same shape has to make a harder choice.
+/* Phone and tablet, where the same shape has to make a harder choice, and where
+   they stop agreeing with each other.
 
    Stacked, the form runs from just under the navbar to just above the footer
    note — on a phone that is z -5.9…+7.2 of a visible ±8.00. Clearing all of it
-   would push 1.35·rz past 11 against a frame edge of 8, i.e. damp the entire
-   frame and ship a dead plate. So these clear the part that has to be clear —
-   the title and the four field rows — and let the light come back over the
-   message box and below it, which is the "at least the form without the
-   message" line. The centre sits high (negative cz) for that reason.
+   would push 1.35·rz past 11 against a frame edge of 8: the entire frame damped
+   and a dead plate shipped. So both clear the part that has to be clear — the
+   title and the four field rows — and let the light back in over the message
+   box and below it. That is the "at least the form without the message" line,
+   and it is why cz is negative in both: the calm sits high, over the fields.
+
+   The message box is the one thing these deliberately do NOT clear — it spans
+   the full width, so protecting it would mean damping the frame. It has its own
+   border and fill to sit on, which the bare field rows do not.
+
+   ⚠️ An offset ellipse was tried on phone and is WORSE — do not re-derive it.
+   The reasoning looked sound: stacked, the labels and inputs only reach about
+   x 300 of 390, so unlike the wide frame there appears to be a right margin for
+   light to arrive from, and {cx -1.1, rx 2.85} clears the copy column while
+   leaving it lit. Measured, that render came out at 14.8 mean against the
+   band's 15.7 — DARKER, not brighter — and it put a lit block hard beside the
+   email row. At 0.46 aspect the visible x range is only ±3.70, so narrowing rx
+   unlocks very little area while the ramp still covers most of it, and what it
+   does unlock arrives next to the copy rather than away from it. The band wins
+   on both counts.
 
    Phone visible extent is x ±3.70, z ±8.00; tablet x ±5.24, z ±6.55. rx is past
    the frame edge in both so the damping spans the full width — see CALM_WIDE on
-   why an rx inside the frame is worse than none. */
+   why an rx inside the frame is worse than none.
+
+   Derived by rendering at 390 and 800 and measuring, not by scaling the wide
+   frame's numbers — see docs/wave-grid.md on what that has cost before. */
 const CALM_PHONE = {cx: 0, cz: -2.1, rx: 5.4, rz: 4.8, depth: 0.96};
 const CALM_TABLET = {cx: 0, cz: -1.6, rx: 7.0, rz: 4.0, depth: 0.96};
 
