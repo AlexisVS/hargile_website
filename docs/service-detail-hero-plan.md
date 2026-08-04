@@ -141,7 +141,7 @@ What survives is prose: `faq-hero-plan.md` and `m5-immersive-design-concepts.md`
 still describe it as the detail pages' hero. Left as written — they are dated
 records of what was true then, and this plan is the thing that supersedes them.
 
-### 3. Pick four compositions — the part that needs eyes
+### 3. Pick four compositions — the part that needs eyes ✅ Done
 
 ```
 npm run dev
@@ -188,7 +188,7 @@ stats of the **whole input image**, silently ignoring the crop — every candida
 comes back with an identical number and the ranking is meaningless. Materialise
 the crop through `.toBuffer()` and re-open it.
 
-### 4. Export — 12 runs, strictly one at a time
+### 4. Export — 12 runs, strictly one at a time ✅ Done
 
 ```
 node scripts/export-wave-grid.mjs --page=services        NN   # wide     → wave-NN
@@ -208,7 +208,7 @@ Expect 60–90 s each with no output until it finishes.
 
 Commit the `.avif` and `.webp`. Nothing regenerates them at build time.
 
-### 5. Point each page at its composition
+### 5. Point each page at its composition ✅ Done
 
 One name per page → three frames derived by `framesOf`. All three files must
 exist before a page points at the name, or that viewport band 404s its
@@ -227,7 +227,28 @@ Settled 2026-08-03. Ordered so no two adjacent pages in the nav repeat a
 family, and so the flagship offer (applications-web) takes the highest-contrast
 frame.
 
-### 6. Verify — measured, not assumed
+### 6. Verify — measured, not assumed ⚠️ All but the Lighthouse pass
+
+Results, 2026-08-04:
+
+- `currentSrc` at all six widths on all four pages: each serves its own
+  composition and switches at the same three edges as `/services`. ✅
+- Copy geometry measured rather than eyeballed. The detail pages' answer box is
+  `98,585,636×114` against `/services`' `98,520,586×143` — **50px wider**,
+  because `/services` ships an aside and the detail pages do not, so `auto-fit`
+  gives the single child the full container and only the 62ch cap bounds it.
+  Predicted by decision 3 and confirmed. It still ends at x 734 of 1440, well
+  inside the left half. ✅
+- The `h1` box is `1245` wide against `/services`' `861` and starts 37px higher.
+  Not drift: `.title` is `width: fit-content` and the detail headlines are
+  longer and wrap to two lines. ✅
+- Luminance under the *real* element boxes, against `/services`' own 85.3 / 43.6:
+  web 80.5/37.5, ia 86.4/38.3, seo 62.4/39.5, mvp 73.2/44.9. Every answer
+  paragraph sits on damped pillars. ✅
+- `git status public/images/wave-grid/` showed **added files only**. ✅
+- Build clean; lint at its baseline of 2. ✅
+- **Lighthouse: not run.** Still outstanding — the grid became the LCP element
+  on four routes that previously had no hero image.
 
 - `img.currentSrc` at **390 / 640 / 641 / 860 / 861 / 1440** on all four pages:
   each must serve its own composition and switch at the same three edges as
@@ -272,3 +293,44 @@ frame.
   plan does not change that.
 - Per-page colour ramps. `COLORS` is deliberately shared site-wide; a per-page
   ramp would take one hero off brand while the others stayed on it.
+
+## What shipped alongside, 2026-08-04
+
+Asked for mid-session and outside this plan's scope, recorded here so the branch
+reads as one story. All on `feat/services-faq-redesign`.
+
+| commit | what |
+| --- | --- |
+| `3ab5d58` | this plan — the grid under the four detail heroes |
+| `800e56e` | `SiblingOffers` + the homepage timeline's ghost number |
+| `d227eac` | `/contact` moves from ColorBends to the cube grid |
+| `5401e17` | offers-strip promise alignment |
+| `f8108fe` | `/contact` quiet band — the fix for "too dark, cubes behind the form" |
+| `819799f` | the phone offset-ellipse dead end, recorded |
+
+**The offers were a dead end** — the four pages only linked downward from
+`/services`, so moving between two of them meant the browser's back button.
+Each now closes on its three siblings plus the way back, above the CTA band.
+Named by the offer rather than "read more", reusing
+`pages.services.index.offers.*` so the titles have one home.
+
+**The homepage timeline** lost its ghost `01/02/03` and, stacked, puts the week
+label on its dot's line. ⚠️ Those rules sit at the END of
+`mvp-promo.module.scss`, not in the `@media` that was already there: a media
+query carries no extra specificity, so the later plain `.stepBody` rule beat it
+and the label stayed 24px under its dot with the indent applied on top.
+
+**`/contact`** is the substantial one and has its own writeup in
+[wave-grid.md](./wave-grid.md#contact--the-page-whose-copy-covers-the-frame) —
+band instead of ellipse, `rz` vs `depth`, and why dimming a layer is not a
+substitute for a quiet zone.
+
+### Still open
+
+- **Lighthouse**, on a detail page and on `/contact`. Never run.
+- **`src/components/vendor/color-bends/ColorBends.jsx` is dead code.** `/contact`
+  was its last consumer; nothing in `src` imports it now. Vendored from React
+  Bits, so deleting it is Mihai's call.
+- **`/contact` on phone reads 15.7 mean against a hero page's 24.4** and that is
+  structural, not a tuning miss. `depth` is the dial to trade back.
+- **`main` has none of this.**

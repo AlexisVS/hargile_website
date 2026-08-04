@@ -1,4 +1,4 @@
-# Wave grid — the /services hero backdrop
+# Wave grid — the site's shared backdrop
 
 > Written 2026-07-31. Covers what shipped in `feat(services): wave-grid still on
 > the hero, with its export pipeline`, and how to make new compositions.
@@ -7,6 +7,15 @@
 > the homepage wave hero. Everything below is about the still mode `/services`
 > ships and is unaffected by it — see [Live mode](#live-mode) at the end, and
 > [homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md) for the why.
+>
+> **Amended 2026-08-04.** The grid went from two pages to eight. The four service
+> detail pages joined the poster hero
+> ([service-detail-hero-plan.md](./service-detail-hero-plan.md)), and `/contact`
+> replaced its ColorBends canvas with the grid. `/contact` is the interesting
+> one: it is the first consumer whose copy covers the whole frame, and the first
+> whose quiet zone is a **band** rather than an ellipse — see
+> [/contact](#contact--the-page-whose-copy-covers-the-frame). The title changed
+> with it; this stopped being "the /services hero backdrop" some time ago.
 
 ## What it is
 
@@ -66,10 +75,34 @@ So the export is made at exactly 1.6:1 (`REF_ASPECT`), and the crop *reproduces*
 the camera rather than approximating it. No per-breakpoint image set is needed,
 including portrait.
 
-## Two pages, three frames each, six images
+## Eight pages, three frames each
 
-Both heroes now run the same three-frame structure — phone, tablet, wide — and
-**every one of the six is its own export**. They are not interchangeable: the
+Every consumer runs the same three-frame structure — phone, tablet, wide — and
+**every frame is its own export**. As of 2026-08-04:
+
+| page | composition | quiet zone | notes |
+| --- | --- | --- | --- |
+| `/services` | `wave-7` | poster hero's, shared | |
+| `/faq` | `wave-70` | poster hero's, shared | |
+| `/services/applications-web` | `wave-142` | poster hero's, shared | |
+| `/services/ia` | `wave-312` | poster hero's, shared | |
+| `/services/seo` | `wave-188` | poster hero's, shared | |
+| `/services/mvp-30-jours` | `wave-97` | poster hero's, shared | |
+| `/contact` | `contact-297` | **its own, a band** | see below |
+| `/` (homepage) | `home*` | `HOME_CALM*` | live canvas ≥1024 |
+
+The six M4 pages share one quiet zone because they share one copy geometry —
+same component, same 100svh box, same measure, same 860px stack point — so only
+the seed table differs between them. That sharing is a property of the layout,
+not a general licence: `/contact` and the homepage each keep their own because
+their copy sits somewhere else entirely.
+
+⚠️ **A composition name is not a page name.** `wave-142` and `contact-297` are
+both "wave 142" and "wave 297" to the generator; the prefix records which quiet
+zone was in force when the frame was captured, and that is the thing that makes
+them non-interchangeable.
+
+The frames are not interchangeable for the same reason: the
 quiet zone is tuned per layout (`/services` has one paragraph in a left column,
 the homepage has eyebrow + headline + paragraph + CTA down the same side, and
 below each page's one-column breakpoint both become a single full-width column),
@@ -307,6 +340,89 @@ every breakpoint and read `img.currentSrc` — an off-by-one between `TABLET_MAX
 and a media query leaves one pixel column of viewport serving the wrong
 composition, and nothing else will tell you.
 
+## /contact — the page whose copy covers the frame
+
+> Shipped 2026-08-04. [`contact-backdrop.jsx`][cb] +
+> [`contact-backdrop.module.scss`][cbs]. It replaced a live ColorBends canvas, so
+> `/contact` now ships **no WebGL at all** — nothing in `src` imports ColorBends
+> any more, and that file is dead code.
+
+[cb]: ../src/components/pages/contact/contact-backdrop.jsx
+[cbs]: ../src/components/pages/contact/contact-backdrop.module.scss
+
+Every other consumer has copy in one part of the frame and light in another.
+The contact form has a title, five field rows and a textarea running edge to
+edge and top to bottom — it covers roughly **82% of a 390×844 phone frame**.
+That single fact drives everything below.
+
+**What transferred, measured rather than assumed.** The backdrop box runs 0.462
+at 390×844, 0.800 at 800×1000 and 1.521 at 1440×900 — the *same aspects as the
+heroes*, because both are viewport boxes. So `PHONE` / `TABLET` / `WIDE` and the
+640/860 band edges were reused unchanged. Only the seeds and the damping are
+new. No new export size was needed.
+
+**The quiet zone is a band, not an ellipse.** The form spans the full measure,
+so there is no side for light to arrive from; the only room left is above the
+title and below the submit button. `rx` is deliberately **past the frame edge**
+(9.6 against a visible ±8.2) so the damping spans the full width. An `rx` inside
+the frame puts the ellipse's shoulders on screen, and a form sitting in a
+visible oval of calm looks worse than no damping at all.
+
+### ⚠️ `rz` and `depth` are different dials — this cost a round trip
+
+- **`rz` is WHERE the calm reaches.** Flat core at `0.8·rz`, ramp out to
+  `1.35·rz` (`RIM_IN` / `RIM_OUT`).
+- **`depth` is HOW EMPTY that core is.**
+
+The first attempt widened `rz` and left `depth` at the heroes' 0.85. A core at
+0.85 still passes **15% of the light**, which reads as cubes behind the fields
+*no matter how wide the band gets* — the form looked "calmer" at every setting
+and never looked clear. `depth: 0.96` is what actually empties it. If the copy
+still has texture behind it, turn `depth`; if the texture is in the wrong
+*place*, turn `rz`.
+
+### The trade there is no way around
+
+Clearing a form that tall removes most of the frame's light. Measured mean
+luminance at 390: `/contact` **15.7** against `/services/ia` **24.4**. That gap
+is structural, not a tuning miss — a hero page only has copy in its middle
+third. `depth` is the dial for trading back: 0.85 lets faint cubes through
+behind the fields and lifts the page.
+
+### No opacity duck below 860px, unlike the heroes
+
+The heroes drop to `--grid-opacity: 0.6` on mobile because their compact profile
+ships **no quiet zone** — the copy becomes one full-width column and opacity is
+the only lever left. `/contact` carries a real band at every frame, so ducking
+again just makes the page dark. It holds 0.92 everywhere.
+
+This was found the expensive way: the page first shipped with damping **off**
+and the layer dimmed to 0.5/0.42 with a mask, on the reasoning that a form
+covering the frame leaves nothing to carve out. That reads at **14.1** mean
+against 24.4 — visibly darker than every other route — *and* never cleared the
+cubes from behind the form. Dimming makes the whole page darker, copy and
+decoration alike; only the quiet zone can make one part darker than another.
+
+### ⚠️ An offset ellipse on phone is worse — do not re-derive it
+
+The idea recurs and looks sound: stacked, the labels and inputs only reach about
+x 300 of 390, so there appears to be a right margin worth lighting. Measured,
+`{cx: -1.1, rx: 2.85}` came out at **14.8** against the band's **15.7** —
+*darker*, not brighter — and the light it freed arrived as a block hard beside
+the email row rather than away from the copy. At 0.46 aspect the visible x range
+is only ±3.70, so narrowing `rx` frees very little area while the ramp still
+covers most of it.
+
+### The loader signal moves with the backdrop
+
+`HeroLoadingProvider` covers `/` and `/contact` and holds a full-screen overlay
+until the page reports ready. The bends reported when their `<canvas>` appeared;
+a still image has no canvas, so that watcher never fires. It is **not** a stuck
+page — `SAFETY_MS` (2500) dismisses regardless — which is exactly what makes it
+easy to miss: the symptom is every contact load sitting behind the overlay for
+two and a half seconds. It now reports on the image's `load`, with `onError`
+wired to the same handler so a missing frame still reveals the page.
+
 ## Making a new composition
 
 The same four steps for either page. Where they differ, both are given.
@@ -316,15 +432,19 @@ The same four steps for either page. Where they differ, both are given.
 ```
 npm run dev
 
-# /services
+# /services — and the four detail pages, which share its quiet zone,
+# so browse here for all six
 open http://localhost:3000/services?wave=1
+
+# /contact — its own quiet zone, so it must be browsed on its own page
+open http://localhost:3000/contact?wave=1
 
 # homepage hero
 open http://localhost:3000/?wave=1
 ```
 
-On `/services` a picker appears top-right: `← wave 1 → random`. On the homepage
-there is no picker — edit the number in the URL. Every number is deterministic —
+On `/services` and `/contact` a picker appears top-right: `← wave 1 → random`.
+On the homepage there is no picker — edit the number in the URL. Every number is deterministic —
 `?wave=34` renders the identical composition forever, on any machine — so note
 the ones you like and come back to them.
 
@@ -356,6 +476,12 @@ npm run images:wavegrid 7               # wide      → wave-7.*
 npm run images:wavegrid:svc-phone 7     # ≤640      → wave-7-phone.*
 npm run images:wavegrid:svc-tablet 7    # 641–860   → wave-7-tablet.*
 npm run images:wavegrid                 # the curated composition  → curated.*
+
+# /contact — three targets, driving /contact rather than /services, because its
+# quiet zone is its own. No npm alias yet; call the script directly.
+node scripts/export-wave-grid.mjs --page=contact        297   # wide     → contact-297.*
+node scripts/export-wave-grid.mjs --page=contact-phone  297   # ≤640     → contact-297-phone.*
+node scripts/export-wave-grid.mjs --page=contact-tablet 297   # 641–860  → contact-297-tablet.*
 
 # homepage hero
 npm run images:wavegrid:home            # the curated composition  → home.*
