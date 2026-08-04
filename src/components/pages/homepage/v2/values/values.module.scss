@@ -1,4 +1,9 @@
-/* Our Values — statement + spotlight value cards (design: Homepage v2) */
+/* Our Values — statement + editorial rows (design: Homepage v2).
+
+   Every colour and hairline here is one the M4/M5 pages already use: #ededed and
+   its rgba steps for text, #96b9f9 as the single accent, 1px
+   rgba(255,255,255,.12) rules, var(--font-headings) for names. Nothing is
+   filled — see the note in values.jsx for why the glass tiles are gone. */
 
 .orb {
   position: absolute;
@@ -18,7 +23,7 @@
   font-size: clamp(20px, 2.2vw, 30px);
   font-weight: 400;
   letter-spacing: -0.015em;
-  color: rgba(237, 237, 237, 0.85);
+  color: rgba(237, 237, 237, 0.92);
   line-height: 1.35;
   max-width: 34ch;
   margin: 28px 0 0;
@@ -28,70 +33,83 @@
 .ambition {
   font-size: 16px;
   font-weight: 300;
-  color: rgba(237, 237, 237, 0.62);
+  color: rgba(237, 237, 237, 0.78);
   line-height: 1.6;
   max-width: 52ch;
   margin: 20px 0 0;
 }
 
-/* --- Value cards: 3 + 2 layout via flex-wrap.
-   The lit-glass recipe used to be shared with the hero's .floatCard; the hero
-   dropped its cards for a single capability rail at every width, so this is now
-   the only place it lives. The dot (.cardDot) is still the same marker the
-   hero's rail uses (.capDot) — that signature is deliberately shared. --- */
-
-.values {
-  margin-top: 64px;
+.list {
+  list-style: none;
+  margin: clamp(48px, 5vw, 80px) 0 0;
+  padding: 0;
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  flex-direction: column;
 }
 
-.card {
-  position: relative;
-  flex: 1 1 calc(33.333% - 14px);
-  min-width: 240px;
-  padding: 20px 22px 24px;
-  box-sizing: border-box;
-  border-radius: 14px;
-  background: linear-gradient(
-    155deg,
-    rgba(56, 74, 122, 0.5) 0%,
-    rgba(24, 33, 58, 0.62) 48%,
-    rgba(12, 17, 32, 0.72) 100%
-  );
-  backdrop-filter: blur(20px) saturate(115%);
-  -webkit-backdrop-filter: blur(20px) saturate(115%);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
-}
+/* Name | description. The name column is a fixed measure so all four names
+   start on the same left edge AND the descriptions form one straight column —
+   that double alignment is what makes four rows read as one figure. */
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, clamp(200px, 21vw, 300px)) minmax(0, 1fr);
+  align-items: baseline;
+  gap: 10px 48px;
+  padding: clamp(26px, 2.6vw, 40px) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  transition: border-color 0.25s ease;
 
-/* Luminous dot in place of an icon — same as the hero's .cardDot */
-.cardDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #96b9f9;
-  box-shadow: 0 0 12px rgba(150, 185, 249, 0.8);
+  &:hover {
+    border-top-color: rgba(150, 185, 249, 0.55);
+
+    /* The name rests ON the accent, so hover can't be "turns blue" any more —
+       it brightens along the same ramp instead, the way .pillAccent does. */
+    .valueName {
+      color: #b8cdfb;
+    }
+  }
 }
 
 .valueName {
-  position: relative;
+  margin: 0;
   font-family: var(--font-headings);
   font-weight: 600;
-  font-size: clamp(19px, 1.8vw, 24px);
-  letter-spacing: -0.015em;
-  margin: 14px 0 0;
-  color: #ededed;
+  font-size: clamp(22px, 2.2vw, 30px);
+  letter-spacing: -0.018em;
+  line-height: 1.15;
+  /* The site's single accent, at rest rather than on hover — the four names are
+     the only thing on this screen carrying colour, which is what lets the
+     section stay otherwise uniformly grey. */
+  color: #96b9f9;
+  transition: color 0.25s ease;
 }
 
+/* 0.82 plutôt que le 0.6 des paragraphes secondaires du site : ces quatre
+   descriptions ne sont pas une légende sous un titre, elles SONT le contenu de
+   la section — le nom à gauche n'est qu'une étiquette. Le poids reste à 300,
+   donc la hiérarchie tient toujours face au nom en 600, mais le texte se lit
+   sans effort. */
 .valueDesc {
-  position: relative;
-  font-size: 14px;
+  margin: 0;
+  max-width: 62ch;
+  font-size: 16px;
   font-weight: 300;
-  color: rgba(237, 237, 237, 0.6);
-  line-height: 1.55;
-  margin: 10px 0 0;
+  line-height: 1.65;
+  color: rgba(237, 237, 237, 0.82);
+}
+
+/* Stacked: the description drops under its name and both keep the container's
+   left edge, so the rule still opens a single-column row. */
+@media (max-width: 860px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row,
+  .valueName {
+    transition: none;
+  }
 }
