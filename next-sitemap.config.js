@@ -6,14 +6,21 @@ const DEFAULT_LOCALE = 'fr';
 
 /* The pages actually served with a 200. Keep this list in sync with the routes
    under src/app/[locale] — a sitemap must only ever contain canonical 200 URLs.
+   services/* and faq are live again since the M4 pages (2026-07-30).
    Deliberately absent:
-     - services / portfolio / solutions/* / about-us / sitemap → 301/307 since the
+     - portfolio / solutions/* / about-us / sitemap → 301/307 since the
        site refresh (next.config.mjs). They were still listed here, which sent
        crawlers to 8 redirects for 6 real pages.
      - audit/result → per-prospect result page, noindex.
      - banner / banner-mvp → internal tools. */
 const PAGES = [
     {path: '', changefreq: 'weekly', priority: 1.0},
+    {path: 'services', changefreq: 'monthly', priority: 0.8},
+    {path: 'services/applications-web', changefreq: 'monthly', priority: 0.7},
+    {path: 'services/ia', changefreq: 'monthly', priority: 0.7},
+    {path: 'services/seo', changefreq: 'monthly', priority: 0.7},
+    {path: 'services/mvp-30-jours', changefreq: 'monthly', priority: 0.7},
+    {path: 'faq', changefreq: 'monthly', priority: 0.6},
     {path: 'contact', changefreq: 'monthly', priority: 0.7},
     {path: 'legal/privacy-policy', changefreq: 'yearly', priority: 0.3},
 ];

@@ -1,0 +1,144 @@
+/* Sibling offers — a closing sub-block, so its title sits a step below the
+   section heading scale, matching mini-faq.
+
+   Border-led, nothing filled: the rows are told apart by one hairline each and
+   the only things that move under the pointer are the chevron and the rule.
+   Same restraint as offers-index on the hub page, one size down — this is a
+   footer to the page, not the page. */
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(24px, 2.2vw, 32px);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0;
+  color: #ededed;
+}
+
+.all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(237, 237, 237, 0.62);
+  text-decoration: none;
+  transition: color 0.25s ease;
+
+  &:hover,
+  &:focus-visible {
+    color: #96b9f9;
+  }
+}
+
+.list {
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0;
+}
+
+/* The rule opens each row rather than closing it, so the block ends on the last
+   offer instead of on a line under it. */
+.row {
+  display: grid;
+  /* Fixed name column rather than `auto`: sized to content, each promise
+     started wherever its offer's name happened to end, so the three ran down a
+     ragged left edge. The offer names are the scan target and the promises are
+     the aside — they need one column each. The clamp keeps the name off the
+     promise as the type scales with the viewport (.name is itself a clamp). */
+  grid-template-columns: minmax(0, clamp(260px, 24vw, 340px)) minmax(0, 1fr) 16px;
+  align-items: baseline;
+  gap: 8px 24px;
+  padding: 22px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  text-decoration: none;
+  transition: border-color 0.25s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-top-color: rgba(150, 185, 249, 0.55);
+
+    .name {
+      color: #96b9f9;
+    }
+
+    .chevron {
+      transform: translateX(4px);
+      color: #96b9f9;
+    }
+  }
+}
+
+.name {
+  font-family: var(--font-headings);
+  font-weight: 600;
+  font-size: clamp(19px, 1.8vw, 24px);
+  letter-spacing: -0.015em;
+  color: #ededed;
+  transition: color 0.25s ease;
+}
+
+.promise {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: rgba(237, 237, 237, 0.55);
+}
+
+.chevron {
+  display: inline-flex;
+  color: rgba(237, 237, 237, 0.45);
+  transition: transform 0.25s ease, color 0.25s ease;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Stacked: the promise drops under the name and the chevron holds the right
+   edge across both lines, so the row still reads as one target. */
+@media (max-width: 700px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr) 16px;
+    align-items: start;
+    gap: 6px 16px;
+  }
+
+  .name {
+    grid-column: 1;
+  }
+
+  .promise {
+    grid-column: 1;
+  }
+
+  .chevron {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row,
+  .name,
+  .chevron,
+  .all {
+    transition: none;
+  }
+
+  .row:hover .chevron,
+  .row:focus-visible .chevron {
+    transform: none;
+  }
+}

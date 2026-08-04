@@ -1,0 +1,115 @@
+/* FAQ chapters — a sticky numeral column beside each group's questions.
+
+   The numeral holds while its own questions scroll past, so the page reads as
+   three chapters instead of one long list, and the release happens at the
+   bottom of each section rather than being pushed out by the next one. Pure
+   CSS, no JS, and no duplicated title in the DOM: the <h2>s that were already
+   there simply stop scrolling away. */
+
+/* Chapters follow each other directly — the section's own top padding is the
+   break between them, and a second one would open a hole. */
+.chapter + .chapter {
+  padding-top: clamp(48px, 5vw, 88px);
+}
+
+/* The hero index jumps here: land the numeral under the fixed navbar, not
+   behind it. */
+.chapter {
+  scroll-margin-top: clamp(88px, 12vh, 132px);
+}
+
+.group {
+  display: grid;
+  grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.38fr);
+  gap: clamp(24px, 4vw, 72px);
+  align-items: start;
+}
+
+.spine {
+  position: sticky;
+  /* 16vh matches the reference; the max() keeps it clear of the fixed navbar
+     on short viewports. */
+  top: max(96px, 16vh);
+  align-self: start;
+}
+
+.num {
+  display: block;
+  background: linear-gradient(135deg, #ffffff 30%, #dce7fd 68%, #96b9f9 105%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.groupTitle {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(22px, 2vw, 30px);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 14px 0 0;
+  color: #ededed;
+  max-width: 18ch;
+}
+
+.list {
+  min-width: 0;
+}
+
+.more {
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  padding-top: clamp(40px, 5vw, 64px);
+}
+
+.moreTitle {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(24px, 2.2vw, 32px);
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: #ededed;
+}
+
+.moreText {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.68);
+  line-height: 1.6;
+  margin: 14px 0 0;
+  max-width: 52ch;
+}
+
+.moreLinks {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 26px 0 0;
+  padding: 0;
+}
+
+/* One column: nothing scrolls past the numeral any more, so it stops sticking
+   and steps down to a marker over its own questions. */
+@media (max-width: 900px) {
+  .group {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .spine {
+    position: static;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .num {
+    font-size: clamp(44px, 11vw, 68px);
+    line-height: 0.9;
+  }
+
+  .groupTitle {
+    margin: 0;
+    max-width: none;
+  }
+}

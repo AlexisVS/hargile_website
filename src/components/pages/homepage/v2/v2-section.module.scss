@@ -50,3 +50,35 @@
   line-height: 1.6;
   margin: 20px 0 0;
 }
+
+/* Display numerals — shared by the M5 service pages (offer rows, SEO steps,
+   MVP weeks). At this scale a numeral is structure: it holds a column or grounds
+   a row, it never floats over copy as decoration. Always aria-hidden — the
+   reading order gets its ordering from the list markup, not from these.
+
+   Two finishes: .numGhost fills at a whisper (behind copy), .numOutline strokes
+   (beside copy). Never both. */
+.numXl {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(120px, 14vw, 240px);
+  line-height: 0.82;
+  letter-spacing: -0.04em;
+}
+
+.numLg {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(88px, 9vw, 168px);
+  line-height: 0.85;
+  letter-spacing: -0.03em;
+}
+
+.numGhost {
+  color: rgba(150, 185, 249, 0.07);
+}
+
+.numOutline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(150, 185, 249, 0.26);
+}

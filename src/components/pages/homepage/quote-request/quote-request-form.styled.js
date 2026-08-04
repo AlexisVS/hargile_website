@@ -17,17 +17,24 @@ export const PageWrapper = styled.div`
   margin-top: calc(-1 * var(--navbar-height, 68px));
 `;
 
-/* Full-bleed WebGL bends behind the form — colour-matched to the homepage
-   hero, reaching the very top so the transparent navbar frosts it like on
-   the homepage. */
-export const BendsBackdrop = styled.div`
+/* Full-bleed backdrop slot behind the form, reaching the very top so the
+   transparent navbar frosts it like on the homepage.
+
+   Renamed from BendsBackdrop: it held the ColorBends canvas until /contact
+   moved to the cube grid, and a slot named after one specific occupant is how
+   the next reader concludes the bends are still there. It is a positioned,
+   full-bleed box and nothing more — every decision about how present the
+   backdrop is now lives with the backdrop itself
+   (contact-backdrop.module.scss). */
+export const BackdropSlot = styled.div`
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  /* Full opacity + the hero's near-black backing so the bands read at exactly
-     the same brightness as the homepage: the canvas renders with alpha, so the
-     troughs land on this floor rather than the page's slightly-lifted black. */
+  /* Opacity stays 1 here; the layer inside dials itself back. The near-black
+     backing is kept from the bends so the page's black is unchanged by the
+     swap — the renderer is alpha, so unlit faces land on this floor rather
+     than on the page's slightly-lifted black. */
   opacity: 1;
   background: #010104;
 `;

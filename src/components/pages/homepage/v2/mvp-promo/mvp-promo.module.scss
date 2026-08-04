@@ -73,26 +73,6 @@
   box-shadow: 0 0 16px rgba(150, 185, 249, 0.9);
 }
 
-.ghostNum {
-  position: absolute;
-  top: 18px;
-  left: -6px;
-  font-family: var(--font-headings);
-  font-weight: 800;
-  font-size: 88px;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  color: rgba(150, 185, 249, 0.07);
-  pointer-events: none;
-  user-select: none;
-}
-
-@media screen and (max-width: 607px) {
-  .ghostNum {
-    padding-left: 24px;
-  }
-}
-
 .stepBody {
   position: relative;
   padding-top: 24px;
@@ -123,6 +103,39 @@
   line-height: 1.55;
   margin: 0;
   max-width: 34ch;
+}
+
+/* Stacked layout, and it has to come AFTER the base .dot / .stepBody rules
+   rather than living in the @media above: a media query carries no extra
+   specificity, so a later plain rule wins over it. Written up there first, and
+   the result was the week label still sitting 24px under its dot with the
+   indent applied on top — the exact bug this block fixes.
+
+   The dot and its week label belong on the same line: the dot is what marks the
+   week, so a label a line below it reads as unattached and leaves the column
+   ragged. Same arrangement as /services/mvp-30-jours (week-timeline.module.scss)
+   — dot out of the flow onto the rail, body flush beside it. */
+@media (max-width: 640px) {
+  /* The indent goes on the grid container, not on .step: the dot is positioned
+     against .step's own padding box, so padding there would carry the dot along
+     with the copy and pull it off the rail. */
+  .steps {
+    padding-left: 36px;
+    gap: 48px;
+  }
+
+  .dot {
+    position: absolute;
+    /* Back out to the rail, which sits at left: 5px — 5.5px centres on it. */
+    left: -36px;
+    /* Optical centre of the 14px label's line box, not its top. */
+    top: 3px;
+  }
+
+  .stepBody {
+    padding-top: 0;
+    padding-left: 0;
+  }
 }
 
 .ctaWrap {

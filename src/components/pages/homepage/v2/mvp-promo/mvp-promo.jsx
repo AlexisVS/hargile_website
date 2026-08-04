@@ -8,11 +8,10 @@ import section from "../v2-section.module.scss";
 import styles from "./mvp-promo.module.scss";
 import {useReveal} from "../useReveal";
 
-const STEPS = [
-    {key: "scope", num: "01"},
-    {key: "build", num: "02"},
-    {key: "launch", num: "03"},
-];
+/* No step numbers: the week label already says which step this is, and the
+   giant ghost digit behind it was a second, louder answer to the same question.
+   /services/mvp-30-jours runs the same month without one and reads cleaner. */
+const STEPS = ["scope", "build", "launch"];
 
 /* Below this the steps stack and the rail runs vertically through their dots —
    must match the @media in mvp-promo.module.scss. */
@@ -43,13 +42,12 @@ const Step = ({step, i, fill, reveal, t}) => {
     return (
         <div className={styles.step} {...reveal(i)}>
             <motion.div className={styles.dot} style={{opacity: dotOpacity, scale: dotScale}}/>
-            <div className={styles.ghostNum} aria-hidden="true">{step.num}</div>
             <div className={styles.stepBody}>
                 <motion.div className={styles.week} style={{opacity: weekOpacity}}>
-                    {t(`steps.${step.key}.week`)}
+                    {t(`steps.${step}.week`)}
                 </motion.div>
-                <h3 className={styles.stepTitle}>{t(`steps.${step.key}.title`)}</h3>
-                <p className={styles.stepText}>{t(`steps.${step.key}.text`)}</p>
+                <h3 className={styles.stepTitle}>{t(`steps.${step}.title`)}</h3>
+                <p className={styles.stepText}>{t(`steps.${step}.text`)}</p>
             </div>
         </div>
     );
@@ -98,7 +96,7 @@ const MvpPromoV2 = () => {
                     </div>
                     <div className={styles.steps}>
                         {STEPS.map((step, i) => (
-                            <Step key={step.key} step={step} i={i} fill={fill} reveal={reveal} t={t}/>
+                            <Step key={step} step={step} i={i} fill={fill} reveal={reveal} t={t}/>
                         ))}
                     </div>
                 </div>

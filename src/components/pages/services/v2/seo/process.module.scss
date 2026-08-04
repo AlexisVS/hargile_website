@@ -1,0 +1,39 @@
+/* Four-step process — numbered hairline columns. */
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(28px, 3.5vw, 48px);
+  margin-top: clamp(40px, 5vw, 60px);
+}
+
+.step {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 22px;
+}
+
+.num {
+  font-family: var(--font-headings);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  color: rgba(150, 185, 249, 0.65);
+  margin: 0;
+}
+
+.stepTitle {
+  font-family: var(--font-headings);
+  font-weight: 600;
+  font-size: clamp(19px, 1.7vw, 24px);
+  letter-spacing: -0.015em;
+  margin: 12px 0 0;
+  color: #ededed;
+}
+
+.stepText {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.62);
+  line-height: 1.6;
+  margin: 10px 0 0;
+}

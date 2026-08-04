@@ -78,7 +78,9 @@ const nextConfig = {
             // gets cached hard by browsers and would keep sending visitors to /
             // even after the page comes back. The rest are gone for good (301).
             {path: 'about-us', to: '/', permanent: false},
-            {path: 'services', to: '/', permanent: true},
+            // 'services' left this list on 2026-07-30: the M4 pages live at
+            // /services and /services/* again. Visitors who cached the old 301
+            // eat that cost — accepted, the traffic was near zero.
             {path: 'sitemap', to: '/', permanent: true},
             {path: 'solutions/agves', to: '/', permanent: true},
             {path: 'solutions/i-go', to: '/', permanent: true},

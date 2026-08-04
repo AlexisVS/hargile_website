@@ -9,8 +9,17 @@ export function generateSharedMetadata(params, translations) {
     // Base URL with locale: French unprefixed, English /en (localeUrl).
     const baseUrl = localeUrl(locale);
 
-    // Default image path (absolute URL required for OG/Twitter)
-    const imageUrl = `${SITE_URL}/images/brand/brand_large.png`;
+    /* Default image path (absolute URL required for OG/Twitter).
+
+       og-hargile-tech-studio.png is Logo_signature_mail.png — the dark-background
+       TECH STUDIO lockup — letterboxed onto its own background at exactly
+       1200×630. The source is 2000×600 (3.33:1) and every OG slot is 1.91:1, so
+       posting it raw would let Twitter's summary_large_image centre-crop it: at
+       that ratio the crop keeps only the middle ~57% of the width, losing the
+       blue H on the left and "STUDIO" on the right. Padding first means no
+       platform has to crop, and the width/height declared below are true rather
+       than the aspirational 1200×630 the old 1754×815 asset claimed. */
+    const imageUrl = `${SITE_URL}/images/brand/og-hargile-tech-studio.png`;
 
     return {
         metadataBase: new URL(SITE_URL),

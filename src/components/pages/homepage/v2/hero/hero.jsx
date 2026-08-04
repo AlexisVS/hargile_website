@@ -1,99 +1,96 @@
 "use client";
 
 import {useEffect, useRef, useState} from "react";
-import {motion, useReducedMotion} from "motion/react";
 import {useTranslations} from "next-intl";
 import CtaLink from "@/components/ui/cta-link/cta-link";
 import styles from "./hero.module.scss";
-import HeroBackdrop, {VARIANTS} from "./backdrops/hero-backdrop";
+import HeroBackdrop from "./backdrops/hero-backdrop";
 import {useHeroLoading} from "@/components/providers/hero-loading-provider";
 
-const CARDS = [
-    {key: "webdev", className: "floatCardA"},
-    {key: "ai", className: "floatCardB"},
-    {key: "marketing", className: "floatCardC"},
-];
+const CARDS = ["webdev", "ai", "marketing"];
 
-/* Cubes are a desktop treatment: they're pointer-driven (touch only ever sees
-   idle ripples) and the WebGL cost is real on phones. Below the breakpoint the
-   hero falls back to the color bends. matchMedia can't run during render (server
-   and first client render have to agree), so the variant starts null — meaning
-   *unresolved* — and HeroBackdrop renders nothing until the effect lands it.
-   Starting at "bends" instead made every desktop load mount ColorBends for a
-   beat before flipping to cubes: its chunk was fetched for nothing and the
-   gradient was visibly on screen on a hard refresh. Waiting costs one frame,
-   and the backdrops are ssr:false dynamic imports, so nothing visible has
-   loaded that early either way.
-   A `backdrop` prop or ?backdrop=<key> URL param still forces a variant. */
-const useHeroVariant = (override) => {
-    const [variant, setVariant] = useState(override ?? null);
+/* The hero backdrop is the wave grid, at every width and with no branch left to
+   resolve — chosen over cubes and colour bends after comparing them side by
+   side, then made the only one (see hero-backdrop.jsx).
 
-    useEffect(() => {
-        if (override) return;
-        const q = new URLSearchParams(window.location.search).get("backdrop");
-        if (q && VARIANTS.includes(q)) {
-            setVariant(q);
-            return;
-        }
-        const mq = window.matchMedia("(min-width: 1024px)");
-        const sync = () => setVariant(mq.matches ? "cubes" : "bends");
-        sync();
-        mq.addEventListener("change", sync);
-        return () => mq.removeEventListener("change", sync);
-    }, [override]);
+   Two things follow from there being no variant, and both are why the branching
+   is gone rather than merely unused:
 
-    return variant;
-};
+   - There used to be a *viewport* branch — cubes above 1024px, colour bends
+     below — which meant two unrelated designs on one page: a lattice on desktop,
+     a drifting gradient on a phone. The wave grid answers that split inside
+     itself (a live canvas on desktop, its own exported still below 1024px), so
+     the design is the same everywhere and only the frame rate changes.
+   - The layout is known during render rather than after an effect, which is what
+     makes the capability rail server-renderable. That mattered: the rail was
+     desktop-only before, so its motion.* reveals never reached the SSR HTML.
+     Now they would have, complete with inline `opacity: 0` — the same defect the
+     h1 and the old glass cards were each fixed for. They are CSS keyframes
+     instead. */
 
-/* Signals when the hero's WebGL backdrop has actually painted, so the branded
-   loader can dismiss on "hero ready" rather than a fixed timer.
+/* Signals when the hero's backdrop has actually painted, so the branded loader
+   can dismiss on "hero ready" rather than a fixed timer.
 
-   The backdrop variants (ColorBends / CubeGrid) are ssr:false dynamic imports
-   that append a <canvas> once their WebGL context is up and the first shader is
-   compiled. We watch the backdrop subtree for that canvas (MutationObserver),
-   then wait two animation frames to guarantee a painted frame before flagging
-   ready. Two backstops keep it honest: the "none" variant has no canvas so it's
-   ready at once, and a hard timeout dismisses the loader even if a device fails
-   to report a canvas — the loader must never outstay the content. */
-const useBackdropReady = (containerRef, variant) => {
+   The live wave grid is an ssr:false dynamic import that appends a <canvas> once
+   its context is up and the first shader is compiled. We watch the backdrop
+   subtree for that element (MutationObserver), then wait two animation frames to
+   guarantee a painted frame before flagging ready.
+
+   **It has to watch for an <img> too.** Below 1024px the backdrop serves the
+   exported still instead of a canvas, and a canvas-only query would never be
+   satisfied — the hero would fall through to the hard timeout below and the
+   loader would visibly outstay content that was already on screen. An image is
+   not ready when it appears, though, only when it has decoded, so that branch
+   waits on `complete` / the load event rather than resolving at once.
+
+   A hard timeout keeps the whole thing honest: the loader must never outstay the
+   content, even if a device fails to report either element. */
+const useBackdropReady = (containerRef) => {
     const [ready, setReady] = useState(false);
 
     useEffect(() => {
-        // Unresolved variant: nothing is mounted to watch yet. Stay not-ready and
-        // don't arm the timeout — useHeroVariant's effect resolves on the same
-        // commit, which re-runs this one. (The loader keeps its own backstop.)
-        if (!variant) return;
-
-        if (variant === "none") {
-            setReady(true);
-            return;
-        }
-
-        setReady(false);
         const container = containerRef.current;
         if (!container) return;
 
         let raf1 = 0;
         let raf2 = 0;
         let done = false;
+        let pending = null; // the <img> we're waiting on, so its listener can be removed
 
         const markReady = () => {
             if (done) return;
             done = true;
-            // Two rAFs: the canvas exists in the DOM, now let it paint a frame.
+            // Two rAFs: the element exists in the DOM, now let it paint a frame.
             raf1 = requestAnimationFrame(() => {
                 raf2 = requestAnimationFrame(() => setReady(true));
             });
         };
 
-        if (container.querySelector("canvas")) {
-            markReady();
-        }
+        // A canvas is painted by the time it is appended; an image is only a
+        // promise of pixels until it has decoded. `complete` covers the common
+        // case where it was already in the HTTP cache, and it is also true on a
+        // failed load — which is correct here, since a broken image is still a
+        // reason to stop waiting.
+        const markWhenPainted = (el) => {
+            if (el.tagName !== "IMG" || el.complete) {
+                markReady();
+                return;
+            }
+            pending = el;
+            el.addEventListener("load", markReady, {once: true});
+            el.addEventListener("error", markReady, {once: true});
+        };
+
+        const found = () => container.querySelector("canvas, img");
+
+        const initial = found();
+        if (initial) markWhenPainted(initial);
 
         const observer = new MutationObserver(() => {
-            if (container.querySelector("canvas")) {
+            const el = found();
+            if (el) {
                 observer.disconnect();
-                markReady();
+                markWhenPainted(el);
             }
         });
         observer.observe(container, {childList: true, subtree: true});
@@ -107,36 +104,35 @@ const useBackdropReady = (containerRef, variant) => {
         return () => {
             observer.disconnect();
             clearTimeout(timeout);
+            pending?.removeEventListener("load", markReady);
+            pending?.removeEventListener("error", markReady);
             if (raf1) cancelAnimationFrame(raf1);
             if (raf2) cancelAnimationFrame(raf2);
         };
-    }, [containerRef, variant]);
+    }, [containerRef]);
 
     return ready;
 };
 
-const HeroV2 = ({backdrop, label}) => {
+const HeroV2 = () => {
     const t = useTranslations("pages.homepage.sections.hero.v2");
-    const reducedMotion = useReducedMotion();
-    const variant = useHeroVariant(backdrop);
     const backdropRef = useRef(null);
-    const backdropReady = useBackdropReady(backdropRef, variant);
+    const backdropReady = useBackdropReady(backdropRef);
 
     // Tell the full-screen loader (layout level) the hero has painted, so it can
-    // draw its ring to completion and dismiss. On mobile the backdrop is the
-    // lighter color-bends canvas; useBackdropReady waits for whichever canvas the
-    // active variant mounts, so this fires correctly on both mobile and desktop.
+    // draw its ring to completion and dismiss. On mobile the backdrop is an
+    // <img>, not a canvas at all; useBackdropReady waits for whichever of the two
+    // the viewport mounts, so this fires correctly on both.
     const {markHeroReady} = useHeroLoading();
     useEffect(() => {
         if (backdropReady) markHeroReady();
     }, [backdropReady, markHeroReady]);
 
     return (
-        <section className={`${styles.section} ${variant === "cubes" ? styles.sectionSharp : ""}`}>
+        <section className={styles.section}>
             <div ref={backdropRef} className={styles.backdropHost}>
-                <HeroBackdrop variant={variant}/>
+                <HeroBackdrop/>
             </div>
-            {label && <div className={styles.variantTag}>{label}</div>}
 
             <div className={styles.container}>
                 {/* The copy reveals are CSS keyframes (hero.module.scss), not
@@ -167,72 +163,46 @@ const HeroV2 = ({backdrop, label}) => {
                     </div>
                 </div>
 
-                {variant === "cubes" ? (
-                    /* Against the cube grid, floating cards fight the geometry — so
-                       the services read as ONE object instead: a labelled column
-                       where a vertical light spine threads three luminous dots (the
-                       same marker as the glass cards' .cardDot). The spine draws on
-                       once at load and each node ignites with its row as the line
-                       reaches it — a single one-shot reveal, then stillness. The
-                       column stays transparent so the cubes read through it. Not
-                       links — it states what we provide, it doesn't navigate. */
-                    <motion.div
-                        className={styles.rail}
-                        initial={{opacity: 0}}
-                        animate={{opacity: 1}}
-                        transition={{duration: 0.8, ease: "easeOut", delay: 0.25}}
-                    >
-                        <p className={styles.railLabel}>{t("cardsLabel")}</p>
-                        <div className={styles.railBody}>
-                            <motion.span
-                                className={styles.railLine}
-                                aria-hidden="true"
-                                initial={reducedMotion ? {opacity: 0} : {scaleY: 0}}
-                                animate={reducedMotion ? {opacity: 1} : {scaleY: 1}}
-                                transition={{duration: 0.9, ease: "easeInOut", delay: 0.45}}
-                            />
-                            <ul className={styles.capList}>
-                                {CARDS.map((card, i) => (
-                                    <motion.li
-                                        key={card.key}
-                                        className={styles.capItem}
-                                        initial={reducedMotion ? {opacity: 0} : {opacity: 0, x: 14}}
-                                        animate={{opacity: 1, x: 0}}
-                                        transition={{duration: 0.5, ease: "easeOut", delay: 0.55 + i * 0.22}}
-                                    >
-                                        <motion.span
-                                            className={styles.capDot}
-                                            aria-hidden="true"
-                                            initial={reducedMotion ? {opacity: 0} : {opacity: 0, scale: 0.4}}
-                                            animate={{opacity: 1, scale: 1}}
-                                            transition={{duration: 0.35, ease: "easeOut", delay: 0.55 + i * 0.22}}
-                                        />
-                                        <span className={styles.capBody}>
-                                            <span className={styles.capTitle}>{t(`cards.${card.key}.title`)}</span>
-                                            <span className={styles.capText}>{t(`cards.${card.key}.text`)}</span>
-                                        </span>
-                                    </motion.li>
-                                ))}
-                            </ul>
-                        </div>
-                    </motion.div>
-                ) : (
-                    /* Fade-in in CSS (hero.module.scss), not motion: this branch is
-                       the one that ships in the SSR HTML, and a serialized
-                       `opacity: 0` left the three capability blurbs invisible to
-                       every client that doesn't run JS — the same defect the copy
-                       above was fixed for. The rail branch opposite is desktop-only
-                       and mounts after hydration, so it never reaches that HTML. */
-                    <div className={styles.visual} aria-hidden="true">
-                        {CARDS.map((card) => (
-                            <div key={card.key} className={`${styles.floatCard} ${styles[card.className]}`}>
-                                <div className={styles.cardDot}/>
-                                <div className={styles.cardTitle}>{t(`cards.${card.key}.title`)}</div>
-                                <div className={styles.cardText}>{t(`cards.${card.key}.text`)}</div>
-                            </div>
-                        ))}
+                {/* Against a lattice, floating cards fight the geometry — so the
+                    services read as ONE object instead: a labelled column where a
+                    vertical light spine threads three luminous dots. The spine
+                    draws on once at load and each node ignites with its row as the
+                    line reaches it — a single one-shot reveal, then stillness. The
+                    column stays transparent so the grid reads through it. Not
+                    links — it states what we provide, it doesn't navigate.
+
+                    The alternative used to live right here as a second branch:
+                    three .floatCard glass panels (20px backdrop-filter, border,
+                    gradient fill, continuous drift) for anything below 1024px.
+                    Having two unrelated objects either side of a breakpoint was
+                    exactly the inconsistency the wave hero exists to remove, so
+                    the branch is gone rather than merely never taken. Same page,
+                    same content, one design. */}
+                <div className={styles.rail}>
+                    <p className={styles.railLabel}>{t("cardsLabel")}</p>
+                    <div className={styles.railBody}>
+                        <span className={styles.railLine} aria-hidden="true"/>
+                        <ul className={styles.capList}>
+                            {CARDS.map((card, i) => (
+                                <li
+                                    key={card}
+                                    className={styles.capItem}
+                                    /* The only thing that varies per row. Everything
+                                       else about the reveal lives in the stylesheet —
+                                       see the note on .railLine for why none of this
+                                       is motion.* any more. */
+                                    style={{"--cap-delay": `${0.55 + i * 0.22}s`}}
+                                >
+                                    <span className={styles.capDot} aria-hidden="true"/>
+                                    <span className={styles.capBody}>
+                                        <span className={styles.capTitle}>{t(`cards.${card}.title`)}</span>
+                                        <span className={styles.capText}>{t(`cards.${card}.text`)}</span>
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
-                )}
+                </div>
             </div>
         </section>
     );

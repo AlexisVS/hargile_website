@@ -266,7 +266,17 @@ async function selfTest(vocab) {
    the old prefixed /fr URLs answer 301, and following the redirect would
    validate the right page under the wrong address. */
 const LOCALES = ["fr", "en"];
-const SITE_PATHS = ["", "/contact", "/legal/privacy-policy"];
+const SITE_PATHS = [
+  "",
+  "/services",
+  "/services/applications-web",
+  "/services/ia",
+  "/services/seo",
+  "/services/mvp-30-jours",
+  "/faq",
+  "/contact",
+  "/legal/privacy-policy",
+];
 const localePath = (locale, path) => (locale === "fr" ? path || "/" : `/${locale}${path}`);
 
 async function main() {

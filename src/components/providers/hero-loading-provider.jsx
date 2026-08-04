@@ -112,9 +112,9 @@ export default function HeroLoadingProvider({children}) {
                             mixBlendMode: "plus-lighter",
                             position: "absolute",
                         }}
-                        width={750}
-                        height={348}
-                        src="/images/brand/brand-large-white.png"
+                        width={2000}
+                        height={600}
+                        src="/images/brand/Logo_no_bg_HARGILE_tech_studio.png"
                         alt="Brand Logo"
                         sizes="20vh"
                         priority={true}

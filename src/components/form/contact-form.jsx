@@ -2,8 +2,7 @@
 // (Adjust path as necessary for your project structure)
 
 import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
+import { useCallback, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -12,7 +11,7 @@ import { motion } from "motion/react";
 // Styled Components and Child Components (Ensure paths are correct)
 import { Header } from "@/components/header/mainHeader";
 import {
-  BendsBackdrop,
+  BackdropSlot,
   FormContainer,
   FormGrid,
   PageWrapper,
@@ -20,71 +19,35 @@ import {
   SubmitButton,
 } from "@/components/pages/homepage/quote-request/quote-request-form.styled";
 
-// Client-only WebGL, kept out of the initial bundle — same vendored component
-// as the homepage hero, dialed way down via BendsBackdrop's opacity/mask.
-const ColorBends = dynamic(
-  () => import("@/components/vendor/color-bends/ColorBends"),
-  { ssr: false }
-);
-
-/* On phones the bands should sweep left→right across the screen rather than
-   stacking top→bottom — near-horizontal rotation lays them along the width,
-   the larger scale keeps fewer, broader bands in view (same treatment as the
-   homepage hero's portrait mode). */
-const useMobileBends = () => {
-  const [mobile, setMobile] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 768px)");
-    const sync = () => setMobile(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
-
-  return mobile;
-};
+/* The cube grid, replacing the ColorBends canvas that used to run here.
+   Not lazy and not WebGL any more: what ships is one exported still per aspect
+   band, so there is no chunk to defer and nothing to compile. See
+   contact-backdrop.jsx — the live three.js path still exists behind ?wave= and
+   ?export=, which is how the frames get chosen and captured. */
+import ContactBackdrop from "@/components/pages/contact/contact-backdrop";
 import { ProseContactSection } from "@/components/pages/homepage/quote-request/components/ProseContactSection";
 import { PrivacyFooter } from "@/components/pages/homepage/quote-request/components/PrivacyFooter";
 import { useHeroLoading } from "@/components/providers/hero-loading-provider";
 
 export default function ContactForm() {
   const t = useTranslations("components.contact-form");
-  const mobileBends = useMobileBends();
 
-  // Same contract as the homepage hero: tell the layout-level loader once the
-  // bends canvas has painted (canvas appears → two rAFs → ready), so the page
-  // is revealed in its final layout with the backdrop already in place.
+  /* Same contract as before — tell the layout-level loader once the backdrop
+     has painted, so the page is revealed with it already in place — but the
+     signal moved. It used to watch for a <canvas> appearing, because the bends
+     were WebGL; the grid is an <img>, so there is no canvas to wait for and
+     that watcher would never have fired. HeroLoadingProvider covers "/" and
+     "/contact" and falls back to a 2.5s SAFETY_MS, so the symptom would not
+     have been a stuck page — it would have been every contact load sitting
+     behind the overlay for the full two and a half seconds. */
   const { markHeroReady } = useHeroLoading();
-  const backdropRef = useRef(null);
-  useEffect(() => {
-    const container = backdropRef.current;
-    if (!container) return;
-
-    let raf1 = 0;
-    let raf2 = 0;
-    let done = false;
-
-    const markReady = () => {
-      if (done) return;
-      done = true;
-      raf1 = requestAnimationFrame(() => {
-        raf2 = requestAnimationFrame(() => markHeroReady());
-      });
-    };
-
-    if (container.querySelector("canvas")) markReady();
-
-    const observer = new MutationObserver(() => {
-      if (container.querySelector("canvas")) markReady();
-    });
-    observer.observe(container, { childList: true, subtree: true });
-
-    return () => {
-      observer.disconnect();
-      if (raf1) cancelAnimationFrame(raf1);
-      if (raf2) cancelAnimationFrame(raf2);
-    };
+  const readyRef = useRef(false);
+  const onBackdropReady = useCallback(() => {
+    if (readyRef.current) return;
+    readyRef.current = true;
+    // Two rAFs: onLoad fires when the image is decoded, this waits until it has
+    // actually been composited, which is what the canvas path also promised.
+    requestAnimationFrame(() => requestAnimationFrame(() => markHeroReady()));
   }, [markHeroReady]);
 
   // Define Zod Schema based on your form fields
@@ -194,23 +157,9 @@ export default function ContactForm() {
 
   return (
     <PageWrapper>
-      <BendsBackdrop aria-hidden="true" ref={backdropRef}>
-        <ColorBends
-          colors={["#2563eb", "#96b9f9"]}
-          // Mobile matches the homepage hero's portrait treatment (bands laid
-          // toward horizontal at 20°) and steps back further so the form leads.
-          rotation={mobileBends ? 20 : 92}
-          scale={mobileBends ? 1.7 : 1}
-          speed={0.14}
-          frequency={1.0}
-          noise={0.02}
-          bandWidth={1.35}
-          iterations={1}
-          intensity={mobileBends ? 0.5 : 0.72}
-          mouseInfluence={0.3}
-          parallax={0.25}
-        />
-      </BendsBackdrop>
+      <BackdropSlot aria-hidden="true">
+        <ContactBackdrop onReady={onBackdropReady} />
+      </BackdropSlot>
       <FormContainer>
         {/* titleAs is h1, not h2: this is the page's main heading and /contact
             had no h1 at all. Styling comes from PageTitle's `as` prop, so the

@@ -1,0 +1,46 @@
+/* Hero chapter index — three link titles, nothing else.
+
+   The rules and the numeral are gone (see faq-index.jsx for why), which means
+   the row no longer has a hairline to sit on and separation has to come from
+   space and weight instead. Both went up together: at 14px/400 against no rule
+   these read as a caption, not as the three doors into the page. */
+
+.index {
+  min-width: 0;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  /* Was 12px of padding either side of a rule. With no rule the same gap reads
+     as one block of text, so the space does the separating now. */
+  gap: clamp(14px, 1.6vw, 20px);
+}
+
+.link {
+  display: block;
+  font-family: var(--font-headings);
+  /* A step under the answer paragraph's cap, so the aside stays secondary to the
+     copy it sits beside while still reading as navigation. */
+  font-size: clamp(17px, 1.35vw, 21px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  /* Brighter than the answer's 0.8: this is a target, and it has the lit part of
+     the grid behind it on the wide frame. */
+  color: rgba(237, 237, 237, 0.9);
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #96b9f9;
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(150, 185, 249, 0.7);
+    outline-offset: 3px;
+  }
+}

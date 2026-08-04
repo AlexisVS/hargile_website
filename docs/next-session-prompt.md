@@ -3,9 +3,462 @@
 > Fichier à copier-coller tel quel en ouverture de session. C'est **la** source
 > unique : les sections « Prompt de reprise » de `homepage-performance-plan.md`
 > et `homepage-code-review-plan.md` renvoient ici pour éviter la dérive.
-> Dernière mise à jour : 2026-07-30. **La phase 1 du GEO est terminée, taguée
-> `v0.21.0` / `v0.21.1`, déployée et vérifiée en prod.** IndexNow soumis, Bing
-> vérifié, `hargile.com` confirmé dans l'index Bing.
+> Dernière mise à jour : 2026-07-31 (fin de session « hero wave », phase 6).
+>
+> **Trois chantiers en vol, à ne pas confondre :**
+>
+> | Chantier | Où | État |
+> | --- | --- | --- |
+> | GEO phase 1 | `main`, prod | ✅ terminé (`v0.21.0`/`v0.21.1`) |
+> | Session M4 — les 6 pages | `main`, **non poussé, non déployé** | codé et commité |
+> | Hero wave-grid | `feat/services-faq-redesign`, **poussé** | phases 1–6 faites ; reste l'image fixe (yeux de Mihai) puis la fusion |
+>
+> ### ✅ 2026-07-31 — hero wave-grid animé : phases 1 à 5 (branche poussée, non fusionnée)
+>
+> Branche `feat/services-faq-redesign`, poussée sur origin jusqu'à `11e1c34`.
+> **Ni fusionnée, ni taguée, ni déployée** — consigne habituelle de Mihai.
+> Plan de référence : [`docs/homepage-wave-hero-plan.md`](./homepage-wave-hero-plan.md).
+> Boucle d'usage quotidienne : [`docs/wave-grid.md`](./wave-grid.md).
+>
+> Le point de départ : la version *animée* de la grille n'existait plus dans le
+> code — construite animée, réécrite en image fixe, et l'animée jamais commitée.
+> Elle a été reconstruite à partir des constantes notées dans le plan.
+>
+> Ce qui existe maintenant :
+>
+> - **`wave-grid.jsx` a deux modes**, `still` (ce que `/services` livre) et
+>   `live`, dans **un seul composant**. Le texel est `{x, z, spawnTime, strength}`
+>   et le shader calcule `age = uTime - spawn` ; en mode still `uTime` reste à 0
+>   et le spawn d'une graine est simplement moins son âge — l'image fixe est donc
+>   littéralement la surface vivante, horloge arrêtée. C'est ce qui empêche les
+>   deux de diverger.
+> - **`/preview/home-wave`** : la vraie homepage avec `backdrop="wave"` forcé
+>   (un prop sur `HomePageClient`, pas une copie de la page). `noindex`, sans
+>   JSON-LD ni `generatePageMetadata` — c'est un doublon de `/` par construction.
+>   `/?backdrop=wave` fait le même A/B sans quitter la homepage.
+> - **Canvas au-dessus de 1024px, image exportée en dessous** — même langage
+>   visuel sur les deux, ce qui est exactement ce que ce hero doit démontrer
+>   contre le partage actuel cubes-desktop / bends-mobile.
+> - **La homepage a son propre export** (`home.avif`, 22 kB), distinct de
+>   `curated.*` : ellipse de calme et colonne de copie différentes, donc une
+>   image faite pour l'une place sa bande sombre au mauvais endroit sur l'autre.
+> - **Le bug du loader annoncé dans le plan était réel** : `useBackdropReady`
+>   guettait un `<canvas>`, qu'un `<img>` ne satisfait jamais. Corrigé ; la
+>   branche image attend `complete`/`load`/`error` — « prêt dès l'apparition »
+>   aurait renvoyé le loader sur un hero encore vide.
+>
+> Deux corrections demandées par Mihai en séance, gardées ici parce qu'elles
+> décrivent des pièges et pas seulement des réglages :
+>
+> - **Plein cadre.** `.sectionSharp` décale le canvas de 40px et le dissout en
+>   bas ; les deux viennent de `cube-grid`, qui a du brouillard et donc un bord
+>   lointain qui recule vraiment. La grille wave est un sol plein sans
+>   brouillard : les mêmes traitements se lisent comme un sol tranché sous la
+>   navbar. `.sectionWave` garde le reste et supprime les deux. `/services`
+>   avait tiré la même conclusion de son côté.
+> - **Le sillage saccadait.** `exp(-age / fadeTime)` vaut 1.0 à l'âge 0, donc
+>   chaque ondulation naissait à pleine hauteur et « popait ». La rampe de
+>   naissance (`MODE.live.ramp`, 0.55 s) les fond les unes dans les autres —
+>   `cube-grid.jsx` avait trouvé la même chose et l'appelle « anti-bounce ».
+>   Éclaircir la traînée pour calmer l'ensemble est le mauvais levier : on
+>   obtient un sillage plus grossier, pas plus calme.
+>
+> Vérifications faites (pas seulement supposées) :
+>
+> - **Non-régression `/services` prouvée à l'octet** : après chaque changement,
+>   `npm run images:wavegrid` reproduit `curated.avif`/`curated.webp`
+>   à l'identique, `git status` propre. C'est le contrôle à refaire après toute
+>   retouche de `wave-grid.jsx`.
+> - 60 fps verrouillé, ombres activées : médiane 16,7 ms, p95 17,0 ms sur
+>   180 frames.
+> - 390×844 : image servie, aucun canvas monté, loader parti. 1440×900 : canvas.
+> - `next build` OK, sitemap régénéré inchangé, lint à la baseline de 4
+>   (⚠️ la phase 6 l'a depuis ramenée à 2 — voir plus haut).
+>
+> ### ✅ Phase 5 — tranchée en séance : le hero wave est promu sur `/`
+>
+> Mihai a comparé et choisi. `/` sert la grille wave **à toutes les largeurs** —
+> `DEFAULT_VARIANT = "wave"` dans `hero.jsx`, plus aucune branche de viewport.
+> Le rail de capacités remplace donc les cartes de verre partout, ce qui était la
+> deuxième demande : sous 1024px le hero rendait `.floatCard` (backdrop-filter
+> 20px, bordure, dégradé) pendant que le desktop rendait le filet sans fond. Deux
+> objets sans rapport de part et d'autre d'un breakpoint ; il n'y en a plus qu'un.
+>
+> Conséquence à connaître avant de toucher au rail : **il est maintenant rendu
+> côté serveur**, donc ses reveals ne sont plus du `motion.*`. Ils étaient
+> desktop-only et montaient après l'hydratation ; en devenant le défaut, leur
+> `initial={{opacity: 0}}` serait parti dans le HTML SSR — exactement le défaut
+> corrigé deux fois déjà (le h1, puis les cartes). Ce sont des keyframes CSS
+> (`railDraw`, `capItemIn`, `capDotIn`), le décalage par ligne passe par une
+> custom property `--cap-delay`. Vérifié dans le HTML servi : copie présente,
+> aucun `opacity: 0` inline.
+>
+> ### ✅ 2026-07-31 (suite) — phase 6 : les variantes de comparaison sont supprimées
+>
+> Mihai a laissé le choix garder/supprimer à l'assistant. **Supprimé.** La
+> comparaison avait déjà eu lieu et été tranchée ; ce qui restait, c'était deux
+> fonds WebGL et une *deuxième mise en page de hero* qu'aucun visiteur ne pouvait
+> atteindre — soit exactement la forme du problème que tout ce chantier existait
+> pour supprimer. `git show 09ddb03` archive mieux qu'un import mort.
+>
+> **Deux points sur lesquels le cadrage de la session précédente (le 👉 qui était
+> ici) se trompait, tous deux trouvés dans le code et pas dans les docs :**
+>
+> - **`src/components/vendor/color-bends/` ne part PAS.** Le point 2 la listait
+>   comme supprimable avec la variante `bends`. Elle est **vivante sur
+>   `/contact`** (`contact-form.jsx`, derrière `BendsBackdrop`) et n'a jamais été
+>   seulement une variante de hero. Seule la branche `bends` du hero est partie.
+> - **Le gros du gain, c'est le hero lui-même.** Sans `bends` ni `cubes`,
+>   `isSharp(variant)` est toujours vrai : la branche des cartes de verre
+>   (`.visual`, `.floatCard`, les trois keyframes de dérive `floatA/B/C`,
+>   `.cardDot`/`.cardTitle`/`.cardText`) était du markup inatteignable et
+>   ~240 lignes de feuille de style morte. `.sectionSharp` et `.sectionWave` se
+>   sont effondrées dans `.backdrop` pour la même raison : trois règles en
+>   cascade dont seule la dernière s'appliquait.
+>
+> Sont partis : `cube-grid.jsx` ; les branches `bends`/`cubes`, `BEND_COLORS` et
+> `usePortrait` de `hero-backdrop.jsx` ; `VARIANTS`, `DEFAULT_VARIANT`,
+> `useHeroVariant`, `SHARP`/`isSharp`, les props `backdrop`/`label` et la branche
+> cartes de `hero.jsx` ; `.sectionSharp`, `.sectionWave`, `.variantTag` et tout le
+> bloc cartes de `hero.module.scss` ; et la prop `backdrop` de `HomePageClient`.
+>
+> ### ⚠️ `/preview/home-wave` a été supprimée, puis remise — à lire avant de la resupprimer
+>
+> Elle avait tout de la victime évidente suivante : sa raison d'être était la
+> comparaison, la comparaison est finie, et elle rend maintenant exactement ce que
+> rend `/` — un doublon `noindex` par construction. Elle est donc partie, et la
+> cible `home` de `scripts/export-wave-grid.mjs` a été repointée sur `/`.
+>
+> **Ça ne marche pas, et le repointage a été annulé.** Sur `/`,
+> `agent-browser open` ne rend jamais la main — deux tentatives, cinq minutes
+> chacune, aucune image écrite — là où la route de preview capture en une
+> trentaine de secondes. Pire : le premier blocage a coincé la session du
+> navigateur, après quoi même la capture `/services` (pourtant connue bonne) s'est
+> bloquée jusqu'à ce que les processus Chrome headless orphelins soient tués.
+>
+> La cause n'a **pas** été identifiée. Le candidat le plus probable est le loader
+> de marque, que `HeroLoadingProvider` monte sur `/` et `/contact` uniquement et
+> que la route de preview n'affiche donc jamais — c'est la seule différence de
+> comportement entre les deux pages. Mais c'est une hypothèse, pas un constat.
+>
+> Donc la route reste, avec une justification nouvelle : **c'est la surface
+> d'export, plus une preview.** Elle porte `npm run images:wavegrid:home`, qui
+> fabrique l'image du hero sous 1024px et dont le point 1 ci-dessous a besoin. La
+> route et le `TARGETS` du script portent chacun une note qui le dit.
+>
+> Vérifié, pas supposé :
+>
+> - `npm run images:wavegrid` reproduit `curated.avif`/`curated.webp` à l'octet
+>   (`git status --short public/` vide). **Ça clôt aussi le contrôle d'une
+>   commande qui traînait** depuis le changement de signature de `capture()` —
+>   c'était le point 3 de l'ancien 👉.
+> - `npm run images:wavegrid:home` reproduit `home.avif`/`home.webp` à l'octet
+>   via la route restaurée.
+> - `next build` OK ; `next-sitemap` régénère à l'identique.
+> - **Lint : de la baseline de 4 erreurs à 2.** Deux des quatre étaient des
+>   `react-hooks/set-state-in-effect` dans `hero.jsx`, dans les effets de
+>   résolution de variante qui n'existent plus. ⚠️ **La baseline est 2
+>   maintenant** — les mentions « baseline de 4 » plus bas décrivent l'état
+>   d'avant cette session. Les deux restantes sont dans `mvp-studio.jsx` et
+>   `Footer.jsx`.
+>
+> ### ✅ 2026-07-31 (fin) — phase 7 : on pilote la composition, on ne tire plus au sort
+>
+> Décision de Mihai, et c'est la bonne : `?wave=N` est un **échantillonnage par
+> rejet** qui connaît déjà l'ellipse de calme, donc feuilleter des graines
+> n'explore que l'intérieur de contraintes écrites par quelqu'un d'autre. Le
+> commentaire de la table de graines dit la même chose — « deliberately laid out,
+> not random ». Cette phase déplace donc les contraintes, pas les dés.
+>
+> **Acquis et vérifié :**
+>
+> - **`HOME_CALM.depth` 0.55 → 0.8.** À 0.55 des ondulations traversaient la
+>   copie de l'eyebrow jusqu'à la rangée de CTA. Le repli (0,65–0,7) est noté sur
+>   la constante si ça lit maintenant « plaque morte » plutôt que « lit sombre ».
+>   Vérifié sur l'image exportée : côté copie sombre, bleu accent à droite.
+> - **Une prop `relief` sur `WaveGrid`** — `{amplitude, maxHeight, view, radius}`.
+>   `/services` ne passe rien et son export reste identique à l'octet.
+> - **Le script d'export a sa propre session agent-browser** (voir plus bas).
+>
+> **Annulé, et il faut savoir pourquoi :**
+>
+> - **Une prop `colors` par page.** Ajoutée, utilisée pour donner à la homepage un
+>   mid plus saturé (#4d84f0), puis retirée le jour même sur consigne de Mihai :
+>   la teinte allumée est `$accent-mihai` (#96b9f9, `_theme.scss`), l'accent de
+>   marque que les eyebrows, les points du rail et la copie de /services utilisent
+>   déjà. **Les deux heros partagent `COLORS`, c'est voulu.** La prop est partie
+>   avec l'override plutôt que de rester un bouton sans appelant — la règle même
+>   que la phase 6 a appliquée aux variantes.
+>
+> ### ✅ L'image téléphone est livrée (2026-08-03)
+>
+> Le premier rendu `home-phone` était une colonne noire avec six énormes piliers.
+> Deux causes, toutes deux de cadrage :
+>
+> 1. **`fovForAspect` ne fait que *fermer* le champ, jamais l'ouvrir.** Sous le
+>    ratio de référence 1.6:1 le vertical reste à 40° et la couverture
+>    horizontale s'effondre avec l'aspect : à 0,46:1 il ne reste que x ±2,3
+>    contre ±8,2 en large.
+> 2. **`HOME_CALM_PHONE` était dimensionnée sur les unités du cadre large**
+>    (`rx 3.4` contre une demi-largeur visible de 2,3) : tout l'écran amorti.
+>
+> Corrigé en ajoutant `radius` à `relief` et en refaisant la zone calme en
+> **bande horizontale** — sur un téléphone la copie occupe presque toute la
+> largeur, la lumière doit donc venir du haut et du bas, pas du côté.
+>
+> **Rendu, regardé, livré.** `home-phone.{avif,webp}` (13 kB / 24 kB) est commité
+> et les deux `<source>` sont actifs dans `hero-backdrop.jsx`.
+>
+> ⚠️ `radius` vaut **22** — soit ~8 piliers de large, et c'est un réglage de
+> **goût, pas de fidélité**. 26 venait du calcul de champ (annoncé ~11, rendu 9).
+> Puis 34 (~12) pour coller aux 15 du cadre large, en se disant que les deux
+> heros doivent lire comme le même objet : **refusé à vue par Mihai** — à taille
+> téléphone, une douzaine de piliers fait une mosaïque qui concurrence la copie.
+> Le cadre téléphone décore et suggère la profondeur, il ne reproduit pas la
+> grille desktop. Ses mots : « a nice mix of big cubes and readability ».
+>
+> ⚠️ `view` a aussi été testé comme levier « rendre ça 3D » et **rejeté** :
+> pousser `mx` vers −1 montre plus de *flancs*, mais les flancs sont dans l'ombre
+> — l'image s'assombrit et les dessus allumés qui portent l'accent rétrécissent.
+> `{mx: -0.2}` à `maxHeight` 1.05 bat `{mx: -0.9}` à 1.35.
+>
+> **Compter les piliers sur l'image exportée, jamais depuis le frustum — et les
+> juger sur le cadre téléphone, pas sur `home.*`.**
+>
+> ### ✅ Et un troisième cadre : `home-tablet.*` (641–1023px)
+>
+> La bande 641–1023px (tablettes, fenêtre desktop en demi-écran) n'avait pas de
+> composition à elle et empruntait `home.*` : une mise en page deux colonnes
+> recadrée dans une fenêtre presque carrée, dont la zone calme court sur la
+> gauche alors que le hero y est **déjà passé en une seule colonne pleine
+> largeur** — la copie se retrouvait moitié sur du sombre, moitié sur de
+> l'éclairé.
+>
+> ⚠️ **Étendre `home-phone.*` vers le haut ne marche pas, et c'est mesuré, pas
+> supposé** : à 0,8:1 le `cover` ne garde que les ~40% du milieu du rendu 0,46:1,
+> et ce milieu est exactement sa bande calme. Toute la lumière est dans les tiers
+> haut et bas, donc recadrée — il ne reste qu'une plaque morte.
+>
+> D'où un export dédié à 1600x2000 (0,8:1 = la moyenne géométrique des extrêmes
+> mesurés de la bande : 0,695 à 820x1180 et 0,938 à 1000x700), `radius: 18`
+> (~11 piliers, entre les 8 du téléphone et les 15 du large) et une zone calme en
+> bande dimensionnée sur **ses** unités monde à lui (x ±5,24, z ±6,55).
+>
+> Le choix du cadre passe par `frameForAspect` dans `hero-backdrop.jsx` : un
+> export répond depuis l'aspect demandé, une fenêtre depuis sa largeur. Donc
+> `?wave=N` à une largeur donnée prévisualise exactement ce que l'export
+> correspondant écrit. **Il y a maintenant quatre images à réexporter** quand la
+> composition bouge : `curated`, `home`, `home-phone`, `home-tablet`.
+>
+> ### 🔧 Sessions agent-browser — la vraie cause des « exports qui pendent »
+>
+> Beaucoup de temps perdu sur des exports sans sortie. Ce n'était **ni la page ni
+> le code** : agent-browser garde **un démon par nom de session**, et deux
+> processus sur `default` se battent pour lui. Parfois ça se dit franchement
+> (« A daemon for session 'default' started concurrently with different daemon
+> configuration »), le reste du temps `open` ne rend simplement jamais la main.
+> Et une fois coincé ça le reste : même la capture `/services` connue bonne pend
+> tant que les Chrome headless orphelins (profil temporaire
+> `agent-browser-chrome-*`) ne sont pas tués.
+>
+> `scripts/export-wave-grid.mjs` tourne désormais dans sa propre session
+> `wave-export` et ferme avec `close` et non `close --all`. ⚠️ **Deux exports
+> simultanés se collisionneraient encore entre eux — les enchaîner.**
+>
+> ### ✅ 2026-08-03 — le hero de /faq est aligné sur /services (poussé, non fusionné)
+>
+> Branche `feat/services-faq-redesign`, poussée jusqu'à `62a2f30`. **Ni fusionnée,
+> ni taguée, ni déployée** — et pousser est sûr : seul un tag `v*` déclenche un
+> déploiement (voir « Comment le déploiement marche »).
+>
+> Demande de Mihai : positionnement, taille, design — et **sans eyebrow**. Fait
+> en deux props sur `FaqPageClient` (l'eyebrow retiré, `WaveGridBackdrop`
+> ajouté), plus les commentaires devenus faux ailleurs. Relevé complet dans
+> [`faq-hero-plan.md`](./faq-hero-plan.md), section « EXÉCUTÉ ».
+>
+> **Et `/faq` a sa propre composition : `wave-70`** (choix de Mihai au `?wave=`),
+> contre `wave-7` sur `/services`. Trois exports (22/12/9 kB), **aucune entrée
+> `TARGETS` ajoutée et aucune route `/faq`** : le script est déjà paramétré par
+> le numéro de variante et continue de piloter `/services`, ce qui est correct
+> puisque la zone calme et l'aspect demandé sont identiques. Le câblage est une
+> prop `composition` sur `WaveGridBackdrop` — **un nom, trois cadres dérivés**
+> (`wave-70`, `wave-70-phone`, `wave-70-tablet`), comme les nomme l'export.
+>
+> ⚠️ **Les compositions se choisissent sur le cadre large.** Sept variantes
+> feuilletées à 390 et 768 : elles s'y ressemblent toutes, parce que sous 860px
+> la bande calme couvre presque tout un écran à une colonne et il ne reste
+> presque rien à différencier. Un premier verdict « wave 70 est plat en étroit »
+> était **faux** — il comparait le canvas *live* de 70 à l'export *encodé* de
+> wave-7. **Comparer à égal : live avec live, export avec export.**
+>
+> Le pari du plan a tenu et il a été **mesuré, pas supposé** : `img.currentSrc`
+> est identique sur les deux pages aux six largeurs testées (390/640/641/860/861/
+> 1440), et la boîte du hero aussi — même hauteur de section, même `padding-top`,
+> même `min-height`, même gouttière, et le **centre vertical du bloc de copie
+> coïncide au pixel** (459/459, 486/486, 500/500).
+>
+> ⚠️ **Le `top` et la largeur du `h1` diffèrent toujours entre les deux pages, et
+> c'est normal** — `.title` est en `width: fit-content` et `.hero.tight` centre
+> verticalement, donc un titre plus long est une boîte plus large qui commence
+> plus haut. `/faq` fait deux lignes contre une sur `/services`. **Mesurer
+> `.container`, jamais le `h1`** : c'est le `h1` qui a failli faire conclure à une
+> dérive alors qu'il n'y en avait pas.
+>
+> **Et l'index de chapitres du hero a été refait dans la foulée** (`62a2f30`) :
+> plus de numéros `01/02/03`, plus de filets entre les lignes, titres plus gros et
+> plus gras (clamp 17–21px / 600, police des titres). C'était la demande de Mihai,
+> et ça a réglé au passage le seul problème de contraste de la page : les numéros
+> alignés à droite tombaient pile sur la masse éclairée de la grille, donc le seul
+> accent de la ligne était aussi ce qui avait le moins de contraste derrière lui.
+> Sans eux l'index revient entièrement sur la partie sombre.
+>
+> ⚠️ Les numéros **ne sont pas supprimés** — `faq-groups.jsx` les affiche toujours
+> dans le corps de page, sur fond plat, et `FAQ_GROUPS.num` existe pour ça. Le
+> filet vertical entre la réponse et l'aside est **volontairement gardé** : il
+> vit sur `.aside` dans `poster-hero.module.scss`, que `/services` partage pour
+> son bloc de stats.
+>
+> ℹ️ Conséquence : **plus aucun appelant ne passe `eyebrow`** à `PosterHero`. La
+> prop est gardée volontairement (elle porte `.tight` avec elle, et c'est un choix
+> de goût qui peut se retourner) — c'est écrit sur le composant. Ne pas la
+> supprimer au nom de la règle « pas de bouton sans appelant » de la phase 6 sans
+> demander à Mihai.
+>
+> ### 👉 Ensuite, ce qui restait ouvert
+>
+> #### 1. Essayer une autre composition pour les stills du hero
+>
+> ⚠️ **Mis à jour le 2026-08-03 — la description ci-dessous a changé.** Sous
+> 1024px on ne sert plus `home.*` mais **deux** images composées pour leur bande :
+> `home-phone.*` (≤640) et `home-tablet.*` (641–1023). `home.*` n'est en fait plus
+> servi à personne (voir « Known gaps » dans [`wave-grid.md`](./wave-grid.md)).
+>
+> Le cadrage des trois a été validé à l'œil par Mihai. Ce qui n'a **jamais** été
+> revu, c'est la **table de graines** : les trois sortent toujours de la
+> composition `curated`, la même que `/services`, qui n'a jamais été composée pour
+> les zones calmes de la homepage. C'est donc là qu'il reste à chercher mieux —
+> et c'est le point qui demande les yeux de Mihai.
+>
+> La boucle complète est dans [`wave-grid.md`](./wave-grid.md) (« Making a new
+> composition ») ; en résumé, et **dans cet ordre** :
+>
+> ```
+> npm run dev
+> # 1. feuilleter — sur la homepage, PAS sur /services : la même graine ne donne
+> #    pas la même image, chaque page est amortie par une ellipse différente
+> open http://localhost:3000/?wave=1     # puis 2, 3, 12, 34…
+>
+> # 2. exporter celles qui plaisent (60-90 s chacune, encodage AVIF)
+> #    ⚠️ feuilleter à la LARGEUR du cadre visé : la fenêtre choisit le cadre
+> npm run images:wavegrid:phone 12 34     # → home-phone-12.*, home-phone-34.*
+> npm run images:wavegrid:tablet 12       # → home-tablet-12.*
+>
+> # 3. comparer les fichiers produits, puis pointer PHONE_IMAGE / TABLET_IMAGE
+> #    (hero-backdrop.jsx) sur celui qu'on garde : "home-phone-12"
+> ```
+>
+> ⚠️ Deux URL ont changé avec la phase 6 : on feuillette sur `/?wave=N`
+> (`?backdrop=` n'existe plus), mais **l'export passe toujours par
+> `/preview/home-wave`** — voir l'encadré ci-dessus, la route est repartie puis
+> revenue.
+>
+> Trois pièges, tous déjà rencontrés :
+>
+> - **`?wave=N` rend une image FIXE, pas la grille vivante.** Feuilleter des
+>   compositions, c'est feuilleter des tables de graines, et le mode live ignore
+>   la table — il remplit sa traînée au pointeur. Un `?wave=7` en live ne
+>   montrerait rien de la composition 7.
+> - **Une composition n'est pas transportable entre les deux pages.** Toujours
+>   feuilleter sur la page qu'on exporte.
+> - **Si le problème est *où* tombe la bande sombre** et non où tombe la lumière,
+>   le levier est l'ellipse (`HOME_CALM`), pas les graines — voir la note sous
+>   `CALM` : déplacer des graines ne peut pas faire ce travail, chaque ondulation
+>   allume un anneau d'environ 6 unités de large.
+>
+> Pour garder une composition générée de façon lisible plutôt que cachée derrière
+> un numéro : la console imprime son tableau de graines sous `?wave=N`. ⚠️ Mais
+> `STILL` est **partagé** avec `/services` — le recopier dedans change aussi
+> l'image de `/services`. Si les deux pages veulent des tables différentes, c'est
+> le moment de rendre `STILL` propre à chaque page, pas de basculer l'une puis
+> l'autre.
+>
+> #### 2. ~~Finir le cadre téléphone~~ — fait le 2026-08-03
+>
+> ```
+> npm run dev
+> npm run images:wavegrid:phone     # écrit home-phone.{avif,webp}
+> ```
+>
+> Reste la boucle si la composition change : exporter, **regarder le fichier**,
+> et si c'est trop zoomé, `radius` dans `HOME_RELIEF_PHONE` est le seul chiffre à
+> bouger. Les deux `<source>` sont désormais actifs et doivent rester **en
+> premier** dans le `<picture>` — voir la note sur `PHONE_IMAGE`.
+>
+> #### 3. Une revue visuelle du hero, à **trois** largeurs
+>
+> Rien ne devrait avoir bougé à l'écran : tout ce qui est supprimé était
+> inatteignable, et la fusion `.sectionSharp`/`.sectionWave` → `.backdrop` a été
+> faite en gardant règle par règle ce qui gagnait réellement dans la cascade
+> (au-dessus de 1024px : `inset: 0`, masque horizontal seul, opacité 1 ; en
+> dessous : pas de masque, opacité 0,6). Mais c'est du CSS refondu à la main, donc
+> ça se regarde : `/` à **1440x900, 820x1180 et 390x844** — une par cadre. La
+> largeur du milieu est celle qu'on ne regarde jamais, et c'est précisément celle
+> qui a servi la mauvaise composition pendant deux sessions.
+>
+> #### 4. Ensuite seulement
+>
+> Au go de Mihai : fusion de la branche, puis les points M4 encore ouverts
+> ci-dessous.
+>
+> ### ✅ 2026-07-30 (soir) — session M4 : les 6 pages sont construites (non déployées)
+>
+> Plan validé par Mihai (5 pages d'un coup, slugs FR partagés entre locales,
+> **aucun montant publié** pour le MVP — « prix fixe annoncé avant le début »),
+> puis exécuté en 12 commits sur `main`, de `95088ca` (messages) à la mise à
+> jour de ce fichier. **Rien n'est poussé/tagué/déployé** — consigne explicite
+> de Mihai : des commits, jamais de tag ni de release sans son accord.
+>
+> Ce qui existe maintenant (vérifié sur build de prod local, FR nu + `/en`) :
+>
+> - **`/services`** (index, 4 offres en rangées numérotées + preuves),
+>   **`/services/applications-web`** (in-house + 3 récits de cas),
+>   **`/services/ia`** (grille signal/résultat + bloc honnêteté),
+>   **`/services/seo`** (méthode 4 étapes + méta-preuve « regardez cette page »),
+>   **`/services/mvp-30-jours`** (timeline verticale, inclus/pas inclus, prix
+>   fixe), **`/faq`** (12 questions, ids stables pour le mapping P01–P20).
+> - JSON-LD : nœud `Service` en `@graph` à côté du WebPage sur les 4 pages
+>   service ; `FAQPage.mainEntity` sur `/faq` construit depuis `pages.faq.items`
+>   (source unique HTML + markup). **Sortie des 3 anciennes pages vérifiée
+>   byte-identique.** `npm run seo:jsonld -- --site` : 18/18 URLs à 0 erreur,
+>   contrôle négatif passé. Lint : baseline 4 inchangée (⚠️ 2 depuis la
+>   phase 6 — voir plus haut).
+> - Les 8 points de couture sont faits : redirect `services` retiré de `gone`
+>   (`next.config.mjs`), ROUTES +6, `seo.pages.*` fr+en (le `ServicePage`
+>   invalide → `CollectionPage`), sitemap 18 URLs, SITE_PATHS +6, llms.txt
+>   +12 puces et offres liées, `CLIENT_NAMESPACES` += `pages.services`/`pages.faq`,
+>   navbar + footer. Réponses FAQ dans le HTML accordéon fermé, 0 `opacity:0`
+>   inline, copie intégrale SSR sur toutes les pages.
+> - La taxonomie v1 de `pages.services` (18 sous-services, lorem) est **purgée**
+>   des deux locales. Les composants v1 morts (`src/components/pages/services/*.jsx`
+>   hors `v2/`, homepage v1) sont toujours là, orphelins — nettoyage possible
+>   mais non fait.
+>
+> ### 📌 Points M4 encore ouverts (plus le point de départ — voir le 👉 plus haut)
+>
+> 1. **Revue visuelle par Mihai** : `npm run build && npm run start`, puis les
+>    6 URLs ci-dessus sur `http://localhost:3000` (FR) et `/en/...` (EN), deux
+>    breakpoints. Les ajustements visuels se font en dial-par-dial (habitude
+>    établie).
+> 2. **ENG-83 avant la mise en prod** : le relevé de citations est une photo
+>    d'AVANT — s'il n'est pas fait, la mise en prod attend 2-3 jours, pas
+>    l'inverse. Rappelé à Mihai en session M4 ; re-vérifier son statut Linear.
+> 3. **Au go de Mihai seulement** : push, tag, déploiement ; puis resoumettre le
+>    sitemap (GSC via MCP `gsc` + Bing), `npm run seo:indexnow`, demandes
+>    d'indexation, et mettre à jour **ENG-91 / ENG-92 / ENG-95** dans Linear
+>    (prose sans pipes — WAF).
+> 4. **Réconciliation ENG-82** : quand Dorian livre `docs/geo-prompt-panel.md`,
+>    mapper chaque `P01`–`P20` sur sa page/entrée FAQ (les items de
+>    `pages.faq.items` ont un `id` stable prévu pour ça).
 >
 > ### ✅ 2026-07-30 — migration locale par défaut DÉPLOYÉE (v0.22.0)
 >
@@ -33,22 +486,16 @@
 > - ⚠️ Ne rien conclure des rapports GSC/Bing avant que leurs crawls soient
 >   postérieurs au 2026-07-30 ~09:20 UTC.
 >
-> ### 👉 Par quoi commencer la prochaine session (mis à jour 2026-07-30 soir)
+> ### État Linear / répartition (au soir du 30/07, avant la session M4)
 >
-> **La prochaine session est la session M4 : FAQ + pages services, niveau
-> Awwwards.** Prompt complet, décisions à trancher et pièges d'intégration dans
-> **`docs/m4-content-session-prompt.md`** — phase Plan obligatoire avant tout
-> code. Les 4 skills VibeCurb sont déjà installés dans `.claude/skills/`.
->
-> Répartition actée le 30/07 : **ENG-82 (les 20 prompts) part chez Dorian** —
-> ne pas la refaire en session. **ENG-83 reste une photo d'AVANT** : le relevé
-> de citations doit idéalement passer avant la mise en ligne des pages M4 —
-> à rappeler à Mihai en ouverture. **ENG-84 est In Progress** : la PR
-> hargile-infra#176 (User-Agent dans les logs Traefik) attend le merge
-> d'Alexis ; mesure possible ~1 semaine après son merge (fenêtre Loki 7 j).
->
-> État Linear au soir du 30/07 : ENG-87 **Done** (les 4 points), ENG-110
-> **Done** (accès GSC opérationnel, outillé via MCP `gsc` — voir baseline
+> **ENG-91/92 : le code est fait (voir ci-dessus), les tickets passent à
+> « livré » seulement après déploiement.** ENG-95 est avancée par le
+> `FAQPage.mainEntity`. Répartition actée le 30/07 : **ENG-82 (les 20 prompts)
+> chez Dorian** — `docs/geo-prompt-panel.md` n'existait pas encore en fin de
+> session M4, la FAQ a été rédigée depuis les offres, à réconcilier. **ENG-84
+> In Progress** : PR hargile-infra#176 (User-Agent dans les logs Traefik)
+> attend le merge d'Alexis ; mesure ~1 semaine après (fenêtre Loki 7 j).
+> ENG-87 **Done**, ENG-110 **Done** (GSC via MCP `gsc`, baseline
 > `docs/geo-gsc-baseline-2026-07-30.md`, relevé comparatif ~mi-août).
 
 ---

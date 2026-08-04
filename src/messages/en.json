@@ -73,7 +73,9 @@
       "links": {
         "aboutUs": "About Us",
         "contact": "Contact",
+        "faq": "FAQ",
         "privacyPolicy": "Privacy Policy",
+        "services": "Services",
         "siteMap": "Site Map"
       },
       "sections": {
@@ -117,6 +119,7 @@
     "menu": {
       "agves": "AGVES",
       "contact": "Contact",
+      "faq": "FAQ",
       "home": "Home",
       "i-go": "I go",
       "our-dna": "Our DNA",
@@ -201,6 +204,115 @@
         }
       }
     },
+    "faq": {
+      "ctaSecondary": "See the services",
+      "hero": {
+        "eyebrow": "FAQ",
+        "title": "The questions we actually get asked.",
+        "answer": "HARGILE is an independent web studio in Brussels, building custom web applications for SMEs. Here are direct answers to the questions asked before choosing an agency: how much a custom application costs in Belgium, how long it takes, agency or freelancer, and who owns the code at the end. Missing yours? Write to us."
+      },
+      "groups": {
+        "project": "Project & timelines",
+        "budget": "Budget & ownership",
+        "tech": "Technology & maintenance"
+      },
+      "items": [
+        {
+          "id": "agence",
+          "group": "project",
+          "q": "How do you choose a web agency in Brussels to build a custom application?",
+          "a": "Three things can be checked before you sign. Who actually writes the code: at HARGILE, design and development are done in-house in Brussels, never subcontracted. How the price is set: during scoping, before the project starts, and it does not move afterwards. And who owns the code at the end: you do. The rest — references, availability, working language — fits in one call."
+        },
+        {
+          "id": "process",
+          "group": "project",
+          "q": "How does a custom web development project unfold, from scoping to launch?",
+          "a": "Always in the same order: a scoping phase where we define scope, priorities and price together; the design of flows and screens; development, with regular check-ins; testing; launch. Everything is done in-house by the same team, and you have one direct contact from start to finish."
+        },
+        {
+          "id": "delai",
+          "group": "project",
+          "q": "How long does it take to build a custom web application for an SME?",
+          "a": "It depends on the scope — and the scope is fixed during scoping, not discovered along the way. The most concrete benchmark: our MVP offer delivers a complete, usable product in 30 days. A showcase site can be faster; a richer business application takes several months, in planned stages."
+        },
+        {
+          "id": "mvp-30",
+          "group": "project",
+          "q": "Is it really possible to build an MVP in 30 days?",
+          "a": "Yes, on one condition: the scope is frozen before we start. Week 1, scoping and design; weeks 2 and 3, development; week 4, testing and launch. What comes out is a real product, live, usable by real users — not a mockup. Anything that does not fit inside the 30 days is priced separately, and comes after."
+        },
+        {
+          "id": "start",
+          "group": "project",
+          "q": "What should you prepare before contacting a web agency about a custom project?",
+          "a": "Nothing is required: your idea and your business reality are enough. Examples of sites you like, known constraints or an existing system to take over all help — but turning all that into a clear scope is exactly what the scoping phase is for."
+        },
+        {
+          "id": "langues",
+          "group": "project",
+          "q": "Where is HARGILE based, and do you work with SMEs across Belgium?",
+          "a": "In Brussels. We work with SMEs all over Belgium: on site when meeting in person actually serves the project, remotely the rest of the time — being close is a matter of availability, not kilometres. Our two working languages are French and English, and multilingual sites are routine: La Marquisette is trilingual, this one exists in French and English."
+        },
+        {
+          "id": "cout",
+          "group": "budget",
+          "q": "How much does it cost to build a custom web application for an SME in Belgium?",
+          "a": "There is no honest one-size-fits-all rate: the price depends on the scope. Our commitment is about the method: the price is set during scoping, announced before the project starts, and it does not move — no time-based billing, no surprise overruns. For a first product, the 30-day MVP offer comes at a fixed price."
+        },
+        {
+          "id": "prix-fixe",
+          "group": "budget",
+          "q": "Can you get a fixed price for custom development, with no time-based billing?",
+          "a": "Yes — and it works because the scope is frozen before we start: scoping defines precisely what will be delivered, and the price matches that scope. If a new idea appears mid-project, it is priced separately and you decide whether to add it — the initial price does not change."
+        },
+        {
+          "id": "freelance",
+          "group": "budget",
+          "q": "Should an SME hire a web agency or a freelance developer?",
+          "a": "A freelancer is often the right call for a well-scoped job that needs a single skill. A team becomes useful when design, development and deployment move in parallel, and when someone still has to be there in two years. HARGILE is an independent studio: one direct contact like a freelancer, a team behind it to ship and maintain."
+        },
+        {
+          "id": "propriete",
+          "group": "budget",
+          "q": "Who owns the source code at the end of a web development project?",
+          "a": "You do. Code and data are yours on delivery: you can host elsewhere, hand the next step to another team, or keep going with us. You stay by choice, never out of necessity."
+        },
+        {
+          "id": "stack",
+          "group": "tech",
+          "q": "Which technologies do you use to build a custom web application?",
+          "a": "Modern, proven web technologies — notably React and Next.js: this very site is built with that framework. The precise choice is made during scoping, based on your project and your existing systems — never the other way around."
+        },
+        {
+          "id": "wordpress",
+          "group": "tech",
+          "q": "Should an SME choose WordPress or custom development for its website?",
+          "a": "WordPress makes sense for publishing content on a tight budget. Custom becomes the right choice when your site has to do something: booking, selling, business processes — or when a generic theme holds your image back. Ecole du Bonheur came with a generic WordPress; we turned it into a digital experience worthy of its project."
+        },
+        {
+          "id": "maintenance",
+          "group": "tech",
+          "q": "Who maintains a website after it goes live?",
+          "a": "We do, if you want us to — the site is not left on its own: we maintain what we ship, updates, security and evolutions. Maintenance is offered separately, with no obligation: since you own the code, you remain free to entrust it to whomever you want."
+        },
+        {
+          "id": "seo-inclus",
+          "group": "tech",
+          "q": "Is SEO included in a web development project?",
+          "a": "The foundations, yes, always: clean structure, speed, structured data, machine-readable content — everything that makes a site able to rank well. The ongoing visibility work (content, rank tracking, AI citations) is what our dedicated SEO offer is for."
+        },
+        {
+          "id": "ia-projets",
+          "group": "tech",
+          "q": "When does integrating AI actually make sense in an SME's web project?",
+          "a": "When it changes the outcome: automating repetitive tasks, smart search, making your data work. And when it adds nothing to your case, we tell you — an AI integration must justify itself with a measurable result, not with a trend."
+        }
+      ],
+      "more": {
+        "title": "The long answer",
+        "text": "Each offer has its own page, with its process, its proof and its specific questions."
+      }
+    },
     "homepage": {
       "sections": {
         "about-us": {
@@ -215,26 +327,23 @@
           ],
           "our-values": [
             {
-              "value": "Excellence",
-              "description": "We pursue technical perfection in everything we build"
+              "value": "Transparency",
+              "description": "Transparency regarding progress, costs and options. No surprises."
             },
             {
-              "value": "Innovation",
-              "description": "We continuously explore emerging technologies to stay at the cutting edge"
+              "value": "Sovereignty",
+              "description": "Your code, your data, your freedom. You're never locked-in."
             },
             {
-              "value": "Collaboration",
-              "description": "We work as an extension of your team, not just as a service provider"
+              "value": "Reliability",
+              "description": "A close, responsive partner who is there for the long term."
             },
             {
-              "value": "Integrity",
-              "description": "We maintain transparency throughout the development process"
-            },
-            {
-              "value": "Adaptability",
-              "description": "We evolve with technological trends while maintaining solid foundations"
+              "value": "Curiosity",
+              "description": "Curious by nature. We explore, test, and constantly learn. We use AI on a daily basis so we can focus our time on what really matters: personal contact and support."
             }
           ],
+          "terminal-file": "values.md",
           "stats": {
             "projects": "Projects delivered",
             "satisfaction": "Client satisfaction",
@@ -395,10 +504,20 @@
         "design-dev": {
           "title": "Development & design",
           "manifesto": [
-            {"text": "We design and develop your digital products"},
-            {"text": "with you, not for you.", "accent": true},
-            {"text": "Interfaces people love to use, foundations we keep alive after delivery. Your code, your data:"},
-            {"text": "you stay by choice, never out of necessity.", "accent": true}
+            {
+              "text": "We design and develop your digital products"
+            },
+            {
+              "text": "with you, not for you.",
+              "accent": true
+            },
+            {
+              "text": "Interfaces people love to use, foundations we keep alive after delivery. Your code, your data:"
+            },
+            {
+              "text": "you stay by choice, never out of necessity.",
+              "accent": true
+            }
           ],
           "offers": {
             "your-project": {
@@ -626,100 +745,361 @@
       "title": "Legal Notices"
     },
     "services": {
-      "categories": {
-        "ai": {
-          "title": "Artificial Intelligence and Cloud Solutions"
+      "detail": {
+        "ia": {
+          "hero": {
+            "eyebrow": "AI solutions",
+            "title": "AI where it changes the outcome.",
+            "answer": "We integrate artificial intelligence into SME products and processes — only where it delivers a measurable result: fewer repetitive tasks, better service, data finally put to work. When AI adds nothing to your case, we tell you."
+          },
+          "useCases": {
+            "title": "Four places where AI earns its place.",
+            "signalLabel": "The signal —",
+            "resultLabel": "The result —",
+            "items": {
+              "automation": {
+                "title": "Back-office automation",
+                "signal": "Your team copies data from one tool to another.",
+                "outcome": "Hours recovered every week, and fewer input errors."
+              },
+              "content": {
+                "title": "Content & visibility",
+                "signal": "You know what to say, but never have time to publish it.",
+                "outcome": "A regular presence, fed by your real expertise."
+              },
+              "support": {
+                "title": "Customer support",
+                "signal": "The same questions keep coming, and the answers keep waiting.",
+                "outcome": "Instant answers to common questions, and a team focused on the cases that matter."
+              },
+              "data": {
+                "title": "Making your data work",
+                "signal": "The numbers exist, but nobody looks at them.",
+                "outcome": "Decisions backed by your data, not by gut feeling."
+              }
+            }
+          },
+          "honesty": {
+            "title": "And when AI is not the answer?",
+            "text": "We say so. An AI integration is only worth it if it changes a result that matters to you — not because of a trend. If a simple script, a better process or nothing at all does the job, that is what we will recommend. That, too, is what a technical partner is for."
+          },
+          "faq": {
+            "items": [
+              {
+                "q": "Where does our data go?",
+                "a": "That is defined before anything is integrated: which data leaves your company, to which provider, under which contract. When data is sensitive, we favour solutions that keep it with you. Nothing gets plugged in without you knowing exactly what flows where."
+              },
+              {
+                "q": "Do we need a big budget to start?",
+                "a": "No. We start with the use case that has the best result-to-effort ratio — often a targeted automation — and we measure before expanding. AI is rolled out in steps, not in a big bang."
+              },
+              {
+                "q": "Will we be locked into an AI provider?",
+                "a": "We design the integration so the provider stays replaceable: models evolve fast, and your product should not be married to one of them. And as with everything we ship, the code belongs to you."
+              },
+              {
+                "q": "Where do we start if we have never used AI?",
+                "a": "With a conversation about your processes, not about technology. Together we identify one measurable task where AI can make a difference, we put it in place, and we judge it on the result."
+              }
+            ]
+          }
         },
-        "analysis": {
-          "title": "Analysis and Quality"
-        },
-        "dev": {
-          "title": "Development and Solution Design"
-        },
-        "maintenance": {
-          "title": "Maintenance and Modernization"
-        }
-      },
-      "description": "With HARGILE, you combine technical expertise and creativity to design customized digital solutions. By combining proven methods with innovative technologies, we design powerful and adaptable applications that precisely meet your specific needs and business objectives.",
-      "mainTitle": "Our Services",
-      "services": {
-        "agents": {
-          "description": "Custom chatbots and virtual assistants",
-          "title": "Intelligent Agent Development"
-        },
-        "api": {
-          "description": "Creating programming interfaces to connect your systems",
-          "title": "API Development"
-        },
-        "apidev": {
-          "description": "Design and implementation of robust APIs",
-          "title": "API Development"
-        },
-        "automation": {
-          "description": "Workflow optimization and automation of repetitive tasks",
-          "title": "Business Process Automation"
-        },
-        "banking-connector": {
-          "description": "Banking solutions, Wordline payment, SIPS Atos, ...",
-          "title": "Banking connector(s)"
-        },
-        "cloud": {
-          "description": "Cloud infrastructure, deployment and resource optimization",
-          "title": "Cloud Solutions"
-        },
-        "cms": {
-          "description": "WordPress, Drupal and other content management systems",
-          "title": "CMS Development"
-        },
-        "consulting": {
-          "description": "Expert guidance for AI integration in your business",
-          "title": "Strategic AI Consulting"
-        },
-        "ecommerce": {
-          "description": "High-performance and secure e-commerce solutions",
-          "title": "E-Commerce"
-        },
-        "migration": {
-          "description": "Upgrading systems and migration to modern technologies",
-          "title": "Migration and Modernization"
-        },
-        "ml": {
-          "description": "Predictive analytics and ML-powered solutions",
-          "title": "Machine Learning Prediction"
-        },
-        "mobile": {
-          "description": "iOS and Android applications, responsive user interfaces",
-          "title": "Mobile Application Development"
-        },
-        "performance": {
-          "description": "Improving speed and user experience",
-          "title": "Performance Optimization"
-        },
-        "qa": {
-          "description": "Functional, performance and quality assurance tests",
-          "title": "Quality Assurance Testing"
-        },
-        "reporting": {
-          "description": "Data analysis and creation of customized reports",
-          "title": "Analysis and Reporting"
+        "mvp": {
+          "hero": {
+            "eyebrow": "MVP in 30 days",
+            "title": "From idea to product, in 30 days.",
+            "answer": "Yes, a real product can launch in one month. Our MVP offer turns your idea into a usable product in 30 days, at a fixed price announced before we start: week 1, scope and design; weeks 2 and 3, development; week 4, tests and launch."
+          },
+          "timeline": {
+            "title": "The 30 days, week by week.",
+            "weeks": {
+              "w1": {
+                "label": "Week 1",
+                "title": "Scope & design",
+                "text": "Together we define the scope: what belongs in the MVP, and what waits for v2. Mockups and user flows are approved before a single line of code is written.",
+                "deliverables": [
+                  "Scope frozen",
+                  "Mockups approved",
+                  "Fixed price confirmed"
+                ]
+              },
+              "w23": {
+                "label": "Weeks 2–3",
+                "title": "Development",
+                "text": "We build the product with modern web technologies. You follow progress continuously — no three-week tunnel without news.",
+                "deliverables": [
+                  "Working product by the end of week 3",
+                  "Regular check-ins"
+                ]
+              },
+              "w4": {
+                "label": "Week 4",
+                "title": "Test & launch",
+                "text": "We test, fix and polish — then go live. Your MVP is in its first users' hands by day 30.",
+                "deliverables": [
+                  "Tested product",
+                  "Production launch",
+                  "Handover"
+                ]
+              }
+            }
+          },
+          "included": {
+            "title": "What's included — and what isn't.",
+            "inLabel": "Included in the 30 days",
+            "outLabel": "Not in the 30 days",
+            "in": [
+              "Scope definition and prioritisation",
+              "Screen and user-flow design",
+              "Product development",
+              "Tests and fixes",
+              "Launch on your domain",
+              "Ownership of the code and the data"
+            ],
+            "out": [
+              "Features deferred together to v2",
+              "The business content only you can write",
+              "Long-term maintenance — offered separately, with no obligation"
+            ]
+          },
+          "price": {
+            "title": "Fixed price, no surprises.",
+            "text": "The price is announced before the project starts, and it does not move: no time-based billing, no overrun discovered along the way. If a new idea comes up mid-project, it is priced separately and you decide."
+          },
+          "proofCase": {
+            "text": "La Marquisette: a character cottage in the Belgian Ardennes, launched with a tight scope — a trilingual showcase site with integrated booking."
+          },
+          "faq": {
+            "items": [
+              {
+                "q": "What happens after the 30 days?",
+                "a": "The product is yours and it is live. From there, three paths: you continue on your own (you own the code), we iterate together towards v2, or we handle maintenance. Nothing is imposed — you stay by choice."
+              },
+              {
+                "q": "What do I need to provide to keep the deadline?",
+                "a": "Your availability in week 1 for scoping decisions, then quick feedback at each check-in. The 30-day deadline assumes a reachable decision-maker — that is the only real condition."
+              },
+              {
+                "q": "What if my idea is too big for 30 days?",
+                "a": "That is what week 1 is for: cutting it down. An MVP is not your full product — it is the smallest version that delivers value to real users. Whatever does not fit goes on the v2 roadmap — not forgotten, prioritised."
+              },
+              {
+                "q": "Is the MVP a real product or a throwaway prototype?",
+                "a": "A real product, built on foundations made to last — the same care as our long-term projects. If the MVP validates your market, v2 is built on top of it, not from scratch."
+              }
+            ]
+          }
         },
         "seo": {
-          "description": "Natural referencing and optimization for search engines",
-          "title": "SEO Performance Optimization"
-        },
-        "support": {
-          "description": "Technical support, updates and preventive maintenance",
-          "title": "Maintenance Support"
+          "hero": {
+            "eyebrow": "SEO",
+            "title": "Your visibility, automated.",
+            "answer": "We make SMEs visible where their customers actually search: on Google, and now in the answers of AI assistants like ChatGPT and Perplexity. Technical SEO, content and measurement — automated where possible, for a durable result rather than a one-off campaign."
+          },
+          "process": {
+            "title": "How we work.",
+            "steps": {
+              "audit": {
+                "title": "Audit",
+                "text": "First, the facts: what makes you visible today, what holds you back, and where the queries that matter to your business are."
+              },
+              "tech": {
+                "title": "Technical",
+                "text": "A site engines can read without obstacles: speed, structure, structured data, content present from the first load."
+              },
+              "content": {
+                "title": "Content",
+                "text": "Pages that each answer one real customer question — the format Google and answer engines cite."
+              },
+              "measure": {
+                "title": "Measure",
+                "text": "Rankings, traffic, AI citations: we track what changes, and we adjust. What is not measured does not improve."
+              }
+            }
+          },
+          "metaProof": {
+            "title": "This page is the demonstration.",
+            "text": "The method we propose is the one we apply to our own site:",
+            "points": [
+              "All the content is in the HTML from the first response — readable by search engines and AI assistants alike.",
+              "Every page carries its structured data (schema.org), validated automatically before every release.",
+              "Every page exists in French and English, with the tags that tell engines which one to serve.",
+              "View this page's source: it is all there."
+            ]
+          },
+          "proofCase": {
+            "text": "VENIZI sells its jewellery online and across a network of 50 boutiques in Belgium and France — a catalogue where every product has to be findable."
+          },
+          "faq": {
+            "items": [
+              {
+                "q": "How long before we see results?",
+                "a": "SEO is a long-term investment: technical fixes show effects within weeks, content within months. It is slower than advertising — but it does not stop when the budget does."
+              },
+              {
+                "q": "Do you guarantee the first position on Google?",
+                "a": "No — and nobody serious can: results depend on an algorithm nobody controls. What we do guarantee is the method — clean technical foundations, content that answers real questions, measurement — and transparency about what it produces."
+              },
+              {
+                "q": "What does being visible in AI answers mean?",
+                "a": "When someone asks ChatGPT or Perplexity which agency can build a web application in Brussels, those assistants cite their sources. Being cited is the new ranking — and it can be worked on: machine-readable content, structured data, and clear answers to the questions people actually ask."
+              },
+              {
+                "q": "How do we track results?",
+                "a": "You do not have to take our word for it: rankings, organic traffic and cited pages are tracked and shared. We look at the same numbers you do."
+              }
+            ]
+          }
         },
         "web": {
-          "description": "Showcase websites, web applications, portals and custom solutions",
-          "title": "Web design and Development"
+          "hero": {
+            "eyebrow": "Web applications",
+            "title": "Custom web applications for SMEs.",
+            "answer": "We design, build and maintain custom web applications entirely in-house, from Brussels. No outsourcing: the team that designs your product is the one that codes it and keeps it alive. And on delivery, the code and the data belong to you."
+          },
+          "madeInHouse": {
+            "title": "Everything happens in-house.",
+            "cols": {
+              "design": {
+                "title": "Designed",
+                "text": "The design starts from your business, not from a template. Mockups and user flows are drawn in-house, with you."
+              },
+              "build": {
+                "title": "Built",
+                "text": "Developed with modern web technologies — like this site. No plugin assembly: code we know line by line."
+              },
+              "maintain": {
+                "title": "Maintained",
+                "text": "After launch, the foundations keep being cared for. You stay by choice, never out of necessity."
+              }
+            },
+            "ownership": {
+              "title": "Your code, your data.",
+              "text": "On delivery you own the code and your data. You can leave, host elsewhere, or keep going with us — by choice."
+            }
+          },
+          "cases": {
+            "title": "Three proofs rather than a promise.",
+            "items": {
+              "edb": {
+                "client": "Ecole du Bonheur",
+                "sector": "Institutional website — education",
+                "text": "A generic WordPress rebuilt into a digital experience worthy of a school that deserved better."
+              },
+              "marquisette": {
+                "client": "La Marquisette",
+                "sector": "Character cottage — Belgian Ardennes",
+                "text": "A 19th-century cottage in the heart of the Belgian Ardennes — a trilingual showcase site with integrated booking."
+              },
+              "venizi": {
+                "client": "VENIZI",
+                "sector": "E-commerce — jewellery",
+                "text": "Venetian-inspired jewellery, sold online and across a network of 50 boutiques in Belgium and France."
+              }
+            }
+          },
+          "faq": {
+            "items": [
+              {
+                "q": "Do you take over an existing site or application?",
+                "a": "Yes. A good share of our projects are rebuilds or takeovers: we audit what exists, keep what holds, and rebuild what blocks you. Ecole du Bonheur arrived with a generic WordPress; it left with a site worthy of its educational project."
+              },
+              {
+                "q": "Can you build a multilingual site?",
+                "a": "Yes — in Belgium it is almost a habit. La Marquisette is a trilingual site with integrated booking, and this very site is served in French and English with search optimisation for each language."
+              },
+              {
+                "q": "Do you do the design too?",
+                "a": "Yes. Design and development are done by the same team, in-house. You do not have to coordinate a design agency and a developer: mockups, user flows and code come from the same place."
+              },
+              {
+                "q": "Do you build e-commerce?",
+                "a": "Yes. VENIZI sells its jewellery online and across a network of 50 boutiques in Belgium and France. Online store, payment, catalogue: we build what your sales actually need."
+              }
+            ]
+          }
         }
       },
-      "subtitle": "We have all the tools to elevate your business",
-      "subtitleBold": "for your digital transformation",
-      "subtitleItalic": "Tech Studio",
-      "title": "Our services"
+      "index": {
+        "ctaSecondary": "Read the FAQ",
+        "detailCta": "See the offer",
+        "hero": {
+          "eyebrow": "Services",
+          "title": "What we deliver.",
+          "answer": "HARGILE is an independent web studio based in Brussels. We design, build and maintain custom web applications for SMEs, integrate AI where it changes the outcome, automate your search visibility, and turn an idea into a live MVP in 30 days, at a fixed price."
+        },
+        "offers": {
+          "ia": {
+            "title": "AI solutions",
+            "promise": "Integrated where it changes the outcome — never as a gimmick.",
+            "deliverables": [
+              "Automation of repetitive work",
+              "AI built into your product",
+              "An honest no when it adds nothing"
+            ]
+          },
+          "mvp": {
+            "title": "MVP in 30 days",
+            "promise": "From idea to product in one month, at a fixed price.",
+            "deliverables": [
+              "Week 1: scope & design",
+              "Weeks 2–3: development",
+              "Week 4: test & launch"
+            ]
+          },
+          "seo": {
+            "title": "SEO",
+            "promise": "Your visibility, automated.",
+            "deliverables": [
+              "Technical SEO and content",
+              "Visible in AI answers too",
+              "Measured and tracked"
+            ]
+          },
+          "web": {
+            "title": "Custom web applications",
+            "promise": "Designed, built and maintained in-house.",
+            "deliverables": [
+              "Websites and web applications",
+              "Rebuilds and migrations",
+              "Design and development under one roof"
+            ]
+          }
+        },
+        "proof": {
+          "label": "Proof",
+          "title": "Three recent projects.",
+          "linkLabel": "Full portfolio"
+        },
+        "spine": {
+          "kicker": "Four offers",
+          "text": "Every offer is a delivery commitment, not a catalogue line. You talk to the team that designs it and writes the code, from scoping to launch."
+        },
+        "stats": {
+          "mvp": "days to an MVP",
+          "projects": "projects live",
+          "offers": "offers, one studio"
+        }
+      },
+      "shared": {
+        "ctaBand": {
+          "title": "Let's talk about your project.",
+          "text": "Tell us where you stand — we'll tell you what we would build, and at what price.",
+          "button": "Contact us"
+        },
+        "miniFaq": {
+          "title": "Frequently asked questions",
+          "allLink": "All the questions"
+        },
+        "proofCase": {
+          "label": "Proof",
+          "linkLabel": "View the project"
+        },
+        "siblings": {
+          "title": "The other offers",
+          "all": "See all four offers"
+        }
+      }
     },
     "sitemap": {
       "description": "Find all the pages and resources on our website organized in a structured way. This sitemap will help you navigate our site and find the information you're looking for quickly.",
@@ -860,6 +1240,16 @@
         "schemaType": "ContactPage",
         "title": "Contact HARGILE | Expert Digital Solutions Team"
       },
+      "faq": {
+        "description": "How much a custom web application costs for an SME in Belgium, how long it takes, agency or freelancer, WordPress or custom, who owns the code: 15 direct answers from a Brussels web studio.",
+        "og": {
+          "description": "How much it costs, how long it takes, agency or freelancer, who owns the code: straight answers from a Brussels web studio.",
+          "imageAlt": "HARGILE FAQ",
+          "title": "Custom web development FAQ: cost, timelines, ownership | HARGILE"
+        },
+        "schemaType": "FAQPage",
+        "title": "Custom web development FAQ: cost, timelines, ownership | HARGILE"
+      },
       "home": {
         "description": "Custom web development, AI integration & digital marketing for SMEs. Grow your business online with HARGILE.",
         "og": {
@@ -893,14 +1283,54 @@
         "title": "Our Portfolio | Innovative Digital Projects | HARGILE"
       },
       "services": {
-        "description": "Explore HARGILE's comprehensive digital services tailored to your business needs. From custom web development and mobile apps to AI solutions and performance optimization.",
-        "og": {
-          "description": "Transform your business with HARGILE's full-spectrum digital services. Custom web development, mobile applications, AI integration, and performance optimization for measurable results.",
-          "imageAlt": "HARGILE Services",
-          "title": "Our Digital Services | Web, Mobile & AI Solutions | HARGILE"
+        "description": "HARGILE's four offers for SMEs: custom web applications, AI where it matters, automated SEO, and an MVP delivered in 30 days at a fixed price. Independent studio in Brussels.",
+        "ia": {
+          "description": "AI integrated into SME products and processes, only where it changes the outcome: automation, support, making data work. No gimmicks.",
+          "og": {
+            "description": "Automation, customer support, data: AI integrated where it delivers a measurable result — and an honest no when it does not.",
+            "imageAlt": "AI solutions — HARGILE",
+            "title": "AI solutions for SMEs: integrated where it matters | HARGILE"
+          },
+          "schemaType": "WebPage",
+          "title": "AI solutions for SMEs: integrated where it matters | HARGILE"
         },
-        "schemaType": "ServicePage",
-        "title": "Our Digital Services | Web, Mobile & AI Solutions | HARGILE"
+        "mvp": {
+          "description": "Your idea becomes a real product in 30 days, at a fixed price announced before the start: scope and design, development, tests and launch. By a Brussels studio.",
+          "og": {
+            "description": "Week 1: scope and design. Weeks 2–3: development. Week 4: launch. A real product in one month, at a fixed price.",
+            "imageAlt": "MVP in 30 days — HARGILE",
+            "title": "MVP in 30 days, at a fixed price | HARGILE"
+          },
+          "schemaType": "WebPage",
+          "title": "MVP in 30 days, at a fixed price | HARGILE"
+        },
+        "og": {
+          "description": "Custom web applications, useful AI, automated SEO and a 30-day MVP: how HARGILE moves SMEs forward.",
+          "imageAlt": "HARGILE services",
+          "title": "Our services: custom web apps, AI, SEO, 30-day MVP | HARGILE"
+        },
+        "schemaType": "CollectionPage",
+        "seo": {
+          "description": "Technical SEO, content and measurement for SMEs — visible on Google and cited by AI assistants like ChatGPT. A durable method, applied to our own site.",
+          "og": {
+            "description": "Your visibility, automated: classic SEO plus citations in AI answer engines, with a method our own site demonstrates.",
+            "imageAlt": "Automated SEO — HARGILE",
+            "title": "Automated SEO: visible on Google and in AI answers | HARGILE"
+          },
+          "schemaType": "WebPage",
+          "title": "Automated SEO: visible on Google and in AI answers | HARGILE"
+        },
+        "title": "Our services: custom web apps, AI, SEO, 30-day MVP | HARGILE",
+        "web": {
+          "description": "Design, development and maintenance of custom web applications for SMEs, fully in-house in Brussels. Your code and your data belong to you.",
+          "og": {
+            "description": "One team designs, builds and maintains your web application in-house, in Brussels — and you own the code on delivery.",
+            "imageAlt": "Custom web applications — HARGILE",
+            "title": "Custom web applications for SMEs | HARGILE"
+          },
+          "schemaType": "WebPage",
+          "title": "Custom web applications for SMEs | HARGILE"
+        }
       },
       "sitemap": {
         "description": "Navigate HARGILE's website easily with our comprehensive sitemap. Find all our services, resources, and information organized in a structured, user-friendly format.",

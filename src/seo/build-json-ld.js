@@ -18,6 +18,24 @@ const KNOWS_ABOUT = [
     "MVP development",
 ];
 
+/* The four service pages carry a Service node *alongside* their WebPage node
+   (see the schemaType comment below — never in its place). serviceType values
+   are copied character for character from KNOWS_ABOUT: the same topic asserted
+   twice is corroboration, two near-identical strings are two topics. */
+const SERVICE_NODES = {
+    "services.web": {serviceType: "Custom web application development"},
+    "services.ia": {serviceType: "AI integration"},
+    "services.seo": {serviceType: "Search engine optimization"},
+    "services.mvp": {serviceType: "MVP development"},
+};
+
+/* The four offers as /services lists them, in the sales order the page renders
+   (offers-index.jsx OFFERS) — position in the ItemList has to match what a
+   reader sees, or the markup describes a different page. Keys index both
+   ROUTES and pages.services.index.offers, so the listed name is the visible
+   row title rather than a fifth restatement of it. */
+const SERVICES_INDEX = ["web", "ia", "seo", "mvp"];
+
 // Builds the JSON-LD object for a given locale + pagePath.
 // Returns null if SEO translations cannot be loaded (graceful fallback).
 export async function buildJsonLd({locale, pagePath}) {
@@ -31,7 +49,11 @@ export async function buildJsonLd({locale, pagePath}) {
            tells engines the two are the same page. */
         const pathSuffix = ROUTES[pagePath] ?? `/${pagePath.replaceAll(".", "/")}`;
         const baseUrl = localeUrl(locale, pathSuffix);
-        const imageUrl = `${SITE_URL}/images/brand/brand_large.png`;
+        /* Same 1200×630 asset the OG tags use (see shared-metadata.js) — it has
+           to be, since `logo` and `image` below are what an engine shows next to
+           the entity, and a mark that differs from the one shared on social is a
+           mismatch of exactly the kind this file exists to avoid. */
+        const imageUrl = `${SITE_URL}/images/brand/og-hargile-tech-studio.png`;
 
         /* Per-page type, read from the message files so it can differ per page.
            It must always be WebPage or one of its subtypes (ContactPage,
@@ -108,8 +130,7 @@ export async function buildJsonLd({locale, pagePath}) {
                organisation. No self-asserted aggregateRating either. */
         };
 
-        return {
-            "@context": "https://schema.org",
+        const pageNode = {
             "@type": schemaType,
             "@id": `${baseUrl}#page`,
             name: pageT("title"),
@@ -126,6 +147,68 @@ export async function buildJsonLd({locale, pagePath}) {
             },
             publisher: organization,
         };
+
+        /* A FAQPage without its questions is legal markup and a useless
+           signal. mainEntity is read from the same pages.faq.items the
+           visible accordion renders, so the structured data cannot drift
+           from the copy — Google treats a mismatch as spam. */
+        if (pagePath === "faq") {
+            const faqT = await getTranslations({locale, namespace: "pages.faq"});
+            pageNode.mainEntity = faqT.raw("items").map(({q, a}) => ({
+                "@type": "Question",
+                name: q,
+                acceptedAnswer: {"@type": "Answer", text: a},
+            }));
+        }
+
+        /* A CollectionPage that collects nothing is the same dead markup as a
+           FAQPage without its questions: /services declared the type but never
+           said what it indexed, so the hub and the four Service nodes it links
+           to were four unrelated pages to a crawler. The ItemList is the join.
+           Names come from the visible row titles, URLs from ROUTES — both
+           already single-sourced, so this cannot drift from the page. */
+        if (pagePath === "services") {
+            const offersT = await getTranslations({locale, namespace: "pages.services.index.offers"});
+            pageNode.mainEntity = {
+                "@type": "ItemList",
+                itemListOrder: "https://schema.org/ItemListOrderAscending",
+                numberOfItems: SERVICES_INDEX.length,
+                itemListElement: SERVICES_INDEX.map((key, i) => ({
+                    "@type": "ListItem",
+                    position: i + 1,
+                    name: offersT(`${key}.title`),
+                    url: localeUrl(locale, ROUTES[`services.${key}`]),
+                })),
+            };
+        }
+
+        const extraNodes = [];
+        const service = SERVICE_NODES[pagePath];
+        if (service) {
+            const serviceNode = {
+                "@type": "Service",
+                /* Locale-independent @id, like #organization: the fr and en
+                   pages describe one service, not two. */
+                "@id": `${SITE_URL}${ROUTES[pagePath]}#service`,
+                name: pageT("title"),
+                description: pageT("description"),
+                url: baseUrl,
+                serviceType: service.serviceType,
+                provider: {"@id": `${SITE_URL}/#organization`},
+                areaServed: {"@type": "Country", name: "Belgium"},
+                /* No offers/price: the site publishes no amounts — same
+                   doctrine as the absent priceRange on the Organization. */
+            };
+            pageNode.mainEntity = {"@id": serviceNode["@id"]};
+            extraNodes.push(serviceNode);
+        }
+
+        /* Existing pages keep the flat single-node shape byte for byte;
+           only pages with a companion node switch to @graph (the validator
+           recurses into both). */
+        return extraNodes.length
+            ? {"@context": "https://schema.org", "@graph": [pageNode, ...extraNodes]}
+            : {"@context": "https://schema.org", ...pageNode};
     } catch {
         return null;
     }

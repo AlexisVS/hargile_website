@@ -1,0 +1,107 @@
+/* FAQ accordion — nothing but type, space and one icon. No rules, no fills,
+   no fills-on-open. The collapse is a grid-template-rows transition: the
+   answer stays in the DOM (and in the server HTML) at all times, .panelInner
+   just clips it while the row is at 0fr. This is the CSS/aria collapse the
+   GEO guard requires.
+
+   There were three separators here — a rule above the list, one under every
+   row, and a blue one that drew itself in on open. Rows this far apart do not
+   need a line to read as separate rows, and the open state was already carried
+   three times over: the icon rotates, the answer appears, aria-expanded flips.
+   What is left is the gap. */
+
+.list {
+  display: grid;
+  gap: 6px;
+}
+
+.q {
+  margin: 0;
+}
+
+.trigger {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  padding: 14px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  /* Closed rows sit a step back so the open one reads as the one in front —
+     the job the blue rule used to do, done with the text that is already
+     there rather than a shape added on top. */
+  color: rgba(237, 237, 237, 0.72);
+  font-family: var(--font-headings);
+  font-weight: 600;
+  font-size: clamp(16px, 1.25vw, 19px);
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #ededed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(150, 185, 249, 0.7);
+    outline-offset: 2px;
+  }
+}
+
+.triggerOpen {
+  color: #ededed;
+}
+
+.qText {
+  flex: 1 1 auto;
+}
+
+.icon {
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  /* Optical alignment against the first text line. */
+  transform: translateY(1px);
+  color: rgba(150, 185, 249, 0.85);
+  transition: transform 0.3s ease;
+}
+
+/* Plus rotates into a multiply sign — reads as "close", stays hairline. */
+.iconOpen {
+  transform: translateY(1px) rotate(45deg);
+}
+
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+}
+
+.panelOpen {
+  grid-template-rows: 1fr;
+}
+
+.panelInner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.a {
+  margin: 0;
+  padding: 0 0 18px;
+  max-width: 68ch;
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.68);
+  line-height: 1.65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .icon {
+    transition: none;
+  }
+}

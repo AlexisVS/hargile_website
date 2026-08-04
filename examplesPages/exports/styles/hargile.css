@@ -1,0 +1,52 @@
+/* HARGILE — services & FAQ pages.
+   Only what inline styles cannot express: resets, hover states,
+   and the reduced-motion escape hatch. No layout lives here. */
+
+:root {
+  --hg-bg: #080c16;
+  --hg-fg: #ededed;
+  --hg-muted: rgba(237, 237, 237, 0.66);
+  --hg-accent: #96b9f9;
+  --hg-accent-hover: #b8cdfb;
+  --hg-line: rgba(255, 255, 255, 0.1);
+}
+
+html { background: var(--hg-bg); }
+
+body {
+  margin: 0;
+  background: var(--hg-bg);
+  color: var(--hg-fg);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+a { color: var(--hg-accent); text-decoration: none; }
+a:hover { color: var(--hg-accent-hover); }
+::selection { background: rgba(150, 185, 249, 0.25); }
+
+/* Pill CTAs — transparent body, hairline border, no fills. */
+.hg-pill { transition: border-color 0.3s, transform 0.3s, color 0.3s; }
+.hg-pill:hover { border-color: rgba(150, 185, 249, 0.55); transform: translateY(-1px); }
+.hg-pill--accent:hover { border-color: var(--hg-accent); transform: translateY(-2px); }
+.hg-pill--quiet:hover { border-color: rgba(255, 255, 255, 0.3); transform: none; }
+
+.hg-nav a { transition: color 0.3s; }
+.hg-nav a:hover { color: var(--hg-fg); }
+
+.hg-card { transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s; }
+.hg-card:hover { border-color: rgba(150, 185, 249, 0.4); }
+
+.hg-faq-btn:focus-visible,
+.hg-pill:focus-visible { outline: 1px solid var(--hg-accent); outline-offset: 4px; }
+
+/* Non-negotiable 4: everything settles to the finished state. */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+  [data-velocity] { transform: none !important; }
+  [data-row] { opacity: 1 !important; transform: none !important; }
+  [data-faq-panel] { grid-template-rows: 1fr !important; }
+}

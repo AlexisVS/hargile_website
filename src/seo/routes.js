@@ -9,6 +9,16 @@ export const ROUTES = {
     'home': '',
     'contact': '/contact',
     'legal.privacy': '/legal/privacy-policy',
+    'services': '/services',
+    /* French slugs shared across locales (like /contact): the target market is
+       French-speaking and the EN pages carry them as-is under /en/services/….
+       The dotted keys stay short and stable — the slug can change, the key
+       must not (it names the seo.pages.* message subtree). */
+    'services.web': '/services/applications-web',
+    'services.ia': '/services/ia',
+    'services.seo': '/services/seo',
+    'services.mvp': '/services/mvp-30-jours',
+    'faq': '/faq',
 };
 
 /* Pages that must stay out of the index. Empty since the audit result page was

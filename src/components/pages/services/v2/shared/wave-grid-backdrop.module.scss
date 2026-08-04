@@ -1,0 +1,138 @@
+/* Layer for the services hero wave grid.
+
+   The grid is a floor the copy sits on, not an image beside it, so it runs
+   edge to edge and everything that makes the copy readable is done by fading
+   the layer rather than by cropping it — a hard-edged canvas behind a headline
+   reads as a panel someone forgot to size.
+
+   The canvas itself is a single still frame (wave-grid.jsx), so this layer holds
+   the only animation in the section: one fade as it arrives. */
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  /* The renderer is alpha, so the pillars' unlit sides are transparent rather
+     than black. Matched to $background-dark — anything else shows as a tint
+     seam where the mask thins the layer. */
+  background: #080c16;
+
+  /* No vertical fade at all, top or bottom. Both ends previously rolled off to
+     transparent, and against a dark grid that reads as the surface running out
+     rather than as it being masked — which is the one thing this must never
+     look like. The hero is a full 100svh box starting at y=0, so the grid now
+     fills the screen and ends only where the section does: the navbar floats
+     over the top of it, the offers index butts straight onto the bottom.
+
+     Only the horizontal ramp survives, floored at 0.6 — a falloff toward the
+     copy column, with the surface still continuous across the full width. */
+  mask-image: linear-gradient(to right, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.75) 40%, #000 82%);
+
+  /* Held back a little, so the pillars stay a surface rather than a subject.
+     Less duck than the animated version needed (0.85) — a still frame doesn't
+     repeatedly pull the eye the way a passing wave did.
+
+     Carried in a custom property, not set directly, because the fade below ends
+     on this value: `animation-fill-mode: both` leaves the keyframe's `to` state
+     applied forever, so a plain `opacity` override in the media query would be
+     silently outranked by it. Routing both through one variable means the
+     breakpoint changes the fade's destination too. Single dial for how present
+     the grid is. */
+  --grid-opacity: 0.92;
+  opacity: var(--grid-opacity);
+
+  /* three.js is a lazy chunk, so the canvas appears some hundreds of ms after
+     the copy has already painted. Without this it lands as a hard cut. One
+     fade, no delay, no loop — matches the hero's own entry reveal timing
+     (0.5s ease-out) so the two read as one arrival rather than two events. */
+  animation: waveGridIn 0.5s ease-out both;
+}
+
+@keyframes waveGridIn {
+  from {
+    opacity: 0.01;
+  }
+  to {
+    opacity: var(--grid-opacity);
+  }
+}
+
+/* Nothing here moves once painted, so the still frame itself is already
+   reduced-motion-safe. The arrival fade is the one thing to drop. */
+@media (prefers-reduced-motion: reduce) {
+  .backdrop {
+    animation: none;
+  }
+}
+
+/* The exported still. cover, not contain: the export is a 1.6:1 frame and the
+   hero is any ratio from a tall phone to a wide desktop, so it has to fill and
+   crop. That crop is not a compromise — it reproduces what the live camera did
+   with its field-of-view lock, which is why one image covers every viewport.
+   Centred so the quiet zone stays put relative to the copy column. */
+.still {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Composition picker — only ever in the DOM when ?wave= is in the URL, so this
+   never ships to a real visitor. Deliberately plain: it is a tool for choosing a
+   variant, not part of the page. */
+.picker {
+  position: absolute;
+  /* Below the navbar, which the hero now runs underneath. */
+  top: calc(var(--navbar-height, 68px) + 16px);
+  right: 24px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 14px;
+  border: 1px solid rgba(150, 185, 249, 0.35);
+  border-radius: 999px;
+  background: rgba(8, 12, 22, 0.75);
+  backdrop-filter: blur(8px);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #96b9f9;
+
+  a,
+  button {
+    color: #96b9f9;
+    text-decoration: none;
+    /* The button has to be un-styled back to matching the links — this is one
+       control strip, not a form. */
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    cursor: pointer;
+
+    &:hover {
+      color: #ffffff;
+    }
+  }
+
+  span {
+    color: rgba(237, 237, 237, 0.75);
+  }
+}
+
+/* One column below 860px (the hero's own breakpoint): the copy spans the full
+   width, so a horizontal falloff has nowhere left to hide the grid — drop the
+   mask and lean on opacity instead. 0.6 rather than the 0.5 the animated grid
+   needed: a still frame behind text is far easier to read over than a moving
+   one, so it can sit closer to full strength. */
+@media (max-width: 860px) {
+  .backdrop {
+    mask-image: none;
+    --grid-opacity: 0.6;
+  }
+}

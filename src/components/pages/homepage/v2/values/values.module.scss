@@ -1,4 +1,15 @@
-/* Our Values — statement + spotlight value cards (design: Homepage v2) */
+/* Nos valeurs — colonne de texte + fenêtre de terminal (d'après
+   examplesPages/NosValeurs2a.jsx, remis dans le système du site).
+
+   Toutes les couleurs viennent d'ici : #ededed et ses crans rgba pour le texte,
+   #96b9f9 comme accent unique, des hairlines à rgba(255,255,255,.10–.12), et
+   var(--font-headings) pour les titres. La maquette apportait Montserrat/Inter,
+   un ambre hors palette, une ombre portée et un radius : rien de tout ça n'a
+   survécu — voir les notes dans values.jsx. */
+
+/* Même pile mono que l'encoche de domaine du portfolio : une seule police à
+   chasse fixe sur le site. */
+$mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
 
 .orb {
   position: absolute;
@@ -13,84 +24,208 @@
   pointer-events: none;
 }
 
+/* 0.42 / 1 plutôt que le `flex: 0 0 360px` de la maquette : la colonne de
+   gauche doit rester proportionnelle au container du site, pas figée à 360px
+   quel que soit l'écran. */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr);
+  gap: clamp(32px, 4.5vw, 64px);
+  align-items: center;
+}
+
 .statement {
   font-family: var(--font-headings);
-  font-size: clamp(20px, 2.2vw, 30px);
+  font-size: clamp(18px, 1.7vw, 24px);
   font-weight: 400;
   letter-spacing: -0.015em;
-  color: rgba(237, 237, 237, 0.85);
-  line-height: 1.35;
-  max-width: 34ch;
-  margin: 28px 0 0;
+  color: rgba(237, 237, 237, 0.92);
+  line-height: 1.4;
+  margin: 22px 0 0;
   text-wrap: balance;
 }
 
 .ambition {
   font-size: 16px;
   font-weight: 300;
-  color: rgba(237, 237, 237, 0.62);
+  color: rgba(237, 237, 237, 0.78);
   line-height: 1.6;
-  max-width: 52ch;
-  margin: 20px 0 0;
+  margin: 18px 0 0;
 }
 
-/* --- Value cards: 3 + 2 layout via flex-wrap.
-   Same lit-glass recipe as the hero's capability cards (.floatCard in
-   hero.module.scss) so the two sections read as one card system; keep the two
-   in sync if the recipe changes. --- */
+/* ---------- La fenêtre ---------- */
 
-.values {
-  margin-top: 64px;
+/* Tracée, pas remplie : une hairline pour tout contour et des angles droits.
+   La maquette posait un fond #07070c, un radius 14 et une ombre
+   0 30px 60px — c'est-à-dire exactement la carte détachée qu'on vient de
+   retirer du portfolio et des valeurs. */
+.panel {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: transparent;
+  min-width: 0;
+}
+
+.chrome {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.card {
-  position: relative;
-  flex: 1 1 calc(33.333% - 14px);
-  min-width: 240px;
-  padding: 20px 22px 24px;
-  box-sizing: border-box;
-  border-radius: 14px;
-  background: linear-gradient(
-    155deg,
-    rgba(56, 74, 122, 0.5) 0%,
-    rgba(24, 33, 58, 0.62) 48%,
-    rgba(12, 17, 32, 0.72) 100%
-  );
-  backdrop-filter: blur(20px) saturate(115%);
-  -webkit-backdrop-filter: blur(20px) saturate(115%);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
-}
-
-/* Luminous dot in place of an icon — same as the hero's .cardDot */
-.cardDot {
-  width: 8px;
-  height: 8px;
+/* Anneaux et non pastilles pleines. Les trois de la maquette étaient remplies,
+   dont un ambre absent de la palette ; ici c'est un seul accent, au trait. */
+.dot {
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background: #96b9f9;
-  box-shadow: 0 0 12px rgba(150, 185, 249, 0.8);
+  border: 1px solid rgba(150, 185, 249, 0.5);
+  flex: 0 0 auto;
 }
 
-.valueName {
-  position: relative;
-  font-family: var(--font-headings);
-  font-weight: 600;
-  font-size: clamp(19px, 1.8vw, 24px);
-  letter-spacing: -0.015em;
-  margin: 14px 0 0;
+.fileName {
+  flex: 1;
+  text-align: center;
+  font-family: $mono;
+  font-size: 12px;
+  color: rgba(237, 237, 237, 0.45);
+}
+
+.body {
+  padding: clamp(20px, 2vw, 28px);
+  font-family: $mono;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.line {
+  margin: 0;
+}
+
+.arrow {
+  color: #96b9f9;
+}
+
+/* Le chemin et les ## : la maquette les mettait en #2563eb, un bleu presque
+   noir sur ce fond. Ce sont des crans dimmés du seul accent du site. */
+.path {
+  color: rgba(150, 185, 249, 0.62);
+}
+
+.cmd {
   color: #ededed;
 }
 
-.valueDesc {
-  position: relative;
-  font-size: 14px;
-  font-weight: 300;
-  color: rgba(237, 237, 237, 0.6);
-  line-height: 1.55;
-  margin: 10px 0 0;
+.list {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+}
+
+.entry + .entry {
+  margin-top: 16px;
+}
+
+/* Le nom porte l'accent au repos — c'est la seule couleur de la sortie, et les
+   dièses le rappellent en plus sombre juste devant.
+
+   Plus de `display: flex` : le gap de 8px qu'il servait à poser dessinait une
+   espace qui n'existait pas dans le texte, donc une sélection donnait
+   « ##Transparence ». L'espace est maintenant dans la chaîne et le titre est un
+   simple bloc. */
+.name {
+  margin: 0;
+  font-family: $mono;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.75;
+  letter-spacing: 0;
+  color: #96b9f9;
+}
+
+.hash {
+  color: rgba(150, 185, 249, 0.45);
+  font-weight: 400;
+  /* L'espace de « ## » est significative : sans ça le collapse HTML la mange et
+     on retombe sur le markdown invalide qu'on vient de corriger. */
+  white-space: pre;
+}
+
+/* 3ch = la largeur exacte de « ## » en chasse fixe, donc la description tombe
+   sur la même colonne que le nom au pixel près, à toutes les tailles de police.
+   26px était juste pour 13px et se décalait au palier mobile. */
+.desc {
+  margin: 0;
+  padding-left: 3ch;
+  max-width: 72ch;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.75;
+  color: rgba(237, 237, 237, 0.82);
+}
+
+/* Le curseur clignote — l'exception assumée à la règle « rien ne boucle » du
+   reste du site. Un caret immobile ne dit pas « le terminal attend », il dit
+   « capture d'écran », ce qui casse la seule chose que la fenêtre a à vendre.
+
+   steps(1) et pas d'interpolation : un vrai curseur commute, il ne fond pas.
+   Le cycle est asymétrique (allumé 55 %, éteint 45 %) comme la plupart des
+   émulateurs — un 50/50 parfait bat plus mécaniquement que ce qu'on a en tête.
+   L'animation ne touche que l'opacité d'un bloc de 8×15px : composée par le
+   GPU, elle ne relayoute rien. */
+@keyframes caretBlink {
+  0%,
+  55% {
+    opacity: 1;
+  }
+  56%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.caret {
+  display: inline-block;
+  width: 8px;
+  height: 15px;
+  background: #96b9f9;
+  vertical-align: -3px;
+  animation: caretBlink 1.1s steps(1) infinite;
+}
+
+/* ---------- Responsive ---------- */
+
+/* La fenêtre a besoin d'une largeur pour que ses lignes ne se cassent pas en
+   escalier ; sous ce seuil la colonne de texte passe au-dessus. */
+@media (max-width: 1024px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(32px, 6vw, 48px);
+  }
+}
+
+/* Le clignotement est le seul mouvement de la section, donc le seul à couper —
+   et il faut le couper : un blink est exactement le type d'animation
+   répétitive que prefers-reduced-motion existe pour éteindre. Le curseur reste,
+   simplement fixe. */
+@media (prefers-reduced-motion: reduce) {
+  .caret {
+    animation: none;
+  }
+}
+
+/* En dessous, le mono à 13px devient le facteur limitant : on descend d'un cran
+   et on resserre l'indentation de la sortie. */
+@media (max-width: 560px) {
+  .body {
+    font-size: 12px;
+  }
+
+  .desc {
+    font-size: 12px;
+  }
+
+  .name {
+    font-size: 12px;
+  }
 }

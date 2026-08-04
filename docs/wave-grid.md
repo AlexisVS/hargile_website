@@ -1,0 +1,780 @@
+# Wave grid — the site's shared backdrop
+
+> Written 2026-07-31. Covers what shipped in `feat(services): wave-grid still on
+> the hero, with its export pipeline`, and how to make new compositions.
+>
+> **Amended the same day.** `wave-grid.jsx` also has a `mode="live"` now, used by
+> the homepage wave hero. Everything below is about the still mode `/services`
+> ships and is unaffected by it — see [Live mode](#live-mode) at the end, and
+> [homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md) for the why.
+>
+> **Amended 2026-08-04.** The grid went from two pages to eight. The four service
+> detail pages joined the poster hero
+> ([service-detail-hero-plan.md](./service-detail-hero-plan.md)), and `/contact`
+> replaced its ColorBends canvas with the grid. `/contact` is the interesting
+> one: it is the first consumer whose copy covers the whole frame, and the first
+> whose quiet zone is a **band** rather than an ellipse — see
+> [/contact](#contact--the-page-whose-copy-covers-the-frame). The title changed
+> with it; this stopped being "the /services hero backdrop" some time ago.
+
+## What it is
+
+A slab of tall pillars, lit in our blue, sitting behind the `/services` hero
+headline. Ported from [franky-adl/3d-wave-grid][repo] — the same author and
+technique as the Codrops article the homepage's `cube-grid.jsx` came from, but
+that one is a heavy simplification and this is the original.
+
+[repo]: https://github.com/franky-adl/3d-wave-grid
+
+| | homepage `cube-grid.jsx` | `/services` wave grid |
+| --- | --- | --- |
+| geometry | 0.4 cubes, whole cube translates | **0.8 × 3 pillars**, only the top half stretches |
+| grid | 26² spaced apart | 48² with a 0.01 gap — one solid floor |
+| camera | 3/4 view, fixed | near-overhead, small fixed tilt |
+| shadows | none | real, cast from the displaced silhouette |
+| motion | live, pointer-driven | **none — a single still frame** (`mode="live"` exists, but not here) |
+
+Only the top half of each box moves, so pillars *stretch* rather than float:
+their bases stay welded into one surface. That, plus the near-overhead camera,
+is what makes a frozen frame read as an opened-up floor rather than as scattered
+blocks.
+
+## What actually ships is an image
+
+`/services` serves a `<picture>`, not a canvas. three.js is only loaded for the
+two authoring paths below.
+
+| | gzipped |
+| --- | --- |
+| three.js (before tree-shaking) | 184 kB — realistically ~150 kB shipped |
+| `curated.avif` @ 2560×1600 | **24 kB** |
+| `curated.webp` (fallback) | 44 kB |
+
+Roughly **6× smaller**, and that is only the download. The image also skips the
+JS parse/compile, building 2304 instances, compiling two shader programs and a
+shadow pass — all main-thread work. It paints with the rest of the page instead
+of popping in after hydration.
+
+The grid was always a single frame that never changes, so the canvas was earning
+nothing at runtime.
+
+**The WebP fallback is required, not belt-and-braces.** Our browserslist allows
+`edge >= 111`, and Edge only shipped AVIF in 121.
+
+### Why one image covers every viewport
+
+`object-fit: cover` is doing more work here than it looks.
+
+The live camera locks horizontal world coverage above 1.6:1 and closes the
+vertical angle as the viewport widens (`fovForAspect`). Below 1.6:1 it holds
+vertical extent and shows less horizontally. Those are precisely `cover`'s two
+behaviours against a fixed-ratio image — fill the width and crop top/bottom, or
+fill the height and crop the sides.
+
+So the export is made at exactly 1.6:1 (`REF_ASPECT`), and the crop *reproduces*
+the camera rather than approximating it. No per-breakpoint image set is needed,
+including portrait.
+
+## Eight pages, three frames each
+
+Every consumer runs the same three-frame structure — phone, tablet, wide — and
+**every frame is its own export**. As of 2026-08-04:
+
+| page | composition | quiet zone | notes |
+| --- | --- | --- | --- |
+| `/services` | `wave-7` | poster hero's, shared | |
+| `/faq` | `wave-70` | poster hero's, shared | |
+| `/services/applications-web` | `wave-142` | poster hero's, shared | |
+| `/services/ia` | `wave-312` | poster hero's, shared | |
+| `/services/seo` | `wave-188` | poster hero's, shared | |
+| `/services/mvp-30-jours` | `wave-97` | poster hero's, shared | |
+| `/contact` | `contact-297` | **its own, a band** | see below |
+| `/` (homepage) | `home*` | `HOME_CALM*` | live canvas ≥1024 |
+
+The six M4 pages share one quiet zone because they share one copy geometry —
+same component, same 100svh box, same measure, same 860px stack point — so only
+the seed table differs between them. That sharing is a property of the layout,
+not a general licence: `/contact` and the homepage each keep their own because
+their copy sits somewhere else entirely.
+
+⚠️ **A composition name is not a page name.** `wave-142` and `contact-297` are
+both "wave 142" and "wave 297" to the generator; the prefix records which quiet
+zone was in force when the frame was captured, and that is the thing that makes
+them non-interchangeable.
+
+The frames are not interchangeable for the same reason: the
+quiet zone is tuned per layout (`/services` has one paragraph in a left column,
+the homepage has eyebrow + headline + paragraph + CTA down the same side, and
+below each page's one-column breakpoint both become a single full-width column),
+so an image made for one puts its dark band in the wrong place on the other.
+
+**The band edges differ per page and that is deliberate**, because they are
+layout facts rather than a shared convention:
+
+| | phone | tablet | wide |
+| --- | --- | --- | --- |
+| homepage | ≤640 | 641–1023 | ≥1024 — **canvas**, image only if WebGL fails |
+| `/services` | ≤640 | 641–860 | ≥861 — image, always |
+
+`/services` switches at **860** because that is where its hero stops being two
+columns; the homepage switches at **1024** because that is where it starts
+affording a canvas. The shared part is the rule, not the numbers:
+[`wave-frame.js`][wf] holds `frameForAspect` and `useWaveFrame`, and each page
+passes its own edges in. A second copy of that rule is how the two would stop
+meaning the same thing.
+
+[wf]: ../src/components/pages/services/v2/shared/wave-frame.js
+
+| | the poster hero (`/services`, `/faq`) | homepage wave hero |
+| --- | --- | --- |
+| route | `/services` **and `/faq`** — same component, same layout | **`/`** — the hero's only backdrop |
+| desktop | **the still image** | **live canvas**, ≥1024px |
+| mobile / tablet | the still image (the wide one, cropped) | **a still composed for that band**, <1024px |
+| image | `/services`: `wave-7.*` + `-phone` + `-tablet`<br>`/faq`: `wave-70.*` + `-phone` + `-tablet` | `home.*` + `home-phone.*` + `home-tablet.*` |
+| pointed at by | the **`composition`** prop on `WaveGridBackdrop` — one name, three frames derived ([`wave-grid-backdrop.jsx`][wgb]) | `HOME_IMAGE` / `PHONE_IMAGE` / `TABLET_IMAGE` in [`hero-backdrop.jsx`][hb] |
+| quiet zone | `CALM` in [`wave-grid.jsx`][wg], `CALM_PHONE` / `CALM_TABLET` in [`wave-grid-backdrop.jsx`][wgb] | `HOME_CALM`, `HOME_CALM_PHONE`, `HOME_CALM_TABLET` in [`hero-backdrop.jsx`][hb] |
+| export command | `npm run images:wavegrid 7`, `…:svc-phone 7`, `…:svc-tablet 7` | `npm run images:wavegrid:home`, `…:phone`, `…:tablet` |
+
+⚠️ **`/services` ships variant 7, not `curated`.** Mihai picked it off the `?bg=`
+compare switch. All three of its frames pass `&wave=7`, so they are one
+composition at three shapes — and genuinely so: `buildSeeds` rejects against the
+module constant `CALM`, **not** against the per-frame quiet zone passed in, so
+the seed table is identical across the three. Only the damping differs.
+
+That also explains why the `/services` phone frame is dimmer than the homepage's:
+`buildSeeds` deliberately leans the light rightward (seeds run to x +9.5, and the
+left half is thinned) for a two-column desktop hero, while a phone frame only
+sees x ±3.7. Most of that light is off-frame by construction. On the page it
+reads correctly — the copy sits on the dark band — but do not expect the raw
+export to look like the homepage's.
+
+`/services` is still everywhere because its grid never moves at all. The homepage
+moves on desktop and freezes on mobile — same grid, same colour, same
+composition language on both, which is the split the homepage wave hero exists to
+introduce.
+
+[hb]: ../src/components/pages/homepage/v2/hero/backdrops/hero-backdrop.jsx
+
+## The homepage ships three frames, and none is a fallback for another
+
+`/services` has `curated.*`. The homepage has three, each composed at the aspect
+it is served at:
+
+| file | served | export aspect | pillars across |
+| --- | --- | --- | --- |
+| `home-phone.*` | ≤640px | 1170x2532 (0.46) | ~8 |
+| `home-tablet.*` | 641–1023px | 1600x2000 (0.80) | ~11 |
+| `home.*` | past 1024px, if the canvas can't run | 2560x1600 (1.60) | ~15 |
+
+**None of them is a crop of another, and that is the whole point.** `object-fit:
+cover` reproduces the camera's own reframing over a modest range of aspects, but
+not across a 3.5× spread: at 390x844 it keeps roughly the middle 29% of the wide
+frame, so a phone was being shown a slice of a composition laid out for a frame
+it never sees.
+
+The pillar counts rise with the frame deliberately — the screen grows, the count
+grows with it, and the pillars themselves stay roughly the size they are on a
+phone. See the ⚠️ below on why that is a taste decision rather than a derived
+one.
+
+`home-phone.*` was unshipped for two sessions because the only render was a black
+column; both causes were framing and both are fixed. See phase 7 in
+[homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md) for the diagnosis.
+
+`home-tablet.*` came later, and the band it fills is worth knowing about because
+it is the one nobody looks at: 641–1023px is a tablet or a half-screen desktop
+window, and it used to borrow `home.*`. That is a two-column composition cropped
+into a nearly-square window — its quiet zone runs down the left while the hero
+there has *already stacked into one full-width column*, so the copy sat half over
+dark and half over lit.
+
+⚠️ **Extending `home-phone.*` upward instead does not work, and it was measured
+rather than assumed.** At 0.8:1 `cover` keeps only the middle ~40% of the 0.46:1
+phone render — and that middle is exactly its quiet band. All of its light lives
+in the top and bottom thirds and gets cropped away, leaving a dead plate. A tall
+composition cannot be re-used at a squarer aspect, in either direction.
+
+⚠️ **The phone frame is deliberately coarser than the wide one — about eight
+pillars across against fifteen.** That is a decision, not drift: at phone size,
+matching the wide frame's density makes a busy mosaic that competes with the
+copy. The phone still decorates and suggests depth; it does not reproduce the
+desktop grid. `radius` in `HOME_RELIEF_PHONE` is the dial, and the count is
+counted off the exported image — every value derived from the frustum maths has
+been wrong.
+
+## ⚠️ Exports that "hang" are an agent-browser session collision
+
+Not the page, not the code. agent-browser keeps one daemon per session name, and
+two processes on `default` at once fight over it — sometimes with a real error,
+sometimes by `open` never returning. Once wedged, every capture hangs until the
+orphaned headless Chromes are killed:
+
+```
+agent-browser close --all
+# if that is not enough, kill chrome.exe processes whose command line contains
+# agent-browser-chrome- (a temp profile dir; never your own browser)
+```
+
+The script now uses its own `wave-export` session, so it cannot collide with
+hand-run `agent-browser`. **Two exports at once still would — run them one after
+the other.**
+
+It also no longer hangs *silently*. Every `agent-browser` call is bounded at 120 s
+(`COMMAND_TIMEOUT`); a whole capture takes about thirty, so the timeout only ever
+fires on this wedge, and when it does it prints the two cleanup commands above.
+Before that, `execFile` had no timeout at all: a wedged daemon left the script
+sitting there having printed its header and nothing else, which reads as "the
+export is slow" — the AVIF encode genuinely is — or as "the page is broken", and
+both send you looking in the wrong place.
+
+## URL switches
+
+All authoring-only. Absent the params, none of this costs anything — no picker,
+no generated seeds, and on `/services` no three.js at all.
+
+| URL | What it does |
+| --- | --- |
+| `/services` | the exported still (no JS) |
+| `/services?bg=wave-7` | a different exported still, to compare |
+| `/services?wave=7` | composition 7 rendered **live** in WebGL, with a picker |
+| `/services?export=2560x1600` | live render at fixed size — what the script drives |
+| `/` | canvas ≥1024px, `home-tablet.*` 641–1023, `home-phone.*` ≤640 |
+| `/?wave=7` | composition 7 as a **still** frame, for picking — **in whichever of the three frames the window's width selects** |
+| `/preview/home-wave?export=2560x1600` | fixed-size render — what the script drives |
+| `/preview/home-wave?export=1600x2000` | the tablet frame, from its aspect alone |
+
+Two notes on that last row:
+
+- **`/preview/home-wave` renders the same hero as `/`**, from the same component.
+  It exists only because the export script cannot drive `/` — `agent-browser
+  open` never returns there. Do not delete it as a duplicate; see phase 6 in
+  [homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md).
+- The `?backdrop=<key>` switch, for comparing the wave grid against the cube grid
+  and the colour bends, is gone. The wave grid won and became the hero's only
+  backdrop, so there is nothing left to switch to.
+
+Two differences on the homepage worth knowing:
+
+- **`?wave=N` renders a still, not a live grid.** Browsing compositions means
+  browsing seed tables, and live mode ignores the seed table entirely — it fills
+  its trail from the pointer. A live `?wave=7` would show you nothing about
+  composition 7.
+- **No picker widget.** Type the number in the URL; the seed array is printed to
+  the console exactly as on `/services`.
+
+Read via `useSyncExternalStore`, not `useSearchParams`: the latter would opt the
+whole route into dynamic rendering just to support debug flags.
+
+**The homepage export goes through the live hero, not a dedicated export page.**
+That is deliberate. The exported image has to be the composition the live canvas
+draws, and the only way to guarantee it is for both to come out of the same call
+site with the same `HOME_CALM`. A second mounting of `WaveGrid` somewhere else is
+exactly how the two would quietly drift apart.
+
+## Adding a frame for a new aspect band
+
+Three frames exist because three bands needed them, and the third one was built
+by following the mistakes of the first two rather than by re-deriving anything.
+If a fourth is ever needed, this is the order that works. It is deliberately
+measure-first: every step that was skipped the first time cost a session.
+
+**1. Measure the band, don't assume it.** The hero's backdrop box is not the
+viewport — it has its own height. Read it at both ends of the range:
+
+```js
+// in the browser, at each width you care about
+const bd = document.querySelector('picture img, canvas').closest('div');
+const r = bd.getBoundingClientRect();
+r.width / r.height
+```
+
+For 641–1023px this gave 0.695 at 820x1180 and 0.938 at 1000x700 — the backdrop
+was *taller* than the viewport at both, which no amount of reasoning would have
+produced.
+
+**2. Compose at the geometric mean of the extremes**, not at one end and not at
+a device's nominal ratio. `sqrt(0.695 × 0.938) ≈ 0.807`, hence 1600x2000. That
+splits the worst-case `cover` crop evenly instead of making one end of the band
+pay for the other.
+
+**3. Check whether an existing frame could cover it — by rendering the crop, not
+by thinking about it.** This takes seconds and has changed the answer twice:
+
+```js
+// what object-fit: cover will actually show
+await sharp('public/images/wave-grid/home-phone.webp')
+    .resize({width: 540, height: 480, fit: 'cover'})
+    .png().toFile('/tmp/preview.png');
+```
+
+Then *look at the file*. Extending `home-phone.*` up into the tablet band looked
+obviously right and rendered as a dead plate — `cover` keeps the middle of a tall
+frame, and the middle of these compositions is the quiet band by construction.
+
+**4. Derive the quiet zone from the new frame's own world extents.** Below
+`REF_ASPECT` the vertical FOV is pinned at 40°, so:
+
+```
+visible height = 2 · R · tan(20°) = 0.728 · R
+visible width  = 0.728 · R · aspect
+```
+
+`rx` must exceed the visible half-width or the damping shows a rim; `rz` sets the
+copy band and `RIM_OUT` ramps it out at 1.35× that. **Sizing a quiet zone from
+another frame's extents is what exported a black column** — it is the single most
+expensive mistake in this file's history.
+
+**5. Pick `radius` by counting pillars on a render.** Not from the frustum maths,
+which have now been wrong three times (26 → predicted 11, delivered 9). Density
+is a taste dial, not a fidelity one: eight on a phone, eleven at tablet, fifteen
+wide. Judge it against the frame you are in, never against `home.*`.
+
+**6. Wire it up in three places, and they must agree**: a `TARGETS` entry in the
+export script, the aspect thresholds in `frameForAspect`, and the `<source>`
+media queries. The thresholds are aspects and the media queries are widths on
+purpose — an export answers from the shape it asked for, a window from its width,
+so a `?wave=N` preview can never disagree with what the export writes.
+
+**7. Verify the handoffs**, not just the render. Load the page at both sides of
+every breakpoint and read `img.currentSrc` — an off-by-one between `TABLET_MAX`
+and a media query leaves one pixel column of viewport serving the wrong
+composition, and nothing else will tell you.
+
+## /contact — the page whose copy covers the frame
+
+> Shipped 2026-08-04. [`contact-backdrop.jsx`][cb] +
+> [`contact-backdrop.module.scss`][cbs]. It replaced a live ColorBends canvas, so
+> `/contact` now ships **no WebGL at all** — nothing in `src` imports ColorBends
+> any more, and that file is dead code.
+
+[cb]: ../src/components/pages/contact/contact-backdrop.jsx
+[cbs]: ../src/components/pages/contact/contact-backdrop.module.scss
+
+Every other consumer has copy in one part of the frame and light in another.
+The contact form has a title, five field rows and a textarea running edge to
+edge and top to bottom — it covers roughly **82% of a 390×844 phone frame**.
+That single fact drives everything below.
+
+**What transferred, measured rather than assumed.** The backdrop box runs 0.462
+at 390×844, 0.800 at 800×1000 and 1.521 at 1440×900 — the *same aspects as the
+heroes*, because both are viewport boxes. So `PHONE` / `TABLET` / `WIDE` and the
+640/860 band edges were reused unchanged. Only the seeds and the damping are
+new. No new export size was needed.
+
+**The quiet zone is a band, not an ellipse.** The form spans the full measure,
+so there is no side for light to arrive from; the only room left is above the
+title and below the submit button. `rx` is deliberately **past the frame edge**
+(9.6 against a visible ±8.2) so the damping spans the full width. An `rx` inside
+the frame puts the ellipse's shoulders on screen, and a form sitting in a
+visible oval of calm looks worse than no damping at all.
+
+### ⚠️ `rz` and `depth` are different dials — this cost a round trip
+
+- **`rz` is WHERE the calm reaches.** Flat core at `0.8·rz`, ramp out to
+  `1.35·rz` (`RIM_IN` / `RIM_OUT`).
+- **`depth` is HOW EMPTY that core is.**
+
+The first attempt widened `rz` and left `depth` at the heroes' 0.85. A core at
+0.85 still passes **15% of the light**, which reads as cubes behind the fields
+*no matter how wide the band gets* — the form looked "calmer" at every setting
+and never looked clear. `depth: 0.96` is what actually empties it. If the copy
+still has texture behind it, turn `depth`; if the texture is in the wrong
+*place*, turn `rz`.
+
+### The trade there is no way around
+
+Clearing a form that tall removes most of the frame's light. Measured mean
+luminance at 390: `/contact` **15.7** against `/services/ia` **24.4**. That gap
+is structural, not a tuning miss — a hero page only has copy in its middle
+third. `depth` is the dial for trading back: 0.85 lets faint cubes through
+behind the fields and lifts the page.
+
+### No opacity duck below 860px, unlike the heroes
+
+The heroes drop to `--grid-opacity: 0.6` on mobile because their compact profile
+ships **no quiet zone** — the copy becomes one full-width column and opacity is
+the only lever left. `/contact` carries a real band at every frame, so ducking
+again just makes the page dark. It holds 0.92 everywhere.
+
+This was found the expensive way: the page first shipped with damping **off**
+and the layer dimmed to 0.5/0.42 with a mask, on the reasoning that a form
+covering the frame leaves nothing to carve out. That reads at **14.1** mean
+against 24.4 — visibly darker than every other route — *and* never cleared the
+cubes from behind the form. Dimming makes the whole page darker, copy and
+decoration alike; only the quiet zone can make one part darker than another.
+
+### ⚠️ An offset ellipse on phone is worse — do not re-derive it
+
+The idea recurs and looks sound: stacked, the labels and inputs only reach about
+x 300 of 390, so there appears to be a right margin worth lighting. Measured,
+`{cx: -1.1, rx: 2.85}` came out at **14.8** against the band's **15.7** —
+*darker*, not brighter — and the light it freed arrived as a block hard beside
+the email row rather than away from the copy. At 0.46 aspect the visible x range
+is only ±3.70, so narrowing `rx` frees very little area while the ramp still
+covers most of it.
+
+### The loader signal moves with the backdrop
+
+`HeroLoadingProvider` covers `/` and `/contact` and holds a full-screen overlay
+until the page reports ready. The bends reported when their `<canvas>` appeared;
+a still image has no canvas, so that watcher never fires. It is **not** a stuck
+page — `SAFETY_MS` (2500) dismisses regardless — which is exactly what makes it
+easy to miss: the symptom is every contact load sitting behind the overlay for
+two and a half seconds. It now reports on the image's `load`, with `onError`
+wired to the same handler so a missing frame still reveals the page.
+
+## Making a new composition
+
+The same four steps for either page. Where they differ, both are given.
+
+### 1. Browse
+
+```
+npm run dev
+
+# /services — and the four detail pages, which share its quiet zone,
+# so browse here for all six
+open http://localhost:3000/services?wave=1
+
+# /contact — its own quiet zone, so it must be browsed on its own page
+open http://localhost:3000/contact?wave=1
+
+# homepage hero
+open http://localhost:3000/?wave=1
+```
+
+On `/services` and `/contact` a picker appears top-right: `← wave 1 → random`.
+On the homepage there is no picker — edit the number in the URL. Every number is deterministic —
+`?wave=34` renders the identical composition forever, on any machine — so note
+the ones you like and come back to them.
+
+**A composition is not portable between the pages.** The same `?wave=34` renders
+different-looking frames on each, because the quiet ellipse it is damped against
+differs. Always browse on the page you are exporting for.
+
+The generator is constrained, not free random ([`wave-grid.jsx`][wg],
+`buildSeeds`). Three rules keep every variant plausible:
+
+- nothing inside the quiet ellipse, so the copy stays dark by construction;
+- the right half runs younger and stronger (`age` is a brightness dial via
+  `exp(-age / fadeTime)`), preserving the light gradient toward the copy;
+- seeds may sit slightly outside the frame, so some rings enter from off-screen
+  rather than every ripple showing its own centre.
+
+It only varies **where the light falls**. Colour, pillar size, camera angle and
+the quiet zone are fixed across every variant.
+
+[wg]: ../src/components/pages/services/v2/shared/wave-grid.jsx
+
+### 2. Export
+
+With the dev server still running, in another terminal:
+
+```
+# /services — all three frames, and the variant number must match on all three
+npm run images:wavegrid 7               # wide      → wave-7.*
+npm run images:wavegrid:svc-phone 7     # ≤640      → wave-7-phone.*
+npm run images:wavegrid:svc-tablet 7    # 641–860   → wave-7-tablet.*
+npm run images:wavegrid                 # the curated composition  → curated.*
+
+# /contact — three targets, driving /contact rather than /services, because its
+# quiet zone is its own. No npm alias yet; call the script directly.
+node scripts/export-wave-grid.mjs --page=contact        297   # wide     → contact-297.*
+node scripts/export-wave-grid.mjs --page=contact-phone  297   # ≤640     → contact-297-phone.*
+node scripts/export-wave-grid.mjs --page=contact-tablet 297   # 641–860  → contact-297-tablet.*
+
+# homepage hero
+npm run images:wavegrid:home            # the curated composition  → home.*
+npm run images:wavegrid:home 7 32       # variants 7 and 32        → home-wave-7.*, home-wave-32.*
+npm run images:wavegrid:phone           # the SAME hero at 1170x2532 → home-phone.*
+npm run images:wavegrid:tablet          # the SAME hero at 1600x2000 → home-tablet.*
+```
+
+All three homepage targets are the same route and the same composition switch —
+only the requested aspect differs. `hero-backdrop.jsx` maps that aspect onto one
+of three frames (`frameForAspect`), which is the same rule a browser window at
+that shape follows, so `?wave=N` at phone or tablet width previews exactly what
+the matching export writes. A dedicated flag could disagree with the preview; an
+aspect cannot.
+
+⚠️ **Re-run all three whenever the composition changes**, and run them one after
+the other, never at once — see the session note above.
+
+Output lands in `public/images/wave-grid/`. The two targets write under different
+names on purpose, so exporting one can never overwrite the other's shipped
+image — the thing that would otherwise happen the first time someone forgets the
+flag.
+
+(`images:wavegrid:home` is just `node scripts/export-wave-grid.mjs --page=home`;
+add a `--page` entry to `TARGETS` in that script if the grid ever lands on a
+third page.)
+
+**Expect 60–90 s per variant** and no output until each one finishes — most of it
+is AVIF encoding at effort 6, which trades CPU for those small files. It is not
+hung. Run it in the background if that matters.
+
+Requires `agent-browser` (`npm i -g agent-browser`). A headless browser is
+unavoidable for WebGL, and this keeps a ~300 MB Puppeteer download out of the
+project's dependencies for a script that runs a handful of times a year.
+
+### 3. Ship it
+
+Point the page at the composition you kept:
+
+- `/services` → `DEFAULT_COMPOSITION` in [`wave-grid-backdrop.jsx`][wgb]
+- `/faq` → the `composition` prop at its call site in `FaqPageClient.jsx`
+- homepage → `HOME_IMAGE` in [`hero-backdrop.jsx`][hb]
+
+⚠️ For the two poster-hero pages that is **one name, not three** — `wave-70`
+gets you `wave-70-phone` and `wave-70-tablet` for free, so a composition can
+never ship half-swapped. It also means all three files must exist before you
+point at it.
+
+Commit the `.avif` and `.webp` — they are build outputs, but they are the shipped
+asset, and nothing regenerates them at build time.
+
+[wgb]: ../src/components/pages/services/v2/shared/wave-grid-backdrop.jsx
+
+### 4. Keep it permanently
+
+To make a generated composition the new default rather than one of many, copy
+the seed array the browser console prints under `?wave=N` into the `STILL`
+constant. Generated variants are reproducible from the number alone, so this is
+optional — but it makes the composition legible in the source instead of hidden
+behind a PRNG.
+
+⚠️ **`STILL` is shared by both pages.** Editing it changes the `/services` frame
+too, and that frame is the shipped image there — so re-export *both* afterwards
+and check `git status`. If the two pages ever want genuinely different seed
+tables, that is the point at which `STILL` has to become per-page, not a value to
+edit back and forth.
+
+### Changing the quiet zone instead
+
+If the problem is *where* the dark band sits rather than where the light falls,
+the ellipse is the dial, not the seeds — see the note under `CALM` on why
+steering seeds cannot do this job. `CALM` (services) and `HOME_CALM` (homepage)
+are independent, so either can move alone. Re-export the page you changed.
+
+## The tuning dials
+
+Everything below is in [`wave-grid.jsx`][wg].
+
+| Constant | Does what |
+| --- | --- |
+| `STILL` | the curated composition — every ripple, as `{x, z, age, strength}` |
+| `WAVE.amplitude` / `.maxHeight` | how far pillars rise. **Roughly double the interactive values** — frozen, a low swell reads as an almost-flat floor with a faint tint |
+| `WAVE.width` | how wide each ripple's lit band is (~6 world units at 3.0) |
+| `CALM` | the quiet zone ellipse: centre, radii, damping depth |
+| `RIM_IN` / `RIM_OUT` | where damping stops being flat and eases out |
+| `RADIUS` | camera distance — the honest dial for pillar size, scales linearly |
+| `COLOR_BASE/MID/HIGH` | the ramp. `MID` is `$accent-mihai` and owns most of the visible range |
+| `PROFILES` | grid extent and FOV, desktop vs phone |
+
+Layer opacity and the horizontal falloff live in
+[`wave-grid-backdrop.module.scss`][scss] as `--grid-opacity` and `mask-image`.
+
+[scss]: ../src/components/pages/services/v2/shared/wave-grid-backdrop.module.scss
+
+## Things that cost time, so they are written down
+
+**The lit colour is `$accent-mihai`, not `$primary`.** `$primary` (`#2563eb`) was
+the first choice and read as a blue panel rather than as ours. `#96b9f9` is where
+the headline gradient resolves. By usage it is already the de facto primary:
+**77 occurrences across `src` against 10 for `#2563eb`**, three of which are the
+token definition itself. `$primary` survives mostly as `--color-primary`,
+consumed in five places. Renaming the token is a separate, deliberate change —
+not done here.
+
+**Copy legibility is geometry, not a CSS scrim.** Seed placement alone cannot
+keep the paragraph dark: each ripple's lit band is ~6 world units wide against a
+~16-unit frame, so a seed placed to light one corner throws a broad ring through
+the middle on its way there. Hence `CALM`.
+
+**The quiet zone's flat core must cover the copy box outright.** A first attempt
+sized the ellipse to the copy but left a narrow flat core, so the paragraph's
+outer corners sat mid-ramp and distant rings still lit them. Measured across 120
+generated compositions, worst-case brightness behind the copy went from **0.65 to
+0.20** (the damping floor) purely by widening `RIM_IN`/`RIM_OUT`. Widening the
+seed *rejection* radius did almost nothing (0.645 → 0.622) — it was the wrong
+lever.
+
+**The upstream camera comments are wrong.** `Camera.js` claims ±14°/±22°;
+`Math.PI * 0.03` is 5.4° and `Math.PI * 0.05` is 9°. Trusting the comments and
+adding a resting tilt on top produced a view more oblique than the original ever
+reaches, which let the grid's outer edge into frame.
+
+**A wide hero opens the horizontal frustum enormously.** At 2.7:1, a 40° vertical
+FOV is nearly 100° horizontally — which both shrinks the pillars and throws the
+frustum sideways past the grid edge. That is what `fovForAspect` exists for, and
+why `onResize` recomputes the FOV rather than only the aspect.
+
+**Fog reads as the grid running out.** It was added for depth, but fog toward the
+page black darkens whatever is furthest from the camera — in a wide frame, the
+left and right extremes. Removed; shadows carry the depth. The original has none.
+
+**The hero slides under the navbar.** The dark band above it was never the bar
+itself (it is transparent at scroll 0) — it was the in-flow `Spacer` the navbar
+renders to reserve its height. Cancelled with a negative margin, as the homepage
+hero already does.
+
+**`preserveDrawingBuffer` is required to export.** WebGL discards the buffer
+after compositing, and since the scene renders once and never again, `toDataURL`
+would otherwise return a blank image. It is gated on `?export=` — preserving the
+buffer costs memory and blocks driver fast paths that a live page should not pay.
+
+**The export script must not go through a shell on Windows.** npm installs global
+CLIs as a `.cmd` shim; `execFile` cannot run a batch file, and routing through
+`cmd.exe` means Node cannot safely quote a URL containing `&`, so
+`?export=…&wave=N` gets truncated. The script finds the shim on `PATH` and hands
+its `.js` entry straight to `node`.
+
+## Live mode
+
+`/services` never uses it, and nothing above changes. It is documented here
+because it lives in the same file, and because the one-file decision is the part
+that needs defending.
+
+`mode="live"` (default `"still"`) turns the component back into the interactive
+toy upstream wrote: a pointer trail feeding ripples in, ambient ripples when
+untouched, a camera that tilts with the pointer, and a rAF loop gated by an
+`IntersectionObserver` **and** `visibilitychange` — either alone leaks frames, a
+hidden tab keeps intersecting and a scrolled-past section keeps a visible tab.
+It degrades to a single still frame under `prefers-reduced-motion` and on a
+software rasteriser, so the loop is never the thing that has to be trusted.
+
+**One component, not a fork.** Geometry, shader, colour ramp, quiet zone and
+camera orbit are identical between the two; only the seed source and the presence
+of a loop differ. The shader is the bulk of the file, and two copies of it would
+have drifted within a month.
+
+The trick that keeps it one path: the texel is `{x, z, spawnTime, strength}` and
+the shader computes `age = uTime - spawn`. **Still mode is a stopped clock** —
+`uTime` stays 0 and each seed's spawn is stored as minus its age, so the
+expression is the authored age unchanged. The still frame is literally the live
+surface with the clock stopped, which is also why the export can never drift from
+what the live path draws.
+
+Two things genuinely differ, and both are load-bearing:
+
+| | still | live |
+| --- | --- | --- |
+| amplitude / maxHeight | 1.0 / 0.8 | **0.4 / 0.45** |
+| speed / fadeTime | 2.2 / 3.0 | **1.4 / 4.5** |
+| birth ramp | 0 (seeds are authored at an age) | **0.55 s** |
+| grid | 48² = 2304 | 40² = 1600 |
+| DPR | 2 | 1.5 |
+| shadow map | 1024 | 512 |
+| trail length | 14 seeds, fixed | 64, a ring buffer |
+
+**The rise is the trap.** The still frame uses roughly double because frozen, a
+low swell reads as an almost-flat floor with a faint tint — the eye needs change
+to read a small height difference. Copy the still values into the live path and
+it looks spiky and over-lit, because the emissive lift in the fragment shader
+keys off height and every passing ripple then peaks it.
+
+**The still frame's speed and fadeTime are not tunable.** The `STILL`
+composition's ages were chosen against speed 2.2 (radius ≈ speed × age) and fade
+3.0 — those two numbers are what that composition *means*, and changing either
+re-renders the shipped image. They sit in `MODE.still` next to the live pair for
+exactly that reason: so a live retune cannot reach them by accident. The check is
+cheap and exact — re-run `npm run images:wavegrid` and confirm `git status` comes
+back clean.
+
+**The birth ramp is what makes the pointer wake continuous.** `exp(-age /
+fadeTime)` is 1.0 at age 0, so without it a ripple is born at full height: every
+spawn pops, and a moving pointer replays that pop once per spawn, which reads as
+the surface *stepping* after the cursor rather than following it. Growing each
+one in over half a second blends consecutive spawns into one wake — and that in
+turn is what lets the trail be dense (spacing 0.2, near upstream's 0.1) without
+the grid boiling. The tempting fix, thinning the trail, makes it worse: what you
+get is not a calmer wake but a coarser stepped one. Calm comes from the ramp and
+a low per-ripple strength, not from firing fewer.
+
+Still mode passes ramp 0, guarded in GLSL as `smoothstep(0.0, max(uRamp,
+0.0001), age)` — every authored seed is at age ≥ 0.8, so it evaluates to exactly
+1.0 and the still frame is untouched (verified by re-export).
+
+The perf column is the other one. The still frame chose DPR 2 and a 1024 shadow
+map *because* it renders exactly once; both are wrong for something drawn sixty
+times a second. Measured on the homepage hero: median 16.7 ms, p95 17.0 ms
+over 180 frames, shadows on.
+
+## Shadow map type: leave it alone
+
+`renderer.shadowMap.type` is deliberately **not set**. It used to be
+`PCFSoftShadowMap`, which as of three r184 is deprecated —
+`WebGLShadowMap.render()` warns and immediately reassigns itself to
+`PCFShadowMap`, *once per rendered frame*. On a still frame that is one warning;
+on the live grid it was sixty a second.
+
+Two things worth knowing before anyone "fixes" this back:
+
+- **Nothing about the output changed by dropping it.** The reassignment happened
+  before the first shadow pass, and therefore before any material was compiled
+  with a `SHADOWMAP_TYPE_*` define — so what shipped was always PCF. Proven by
+  re-export: byte-identical.
+- **`key.shadow.radius = 4` is still doing its job.** The softening is a PCF
+  feature, not a PCFSoft one — three's PCF path is a 5-tap Vogel disk with
+  `radius = shadowRadius * texelSize.x`. Dropping the radius *would* change the
+  look; dropping the type did not.
+
+## Known gaps
+
+- **Not verified on real hardware.** The homepage's three frames have each been
+  rendered, looked at, and checked resolving at their own breakpoints — but in a
+  desktop browser at simulated sizes, never on a real phone or tablet.
+- ~~**`home.*` is no longer served to anyone.**~~ **Fixed.** For one commit it
+  wasn't: once the tablet frame took the 641–1023px band, the wide export became
+  unreachable, because the `<picture>` is only rendered for the phone and tablet
+  frames and `wide` returned the canvas without falling through. A desktop
+  without WebGL therefore got an empty mount and no backdrop at all, while a
+  perfectly good wide still sat unused in `/public` — the fallback was present,
+  correct, and unreachable.
+
+  `WaveGrid` now takes an **`onUnavailable`** callback, fired when the WebGL
+  context cannot be created. The homepage latches it and stops returning a
+  canvas, which drops the wide frame through to the `<picture>` where the
+  unconditional `<source>` is the one that matches past 1023px. Verified by
+  forcing the constructor to throw: at 1280px the canvas disappears and
+  `home.avif` (2560×1600) is served in its place.
+
+  `/services` passes no handler and is unaffected — it has no canvas in its
+  shipped path to fall back from.
+
+  ⚠️ Still uncovered: **context *loss* after a successful start** (GPU reset, too
+  many live contexts). `onUnavailable` only fires at construction, so a lost
+  context leaves a blank canvas rather than falling back. Handling it means a
+  `webglcontextlost` listener and deciding whether to wait for a restore.
+- **The image count is now six, and nothing enforces re-exporting all of them.**
+  This is the standing risk of the whole approach. `curated.*` and `wave-32.*`
+  are alternates on top, so the directory holds eight files of which six ship.
+  After touching `wave-grid.jsx`, re-run every target and confirm `git status` is
+  clean — that check has now caught nothing twice, which is the point of running
+  it rather than a reason to stop.
+- **The export depends on the exporting machine having a GPU.** Checked during
+  the phone export: headless Chrome reported `ANGLE (NVIDIA GeForce GTX 1650,
+  D3D11)`, so `isSoftwareRenderer` is false and the shadow pass runs. On a
+  machine without one it would fall back to SwiftShader, `shadows` would be
+  false, and the export would silently come out flatter than the committed
+  images. Nothing checks for this.
+- **The offers index butts hard onto the grid.** Its `border-top` lands on lit
+  pixels at the bottom edge — deliberate, so the grid does not visibly end, but
+  worth a look.
+- **The exported images are build artefacts in git.** They must be re-exported
+  whenever the composition changes, and there are **four** of them now
+  (`curated`, `home`, `home-phone`, `home-tablet`). That is what the script is
+  for, but nothing enforces it, and the count is the problem: forgetting one
+  leaves a single breakpoint band showing a stale composition, which is exactly
+  the kind of thing nobody notices. The cheap check after touching anything in
+  `wave-grid.jsx`: re-run all four exports and confirm `git status` is clean — if
+  a file changed, either the change was unintended or the image needs committing.
+- **There is no second backdrop to fall back to any more.** `bends` and `cubes`
+  were deleted once the wave grid became the default at every width (phase 6 in
+  [homepage-wave-hero-plan.md](./homepage-wave-hero-plan.md)), along with
+  the `?backdrop=` switch and the `.floatCard` hero styles. If a change to
+  `wave-grid.jsx` breaks the homepage hero, the homepage has no backdrop —
+  `git show 09ddb03` is the archive, not the codebase.
+  Two things did **not** go, both for reasons that are easy to miss:
+  `src/components/vendor/color-bends/` is still live on `/contact`, and
+  `/preview/home-wave` is still what the export script drives.
