@@ -82,7 +82,9 @@ const IaOffreSection = async ({locale}) => {
                                 ones stack them — see .pair in the stylesheet. */}
                             <div className={styles.pair}>
                                 <p className={styles.signal}>
-                                    <span className={styles.label}>{t("useCases.signalLabel")}</span>{" "}
+                                    <span className={`${styles.label} ${styles.labelAccent}`}>
+                                        {t("useCases.signalLabel")}
+                                    </span>{" "}
                                     {t(`useCases.items.${useCase.key}.signal`)}
                                 </p>
                                 <p className={styles.result}>

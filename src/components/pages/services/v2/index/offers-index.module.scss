@@ -46,36 +46,6 @@
   padding: clamp(30px, 4vw, 64px) 0;
 }
 
-/* Number left, chevron right. The mirror flips the row rather than restyling
-   it, so there is one label rule for all four bands. */
-.label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 0 clamp(14px, 1.6vw, 26px);
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(237, 237, 237, 0.55);
-}
-
-.index {
-  font-variant-numeric: tabular-nums;
-}
-
-.chevron {
-  display: block;
-  color: #96b9f9;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-
-  svg {
-    display: block;
-    width: 16px;
-    height: 16px;
-  }
-}
-
 /* The name takes the container. line-height under 1 because at this size the
    default leading opens a hole between the two lines of a long offer name. */
 .name {
@@ -115,15 +85,19 @@
 
 /* The moving part, and the one that carries the identity ramp — inline-block so
    the gradient maps onto the glyphs rather than an empty container box, and so
-   the transform has a box to act on. Same stops as the poster hero and the
-   inner hero: one ramp on the site. */
+   the transform has a box to act on. The stops are the site ramp (poster hero,
+   inner hero, CTA) but the blue lands at 100% instead of 105%: on the poster
+   hero the name is one short line so a 105% stop still catches, but a full-width
+   offer name is mostly white and the blue fell off the end. Pulled in so the
+   ramp actually reads on the tail of the name — the same "blue toward the end"
+   as the homepage "1 mois", kept light. */
 .drift {
   display: inline-block;
   /* Long names break themselves rather than being broken by a <br> we would
      have to keep per language: "Applications web sur mesure" lands on two even
      lines, "SEO" stays on one. */
   text-wrap: balance;
-  background: linear-gradient(135deg, #ffffff 30%, #dce7fd 68%, #96b9f9 105%);
+  background: linear-gradient(135deg, #ffffff 28%, #dce7fd 65%, #96b9f9 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -141,8 +115,11 @@
 
 .promise {
   font-size: 15px;
-  font-weight: 300;
-  color: rgba(237, 237, 237, 0.66);
+  font-weight: 400;
+  /* Same blue accent as the IA use-case lead-ins (.labelAccent): the promise is
+     the line that names the payoff, so it carries the colour and the list below
+     stays quiet. */
+  color: #96b9f9;
   line-height: 1.75;
   margin: 0;
 }
@@ -157,7 +134,7 @@
   font-size: 13px;
   font-weight: 400;
   line-height: 1.5;
-  color: rgba(237, 237, 237, 0.5);
+  color: rgba(237, 237, 237, 0.72);
 
   li {
     padding-left: 16px;
@@ -175,63 +152,60 @@
   }
 }
 
-/* Everything above this line is the phone layout: one column, one alignment.
-   The two-margin composition — promise pushed to the far edge, even bands
-   mirrored — only exists where there is width for it. Written as min-width
-   rather than undone in a max-width block so nothing has to out-specify itself
-   later, and so the chevron hover has one origin per breakpoint, not two. */
+/* Everything above this line is the phone layout: one column, stacked. The
+   two-column composition — name beside its promise, even bands mirrored — only
+   exists where there is width for it. Written as min-width rather than undone in
+   a max-width block so nothing has to out-specify itself later. */
 @media (min-width: 769px) {
-  /* Odd bands: name at the left edge, promise at the right. */
-  .aside {
-    margin-left: auto;
+  /* Name and aside share one row instead of stacking: the promise no longer
+     sits below the name but beside it, which roughly halves the height of each
+     band. The name takes the flexible column, the aside a fixed measure.
+
+     The name is pinned to the top of the row (it sets where the band begins);
+     the aside is centred against it. This reads the same on every offer whatever
+     the two heights do: when the name is the taller of the two (a two-line name
+     over a short promise, e.g. the right-set MVP band) the aside sits centred
+     beside it rather than stranded at the top with a hole below; when the aside
+     is taller (a one-line name like Solutions IA over four lines of content) the
+     name stays at the top and the aside simply fills the row. Centring both was
+     the first attempt and it floated the short names down the band. */
+  .band {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 42ch);
+    align-items: start;
+    column-gap: clamp(40px, 6vw, 120px);
   }
 
-  /* Even bands run the other way. The label row reverses so the chevron leads
-     at the left, the glyph turns with it, the name is set right, and the
-     promise moves to the opposite margin. */
-  .mirror {
-    .label {
-      flex-direction: row-reverse;
-    }
+  /* grid-row: 1 is load-bearing on the mirror bands. The name comes first in the
+     DOM but sits in column 2 there, and the aside second but in column 1; grid
+     auto-placement never steps backwards within a row, so without an explicit
+     row it drops the aside to a second row — the content falls under the name.
+     Pinning both to row 1 keeps them side by side whichever column each takes. */
+  .name {
+    grid-column: 1;
+    grid-row: 1;
+  }
 
-    .chevron {
-      transform: rotate(180deg);
-    }
+  .aside {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    margin: 0;
+  }
+
+  /* Even bands run the other way: the wide name column moves to the right, the
+     aside to the left. The aside keeps its normal left-to-right setting on both
+     sides — a right-aligned bullet list reads as a mistake. */
+  .mirror {
+    grid-template-columns: minmax(0, 42ch) minmax(0, 1fr);
 
     .name {
+      grid-column: 2;
       text-align: right;
     }
 
     .aside {
-      margin-left: 0;
-      margin-right: auto;
-      text-align: right;
-    }
-
-    .deliverables li {
-      padding-left: 0;
-      padding-right: 16px;
-    }
-
-    .deliverables li::before {
-      left: auto;
-      right: 0;
-    }
-  }
-
-  /* One gesture, and only one: the chevron leaves the band by 8px, outward on
-     both sides. :has() carries the same state to keyboard focus so a tab stop
-     is not a lesser affordance than a pointer. */
-  @media (hover: hover) and (pointer: fine) {
-    .band:hover .chevron,
-    .band:has(.bandLink:focus-visible) .chevron {
-      transform: translateX(8px);
-    }
-
-    /* Rotated first, so the local +8px points left on screen. */
-    .mirror:hover .chevron,
-    .mirror:has(.bandLink:focus-visible) .chevron {
-      transform: rotate(180deg) translateX(8px);
+      grid-column: 1;
     }
   }
 }
@@ -250,10 +224,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .chevron {
-    transition: none;
-  }
-
   /* useScrollDrift never attaches here, so the name is already at rest — this
      only guards a transform left behind by a media-query change mid-session. */
   .drift {

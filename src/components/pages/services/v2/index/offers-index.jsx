@@ -85,21 +85,6 @@ const OfferBand = ({offer, rank, t, revealProps}) => {
             className={`${styles.band} ${mirrored ? styles.mirror : ""}`}
             {...revealProps}
         >
-            <p className={styles.label}>
-                <span className={styles.index}>{String(rank + 1).padStart(2, "0")}</span>
-                <span className={styles.chevron} aria-hidden="true">
-                    <svg viewBox="0 0 16 16" fill="none">
-                        <path
-                            d="M6 3.5 10.5 8 6 12.5"
-                            stroke="currentColor"
-                            strokeWidth="1.6"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                    </svg>
-                </span>
-            </p>
-
             {/* The drift lives on the inner span, never on the h2 or the
                 anchor: a transform makes an element the containing block for
                 its absolute descendants, and the anchor's stretched ::after

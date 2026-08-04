@@ -175,9 +175,9 @@
   white-space: nowrap;
 }
 
-/* The one accent standing in the cells at rest. It is on the word that names
-   the payoff rather than on a shape beside it, which is the least decorative
-   place the colour can go. */
+/* The accent the cells carry at rest — on the "Le signal" / "Le résultat"
+   lead-ins that name each line rather than on a shape beside them, which is the
+   least decorative place the colour can go. */
 .labelAccent {
   color: #96b9f9;
 }
