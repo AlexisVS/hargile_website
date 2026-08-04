@@ -104,9 +104,9 @@ const Navbar = () => {
                             on mobile) — sizes mirrors it so srcset picks a small
                             variant instead of a viewport-width one. */}
                         <OptimizedImage
-                            width={750}
-                            height={348}
-                            src="/images/brand/brand-large-white.png"
+                            width={2000}
+                            height={600}
+                            src="/images/brand/Logo_no_bg_HARGILE_tech_studio.png"
                             alt="Brand Logo"
                             sizes="(max-width: 768px) 13rem, 16rem"
                             priority={true}

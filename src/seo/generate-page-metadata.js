@@ -32,7 +32,8 @@ export async function generatePageMetadata({params, pagePath}) {
         // French is unprefixed, English is /en — localeUrl owns that rule.
         const pathSuffix = ROUTES[pagePath] ?? `/${pagePath.replaceAll('.', '/')}`;
         const baseUrl = localeUrl(locale, pathSuffix);
-        const imageUrl = `${SITE_URL}/images/brand/brand_large.png`;
+        // 1200×630, padded from the dark TECH STUDIO lockup — see shared-metadata.js
+        const imageUrl = `${SITE_URL}/images/brand/og-hargile-tech-studio.png`;
         const indexable = !NOINDEX_PAGES.has(pagePath);
 
         return {

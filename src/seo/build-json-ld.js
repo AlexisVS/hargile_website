@@ -49,7 +49,11 @@ export async function buildJsonLd({locale, pagePath}) {
            tells engines the two are the same page. */
         const pathSuffix = ROUTES[pagePath] ?? `/${pagePath.replaceAll(".", "/")}`;
         const baseUrl = localeUrl(locale, pathSuffix);
-        const imageUrl = `${SITE_URL}/images/brand/brand_large.png`;
+        /* Same 1200×630 asset the OG tags use (see shared-metadata.js) — it has
+           to be, since `logo` and `image` below are what an engine shows next to
+           the entity, and a mark that differs from the one shared on social is a
+           mismatch of exactly the kind this file exists to avoid. */
+        const imageUrl = `${SITE_URL}/images/brand/og-hargile-tech-studio.png`;
 
         /* Per-page type, read from the message files so it can differ per page.
            It must always be WebPage or one of its subtypes (ContactPage,
