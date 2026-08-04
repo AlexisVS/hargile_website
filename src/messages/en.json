@@ -343,6 +343,7 @@
               "description": "Curious by nature. We explore, test, and constantly learn. We use AI on a daily basis so we can focus our time on what really matters: personal contact and support."
             }
           ],
+          "terminal-file": "values.md",
           "stats": {
             "projects": "Projects delivered",
             "satisfaction": "Client satisfaction",

@@ -343,6 +343,7 @@
               "description": "Curieux par nature. On explore, on teste, on apprend en continu. On pilote l'IA au quotidien pour investir notre temps là où l'humain compte : le contact et le support."
             }
           ],
+          "terminal-file": "valeurs.md",
           "stats": {
             "projects": "Projets livrés",
             "satisfaction": "Satisfaction client",
