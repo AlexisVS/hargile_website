@@ -14,18 +14,18 @@ import styles from "./contact-backdrop.module.scss";
    the same aspects the hero frames were sized for, because both are viewport
    boxes. So PHONE/TABLET/WIDE and the 640/860 band edges carry over unchanged.
 
-   ⚠️ What does NOT carry over is the quiet zone, and it cannot: a poster hero
-   damps the grid where a paragraph sits in one corner of the measure, while the
-   form here covers the whole frame — title, five fields and a textarea, edge to
-   edge, top to bottom. There is no lit half left to protect the copy from, so
-   an ellipse would be arbitrary. This renders with damping off (`calm.depth 0`)
-   and pushes the entire layer back in CSS instead, which is the role the bends
-   played: texture behind the form, never a subject competing with it.
+   ⚠️ What does NOT carry over is the quiet zone. A poster hero damps the grid
+   where a paragraph sits in one corner of the measure; the form here covers
+   almost the whole frame, so the shape it needs is a full-width BAND with the
+   light left above the title and below the submit button — cubes framing the
+   form rather than sitting under it. See CALM_WIDE.
 
-   That also means no quiet zone was derived for this page — deliberately. See
-   docs/wave-grid.md: a re-derived quiet zone is the most expensive mistake this
-   codebase has recorded, and the honest alternative when the copy covers the
-   frame is to dim the layer, not to invent a shape for it.
+   This shipped once with damping off and the whole layer dimmed instead, on the
+   reasoning that a form covering the frame leaves nothing to carve out. Mihai
+   rejected it and was right: dimming makes the page darker than every other one
+   on the site without making the cubes any less present where the copy is. The
+   grid now runs at the heroes' own opacity and the band does the work — which
+   is also what keeps /contact the same weight as its neighbours.
 
    A still image ships, exactly as on the heroes: the frame never changes, so
    three.js earns nothing. The live path only mounts under ?wave= or ?export=,
@@ -56,10 +56,61 @@ const framesOf = (composition) => ({
 const PHONE_MAX = 640;
 const TABLET_MAX = 860;
 
-/* Damping off. Not "tuned to zero" — there is nothing here to tune it to; see
-   the header. A stable module constant because WaveGrid re-runs its whole
-   effect when this identity changes. */
-const NO_CALM = {cx: 0, cz: 0, rx: 1, rz: 1, depth: 0};
+/* The quiet zone, and it is a BAND rather than the heroes' ellipse.
+
+   Measured off the rendered page at 1440x900: the form runs x 98…1340 of 1440
+   and y 160…815 of a 947-tall box, which maps onto the wide frame's visible
+   x ±8.2, z ±3.9 as x -7.1…+7.1, z -2.6…+2.8. It covers almost the whole frame
+   horizontally, so there is no side for light to arrive from — the only room
+   left is above the title and below the submit button, and that is the shape
+   these describe: rx past the frame edge so the damping spans the full width,
+   rz just tight enough to leave a lit band top and bottom.
+
+   ⚠️ rx is deliberately larger than the visible half-width. That is not a typo
+   or a safety margin — an rx inside the frame would put the ellipse's left and
+   right shoulders on screen, and a form sitting in a visible oval of calm is
+   worse than no damping at all.
+
+   Also why the depth is high (0.85 against the heroes' 0.8): the layer now runs
+   at the heroes' opacity rather than dimmed, so all of the work of keeping the
+   form readable is done here instead of half here and half by the CSS.
+
+   Derived by rendering and checking, not by arithmetic from another frame's
+   extents — see docs/wave-grid.md on what that has cost before. */
+/* Two dials, and they do different jobs — worth keeping straight, because the
+   first pass turned the wrong one.
+
+   rz is WHERE the calm reaches: the flat core is 0.8·rz and the ramp runs out
+   to 1.35·rz (RIM_IN/RIM_OUT in wave-grid.jsx). depth is HOW empty the core
+   actually is. At depth 0.85 the core still passes 15% of the light, which is
+   enough to read as cubes behind the fields however wide the band is — the
+   fields looked "calmer" but never clear. 0.96 is what empties them.
+
+   rz 3.3 at cz 0 puts the core at z ±2.64, i.e. y 153…794 of the 947-tall box:
+   from above the title down past the submit button. 1.35·rz then lands at 4.46
+   against a frame edge of 3.9, so the top and bottom bands light to about 77%
+   rather than 100% — cubes bright at the edges, fading as they approach the
+   form, some touching it. That is the trade and no setting avoids it: a form
+   this tall cannot be cleared AND leave a fully-lit rim. */
+const CALM_WIDE = {cx: 0, cz: 0, rx: 9.6, rz: 3.3, depth: 0.96};
+
+/* Phone and tablet, where the same shape has to make a harder choice.
+
+   Stacked, the form runs from just under the navbar to just above the footer
+   note — on a phone that is z -5.9…+7.2 of a visible ±8.00. Clearing all of it
+   would push 1.35·rz past 11 against a frame edge of 8, i.e. damp the entire
+   frame and ship a dead plate. So these clear the part that has to be clear —
+   the title and the four field rows — and let the light come back over the
+   message box and below it, which is the "at least the form without the
+   message" line. The centre sits high (negative cz) for that reason.
+
+   Phone visible extent is x ±3.70, z ±8.00; tablet x ±5.24, z ±6.55. rx is past
+   the frame edge in both so the damping spans the full width — see CALM_WIDE on
+   why an rx inside the frame is worse than none. */
+const CALM_PHONE = {cx: 0, cz: -2.1, rx: 5.4, rz: 4.8, depth: 0.96};
+const CALM_TABLET = {cx: 0, cz: -1.6, rx: 7.0, rz: 4.0, depth: 0.96};
+
+const CALM_FOR = {phone: CALM_PHONE, tablet: CALM_TABLET, wide: CALM_WIDE};
 
 /* Relief per frame, the hero's values. radius is the dial that holds pillar
    SIZE roughly constant as the frame grows — about eight pillars across a
@@ -160,7 +211,7 @@ const ContactBackdrop = ({composition = DEFAULT_COMPOSITION, onReady}) => {
                         compact={compact}
                         variant={variant}
                         exportSize={exportSize}
-                        calm={NO_CALM}
+                        calm={CALM_FOR[frame]}
                         relief={RELIEF_FOR[frame]}
                     />
                 ) : (

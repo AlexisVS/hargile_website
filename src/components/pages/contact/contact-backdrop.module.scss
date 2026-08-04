@@ -1,14 +1,11 @@
 /* Layer for the contact page's cube grid.
 
-   The services heroes hold their grid at --grid-opacity 0.92 and protect the
-   copy with a quiet zone baked into the render. Neither applies here: the form
-   covers the frame, so there is no quiet zone (contact-backdrop.jsx explains
-   why one would be arbitrary), and 0.92 behind five input rows and a textarea
-   would be a legibility problem rather than an atmosphere.
-
-   So the whole job is done by this layer. It is the same lever the bends used
-   before it — the grid is texture the form sits on, and the form wins every
-   contest between them. */
+   Same treatment as the services heroes, and that is the point: this page ran
+   dimmed at 0.5/0.42 for one revision and read visibly darker than every other
+   page on the site — the complaint that produced this file's current shape.
+   Legibility is the quiet zone's job now (a full-width band, see
+   contact-backdrop.jsx), which leaves this layer free to sit at the same
+   weight as its neighbours instead of paying for readability twice. */
 
 .backdrop {
   position: absolute;
@@ -20,21 +17,18 @@
      swap — anything else shows as a tint seam where the layer thins. */
   background: #010104;
 
-  /* Falls away toward the bottom, where the textarea is: the form's top half is
-     short label-and-field lines with plenty of gap between them, its bottom half
-     is one large box of placeholder text and the CTA. Not a vertical fade to
-     transparent at BOTH ends — against a dark grid that reads as the surface
-     running out rather than as it being masked. This holds full strength at the
-     top edge, under the navbar, and only rolls off past the midpoint. */
-  mask-image: linear-gradient(to bottom, #000 0%, #000 42%, rgba(0, 0, 0, 0.45) 100%);
+  /* No mask. The previous one rolled the layer off toward the bottom on top of
+     an already-dimmed surface, which is most of why the page read dark — and
+     against a dark grid a fade reads as the surface running out rather than as
+     it being masked, which is the one thing this must never look like. The band
+     in the render already clears the form; nothing is left for a mask to do.
 
-  /* The single dial for how present the grid is. Well under the heroes' 0.92:
-     they put a paragraph on damped pillars, this puts a whole form on undamped
-     ones. Carried in a custom property rather than set directly because the
-     arrival fade below ends on this value — `animation-fill-mode: both` leaves
-     the keyframe's `to` state applied forever, so a plain opacity override
-     would be silently outranked by it. */
-  --grid-opacity: 0.5;
+     The single dial for how present the grid is, and it matches the heroes'
+     0.92 on purpose. Carried in a custom property rather than set directly
+     because the arrival fade below ends on this value — `animation-fill-mode:
+     both` leaves the keyframe's `to` state applied forever, so a plain opacity
+     override would be silently outranked by it. */
+  --grid-opacity: 0.92;
   opacity: var(--grid-opacity);
 
   /* One fade on arrival, no delay, no loop — the still itself never moves. */
@@ -68,15 +62,19 @@
   object-position: center;
 }
 
-/* Stacked: the form goes one-column and its fields run the full width, so the
-   grid has even less room to be present in. Same direction the heroes take
-   below their own breakpoint, one step further. */
-@media (max-width: 860px) {
-  .backdrop {
-    --grid-opacity: 0.42;
-    mask-image: linear-gradient(to bottom, #000 0%, #000 30%, rgba(0, 0, 0, 0.35) 100%);
-  }
-}
+/* No opacity drop below 860px, and that is a real difference from the heroes
+   rather than an oversight.
+
+   They fall to 0.6 there because their compact profile ships NO quiet zone —
+   the copy becomes one full-width column and opacity is the only lever left, so
+   the layer has to duck. This page carries a real band at every frame including
+   phone and tablet (CALM_PHONE / CALM_TABLET), so the readability is already
+   paid for and ducking again just makes the page dark.
+
+   Measured, that is exactly what went wrong: at 0.42-with-a-mask /contact read
+   14.1 mean against /services/ia's 24.4 at 390 — the "too dark on mobile"
+   complaint, and still 42% down after a first pass at 0.6. Holding 0.92 here is
+   what closes it. */
 
 /* Composition picker — only in the DOM when ?wave= is in the URL, so it never
    ships to a real visitor. Deliberately plain: a tool, not part of the page. */
