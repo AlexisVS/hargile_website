@@ -1057,8 +1057,8 @@
             ]
           },
           "web": {
-            "title": "Applications web sur mesure",
-            "promise": "Conçues, codées et maintenues chez nous.",
+            "title": "Développement Web",
+            "promise": "Conçu, codé et maintenu chez nous.",
             "deliverables": [
               "Sites et applications web",
               "Refontes et migrations",
