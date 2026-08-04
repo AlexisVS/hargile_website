@@ -757,26 +757,28 @@
           },
           "useCases": {
             "title": "Four places where AI earns its place.",
+            "signalLabel": "The signal —",
+            "resultLabel": "The result —",
             "items": {
               "automation": {
                 "title": "Back-office automation",
-                "signal": "The signal: your team copies data from one tool to another.",
-                "outcome": "The result: hours recovered every week, and fewer input errors."
+                "signal": "Your team copies data from one tool to another.",
+                "outcome": "Hours recovered every week, and fewer input errors."
               },
               "content": {
                 "title": "Content & visibility",
-                "signal": "The signal: you know what to say, but never have time to publish it.",
-                "outcome": "The result: a regular presence, fed by your real expertise."
+                "signal": "You know what to say, but never have time to publish it.",
+                "outcome": "A regular presence, fed by your real expertise."
               },
               "support": {
                 "title": "Customer support",
-                "signal": "The signal: the same questions keep coming, and the answers keep waiting.",
-                "outcome": "The result: instant answers to common questions, and a team focused on the cases that matter."
+                "signal": "The same questions keep coming, and the answers keep waiting.",
+                "outcome": "Instant answers to common questions, and a team focused on the cases that matter."
               },
               "data": {
                 "title": "Making your data work",
-                "signal": "The signal: the numbers exist, but nobody looks at them.",
-                "outcome": "The result: decisions backed by your data, not by gut feeling."
+                "signal": "The numbers exist, but nobody looks at them.",
+                "outcome": "Decisions backed by your data, not by gut feeling."
               }
             }
           },

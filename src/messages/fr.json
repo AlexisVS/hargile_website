@@ -757,26 +757,28 @@
           },
           "useCases": {
             "title": "Quatre endroits où l'IA gagne sa place.",
+            "signalLabel": "Le signal —",
+            "resultLabel": "Le résultat —",
             "items": {
               "automation": {
                 "title": "Automatisation du back-office",
-                "signal": "Le signal : vos équipes recopient des données d'un outil à l'autre.",
-                "outcome": "Le résultat : des heures récupérées chaque semaine, et moins d'erreurs de saisie."
+                "signal": "Vos équipes recopient des données d'un outil à l'autre.",
+                "outcome": "Des heures récupérées chaque semaine, et moins d'erreurs de saisie."
               },
               "content": {
                 "title": "Contenu & visibilité",
-                "signal": "Le signal : vous savez quoi dire, mais jamais le temps de le publier.",
-                "outcome": "Le résultat : une présence régulière, alimentée par vos vrais savoir-faire."
+                "signal": "Vous savez quoi dire, mais jamais le temps de le publier.",
+                "outcome": "Une présence régulière, alimentée par vos vrais savoir-faire."
               },
               "support": {
                 "title": "Support client",
-                "signal": "Le signal : les mêmes questions reviennent, et les réponses attendent.",
-                "outcome": "Le résultat : des réponses immédiates aux questions courantes, l'équipe concentrée sur les cas qui comptent."
+                "signal": "Les mêmes questions reviennent, et les réponses attendent.",
+                "outcome": "Des réponses immédiates aux questions courantes, l'équipe concentrée sur les cas qui comptent."
               },
               "data": {
                 "title": "Exploitation de vos données",
-                "signal": "Le signal : les chiffres existent, mais personne ne les regarde.",
-                "outcome": "Le résultat : des décisions appuyées sur vos données, pas sur l'intuition."
+                "signal": "Les chiffres existent, mais personne ne les regarde.",
+                "outcome": "Des décisions appuyées sur vos données, pas sur l'intuition."
               }
             }
           },

@@ -1,0 +1,579 @@
+/* /services/ia — the whole page body below the hero.
+
+   Every colour, hairline and type step here is one the site already uses:
+   #ededed and its rgba steps for text, #96b9f9 / rgba(150,185,249,…) as the
+   single accent, 1px rgba(255,255,255,.09–.12) hairlines, var(--font-headings)
+   for headings and numerals, and the 135deg identity ramp for the two titles
+   that carry it. Nothing is filled — the shapes are drawn with borders, the
+   way sibling-offers, cta-link and use-cases already draw them.
+
+   Motion is transform and opacity only: the chevron nudge, the plus rotating
+   into a multiply sign, the spotlight fade, and the FAQ's grid-template-rows
+   collapse. No loops, nothing ambient. */
+
+.ia {
+  /* The measure and the gutter come from .container in v2-section.module.scss,
+     which this composes with — so the H2 starts on the same line as the hero
+     headline and the navbar logo. */
+  display: block;
+
+  /* One dial for the whole page rhythm. This section stands in for what used
+     to be five separate <section>s, each opening on the 112–200px padding of
+     v2-section — so the distance between its blocks has to carry that same
+     "new section starts here" weight, or the page reads as one long block. */
+  --block-gap: clamp(76px, 9vw, 150px);
+  /* The step inside a block (title to its content) is deliberately about half
+     of it: enough to separate, not enough to look like a new section. */
+  --step-gap: clamp(40px, 4.5vw, 72px);
+}
+
+/* The section title lands on the identity ramp — same gradient as the hero H1.
+   width must shrink-wrap so the ramp maps onto glyphs, not an empty box. */
+.title {
+  width: fit-content;
+  max-width: 20ch;
+  background: linear-gradient(135deg, #ffffff 30%, #dce7fd 68%, #96b9f9 105%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-bottom: 0.06em;
+}
+
+/* ---------- Bento : 4 / 2 — 2 / 4 sur six colonnes ---------- */
+
+/* One continuous hairline grid, not four tiles. gap: 0 and the rules are
+   shared — the container draws the top and left edge, each cell draws its own
+   right and bottom — so every line in the figure is exactly 1px and no two
+   ever double up. Square corners: a radius only works on a detached tile, and
+   these cells are cut out of one object.
+
+   With no gap, the padding IS the air, so it is the one generous number here. */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0;
+  margin-top: var(--step-gap);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  /* The row's height is set by its tallest cell, so space-between lands the
+     signal/result pair on a shared baseline across the row — no min-height
+     needed to prop the wide cells up, which is what left them so airy. */
+  justify-content: space-between;
+  gap: clamp(28px, 3.5vw, 52px);
+  overflow: hidden;
+  padding: clamp(26px, 3vw, 52px);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  /* Hover is where the accent lives now: the wash comes up under the pointer
+     and the title takes the blue. The rules deliberately do not react — on a
+     shared-line grid only this cell's right and bottom would light, and that
+     reads as a rendering bug. */
+  &:hover .cardTitle {
+    color: #96b9f9;
+  }
+
+  &[data-span="4"] {
+    grid-column: span 4;
+  }
+
+  &[data-span="2"] {
+    grid-column: span 2;
+  }
+}
+
+/* Pointer-following wash, driven by the --mx / --my the island writes on the
+   card. Opacity only — the gradient itself never animates. */
+.spot {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  background: radial-gradient(
+                  460px circle at var(--mx, 50%) var(--my, 50%),
+                  rgba(150, 185, 249, 0.14),
+                  transparent 68%
+  );
+}
+
+.card[data-hover="1"] .spot {
+  opacity: 1;
+}
+
+/* One size for all four, and a big one: the titles are what the cell is for.
+   18ch lets the long ones take two lines and hold the top of the cell. */
+.cardTitle {
+  position: relative;
+  font-family: var(--font-headings);
+  font-weight: 600;
+  font-size: clamp(22px, 2.3vw, 32px);
+  letter-spacing: -0.018em;
+  line-height: 1.15;
+  max-width: 18ch;
+  margin: 0;
+  color: #ededed;
+  transition: color 0.25s ease;
+}
+
+/* Signal above result in every cell, wide or narrow. The wide ones used to run
+   the two side by side, so a reader crossing the figure met the same two facts
+   in a different arrangement in each cell — the layout changed while the
+   content did not. One arrangement everywhere; the span only decides how wide
+   the cell is, never how it is read. */
+.pair {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.2vw, 16px);
+}
+
+/* No max-width: the paragraph takes the cell it is in. A fixed measure is what
+   emptied the span-4 cells — a 46ch paragraph in an ~80ch cell leaves the right
+   half of the card white, and the wider the viewport the worse it got. These are single
+   sentences, so at full width they set as one or two lines that reach the right
+   edge; in the span-2 cells the same rule wraps them to four narrow lines. One
+   declaration, both cells filled. */
+.signal,
+.result {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.signal {
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.52);
+}
+
+/* The result is the half that matters. It used to say so with an accent rule
+   down its left edge; that rule and the 01–04 numerals are gone, so the split
+   is carried by weight and brightness alone — signal 300 at 52%, result 400 at
+   86%. Both paragraphs now start on the same left edge as the title, so each
+   cell is one clean column instead of a title plus two indents. */
+.result {
+  font-weight: 400;
+  color: rgba(237, 237, 237, 0.86);
+}
+
+.label {
+  font-weight: 500;
+  color: rgba(237, 237, 237, 0.4);
+  white-space: nowrap;
+}
+
+/* The one accent standing in the cells at rest. It is on the word that names
+   the payoff rather than on a shape beside it, which is the least decorative
+   place the colour can go. */
+.labelAccent {
+  color: #96b9f9;
+}
+
+/* Counter-argument. Its own block below the grid, not a fifth cell in it: it
+   answers the four cases rather than continuing them. No rule of its own —
+   the space above it and the title's scale are enough to set it apart, and
+   the figure right above is already carrying every line on this screen. */
+.counter {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: clamp(24px, 3vw, 56px);
+  align-items: center;
+  margin-top: var(--block-gap);
+}
+
+.counterTitle {
+  margin: 0;
+  max-width: 18ch;
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(24px, 2.4vw, 36px);
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  color: #ededed;
+}
+
+.counterText {
+  margin: 0;
+  max-width: 56ch;
+  font-size: clamp(15px, 1.15vw, 17px);
+  font-weight: 300;
+  line-height: 1.7;
+  color: rgba(237, 237, 237, 0.72);
+}
+
+/* ---------- FAQ ---------- */
+
+/* Same split as the chapters on /faq (faq-groups.module.scss .group): a narrow
+   title column beside a wider question column, not an even half-and-half. */
+.faq {
+  display: grid;
+  grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.38fr);
+  gap: clamp(24px, 4vw, 72px);
+  margin-top: var(--block-gap);
+  align-items: start;
+}
+
+/* A closing sub-block, so its title sits a step below the section heading. */
+.faqTitle {
+  margin: 0;
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(24px, 2.2vw, 32px);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: #ededed;
+}
+
+.faqList {
+  display: grid;
+  gap: 6px;
+}
+
+.faqHeading {
+  margin: 0;
+}
+
+/* Every number below matches ui/faq-accordion.module.scss — this is the /faq
+   page's accordion, re-expressed for server-rendered markup. Closed rows sit a
+   step back so the open one reads as the one in front; no rules, no fills, the
+   gap is the only separator. */
+.faqBtn {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+  width: 100%;
+  padding: 14px 0;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: rgba(237, 237, 237, 0.72);
+  font-family: var(--font-headings);
+  font-weight: 600;
+  font-size: clamp(16px, 1.25vw, 19px);
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  transition: color 0.2s;
+
+  &:hover,
+  &[aria-expanded="true"] {
+    color: #ededed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(150, 185, 249, 0.7);
+    outline-offset: 2px;
+  }
+}
+
+/* The island rotates this to 45deg — plus becomes a multiply sign. */
+.faqPlus {
+  display: inline-flex;
+  flex: 0 0 auto;
+  /* Optical alignment against the first text line, as on /faq. */
+  transform: translateY(1px);
+  color: rgba(150, 185, 249, 0.85);
+  transition: transform 0.3s ease;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* Resting state is OPEN: the answers ship visible and the island closes them.
+   Collapsing is 1fr -> 0fr, never display:none — the copy stays in the DOM. */
+.faqPanel {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+.faqPanelInner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.faqAnswer {
+  margin: 0;
+  padding: 0 0 18px;
+  max-width: 68ch;
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: rgba(237, 237, 237, 0.68);
+}
+
+/* ---------- Autres offres ---------- */
+
+.others {
+  margin-top: var(--block-gap);
+}
+
+.othersHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.kicker {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(237, 237, 237, 0.45);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(237, 237, 237, 0.62);
+  text-decoration: none;
+  transition: color 0.25s ease;
+
+  &:hover,
+  &:focus-visible {
+    color: #96b9f9;
+  }
+}
+
+.othersList {
+  display: flex;
+  flex-direction: column;
+}
+
+/* The rule opens each row rather than closing it, so the block ends on the
+   last offer instead of on a line under it. */
+.othersRow {
+  display: grid;
+  grid-template-columns: minmax(0, clamp(260px, 24vw, 340px)) minmax(0, 1fr) 16px;
+  align-items: baseline;
+  gap: 8px 24px;
+  padding: 20px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  text-decoration: none;
+  transition: border-color 0.25s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-top-color: rgba(150, 185, 249, 0.55);
+
+    .othersTitle {
+      color: #96b9f9;
+    }
+  }
+}
+
+.othersTitle {
+  font-family: var(--font-headings);
+  font-weight: 600;
+  font-size: clamp(19px, 1.8vw, 24px);
+  letter-spacing: -0.015em;
+  color: #ededed;
+  transition: color 0.25s ease;
+}
+
+.othersNote {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: rgba(237, 237, 237, 0.55);
+}
+
+/* ---------- CTA ---------- */
+
+.cta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: clamp(24px, 3vw, 56px);
+  align-items: center;
+  margin-top: var(--block-gap);
+}
+
+/* The page still lands on the identity ramp, the way all six M4 pages do. */
+.ctaTitle {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(24px, 2.4vw, 36px);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  background: linear-gradient(135deg, #ffffff 30%, #dce7fd 68%, #96b9f9 105%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-bottom: 0.06em;
+}
+
+.ctaText {
+  margin: 16px 0 0;
+  max-width: 52ch;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(237, 237, 237, 0.68);
+}
+
+.ctaActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ---------- Pilules ---------- */
+
+/* Same treatment as ui/cta-link: hairline full-round border, transparent body,
+   small chevron. Not imported from it because that component is a client
+   component and this section is a Server Component. */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 22px;
+  padding: 13px 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: transparent;
+  color: rgba(237, 237, 237, 0.75);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+
+  &:hover {
+    color: #ededed;
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(150, 185, 249, 0.7);
+    outline-offset: 2px;
+  }
+}
+
+.pillAccent {
+  margin-top: 0;
+  color: #96b9f9;
+  font-weight: 600;
+  border-color: rgba(150, 185, 249, 0.55);
+
+  &:hover {
+    color: #b8cdfb;
+    border-color: rgba(150, 185, 249, 0.85);
+    background: rgba(150, 185, 249, 0.07);
+  }
+}
+
+/* The one piece of motion the links carry, same 2–4px nudge as everywhere. */
+.chevron {
+  display: inline-flex;
+  flex: 0 0 auto;
+  color: currentColor;
+  transition: transform 0.2s ease;
+
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+.pill:hover .chevron,
+.link:hover .chevron {
+  transform: translateX(2px);
+}
+
+.othersRow .chevron {
+  width: 16px;
+  color: rgba(237, 237, 237, 0.45);
+  transition: transform 0.25s ease, color 0.25s ease;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.othersRow:hover .chevron,
+.othersRow:focus-visible .chevron {
+  transform: translateX(4px);
+  color: #96b9f9;
+}
+
+/* ---------- Responsive ---------- */
+
+/* Stacked, and still glued: one column, each cell keeping the bottom rule that
+   separates it from the next. */
+@media (max-width: 768px) {
+  .bento {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .card {
+    grid-column: span 1 !important;
+  }
+
+  .ctaActions {
+    justify-content: flex-start;
+  }
+}
+
+/* Same breakpoint /faq drops its chapter split at. */
+@media (max-width: 900px) {
+  .faq {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+}
+
+/* Stacked: the promise drops under the name and the chevron holds the right
+   edge across both lines, so the row still reads as one target. */
+@media (max-width: 700px) {
+  .othersRow {
+    grid-template-columns: minmax(0, 1fr) 16px;
+    align-items: start;
+    gap: 6px 16px;
+  }
+
+  .othersTitle,
+  .othersNote {
+    grid-column: 1;
+  }
+
+  .othersRow .chevron {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+}
+
+/* !important because the accordion island writes grid-template-rows inline —
+   this is the one declaration that has to beat it. The blanket rule below is
+   scoped to this section on purpose: a bare `*` would strip transitions from
+   the whole site, navbar and page transitions included. */
+@media (prefers-reduced-motion: reduce) {
+  .faqPanel {
+    grid-template-rows: 1fr !important;
+  }
+
+  .ia,
+  .ia * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
