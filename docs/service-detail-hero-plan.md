@@ -287,8 +287,10 @@ Results, 2026-08-04:
 ## Out of scope unless asked
 
 - `/services` and `/faq` themselves — both settled.
-- The body sections of the detail pages (`UseCases`, `WeekTimeline`, `Process`,
-  `MadeInHouse`, `MiniFaq`, `CtaBand`).
+- The body sections of the detail pages (`WeekTimeline`, `Process`,
+  `MadeInHouse`, `MiniFaq`, `CtaBand`). ⚠️ `UseCases` was on this list and is
+  now gone: `/services/ia`'s body was rebuilt after this plan was written — see
+  "What shipped alongside" below.
 - Live mode (`mode="live"`). What ships is a still image on every page and this
   plan does not change that.
 - Per-page colour ramps. `COLORS` is deliberately shared site-wide; a per-page
@@ -307,6 +309,7 @@ reads as one story. All on `feat/services-faq-redesign`.
 | `5401e17` | offers-strip promise alignment |
 | `f8108fe` | `/contact` quiet band — the fix for "too dark, cubes behind the form" |
 | `819799f` | the phone offset-ellipse dead end, recorded |
+| `07cc388` | `/services/ia`'s whole body, rebuilt as one Server Component |
 
 **The offers were a dead end** — the four pages only linked downward from
 `/services`, so moving between two of them meant the browser's back button.
@@ -320,7 +323,24 @@ label on its dot's line. ⚠️ Those rules sit at the END of
 query carries no extra specificity, so the later plain `.stepBody` rule beat it
 and the label stayed 24px under its dot with the indent applied on top.
 
-**`/contact`** is the substantial one and has its own writeup in
+**`/services/ia`'s body** is the other substantial one. The five sections under
+the hero became one Server Component, `services/v2/ia/ia-offre-section.jsx`, so
+the whole body ships in the initial HTML with no client re-render — the FAQ
+answers included, which is the GEO constraint the five sections each satisfied
+separately. `ia/use-cases.*` and `ia/honesty.*` are deleted; the three shared
+components are untouched, because the other three detail pages still import
+them. The design record, including every point where it diverged from the plan
+it was built from, is the ✅ block at the top of §3 of
+[m5-immersive-design-concepts.md](./m5-immersive-design-concepts.md).
+
+⚠️ **The heroes are the reason this is not a free change.** This page now mounts
+`ServiceIaClient` (hero, client, WebGL backdrop) and `IaOffreSection` (body,
+server) as siblings from `page.jsx`. Mounting the section inside the client
+component instead would silently turn it back into a client component and undo
+the whole point — the `(client)` route group's layout is `"use client"`, so only
+`page.jsx` can keep a child on the server.
+
+**`/contact`** is the substantial one of the earlier batch and has its own writeup in
 [wave-grid.md](./wave-grid.md#contact--the-page-whose-copy-covers-the-frame) —
 band instead of ellipse, `rz` vs `depth`, and why dimming a layer is not a
 substitute for a quiet zone.

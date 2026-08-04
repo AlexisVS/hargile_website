@@ -89,7 +89,14 @@
 }
 
 /* Pointer-following wash, driven by the --mx / --my the island writes on the
-   card. Opacity only — the gradient itself never animates. */
+   card. Opacity only — the gradient itself never animates.
+
+   420px and the 68% stop are the site's one spotlight (shared/spotlight.module.scss,
+   §0.2 of m5-immersive-design-concepts.md). The alpha is not: 5.5% is right for
+   the /services proof strip, which still has its numerals and rules, and is
+   invisible here — this is the only accent these cells carry on hover now that
+   the 01-04 numerals and the result's left rule are gone. Deliberate exception,
+   recorded rather than silently forked. */
 .spot {
   position: absolute;
   inset: 0;
@@ -97,7 +104,7 @@
   opacity: 0;
   transition: opacity 0.45s ease;
   background: radial-gradient(
-                  460px circle at var(--mx, 50%) var(--my, 50%),
+                  420px circle at var(--mx, 50%) var(--my, 50%),
                   rgba(150, 185, 249, 0.14),
                   transparent 68%
   );

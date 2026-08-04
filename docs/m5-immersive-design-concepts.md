@@ -56,8 +56,18 @@ implementation and one set of numbers.
    @media (hover: hover) and (pointer: fine) { .spot:hover::before { opacity: 1 } }
    ```
    This is SpotlightCard with the colour ramp, the border glow and the mouse-leave
-   spring removed. Used by /services rows and the /ia bento. **One spotlight on
-   the site, one radius, one alpha.**
+   spring removed. **One spotlight on the site, one radius, one alpha.**
+
+   > As built: the hook and this stylesheet are used by the `/services` proof
+   > strip. The `/ia` bento does **not** use them — that section is a Server
+   > Component and cannot call the hook, so it has its own island writing
+   > `--mx`/`--my` (`ia/bento-spotlight.jsx`). It keeps the 420px radius and the
+   > 68% stop; its alpha is **0.14, not 0.055**, because it is the only hover
+   > accent left in those cells. One radius, two alphas — see §3.
+
+   > 🔎 A third consumer means a decision, not a copy-paste: either it takes
+   > 0.055 and this stays a one-off, or the two alphas need a reason written
+   > down here.
 
 2. **`.displayNumeral`** — a shared type token, three sizes, in
    `v2-section.module.scss`:
@@ -232,8 +242,10 @@ Three equal columns is the same table problem. Fix without motion:
   between columns runs **only its own column's height**, so the separators form a
   descending edge rather than a grid.
 - The `ownership` strip ("your code, your data") adopts the pull-quote treatment
-  from `ia/honesty.module.scss` — left accent hairline, no frame, larger text.
-  Reusing an existing treatment, not inventing a seventh.
+  — left accent hairline, no frame, larger text. Reusing an existing treatment,
+  not inventing a seventh. This shipped, and `web/made-in-house.module.scss` is
+  now where that treatment lives: it used to be `ia/honesty.module.scss`, which
+  no longer exists (see §3 below).
 
 > 📝 **Optional messages change, flagged.** A stronger version sets the last two
 > words of the H2 at 1.6× the first part ("Tout se passe / **chez nous**").
@@ -300,6 +312,30 @@ Staircase offsets → 0. H2 drops to `clamp(32px, 8vw, 44px)`.
 
 ## 3. `/services/ia`
 
+> ✅ **This section shipped, 2026-08-04, commit `07cc388` — and it is the one
+> page where the concept below is no longer the source of truth.** The five body
+> sections were replaced by a single Server Component,
+> `services/v2/ia/ia-offre-section.jsx`, and `ia/use-cases.*` and `ia/honesty.*`
+> were deleted. What changed against the concept, and why:
+>
+> | §3 proposed | what shipped | why |
+> |---|---|---|
+> | 12 columns, 7/5 spans, gapped tiles | 6 columns, 4/2 — 2/4, **glued**: `gap: 0`, shared hairlines, square corners | Mihai rejected the radius, then the gaps — "cards have to be glued together". One figure cut into cells, not four widgets. |
+> | numerals `01`–`04` on each tile | no numerals | asked for, explicitly |
+> | `outcome` gets an accent left hairline | no rule; signal/result split by weight and brightness (300 @ 52% vs 400 @ 86%) | asked for. The accent moved to the "result" label at rest and the title + spotlight on hover. |
+> | `useSpotlight()` + `spotlight.module.scss` | its own island, `bento-spotlight.jsx`, writing `--mx`/`--my` | the section is a Server Component, so it cannot call the hook. Same 420px radius and 68% stop; **the alpha is 0.14, not §0.2's 0.055** — the deliberate exception to "one alpha", because it is the only hover accent left in these cells. |
+> | §3.3 as a full-bleed signature moment | a plain two-column block inside the section, no draw-on hairline, no 72vh | never built. The page's motion budget went unspent rather than being moved. |
+> | §3.4 "Mini-FAQ + CTA — keep" | both absorbed into the one section; the FAQ is now single-open, matching `/faq` | `shared/mini-faq`, `shared/sibling-offers` and `shared/cta-band` still exist — the other three detail pages use them. |
+>
+> One messages change came with it: `useCases.*.signal` / `.outcome` carried
+> their "Le signal :" / "Le résultat :" prefix inline; the prefix is now its own
+> key (`signalLabel` / `resultLabel`) so it can be a styled span. Copy otherwise
+> frozen, as §0 requires.
+>
+> §§3.1–3.5 below are kept as written — they are the reasoning that got there,
+> and §§3.2/3.5 still describe the bento's intent correctly even where the
+> numbers moved.
+
 ### 3.1 Hero — keep
 
 ### 3.2 Use cases — the asymmetric bento
@@ -332,6 +368,12 @@ budget is spent on §3.3.
 
 ### 3.3 Honesty — **signature moment: the page's one big statement**
 
+> ❌ **Not built.** The counter-argument shipped as an ordinary block inside
+> `ia-offre-section.jsx` — title left, answer right, no rule, no full-bleed, no
+> draw-on. `ia/honesty.*` is deleted; the copy still comes from
+> `pages.services.detail.ia.honesty`. The section below is still the best
+> argument on file for giving this block the viewport, if it is ever revisited.
+
 "Et quand l'IA n'est pas la réponse ?" is this page's differentiator, and it is
 currently a small pull-quote. Give it the viewport:
 
@@ -358,6 +400,10 @@ natural height, spotlight not registered. Honesty: section height → auto with
 generous padding, question `clamp(30px, 8vw, 46px)`, answer moves directly under
 it (the diagonal doesn't survive one column and shouldn't be faked), hairline
 stays at the left edge and still draws.
+
+> Shipped: single column and no spotlight, as above, at 768px rather than 860px —
+> the cells stay glued, each keeping the bottom rule that separates it from the
+> next. The Honesty half is moot, per §3.3.
 
 ---
 
