@@ -14,8 +14,13 @@ export default function HomePageClient() {
             <HeroV2/>
             <MvpPromoV2/>
             <DesignDevV2/>
-            <RecentWorksShowcaseV2/>
+            {/* Values before the work, not after: the manifesto above states how
+                we work, the values say what that rests on, and the portfolio is
+                then the evidence for both. It also lands the page on the pinned
+                rail — the one section that ends on a full-viewport frame, which
+                is a better last impression than a list of principles. */}
             <ValuesV2/>
+            <RecentWorksShowcaseV2/>
         </div>
     );
 }

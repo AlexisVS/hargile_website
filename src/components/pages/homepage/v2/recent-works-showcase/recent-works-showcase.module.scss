@@ -99,14 +99,15 @@
 
 /* --- Cartes projet ----------------------------------------- */
 
-/* Same lit-glass recipe as the values cards (.card in values.module.scss) so the
-   two card families read as one system. It was three: the hero had .floatCard
-   below 1024px, but the hero is one capability rail at every width now and its
-   cards are gone. The image owns the top of the
-   card, so the gradient lives on .cardBody — that's the visible glass surface,
-   with the bright light-catch corner emerging right under the media edge.
-   No backdrop-filter here: the rail scrolls on transform, and re-blurring every
-   frame is pure cost when there's nothing behind the card but the flat page. */
+/* Plus de carte, au sens objet : la capture EST le bloc, et le texte se pose
+   dessous sur le fond de page. Ce qui a sauté — bordure 1px, radius 24px,
+   drop shadow, light-catch en inset, et le dégradé bleu du .cardBody — était
+   la même recette de verre lumineux que portaient les cartes de valeurs. Les
+   valeurs sont passées en lignes filaires ; laisser ces cartes-ci en verre
+   aurait fait cohabiter deux systèmes à trois sections d'écart.
+   Ce que ça donne : la seule ligne de la figure est la couture média/texte,
+   comme les hairlines des pages M4/M5, et la capture n'est plus enfermée dans
+   un cadre — elle est le cadre. */
 .card {
   flex: 0 0 auto;
   /* Narrower than the original 56vw/780px: less horizontal distance per card,
@@ -117,34 +118,33 @@
      haut/bas — et le bloc texte garde sa hauteur, donc le bouton ne déborde
      plus. */
   max-height: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 24px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   background: transparent;
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
-/* Étiquette domaine : chip verre hairline posé sur le coin de la capture —
-   domaine réel du client en mono. Pas de backdrop-filter (le rail défile en
-   transform, re-flouter chaque frame coûte cher) : fond translucide simple.
+/* Étiquette domaine : le domaine réel du client, en mono. Plus une pilule
+   posée SUR la capture (bordure hairline, radius 999px, retrait de 14px) mais
+   un coin littéralement absent de la capture. D'où le fond : exactement
+   --color-background-dark, la couleur que .work pose derrière les cartes — pas
+   un noir translucide ni un backdrop-filter (le rail défile en transform,
+   re-flouter chaque frame coûte cher). Opaque et strictement identique au fond,
+   c'est ce qui fait lire l'encoche comme un morceau manquant plutôt qu'une
+   étiquette posée dessus ; le domaine passe en blanc pour la même raison, un
+   accent bleu redessinerait l'étiquette qu'on vient d'enlever.
    z-index 1 : au-dessus du voile teinté (::after) pour ne pas être re-teinté. */
 .domainChip {
   position: absolute;
-  top: 14px;
-  left: 14px;
+  top: 0;
+  left: 0;
   z-index: 1;
-  padding: 5px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 999px;
-  background: rgba(10, 12, 22, 0.97);
+  padding: 8px 16px;
+  background: var(--color-background-dark);
   font-family: ui-monospace, "Cascadia Code", "SF Mono", monospace;
   font-size: 11px;
   letter-spacing: 0.06em;
-  color: rgba(150, 185, 249, 0.9);
+  color: rgba(237, 237, 237, 0.82);
 }
 
 /* Les visuels sont des captures de sites normalisées (~1500×905 via
@@ -162,7 +162,10 @@
   background: #101018;
   /* Assied la capture (souvent claire) sur le corps sombre : couture nette
      plutôt que bord flottant. */
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  /* La seule ligne qui reste dans la figure, donc au même poids que les
+     hairlines du reste du site (valeurs, offres, FAQ) plutôt qu'au 0.08
+     d'origine, qui n'avait à se détacher que d'un corps de carte teinté. */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 
   /* Chaque visuel arrive dans la palette de son client (magnolia rose, pelouse,
      robe fuchsia) et jure avec le système sombre/bleu du site. On désature puis
@@ -212,13 +215,12 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 24px 32px 26px;
-  background: linear-gradient(
-    155deg,
-    rgba(56, 74, 122, 0.5) 0%,
-    rgba(24, 33, 58, 0.62) 48%,
-    rgba(12, 17, 32, 0.72) 100%
-  );
+  /* Aucun retrait latéral : le texte démarre sur le bord gauche de la capture,
+     donc chaque carte est une seule colonne. Avec le dégradé parti, un padding
+     horizontal n'aurait plus rien à border — il ne ferait que décrocher le
+     texte de son image. */
+  padding: 22px 0 0;
+  background: transparent;
 }
 
 .eyebrow {
@@ -236,7 +238,10 @@
   font-size: clamp(24px, 2.2vw, 32px);
   letter-spacing: -0.02em;
   margin: 0 0 10px;
-  color: #ffffff;
+  /* #ededed, pas #ffffff : le blanc pur était le seul de la page, et il ne se
+     lisait comme tel que posé sur le verre. Sur le fond de page il se range
+     avec les autres titres. */
+  color: #ededed;
 }
 
 .desc {
@@ -310,7 +315,7 @@
   }
 
   .cardBody {
-    padding: 20px 20px 22px;
+    padding: 18px 0 0;
   }
 
   .title {
