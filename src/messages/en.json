@@ -209,7 +209,7 @@
       "hero": {
         "eyebrow": "FAQ",
         "title": "The questions we actually get asked.",
-        "answer": "HARGILE is an independent web studio in Saint-Gilles, Brussels, building custom web applications for SMEs. Here are direct answers to the questions asked before choosing an agency: how much a custom application costs in Belgium, how long it takes, agency or freelancer, and who owns the code at the end. Missing yours? Write to us."
+        "answer": "HARGILE is an independent web studio in Brussels, building custom web applications for SMEs. Here are direct answers to the questions asked before choosing an agency: how much a custom application costs in Belgium, how long it takes, agency or freelancer, and who owns the code at the end. Missing yours? Write to us."
       },
       "groups": {
         "project": "Project & timelines",
@@ -251,7 +251,7 @@
           "id": "langues",
           "group": "project",
           "q": "Where is HARGILE based, and do you work with SMEs across Belgium?",
-          "a": "In Saint-Gilles, Brussels. We work with SMEs all over Belgium: on site when meeting in person actually serves the project, remotely the rest of the time — being close is a matter of availability, not kilometres. Our two working languages are French and English, and multilingual sites are routine: La Marquisette is trilingual, this one exists in French and English."
+          "a": "In Brussels. We work with SMEs all over Belgium: on site when meeting in person actually serves the project, remotely the rest of the time — being close is a matter of availability, not kilometres. Our two working languages are French and English, and multilingual sites are routine: La Marquisette is trilingual, this one exists in French and English."
         },
         {
           "id": "cout",
@@ -327,24 +327,20 @@
           ],
           "our-values": [
             {
-              "value": "Excellence",
-              "description": "We pursue technical perfection in everything we build"
+              "value": "Transparency",
+              "description": "Transparency regarding progress, costs and options. No surprises."
             },
             {
-              "value": "Innovation",
-              "description": "We continuously explore emerging technologies to stay at the cutting edge"
+              "value": "Sovereignty",
+              "description": "Your code, your data, your freedom. You're never locked-in."
             },
             {
-              "value": "Collaboration",
-              "description": "We work as an extension of your team, not just as a service provider"
+              "value": "Reliability",
+              "description": "A close, responsive partner who is there for the long term."
             },
             {
-              "value": "Integrity",
-              "description": "We maintain transparency throughout the development process"
-            },
-            {
-              "value": "Adaptability",
-              "description": "We evolve with technological trends while maintaining solid foundations"
+              "value": "Curiosity",
+              "description": "Curious by nature. We explore, test, and constantly learn. We use AI on a daily basis so we can focus our time on what really matters: personal contact and support."
             }
           ],
           "stats": {
@@ -1029,7 +1025,7 @@
         "hero": {
           "eyebrow": "Services",
           "title": "What we deliver.",
-          "answer": "HARGILE is an independent web studio based in Saint-Gilles, Brussels. We design, build and maintain custom web applications for SMEs, integrate AI where it changes the outcome, automate your search visibility, and turn an idea into a live MVP in 30 days, at a fixed price."
+          "answer": "HARGILE is an independent web studio based in Brussels. We design, build and maintain custom web applications for SMEs, integrate AI where it changes the outcome, automate your search visibility, and turn an idea into a live MVP in 30 days, at a fixed price."
         },
         "offers": {
           "ia": {

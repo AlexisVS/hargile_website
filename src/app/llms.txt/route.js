@@ -33,7 +33,7 @@ function body() {
     return `# HARGILE
 
 > HARGILE (also HARGILE Tech Studio) is an independent web and software studio
-> based in Saint-Gilles, Brussels, Belgium, founded in 2025. It designs, builds
+> based in Brussels, Belgium, founded in 2025. It designs, builds
 > and maintains custom web applications for small and medium-sized businesses,
 > integrates AI where it earns its place, and automates SEO. Work is done
 > in-house; clients keep ownership of their code and data.

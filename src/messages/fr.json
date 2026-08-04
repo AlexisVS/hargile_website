@@ -209,7 +209,7 @@
       "hero": {
         "eyebrow": "FAQ",
         "title": "Les questions qu'on nous pose vraiment.",
-        "answer": "HARGILE est un studio web indépendant à Saint-Gilles (Bruxelles) qui développe des applications web sur mesure pour les PME. Voici les réponses directes aux questions posées avant de choisir une agence : combien coûte une application sur mesure en Belgique, en combien de temps, agence ou freelance, et à qui appartient le code à la fin. Il manque la vôtre ? Écrivez-nous."
+        "answer": "HARGILE est un studio web indépendant à Bruxelles qui développe des applications web sur mesure pour les PME. Voici les réponses directes aux questions posées avant de choisir une agence : combien coûte une application sur mesure en Belgique, en combien de temps, agence ou freelance, et à qui appartient le code à la fin. Il manque la vôtre ? Écrivez-nous."
       },
       "groups": {
         "project": "Projet & délais",
@@ -251,7 +251,7 @@
           "id": "langues",
           "group": "project",
           "q": "Où est basée HARGILE, et travaillez-vous avec des PME partout en Belgique ?",
-          "a": "À Saint-Gilles, dans Bruxelles. Nous travaillons avec des PME partout en Belgique : sur place quand la rencontre sert à quelque chose, à distance le reste du temps — la proximité se joue sur la disponibilité, pas sur les kilomètres. Nos deux langues de travail sont le français et l'anglais, et les sites multilingues sont une habitude : La Marquisette est trilingue, celui-ci existe en français et en anglais."
+          "a": "À Bruxelles. Nous travaillons avec des PME partout en Belgique : sur place quand la rencontre sert à quelque chose, à distance le reste du temps — la proximité se joue sur la disponibilité, pas sur les kilomètres. Nos deux langues de travail sont le français et l'anglais, et les sites multilingues sont une habitude : La Marquisette est trilingue, celui-ci existe en français et en anglais."
         },
         {
           "id": "cout",
@@ -327,24 +327,20 @@
           ],
           "our-values": [
             {
-              "value": "Excellence",
-              "description": "Nous recherchons la perfection technique dans tout ce que nous construisons"
+              "value": "Transparence",
+              "description": "Une transparence sur l'avancement, les coûts, les choix. Pas de surprises."
             },
             {
-              "value": "Innovation",
-              "description": "Nous explorons constamment les technologies émergentes pour rester à la pointe"
+              "value": "Souveraineté",
+              "description": "Votre code, vos données, votre liberté. Vous restez propriétaire de tout ce qu'on construit pour vous. Si vous restez, c'est par choix, pas par dépendance."
             },
             {
-              "value": "Collaboration",
-              "description": "Nous travaillons comme une extension de votre équipe, pas seulement comme un prestataire de services"
+              "value": "Fiabilité",
+              "description": "Un partenaire proche, réactif et présent dans la durée."
             },
             {
-              "value": "Intégrité",
-              "description": "Nous maintenons la transparence tout au long du processus de développement"
-            },
-            {
-              "value": "Adaptabilité",
-              "description": "Nous évoluons avec les tendances technologiques tout en maintenant des bases solides"
+              "value": "Curiosité",
+              "description": "Curieux par nature. On explore, on teste, on apprend en continu. On pilote l'IA au quotidien pour investir notre temps là où l'humain compte : le contact et le support."
             }
           ],
           "stats": {
@@ -1029,7 +1025,7 @@
         "hero": {
           "eyebrow": "Services",
           "title": "Ce que nous livrons.",
-          "answer": "HARGILE est un studio web indépendant basé à Saint-Gilles, à Bruxelles. Nous concevons, développons et maintenons des applications web sur mesure pour les PME, intégrons l'IA là où elle change le résultat, automatisons votre visibilité sur les moteurs de recherche, et transformons une idée en MVP en 30 jours, à prix fixe."
+          "answer": "HARGILE est un studio web indépendant basé à Bruxelles. Nous concevons, développons et maintenons des applications web sur mesure pour les PME, intégrons l'IA là où elle change le résultat, automatisons votre visibilité sur les moteurs de recherche, et transformons une idée en MVP en 30 jours, à prix fixe."
         },
         "offers": {
           "ia": {
