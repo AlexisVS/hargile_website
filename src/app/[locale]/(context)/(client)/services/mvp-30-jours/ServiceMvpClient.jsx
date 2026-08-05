@@ -1,18 +1,14 @@
 "use client";
 
 import {useTranslations} from "next-intl";
-import {projectsData} from "@/data/portfolio-data";
 import PosterHero from "@/components/pages/services/v2/shared/poster-hero";
 import WeekTimeline from "@/components/pages/services/v2/mvp/week-timeline";
 import Included from "@/components/pages/services/v2/mvp/included";
 import FixedPrice from "@/components/pages/services/v2/mvp/fixed-price";
-import ProofCase from "@/components/pages/services/v2/shared/proof-case";
 import MiniFaq from "@/components/pages/services/v2/shared/mini-faq";
 import SiblingOffers from "@/components/pages/services/v2/shared/sibling-offers";
 import CtaBand from "@/components/pages/services/v2/shared/cta-band";
 import WaveGridBackdrop from "@/components/pages/services/v2/shared/wave-grid-backdrop";
-
-const MARQUISETTE = projectsData.find((p) => p.id === 25);
 
 export default function ServiceMvpClient() {
     const t = useTranslations("pages.services.detail.mvp.hero");
@@ -36,7 +32,9 @@ export default function ServiceMvpClient() {
             <WeekTimeline/>
             <Included/>
             <FixedPrice/>
-            <ProofCase namespace="pages.services.detail.mvp" project={MARQUISETTE}/>
+            {/* La Marquisette proof case pulled out for now — shared/proof-case.jsx
+                and the mvp.proofCase copy stay in place, so it comes back with
+                one line. */}
             <MiniFaq namespace="pages.services.detail.mvp.faq"/>
             <SiblingOffers current="mvp"/>
             <CtaBand/>

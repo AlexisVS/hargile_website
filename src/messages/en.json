@@ -1066,11 +1066,6 @@
             ]
           }
         },
-        "proof": {
-          "label": "Proof",
-          "title": "Three recent projects.",
-          "linkLabel": "Full portfolio"
-        },
         "spine": {
           "kicker": "Four offers",
           "text": "Every offer is a delivery commitment, not a catalogue line. You talk to the team that designs it and writes the code, from scoping to launch."

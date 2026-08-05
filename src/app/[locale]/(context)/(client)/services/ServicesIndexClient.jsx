@@ -4,7 +4,6 @@ import {useTranslations} from "next-intl";
 import PosterHero from "@/components/pages/services/v2/shared/poster-hero";
 import HeroStats from "@/components/pages/services/v2/index/hero-stats";
 import OffersIndex from "@/components/pages/services/v2/index/offers-index";
-import ProofStrip from "@/components/pages/services/v2/index/proof-strip";
 import CtaBand from "@/components/pages/services/v2/shared/cta-band";
 import WaveGridBackdrop from "@/components/pages/services/v2/shared/wave-grid-backdrop";
 
@@ -24,8 +23,7 @@ export default function ServicesIndexClient() {
                 backdrop={<WaveGridBackdrop/>}
             />
             <OffersIndex/>
-            <ProofStrip/>
-            <CtaBand variant="box" secondary={{href: "/faq", label: t("ctaSecondary")}}/>
+            <CtaBand variant="box" framed={false} secondary={{href: "/faq", label: t("ctaSecondary")}}/>
         </>
     );
 }

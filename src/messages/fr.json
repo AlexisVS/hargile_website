@@ -1066,11 +1066,6 @@
             ]
           }
         },
-        "proof": {
-          "label": "Preuves",
-          "title": "Trois projets récents.",
-          "linkLabel": "Tout le portfolio"
-        },
         "spine": {
           "kicker": "Quatre offres",
           "text": "Chaque offre est un engagement de livraison, pas une ligne de catalogue. Vous parlez à l'équipe qui conçoit et qui code, du cadrage à la mise en ligne."

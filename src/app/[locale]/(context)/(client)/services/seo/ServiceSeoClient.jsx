@@ -1,17 +1,13 @@
 "use client";
 
 import {useTranslations} from "next-intl";
-import {projectsData} from "@/data/portfolio-data";
 import PosterHero from "@/components/pages/services/v2/shared/poster-hero";
 import Process from "@/components/pages/services/v2/seo/process";
 import MetaProof from "@/components/pages/services/v2/seo/meta-proof";
-import ProofCase from "@/components/pages/services/v2/shared/proof-case";
 import MiniFaq from "@/components/pages/services/v2/shared/mini-faq";
 import SiblingOffers from "@/components/pages/services/v2/shared/sibling-offers";
 import CtaBand from "@/components/pages/services/v2/shared/cta-band";
 import WaveGridBackdrop from "@/components/pages/services/v2/shared/wave-grid-backdrop";
-
-const VENIZI = projectsData.find((p) => p.id === 23);
 
 export default function ServiceSeoClient() {
     const t = useTranslations("pages.services.detail.seo.hero");
@@ -34,7 +30,10 @@ export default function ServiceSeoClient() {
             />
             <Process/>
             <MetaProof/>
-            <ProofCase namespace="pages.services.detail.seo" project={VENIZI}/>
+            {/* VENIZI proof case pulled out for now — shared/proof-case.jsx and
+                the seo.proofCase copy stay in place, so it comes back with one
+                line. MetaProof stays: it demonstrates the method on this very
+                page rather than showing a client site. */}
             <MiniFaq namespace="pages.services.detail.seo.faq"/>
             <SiblingOffers current="seo"/>
             <CtaBand/>
