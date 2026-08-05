@@ -3,8 +3,9 @@
 > Écrit le 2026-08-05, en fin de session « sections + graphiques ».
 > **Prompt à coller en ouverture de la prochaine session :**
 >
-> « Lis `docs/services-graphs-session-prompt.md` et exécute-le. Commence par la
-> décision ouverte §2.1 — rien d'autre n'est bloquant. »
+> « Lis `docs/services-graphs-session-prompt.md` et exécute-le. Les deux
+> décisions encore ouvertes sont §2.3 et §2.4 ; aucune n'est bloquante, donc
+> commence par la dette de mesure (§3) si Mihai n'a rien à trancher. »
 >
 > Remplace [`services-sections-session-prompt.md`](./services-sections-session-prompt.md),
 > dont la mission est exécutée.
@@ -23,7 +24,7 @@ mémoire :
 web  : PosterHero · MadeInHouse · Deliverables · PriceMethod · MiniFaq · Siblings · CtaBand
 seo  : PosterHero · Process · MetaProof · MeasuredProof · GeoAnswer · Measures · MiniFaq · Siblings · CtaBand
 ia   : PosterHero · [serveur : bento · honesty · DataGuarantees · MiniFaq · siblings · cta]
-mvp  : PosterHero · WeekCalendar · Included · FixedPrice · ScopeGuard · MiniFaq · Siblings · CtaBand
+mvp  : PosterHero · WeekCalendar · Included · FixedPrice · MiniFaq · Siblings · CtaBand
 ```
 
 Poids mesuré sur le HTML rendu. ⚠️ Le script de comptage rend ~5 % de moins que
@@ -35,9 +36,15 @@ comparer des tendances, pas des valeurs absolues :
 /services/applications-web   777 mots   (était 482)
 /services/ia                 670 mots   (était 578)
 /services/seo                999 mots   (était 598)
-/services/mvp-30-jours       730 mots   (était 643)
+/services/mvp-30-jours       621 mots   (était 643)
 /faq                        1210 mots
 ```
+
+⚠️ **mvp est la seule page qui a perdu du poids** : elle est montée à 730 puis
+redescendue à 621 en fin de session, quand `ScopeGuard` a été démontée (§2.2).
+C'est voulu — c'était du doublon — mais si la page doit regagner de la matière,
+c'est celle-là qu'il faut regarder, et **pas** en réécrivant ce qui vient de
+partir.
 
 **Infrastructure ajoutée, réutilisable :**
 
@@ -45,56 +52,62 @@ comparer des tendances, pas des valeurs absolues :
   (scaleX depuis la gauche) au lieu de monter en fondu. Se compose avec les
   classes que `useReveal` pose déjà : **aucun JS modifié, pas de second
   observer**. Repli reduced-motion en fondu. Stagger toujours **1 à 8**.
-- `shared/count-up.jsx` — le compteur extrait de `index/hero-stats.jsx`, partagé
-  avec `mvp/scope-guard.jsx`. Le HTML SSR porte la valeur finale.
+- `shared/count-up.jsx` — le compteur extrait de `index/hero-stats.jsx`. Le HTML
+  SSR porte la valeur finale. ⚠️ Son second consommateur était `scope-guard.jsx`,
+  aujourd'hui démontée : **il n'est donc plus utilisé que par `/services`.**
+  Il reste partagé et documenté comme tel — ne pas le réintégrer dans
+  `hero-stats.jsx` sous prétexte qu'il n'a plus qu'un appelant.
 - `src/data/site-metrics.js` — vrais chiffres Lighthouse de la page seo. **§3.**
 
-**Le calendrier horizontal a remplacé la timeline verticale sur mvp.**
-`week-timeline.jsx` reste sur le disque, intact, sur les mêmes clés
-`timeline.*` — un import le remet. Composants dormants aujourd'hui :
-`mvp/week-timeline.jsx`, `shared/proof-case.jsx`, `web/case-studies.jsx`.
+**Le calendrier horizontal a remplacé la timeline verticale sur mvp**, et
+`ScopeGuard` a été démontée. Rien n'est supprimé : composants, styles et clés
+restent intacts, un import les remet. **Composants dormants au 2026-08-05 :**
+
+| Fichier | Clés | Pourquoi démonté |
+| --- | --- | --- |
+| `mvp/week-timeline.jsx` | `mvp.timeline.*` (partagées avec le calendrier) | remplacé par `week-calendar.jsx` |
+| `mvp/scope-guard.jsx` | `mvp.scope.*` (orphelines) | doublonnait les exclusions |
+| `shared/proof-case.jsx` | `seo.proofCase`, `mvp.proofCase` | retrait des exemples clients (04/08) |
+| `web/case-studies.jsx` | `web.cases.*` | idem |
 
 ---
 
-## 2. Décisions ouvertes — traiter §2.1 en premier
+## 2. Décisions — deux tranchées en fin de session, deux encore ouvertes
 
-### 2.1 Variante « inclus / pas inclus » ⇠ **le seul point bloquant**
+### 2.1 ✅ Variante « inclus / pas inclus » — **tranchée, appliquée**
 
-Planche de six variantes publiée pour arbitrage :
-**https://claude.ai/code/artifact/a7464a34-3c48-44d4-84c9-3b50c9c519c2**
+Mihai a choisi la **variante B (empilée)** sur la planche
+[https://claude.ai/code/artifact/a7464a34-3c48-44d4-84c9-3b50c9c519c2](https://claude.ai/code/artifact/a7464a34-3c48-44d4-84c9-3b50c9c519c2),
+plus des coches en bleu accent. C'est en place dans `mvp/included.jsx`.
 
-Recherche faite et sourcée. Les trois conclusions qui pilotent le choix :
+Ce qu'il faut savoir pour ne pas défaire la raison du choix :
 
-1. **L'ordre compte.** L'effet de crédibilité d'une exclusion publiée dépend du
-   fait qu'elle arrive **après** le positif, pas à côté à poids égal (Ein-Gar,
-   Shiv & Tormala, *When blemishing leads to blossoming*, JCR 2012). La page les
-   met aujourd'hui **côte à côte** ; la variante **B** corrige ça à copie
-   constante.
-2. **Ni coches/croix ni barré.** Un tableau de comparaison sert à départager
-   plusieurs offres — il y en a une. Le NN/g exige des filets pour qu'un tableau
-   reste suivable : ils viennent d'être retirés. Et ✓/✗ comme `line-through` ne
-   sont pas transmis de façon fiable aux lecteurs d'écran.
-3. **Le terrain est libre** : sur six pages de services productisés vérifiées
-   (Designjoy, ManyPixels, Awesomic, Linear, Basecamp, ONCE), aucune ne montre
-   ses exclusions de façon scannable.
+- **L'ordre est la substance, pas la mise en page.** Une exclusion publiée
+  volontairement n'achète de la crédibilité que si elle arrive **après** le
+  positif, pas à côté à poids égal (Ein-Gar, Shiv & Tormala, *When blemishing
+  leads to blossoming*, JCR 2012). Ne pas « rééquilibrer » en remettant deux
+  colonnes côte à côte.
+- **Les coches sont sûres ici parce que ce ne sont pas des plans.** Un tableau
+  coches/croix sert à départager plusieurs offres ; il y en a une. La coche est
+  donc une décoration sur une liste que son titre nomme déjà — d'où un **SVG
+  `aria-hidden`** et non le caractère ✓, que les lecteurs d'écran énoncent de
+  façon peu fiable. La liste exclue garde un tiret et **pas une croix rouge** :
+  la palette n'a qu'un accent, et inventer une seconde couleur sémantique pour
+  dire « non » échouerait au même test que les coches ont été conçues pour
+  passer.
+- **Ne pas réintroduire de barré** (`line-through` ne transmet rien) ni de
+  tableau (le NN/g exige des filets pour qu'il reste suivable — ils sont partis).
 
-**Si Mihai ne tranche pas : appliquer B.** Même copie, même composant, seuls
-l'ordre et la largeur changent — c'est le seul changement que la recherche
-soutient directement.
+### 2.2 ✅ Doublon `Included` ↔ `ScopeGuard` — **tranché : section supprimée**
 
-### 2.2 Doublon `Included` ↔ `ScopeGuard` ⇠ à corriger quelle que soit la variante
+`ScopeGuard` (« La limite qui tient la promesse ») est **démontée**. Deux de ses
+trois puces redisaient les lignes « pas dans les 30 jours » ; la troisième — le
+décideur joignable — est **déjà la réponse mot pour mot de la question 2 de la
+mini-FAQ de la même page**. Vérifié avant de retirer : rien ne se perd.
 
-| `included.out` | `scope.points` |
-| --- | --- |
-| Les fonctionnalités reportées ensemble en v2 | Ce qui déborde part sur la feuille de route v2… |
-| Le contenu métier que vous seul pouvez écrire | Le contenu métier reste à vous… |
-| La maintenance long terme… | — |
-| — | La seule vraie condition… un décideur joignable |
-
-Seul « décideur joignable » est neuf : les deux sections sont à moitié le même
-texte, à quelques mètres d'écart. Proposition faite à Mihai, **sans réponse** :
-resserrer `ScopeGuard` sur ce qu'elle seule dit — la semaine 1 qui existe pour
-découper, et la condition côté client. **Copie commerciale = son appel.**
+Le composant, ses styles et les clés `mvp.scope` restent sur le disque.
+⚠️ **Ne pas réécrire cette section « en mieux »** si la page paraît courte : le
+problème d'origine était le doublon, pas la formulation.
 
 ### 2.3 Les phases du calendrier se chevauchent-elles ?
 
@@ -172,11 +185,12 @@ plus saturé que l'accent du site.
   le HTML SSR. Reveals via `useReveal` + `reveal.module.scss` uniquement, jamais
   d'`opacity: 0` dans un `style=`. Stagger 1–8, échec silencieux au-delà.
 - **Goût** : sobre, one-shot, aucun effet en boucle ni backdrop ambiant.
-- ⚠️ **Nouveau** : les trois sections de bas de page mvp (`Included`,
-  `FixedPrice`, `ScopeGuard`) sont **sans cadre ni filet**, à la demande de
-  Mihai le 05/08. La structure y est portée par l'échelle typographique, le
-  poids d'encre et l'espace. **Ne pas y réintroduire de bordure sans le lui
-  demander** — c'est un écart assumé au « hairline-led » du reste du site.
+- ⚠️ **Nouveau** : les sections de bas de page mvp (`Included` et `FixedPrice`,
+  ainsi que `ScopeGuard` tant qu'elle était montée) sont **sans cadre ni
+  filet**, à la demande de Mihai le 05/08. La structure y est portée par
+  l'échelle typographique, le poids d'encre et l'espace. **Ne pas y
+  réintroduire de bordure sans le lui demander** — c'est un écart assumé au
+  « hairline-led » du reste du site, limité à cette page.
 - ⚠️ **Nouveau — contraste : mesurer, ne pas juger à l'œil.** Sur `#080c16`,
   l'encre `#ededed` ne passe 4,5:1 **qu'à partir de 0,50 d'alpha** (0,44 =
   3,89:1, échec AA). Piège mordu cette session sur la liste « pas inclus ».

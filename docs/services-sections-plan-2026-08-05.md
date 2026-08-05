@@ -6,6 +6,13 @@
 > toute la copie des nouvelles sections présente dans le HTML sans JS, JSON-LD
 > valide sur 18 sources et `FAQPage` toujours uniquement sur `/faq`.
 > **Rien n'est poussé ni déployé** — reste la validation visuelle de Mihai.
+>
+> ⚠️ **La page mvp a évolué après l'exécution de ce plan**, le même jour : la
+> timeline verticale a été remplacée par un calendrier horizontal, les trois
+> sections de bas de page ont perdu leurs cadres, et `ScopeGuard` — décrite en
+> §4 ci-dessous — a été démontée parce qu'elle doublonnait les exclusions. Ce
+> document reste le plan tel que validé ; pour l'état réel des pages, voir
+> [`services-graphs-session-prompt.md`](./services-graphs-session-prompt.md).
 
 ## Contexte
 

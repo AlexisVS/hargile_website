@@ -1,5 +1,14 @@
 # Prompt de session — nouvelles sections pour les pages services
 
+> ✅ **MISSION EXÉCUTÉE le 2026-08-05. Ce document est historique.**
+> Il garde sa valeur pour le *pourquoi* (état GSC de départ, ce qui avait été
+> démonté, les sources de contenu), mais **son état des pages est périmé** :
+> les sections ont été construites, la timeline mvp remplacée par un
+> calendrier, et `ScopeGuard` démontée depuis.
+>
+> **Le prompt de reprise est désormais
+> [`services-graphs-session-prompt.md`](./services-graphs-session-prompt.md).**
+
 > Écrit le 2026-08-05, en fin de session « retraits + maillage ».
 > **Prompt à coller en ouverture de la prochaine session :**
 >

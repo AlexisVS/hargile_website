@@ -12,9 +12,31 @@
 > | GEO phase 1 | `main`, prod | ✅ terminé (`v0.21.0`/`v0.21.1`) |
 > | Session M4 — les 6 pages | `main`, **non poussé, non déployé** | codé et commité |
 > | Hero wave-grid | `feat/services-faq-redesign`, **poussé** | phases 1–6 faites ; reste l'image fixe (yeux de Mihai) puis la fusion |
-> | Sections des pages services | `main`, **non poussé** | retraits + maillage commités ; le contenu se planifie en prochaine session → [`services-sections-session-prompt.md`](./services-sections-session-prompt.md) |
+> | Sections des pages services | `main`, **non poussé** | sections construites sur les 4 pages, graphiques mesurés sur seo → [`services-graphs-session-prompt.md`](./services-graphs-session-prompt.md) |
 >
-> ### ✅ 2026-08-05 — exemples retirés, FAQ unifiée, maillage interne
+> ### ✅ 2026-08-05 (après-midi) — sections construites, graphiques, arbitrages
+>
+> **Le prompt de reprise est
+> [`docs/services-graphs-session-prompt.md`](./services-graphs-session-prompt.md)**
+> — il porte la composition à jour des quatre pages, les décisions encore
+> ouvertes et la dette de mesure. En résumé :
+>
+> - Les quatre pages offres ont leurs nouvelles sections ; web passe de 482 à
+>   777 mots, seo de 598 à 999.
+> - `/services/seo` publie ses **vrais** scores Lighthouse, mesurés en prod et
+>   datés (`src/data/site-metrics.js`) — y compris un LCP au-dessus du seuil,
+>   affiché volontairement. **À re-mesurer après déploiement.**
+> - mvp : la timeline verticale a laissé place à un calendrier horizontal, les
+>   listes inclus/exclus sont empilées avec des coches accent, et `ScopeGuard`
+>   a été démontée (elle doublonnait). La page passe de 643 à 621 mots.
+> - Deux planches publiées pour arbitrage : les
+>   [douze formes de graphiques](https://claude.ai/code/artifact/38f4933e-4829-4e1d-a0f7-d0bf1a4af7e2)
+>   et les [six variantes inclus/exclus](https://claude.ai/code/artifact/a7464a34-3c48-44d4-84c9-3b50c9c519c2).
+> - Nouveaux pièges documentés : contraste à mesurer et non à juger à l'œil
+>   (0,44 d'alpha = 3,89:1, échec AA) ; `hrefLang` est émis en camelCase ; pas
+>   de backticks dans un `git commit -m` depuis bash.
+>
+> ### ✅ 2026-08-05 (matin) — exemples retirés, FAQ unifiée, maillage interne
 >
 > **Le prompt de reprise pour la suite est
 > [`docs/services-sections-session-prompt.md`](./services-sections-session-prompt.md)**,
