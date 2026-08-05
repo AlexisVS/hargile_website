@@ -5,7 +5,6 @@ import PosterHero from "@/components/pages/services/v2/shared/poster-hero";
 import WeekCalendar from "@/components/pages/services/v2/mvp/week-calendar";
 import Included from "@/components/pages/services/v2/mvp/included";
 import FixedPrice from "@/components/pages/services/v2/mvp/fixed-price";
-import ScopeGuard from "@/components/pages/services/v2/mvp/scope-guard";
 import MiniFaq from "@/components/pages/services/v2/shared/mini-faq";
 import SiblingOffers from "@/components/pages/services/v2/shared/sibling-offers";
 import CtaBand from "@/components/pages/services/v2/shared/cta-band";
@@ -38,11 +37,14 @@ export default function ServiceMvpClient() {
             <WeekCalendar/>
             <Included/>
             <FixedPrice/>
-            {/* Directly after the price, because it is the same argument seen
-                from the other end: the price holds because the scope does.
-                The La Marquisette proof case stays on disk with its copy
-                (shared/proof-case.jsx) — one line brings it back. */}
-            <ScopeGuard/>
+            {/* « La limite qui tient la promesse » (mvp/scope-guard.jsx) a été
+                démontée le 2026-08-05 : deux de ses trois puces redisaient les
+                lignes « pas dans les 30 jours » de Included, et la troisième —
+                le décideur joignable — est déjà la réponse mot pour mot de la
+                question 2 de la mini-FAQ ci-dessous. Le composant, ses styles
+                et ses clés `mvp.scope` restent intacts sur le disque, comme
+                proof-case et week-timeline : un import le remet.
+                La Marquisette (shared/proof-case.jsx) est dormante de même. */}
             <MiniFaq namespace="pages.services.detail.mvp.faq"/>
             <SiblingOffers current="mvp"/>
             <CtaBand/>
