@@ -1,0 +1,75 @@
+/* What we measure — the same neutral frame as meta-proof, since it is the same
+   kind of statement: checkable, not persuasive. The refusal below the drawn
+   rule keeps full text colour rather than the dimmed note treatment; it is not
+   a footnote. */
+
+.frame {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: clamp(32px, 4.5vw, 56px);
+}
+
+.title {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(24px, 2.4vw, 36px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+  color: #ededed;
+}
+
+.text {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.68);
+  line-height: 1.6;
+  max-width: 72ch;
+  margin: 14px 0 0;
+}
+
+.points {
+  list-style: none;
+  margin: 26px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  li {
+    position: relative;
+    padding-left: 26px;
+    font-size: 15px;
+    font-weight: 300;
+    color: rgba(237, 237, 237, 0.72);
+    line-height: 1.6;
+    max-width: 72ch;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.62em;
+      width: 14px;
+      height: 1px;
+      background: rgba(150, 185, 249, 0.7);
+    }
+  }
+}
+
+.rule {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin-top: clamp(26px, 3vw, 34px);
+}
+
+.refusal {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.68);
+  line-height: 1.65;
+  max-width: 68ch;
+  margin: clamp(24px, 3vw, 32px) 0 0;
+}

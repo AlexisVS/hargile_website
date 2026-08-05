@@ -927,6 +927,38 @@
               "View this page's source: it is all there."
             ]
           },
+          "geo": {
+            "title": "Being cited by AI answers.",
+            "lead": "When a client asks ChatGPT or Perplexity which agency builds web applications in Brussels, the assistant answers by citing its sources. Being one of those sources is where visibility now starts — and it is worked page by page.",
+            "cols": {
+              "readable": {
+                "title": "Content machines can read",
+                "text": "The answers are in the HTML on the first response, with no JavaScript to run. An answer engine that only sees an empty page will never cite anything."
+              },
+              "structured": {
+                "title": "Structured data",
+                "text": "Every page states what it is and who wrote it, in schema.org format. That is what lets an engine attach an answer to one specific company."
+              },
+              "answers": {
+                "title": "One page, one real question",
+                "text": "Pages are written to answer, plainly, a question your clients actually ask. That is the format answer engines quote and attribute."
+              }
+            },
+            "closing": {
+              "title": "What this does not guarantee.",
+              "text": "Nobody controls the models, and nobody can promise you will be cited. What we commit to is the method, and transparency about what it produces."
+            }
+          },
+          "measures": {
+            "title": "What we measure — and what we don't promise.",
+            "text": "You don't have to take our word for it. The numbers are tracked and shared: we look at the same ones you do, at the same time.",
+            "points": [
+              "Positions on the queries that matter to your business, not the ones that look good in a report.",
+              "Organic traffic, with the honest timeline: a few weeks for what is technical, several months for what is editorial.",
+              "Pages cited by answer engines, tracked on the same footing as Google positions."
+            ],
+            "refusal": "What we will not sell: a guaranteed first position. Nobody serious can promise it, and an agency that does has already told you something about the rest."
+          },
           "proofCase": {
             "text": "VENIZI sells its jewellery online and across a network of 50 boutiques in Belgium and France — a catalogue where every product has to be findable."
           },

@@ -1,0 +1,84 @@
+/* GEO — three columns under drawn hairlines, closed by the honest-boundary
+   strip. Same left accent hairline as web/made-in-house's ownership block: on
+   both pages that shape means "and here is the limit of what we claim". */
+
+/* The identity ramp, same recipe as shared/cta-band — shrink-wrapped so the
+   gradient maps onto glyphs rather than an empty box. */
+.title {
+  width: fit-content;
+  max-width: 100%;
+  background: linear-gradient(135deg, #ffffff 30%, #dce7fd 68%, #96b9f9 105%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-bottom: 0.06em;
+}
+
+.lead {
+  max-width: 68ch;
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 3.5vw, 56px);
+  margin-top: clamp(40px, 5vw, 60px);
+}
+
+.rule {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.body {
+  padding-top: 24px;
+}
+
+.colTitle {
+  font-family: var(--font-headings);
+  font-weight: 600;
+  font-size: clamp(20px, 1.8vw, 26px);
+  letter-spacing: -0.015em;
+  margin: 0;
+  color: #ededed;
+}
+
+.colText {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.62);
+  line-height: 1.6;
+  margin: 12px 0 0;
+}
+
+.closing {
+  margin-top: clamp(48px, 6vw, 72px);
+  border-left: 1px solid rgba(150, 185, 249, 0.6);
+  padding-left: clamp(24px, 3vw, 40px);
+}
+
+.closingTitle {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(22px, 2vw, 30px);
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: #ededed;
+}
+
+.closingText {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.68);
+  line-height: 1.65;
+  max-width: 60ch;
+  margin: 12px 0 0;
+}
+
+@media (max-width: 720px) {
+  .cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -4,6 +4,8 @@ import {useTranslations} from "next-intl";
 import PosterHero from "@/components/pages/services/v2/shared/poster-hero";
 import Process from "@/components/pages/services/v2/seo/process";
 import MetaProof from "@/components/pages/services/v2/seo/meta-proof";
+import GeoAnswer from "@/components/pages/services/v2/seo/geo-answer";
+import Measures from "@/components/pages/services/v2/seo/measures";
 import MiniFaq from "@/components/pages/services/v2/shared/mini-faq";
 import SiblingOffers from "@/components/pages/services/v2/shared/sibling-offers";
 import CtaBand from "@/components/pages/services/v2/shared/cta-band";
@@ -30,10 +32,13 @@ export default function ServiceSeoClient() {
             />
             <Process/>
             <MetaProof/>
-            {/* VENIZI proof case pulled out for now — shared/proof-case.jsx and
-                the seo.proofCase copy stay in place, so it comes back with one
-                line. MetaProof stays: it demonstrates the method on this very
-                page rather than showing a client site. */}
+            {/* The three build on each other: MetaProof demonstrates the
+                technique on this page, GeoAnswer says what it is as an offer,
+                Measures says how we are held to it. The VENIZI proof case stays
+                on disk with its copy (shared/proof-case.jsx) — one line brings
+                it back if the page ever wants a client site again. */}
+            <GeoAnswer/>
+            <Measures/>
             <MiniFaq namespace="pages.services.detail.seo.faq"/>
             <SiblingOffers current="seo"/>
             <CtaBand/>
