@@ -1053,19 +1053,23 @@
             "lead": "À la fin d'un projet, quatre choses vous appartiennent. Rien ne reste chez nous : tout est conçu et codé en interne à Bruxelles, sans sous-traitance, et ce qui est produit part avec vous.",
             "items": {
               "design": {
-                "title": "Le design, maquettes comprises",
+                "titleLead": "Le design,",
+                "titleRest": "maquettes comprises",
                 "text": "Les écrans et les parcours, dessinés par l'équipe qui les code ensuite. Vous récupérez les maquettes, pas seulement le résultat à l'écran."
               },
               "code": {
-                "title": "Le code source, dans un dépôt à votre nom",
+                "titleLead": "Le code source,",
+                "titleRest": "dans un dépôt à votre nom",
                 "text": "L'intégralité du code, sur un dépôt dont vous êtes propriétaire. Une autre équipe peut le reprendre sans avoir à nous demander quoi que ce soit."
               },
               "live": {
-                "title": "Le site en ligne, dans vos langues",
+                "titleLead": "Le site en ligne,",
+                "titleRest": "dans vos langues",
                 "text": "Mis en production sur votre domaine, en une ou plusieurs langues — un site trilingue est une demande courante ici, pas une option exotique."
               },
               "keys": {
-                "title": "Les accès et la documentation",
+                "titleLead": "Les accès",
+                "titleRest": "et la documentation",
                 "text": "Hébergement, domaine, outils de mesure : les comptes sont à votre nom et vous sont remis. Vous restez avec nous par choix, jamais parce que la porte est fermée."
               }
             }

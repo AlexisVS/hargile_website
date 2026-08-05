@@ -1053,19 +1053,23 @@
             "lead": "At the end of a project, four things are yours. Nothing stays with us: everything is designed and built in-house in Brussels, never subcontracted, and what comes out of it leaves with you.",
             "items": {
               "design": {
-                "title": "The design, mockups included",
+                "titleLead": "The design,",
+                "titleRest": "mockups included",
                 "text": "Screens and user journeys, drawn by the same team that then codes them. You get the mockups, not only the result on screen."
               },
               "code": {
-                "title": "The source code, in a repository under your name",
+                "titleLead": "The source code,",
+                "titleRest": "in a repository under your name",
                 "text": "All of the code, in a repository you own. Another team can pick it up without having to ask us for anything."
               },
               "live": {
-                "title": "The site live, in your languages",
+                "titleLead": "The site live,",
+                "titleRest": "in your languages",
                 "text": "Deployed on your own domain, in one language or several — a trilingual site is a routine request here, not an exotic add-on."
               },
               "keys": {
-                "title": "The accounts and the documentation",
+                "titleLead": "The accounts",
+                "titleRest": "and the documentation",
                 "text": "Hosting, domain, analytics: the accounts are in your name and handed over to you. You stay with us by choice, never because the door is shut."
               }
             }

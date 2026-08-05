@@ -1,68 +1,59 @@
-/* Four deliverables, four drawn hairlines.
+/* Four deliverables, one figure.
 
-   The rule is its own element rather than a border-top on the column: a border
-   cannot be scaled on its own axis, and the draw is the whole point. Column
-   copy keeps the same 24px offset from the line that made-in-house.jsx uses, so
-   the two sections stack without a seam. */
+   Shared-line grid, same construction as ia/ia-offre-section: the container
+   draws the top and left edge, each cell draws its own right and bottom, so
+   every line is exactly 1px and no two ever double up. Square corners — a
+   radius only works on a detached tile, and these cells are cut out of one
+   object. With no gap, the padding IS the air, so it is the generous number.
 
-.cols {
+   The drawn hairlines and the 01–04 numerals this section used until 05/08 are
+   gone with the four-column layout that carried them. */
+
+.bento {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(24px, 3vw, 44px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
   margin-top: clamp(40px, 5vw, 60px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.rule {
-  display: block;
-  width: 100%;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.12);
+.cell {
+  padding: clamp(26px, 3vw, 52px);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.body {
-  padding-top: 20px;
-}
-
-/* Numeral: numLg's proportions at a scale that fits four across. Outline only —
-   the ghost fill is for numbers sitting behind copy, this one sits above it. */
-.num {
-  display: block;
-  font-size: clamp(46px, 4.6vw, 78px);
-  line-height: 0.9;
-  margin-bottom: 14px;
-}
-
-.colTitle {
+.cellTitle {
   font-family: var(--font-headings);
   font-weight: 600;
-  font-size: clamp(18px, 1.5vw, 22px);
-  letter-spacing: -0.015em;
-  line-height: 1.25;
+  font-size: clamp(20px, 2vw, 28px);
+  letter-spacing: -0.018em;
+  line-height: 1.2;
+  /* 20ch lets the long ones take two lines and hold the top of the cell. */
+  max-width: 20ch;
   margin: 0;
   color: #ededed;
 }
 
-.colText {
+/* The accent the cells carry at rest — on the noun that names what is handed
+   over, which is the least decorative place the colour can go. The rules
+   deliberately do not react to hover: on a shared-line grid only this cell's
+   right and bottom would light, and that reads as a rendering bug. */
+.titleLead {
+  color: #96b9f9;
+}
+
+.cellText {
   font-size: 15px;
   font-weight: 300;
   color: rgba(237, 237, 237, 0.62);
   line-height: 1.6;
-  margin: 12px 0 0;
+  margin: 14px 0 0;
 }
 
-@media (max-width: 1000px) {
-  .cols {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(28px, 4vw, 44px) clamp(24px, 3vw, 40px);
-  }
-}
-
-@media (max-width: 620px) {
-  .cols {
+@media (max-width: 700px) {
+  .bento {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .num {
-    font-size: 56px;
   }
 }

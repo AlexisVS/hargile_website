@@ -1,31 +1,60 @@
-/* Price method — the neutral frame, same shape as seo/meta-proof: a checkable
-   statement, not a sales panel, so the border stays white-hairline rather than
-   accent-tinted. The closing note is the delay half of "price and delays" and
-   is dimmed one step: it points at another page's offer. */
+/* Price method — an uneven split rather than a panel (05/08). Same geometry as
+   mvp/fixed-price: the title holds the left column on its own, the argument
+   runs down the right. Two drawn rules do the work the frame's border used to
+   do, splitting mechanism from commitments and commitments from craft.
 
-.frame {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  padding: clamp(32px, 4.5vw, 56px);
+   Three areas, and the note is placed rather than ordered: it is last in the
+   DOM (see the component) and lands under the title on wide screens, after the
+   argument on narrow ones. Row gap is the note's offset from the title; column
+   gap is the gutter between the two columns. */
+
+.split {
+  display: grid;
+  grid-template-columns: 0.78fr 1.22fr;
+  grid-template-areas:
+          "title  method"
+          "note   method";
+  gap: clamp(24px, 3vw, 40px) clamp(32px, 5vw, 96px);
+  align-items: start;
 }
 
+/* The identity ramp — same recipe as shared/cta-band and the poster hero. It is
+   this section's one flourish, and it is spent on the question the whole page
+   circles. width must shrink-wrap so the gradient maps onto glyphs, not an
+   empty box; .section already clears the inherited text-shadow, which would
+   otherwise paint a shadow of the box behind transparent glyphs. */
 .title {
+  grid-area: title;
   font-family: var(--font-headings);
   font-weight: 700;
-  font-size: clamp(24px, 2.4vw, 36px);
+  font-size: clamp(28px, 3vw, 44px);
   letter-spacing: -0.02em;
-  line-height: 1.1;
+  line-height: 1.08;
   margin: 0;
-  color: #ededed;
+  width: fit-content;
+  max-width: 14ch;
+  text-wrap: balance;
+  background: linear-gradient(135deg, #ffffff 30%, #dce7fd 68%, #96b9f9 105%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-bottom: 0.06em;
 }
 
-.text {
-  font-size: 15px;
+.method {
+  grid-area: method;
+}
+
+/* The lead promoted: with no frame around it this paragraph is what the reader
+   lands on, so it sets at statement scale and one step brighter than body copy
+   rather than at the 15px the frame used to justify. */
+.statement {
+  font-size: clamp(18px, 1.9vw, 25px);
   font-weight: 300;
-  color: rgba(237, 237, 237, 0.68);
-  line-height: 1.6;
-  max-width: 72ch;
-  margin: 14px 0 0;
+  color: rgba(237, 237, 237, 0.82);
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  margin: 0;
 }
 
 .rule {
@@ -33,12 +62,12 @@
   width: 100%;
   height: 1px;
   background: rgba(255, 255, 255, 0.1);
-  margin-top: clamp(26px, 3vw, 34px);
+  margin-top: clamp(28px, 3.2vw, 38px);
 }
 
 .points {
   list-style: none;
-  margin: clamp(26px, 3vw, 34px) 0 0;
+  margin: clamp(28px, 3.2vw, 38px) 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -65,41 +94,55 @@
   }
 }
 
+/* Dimmed one step: it points at another page's offer. */
 .note {
+  grid-area: note;
   font-size: 14px;
   font-weight: 300;
   color: rgba(237, 237, 237, 0.5);
   line-height: 1.6;
-  max-width: 68ch;
-  margin: clamp(24px, 3vw, 32px) 0 0;
+  max-width: 34ch;
+  margin: 0;
 }
 
-/* Conçu / codé / maintenu — arrivés de made-in-house.jsx le 05/08. Hors du
-   cadre, et sans filet au-dessus de chaque colonne : la section précédente a
-   perdu les siens le même jour, deux sections voisines ne peuvent pas répondre
-   à deux règles. */
+/* Conçu / codé / maintenu — arrivés de made-in-house.jsx le 05/08, entrés dans
+   cette section le même jour. A label rather than a heading now: at 12px it
+   names the three trades and hands the weight back to the crafts themselves,
+   which also keeps it from reading as a second promise about the price. */
 .colsTitle {
   font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: clamp(20px, 1.9vw, 28px);
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: #ededed;
-  margin: clamp(52px, 6vw, 84px) 0 0;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: rgba(150, 185, 249, 0.9);
+  margin: clamp(28px, 3.2vw, 38px) 0 0;
 }
 
+/* Rows, not columns: three narrow columns inside the right half would set the
+   craft copy at half the measure of everything above it. The trade name holds
+   its own column so the three line up on one left edge. */
 .cols {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 26px;
+}
+
+.col {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(28px, 3.5vw, 56px);
-  margin-top: clamp(28px, 3.2vw, 40px);
+  grid-template-columns: clamp(90px, 10vw, 130px) minmax(0, 1fr);
+  gap: clamp(16px, 2vw, 32px);
+  align-items: baseline;
 }
 
 .colTitle {
   font-family: var(--font-headings);
   font-weight: 600;
-  font-size: clamp(18px, 1.6vw, 23px);
+  font-size: 18px;
   letter-spacing: -0.015em;
+  line-height: 1.3;
   margin: 0;
   color: #ededed;
 }
@@ -109,12 +152,34 @@
   font-weight: 300;
   color: rgba(237, 237, 237, 0.62);
   line-height: 1.6;
-  margin: 12px 0 0;
+  max-width: 62ch;
+  margin: 0;
 }
 
-@media (max-width: 820px) {
-  .cols {
+@media (max-width: 860px) {
+  .split {
     grid-template-columns: minmax(0, 1fr);
-    gap: 28px;
+    /* The note goes last once the columns stack — which is also its DOM order,
+       so nothing is reordered here, the areas simply stop moving it. */
+    grid-template-areas:
+            "title"
+            "method"
+            "note";
+    gap: clamp(32px, 5vw, 44px);
+  }
+
+  .title {
+    max-width: 20ch;
+  }
+
+  .note {
+    max-width: 62ch;
+  }
+}
+
+@media (max-width: 700px) {
+  .col {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
   }
 }
