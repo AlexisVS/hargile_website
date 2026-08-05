@@ -7,6 +7,10 @@
     "reactbits": {
       "command": "npx",
       "args": ["-y", "reactbits-dev-mcp-server"]
+    },
+    "chatseo": {
+      "type": "http",
+      "url": "https://api.chatseo.app/mcp"
     }
   }
 }
