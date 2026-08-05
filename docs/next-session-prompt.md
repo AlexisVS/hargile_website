@@ -3,15 +3,36 @@
 > Fichier à copier-coller tel quel en ouverture de session. C'est **la** source
 > unique : les sections « Prompt de reprise » de `homepage-performance-plan.md`
 > et `homepage-code-review-plan.md` renvoient ici pour éviter la dérive.
-> Dernière mise à jour : 2026-07-31 (fin de session « hero wave », phase 6).
+> Dernière mise à jour : 2026-08-05 (fin de session « retraits + maillage »).
 >
-> **Trois chantiers en vol, à ne pas confondre :**
+> **Quatre chantiers en vol, à ne pas confondre :**
 >
 > | Chantier | Où | État |
 > | --- | --- | --- |
 > | GEO phase 1 | `main`, prod | ✅ terminé (`v0.21.0`/`v0.21.1`) |
 > | Session M4 — les 6 pages | `main`, **non poussé, non déployé** | codé et commité |
 > | Hero wave-grid | `feat/services-faq-redesign`, **poussé** | phases 1–6 faites ; reste l'image fixe (yeux de Mihai) puis la fusion |
+> | Sections des pages services | `main`, **non poussé** | retraits + maillage commités ; le contenu se planifie en prochaine session → [`services-sections-session-prompt.md`](./services-sections-session-prompt.md) |
+>
+> ### ✅ 2026-08-05 — exemples retirés, FAQ unifiée, maillage interne
+>
+> **Le prompt de reprise pour la suite est
+> [`docs/services-sections-session-prompt.md`](./services-sections-session-prompt.md)**,
+> pas ce fichier : il porte l'état GSC, les mots par page et les hypothèses de
+> sections. Ce qui a été fait aujourd'hui, en résumé :
+>
+> - Les sections « exemples de sites » sont démontées des quatre pages offres
+>   (rien de supprimé sauf `index/proof-strip.jsx` — récupérable dans git).
+> - `/services/ia` monte le FAQ client partagé comme les autres pages ; l'island
+>   d'accordéon et ~2 450 caractères de styles dupliqués sont partis. Mesuré :
+>   les quatre réponses restent dans le premier HTML.
+> - **Maillage interne** : rail du hero cliquable, lien MVP dans `MvpPromo`,
+>   quatre offres dans le footer (site-wide). C'était la cause du
+>   « Discovered – not indexed » relevé dans GSC — aucune page offre n'avait
+>   jamais été crawlée.
+> - Mihai a demandé l'indexation de `/services`, `/faq` et `/contact` dans les
+>   deux langues. Les huit pages offres attendent le déploiement du maillage.
+> - Baseline lint : **3 erreurs**, pas 4 comme l'annonce le doc M4.
 >
 > ### ✅ 2026-07-31 — hero wave-grid animé : phases 1 à 5 (branche poussée, non fusionnée)
 >
