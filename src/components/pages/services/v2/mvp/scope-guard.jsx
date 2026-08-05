@@ -6,11 +6,12 @@
    sits right after the fixed-price statement: the price does not move because
    the scope does not, and here is who holds each end of that.
 
-   The "30" behind the copy is the page's one count-up — WeekTimeline already
-   owns the page's one scroll-linked moment, and two of those would be a
-   competition rather than a rhythm. It is aria-hidden: the number is in the
-   heading of the timeline above and in the copy here, so screen readers are
-   not made to hear it a third time as a bare digit.
+   The "30" behind the copy is the page's one count-up, and since the vertical
+   timeline gave way to the calendar (2026-08-05) it is the only moving thing
+   here beyond the reveals — which is the right amount for a page whose
+   argument is restraint. It is aria-hidden: the number is already in the
+   section heading above and in the copy here, so screen readers are not made
+   to hear it a third time as a bare digit.
 
    No figure here that the studio cannot stand behind: 30 is the offer itself. */
 

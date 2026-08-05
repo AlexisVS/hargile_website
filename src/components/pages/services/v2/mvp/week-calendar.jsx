@@ -1,15 +1,15 @@
 "use client";
 
-/* ⚠ VARIANTE DE COMPARAISON — proposition H de la planche de graphiques.
+/* Les 30 jours, en calendrier horizontal.
  *
- * Montée temporairement SOUS week-timeline.jsx pour que Mihai compare les deux
- * traitements du même contenu. Ce n'est pas un ajout définitif : à l'issue du
- * choix, soit ce fichier remplace week-timeline.jsx, soit il est supprimé.
- * Tant que les deux coexistent, la copie des semaines apparaît deux fois dans
- * le HTML de la page — raison de plus pour ne pas déployer cet état.
+ * Remplace la timeline verticale depuis le 2026-08-05 (choix de Mihai) :
+ * week-timeline.jsx reste sur le disque avec ses styles, et il se remonte en
+ * un import si la décision s'inverse. Les deux lisent exactement les mêmes
+ * clés `timeline.*`, donc aucune copie n'a bougé.
  *
- * Pas de <h2> ici, volontairement : le titre de la section est celui de la
- * timeline juste au-dessus, et deux h2 identiques seraient un doublon.
+ * Ce que ce traitement montre et que la liste verticale ne montrait pas : la
+ * durée relative des phases. Trois puces de même taille donnaient le même
+ * poids visuel à une semaine et à deux.
  *
  * ── LES PHASES SONT DES POURCENTAGES DU MOIS ─────────────────────────────
  * Une ligne par phase : c'est ce qui produit l'escalier, et c'est ce qui
@@ -50,6 +50,7 @@ const WeekCalendar = () => {
     return (
         <section className={section.section}>
             <div className={section.container}>
+                <h2 className={section.heading} {...reveal(0)}>{t("title")}</h2>
                 <div className={styles.chart}>
                     {/* Week boundaries, behind everything. */}
                     <div className={styles.gridlines} aria-hidden="true">
@@ -72,14 +73,19 @@ const WeekCalendar = () => {
                                     bar stops being a block with a title inside and
                                     becomes a rule under the title, and the rule
                                     needs the same two numbers. */}
-                                <span
+                                {/* A div carrying an h3, not a span carrying a
+                                    span: these are the phase headings the
+                                    vertical timeline used to contribute, and a
+                                    heading may not live inside phrasing
+                                    content. */}
+                                <div
                                     className={styles.bar}
                                     data-rank={i + 1}
                                     style={{"--from": `${from}%`, "--span": `${to - from}%`}}
                                     {...reveal(i + 1)}
                                 >
-                                    <span className={styles.barTitle}>{t(`weeks.${key}.title`)}</span>
-                                </span>
+                                    <h3 className={styles.barTitle}>{t(`weeks.${key}.title`)}</h3>
+                                </div>
                             </div>
                         ))}
                     </div>

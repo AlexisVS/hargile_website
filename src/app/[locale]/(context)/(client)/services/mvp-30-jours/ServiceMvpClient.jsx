@@ -2,7 +2,6 @@
 
 import {useTranslations} from "next-intl";
 import PosterHero from "@/components/pages/services/v2/shared/poster-hero";
-import WeekTimeline from "@/components/pages/services/v2/mvp/week-timeline";
 import WeekCalendar from "@/components/pages/services/v2/mvp/week-calendar";
 import Included from "@/components/pages/services/v2/mvp/included";
 import FixedPrice from "@/components/pages/services/v2/mvp/fixed-price";
@@ -31,11 +30,11 @@ export default function ServiceMvpClient() {
                 answer={t("answer")}
                 backdrop={<WaveGridBackdrop composition="wave-97"/>}
             />
-            <WeekTimeline/>
-            {/* ⚠ TEMPORAIRE — les deux traitements du même contenu, l'un sous
-                l'autre, le temps que Mihai tranche. L'un des deux part ensuite :
-                tant qu'ils coexistent, la copie des semaines est en double dans
-                le HTML, donc cet état ne se déploie pas. */}
+            {/* Le calendrier horizontal a remplacé la timeline verticale le
+                2026-08-05 : il montre la durée relative des phases, ce que
+                trois puces de même taille ne pouvaient pas faire. La timeline
+                et ses styles restent sur le disque (mvp/week-timeline.jsx),
+                sur les mêmes clés de traduction — un import la remet. */}
             <WeekCalendar/>
             <Included/>
             <FixedPrice/>
