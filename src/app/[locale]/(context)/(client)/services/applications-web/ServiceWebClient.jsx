@@ -3,6 +3,8 @@
 import {useTranslations} from "next-intl";
 import PosterHero from "@/components/pages/services/v2/shared/poster-hero";
 import MadeInHouse from "@/components/pages/services/v2/web/made-in-house";
+import Deliverables from "@/components/pages/services/v2/web/deliverables";
+import PriceMethod from "@/components/pages/services/v2/web/price-method";
 import MiniFaq from "@/components/pages/services/v2/shared/mini-faq";
 import SiblingOffers from "@/components/pages/services/v2/shared/sibling-offers";
 import CtaBand from "@/components/pages/services/v2/shared/cta-band";
@@ -28,10 +30,12 @@ export default function ServiceWebClient() {
                 backdrop={<WaveGridBackdrop composition="wave-142"/>}
             />
             <MadeInHouse/>
-            {/* Client examples pulled out for now — the section, its copy and
-                its portfolio data are untouched (web/case-studies.jsx), so
-                putting them back is one import. What replaces them is a
-                content decision still open. */}
+            {/* What replaced the client examples: the concrete deliverables,
+                then how the price is set. The examples themselves stay on disk
+                with their copy and portfolio data intact (web/case-studies.jsx)
+                — putting them back is still one import. */}
+            <Deliverables/>
+            <PriceMethod/>
             <MiniFaq namespace="pages.services.detail.web.faq"/>
             <SiblingOffers current="web"/>
             <CtaBand/>

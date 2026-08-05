@@ -1,0 +1,68 @@
+/* Four deliverables, four drawn hairlines.
+
+   The rule is its own element rather than a border-top on the column: a border
+   cannot be scaled on its own axis, and the draw is the whole point. Column
+   copy keeps the same 24px offset from the line that made-in-house.jsx uses, so
+   the two sections stack without a seam. */
+
+.cols {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(24px, 3vw, 44px);
+  margin-top: clamp(40px, 5vw, 60px);
+}
+
+.rule {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.body {
+  padding-top: 20px;
+}
+
+/* Numeral: numLg's proportions at a scale that fits four across. Outline only —
+   the ghost fill is for numbers sitting behind copy, this one sits above it. */
+.num {
+  display: block;
+  font-size: clamp(46px, 4.6vw, 78px);
+  line-height: 0.9;
+  margin-bottom: 14px;
+}
+
+.colTitle {
+  font-family: var(--font-headings);
+  font-weight: 600;
+  font-size: clamp(18px, 1.5vw, 22px);
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  margin: 0;
+  color: #ededed;
+}
+
+.colText {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.62);
+  line-height: 1.6;
+  margin: 12px 0 0;
+}
+
+@media (max-width: 1000px) {
+  .cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(28px, 4vw, 44px) clamp(24px, 3vw, 40px);
+  }
+}
+
+@media (max-width: 620px) {
+  .cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .num {
+    font-size: 56px;
+  }
+}

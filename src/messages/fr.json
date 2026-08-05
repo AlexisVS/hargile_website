@@ -978,6 +978,38 @@
               "text": "À la livraison, vous êtes propriétaire du code et de vos données. Vous pouvez partir, héberger ailleurs, ou continuer avec nous — par choix."
             }
           },
+          "deliverables": {
+            "title": "Ce que vous recevez.",
+            "lead": "À la fin d'un projet, quatre choses vous appartiennent. Rien ne reste chez nous : tout est conçu et codé en interne à Bruxelles, sans sous-traitance, et ce qui est produit part avec vous.",
+            "items": {
+              "design": {
+                "title": "Le design, maquettes comprises",
+                "text": "Les écrans et les parcours, dessinés par l'équipe qui les code ensuite. Vous récupérez les maquettes, pas seulement le résultat à l'écran."
+              },
+              "code": {
+                "title": "Le code source, dans un dépôt à votre nom",
+                "text": "L'intégralité du code, sur un dépôt dont vous êtes propriétaire. Une autre équipe peut le reprendre sans avoir à nous demander quoi que ce soit."
+              },
+              "live": {
+                "title": "Le site en ligne, dans vos langues",
+                "text": "Mis en production sur votre domaine, en une ou plusieurs langues — un site trilingue est une demande courante ici, pas une option exotique."
+              },
+              "keys": {
+                "title": "Les accès et la documentation",
+                "text": "Hébergement, domaine, outils de mesure : les comptes sont à votre nom et vous sont remis. Vous restez avec nous par choix, jamais parce que la porte est fermée."
+              }
+            }
+          },
+          "priceMethod": {
+            "title": "Comment le prix est fixé.",
+            "text": "Il n'existe pas de tarif unique honnête pour une application sur mesure : le prix dépend de ce qu'il y a à construire. Ce sur quoi nous nous engageons, c'est la méthode — le prix est arrêté au cadrage, annoncé avant que le développement commence, et il ne bouge plus ensuite.",
+            "points": [
+              "Le périmètre est figé au cadrage : le prix correspond à ce périmètre-là, écrit noir sur blanc.",
+              "Pas de facturation au temps passé, donc pas de dépassement découvert en cours de route.",
+              "Une idée qui apparaît en chemin est chiffrée à part : vous décidez de la prendre ou de la garder pour la suite, et le prix initial ne change pas."
+            ],
+            "note": "Pour un premier produit, l'offre MVP en 30 jours applique la même méthode, avec un prix fixe et une date de mise en ligne connus dès le départ."
+          },
           "cases": {
             "title": "Trois preuves plutôt qu'une promesse.",
             "items": {

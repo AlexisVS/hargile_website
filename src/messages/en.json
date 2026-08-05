@@ -978,6 +978,38 @@
               "text": "On delivery you own the code and your data. You can leave, host elsewhere, or keep going with us — by choice."
             }
           },
+          "deliverables": {
+            "title": "What you receive.",
+            "lead": "At the end of a project, four things are yours. Nothing stays with us: everything is designed and built in-house in Brussels, never subcontracted, and what comes out of it leaves with you.",
+            "items": {
+              "design": {
+                "title": "The design, mockups included",
+                "text": "Screens and user journeys, drawn by the same team that then codes them. You get the mockups, not only the result on screen."
+              },
+              "code": {
+                "title": "The source code, in a repository under your name",
+                "text": "All of the code, in a repository you own. Another team can pick it up without having to ask us for anything."
+              },
+              "live": {
+                "title": "The site live, in your languages",
+                "text": "Deployed on your own domain, in one language or several — a trilingual site is a routine request here, not an exotic add-on."
+              },
+              "keys": {
+                "title": "The accounts and the documentation",
+                "text": "Hosting, domain, analytics: the accounts are in your name and handed over to you. You stay with us by choice, never because the door is shut."
+              }
+            }
+          },
+          "priceMethod": {
+            "title": "How the price is set.",
+            "text": "There is no honest single rate for a custom application: the price depends on what there is to build. What we commit to is the method — the price is settled during scoping, announced before development starts, and does not move afterwards.",
+            "points": [
+              "The scope is frozen during scoping: the price matches that scope, in writing.",
+              "No billing by time spent, so no overrun discovered along the way.",
+              "An idea that comes up mid-project is quoted separately: you decide whether to take it or keep it for later, and the initial price does not change."
+            ],
+            "note": "For a first product, the MVP in 30 days offer applies the same method, with a fixed price and a launch date both known from the start."
+          },
           "cases": {
             "title": "Three proofs rather than a promise.",
             "items": {
