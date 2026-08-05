@@ -1,0 +1,259 @@
+{
+  "_comment": "Généré par scripts/sync-portfolio.mjs depuis le dépôt Hargile Portfolio. Ne pas éditer à la main.",
+  "syncedFrom": "hargile-portfolio/src/data/projects",
+  "projects": [
+    {
+      "id": "ecoledubonheur",
+      "client": "École du Bonheur",
+      "sector": "Éducation",
+      "sectorEn": "Education",
+      "year": "2026",
+      "url": "https://ecoledubonheur.eu",
+      "caseStudy": true,
+      "group": "Éducation",
+      "groupEn": "Education"
+    },
+    {
+      "id": "lamarquisette",
+      "client": "La Marquisette",
+      "sector": "Tourisme",
+      "sectorEn": "Tourism",
+      "year": "2026",
+      "url": "https://lamarquisette.be",
+      "caseStudy": false,
+      "group": "Tourisme & hôtellerie",
+      "groupEn": "Tourism & hospitality"
+    },
+    {
+      "id": "puybernier",
+      "client": "Domaine de Puybernier",
+      "sector": "Hotellerie",
+      "sectorEn": "Hospitality",
+      "year": "2026",
+      "url": "https://domainedepuybernier.com",
+      "caseStudy": false,
+      "group": "Tourisme & hôtellerie",
+      "groupEn": "Tourism & hospitality"
+    },
+    {
+      "id": "venizi",
+      "client": "VENIZI",
+      "sector": "Bijouterie",
+      "sectorEn": "Jewellery",
+      "year": "2026",
+      "url": "https://venizi.com",
+      "caseStudy": false,
+      "group": "Bijouterie",
+      "groupEn": "Jewellery"
+    },
+    {
+      "id": "fondacio",
+      "client": "Fondacio",
+      "sector": "Associatif",
+      "sectorEn": "Non-profit",
+      "year": "2026",
+      "url": "https://fondacio.be",
+      "caseStudy": false,
+      "group": "Associatif",
+      "groupEn": "Non-profit"
+    },
+    {
+      "id": "itsabouttogo",
+      "client": "It's About To Go",
+      "sector": "Journalisme & Humanitaire",
+      "sectorEn": "Journalism & Humanitarian",
+      "year": "2025",
+      "url": "https://itsabouttogo.com",
+      "caseStudy": false,
+      "group": "Journalisme & Humanitaire",
+      "groupEn": "Journalism & Humanitarian"
+    },
+    {
+      "id": "mybob",
+      "client": "MY BOB",
+      "sector": "Mode",
+      "sectorEn": "Fashion",
+      "year": "2025",
+      "url": "https://mybob.be",
+      "caseStudy": false,
+      "group": "Mode",
+      "groupEn": "Fashion"
+    },
+    {
+      "id": "centrespms",
+      "client": "Centres PMS de Woluwe",
+      "sector": "Éducation",
+      "sectorEn": "Education",
+      "year": "2025",
+      "url": "https://pmswl.be/",
+      "caseStudy": true,
+      "group": "Éducation",
+      "groupEn": "Education"
+    },
+    {
+      "id": "delphinesimonis",
+      "client": "Delphine Simonis",
+      "sector": "Art",
+      "sectorEn": "Art",
+      "year": "2025",
+      "url": "https://delphinesimonis.com",
+      "caseStudy": false,
+      "group": "Art",
+      "groupEn": "Art"
+    },
+    {
+      "id": "trussogne",
+      "client": "Gîte de Trussogne",
+      "sector": "Tourisme",
+      "sectorEn": "Tourism",
+      "year": "2025",
+      "url": "https://trussogne.com",
+      "caseStudy": false,
+      "group": "Tourisme & hôtellerie",
+      "groupEn": "Tourism & hospitality"
+    },
+    {
+      "id": "eren",
+      "client": "EREN Energy Storage",
+      "sector": "Énergie",
+      "sectorEn": "Energy",
+      "year": "2025",
+      "url": "https://erenenergystorage.be",
+      "caseStudy": false,
+      "group": "Énergie",
+      "groupEn": "Energy"
+    },
+    {
+      "id": "aluvi",
+      "client": "ALUVI Immo",
+      "sector": "Immobilier",
+      "sectorEn": "Real Estate",
+      "year": "2025",
+      "url": "https://aluvi.be",
+      "caseStudy": false,
+      "group": "Immobilier",
+      "groupEn": "Real Estate"
+    },
+    {
+      "id": "dripdrops",
+      "client": "Drip Drops",
+      "sector": "Streetwear",
+      "sectorEn": "Streetwear",
+      "year": "2024",
+      "url": "https://dripdrops.be",
+      "caseStudy": false,
+      "group": "Mode",
+      "groupEn": "Fashion"
+    },
+    {
+      "id": "basseilles",
+      "client": "Ferme de Basseilles",
+      "sector": "Hébergement & Tourisme",
+      "sectorEn": "Accommodation & Tourism",
+      "year": "2025",
+      "url": "https://fermedebasseilles.be",
+      "caseStudy": true,
+      "group": "Tourisme & hôtellerie",
+      "groupEn": "Tourism & hospitality"
+    },
+    {
+      "id": "azzaizzy",
+      "client": "Azza World",
+      "sector": "Loisirs Créatifs",
+      "sectorEn": "Creative Crafts",
+      "year": "2025",
+      "url": "https://www.azzaworld.com/",
+      "caseStudy": false,
+      "group": "Loisirs Créatifs",
+      "groupEn": "Creative Crafts"
+    },
+    {
+      "id": "gvegroup",
+      "client": "GVE Group",
+      "sector": "Conseil & Innovation",
+      "sectorEn": "Consulting & Innovation",
+      "year": "2024",
+      "url": "https://gv-e.com",
+      "caseStudy": false,
+      "group": "Conseil & Innovation",
+      "groupEn": "Consulting & Innovation"
+    },
+    {
+      "id": "alianature",
+      "client": "Alia Nature",
+      "sector": "Beauté Naturelle",
+      "sectorEn": "Natural Beauty",
+      "year": "2025",
+      "url": "https://alianature.be",
+      "caseStudy": false,
+      "group": "Beauté Naturelle",
+      "groupEn": "Natural Beauty"
+    },
+    {
+      "id": "mayaglobal",
+      "client": "Maya Global",
+      "sector": "GreenTech",
+      "sectorEn": "GreenTech",
+      "year": "2024",
+      "url": "https://mayaglobal.io",
+      "caseStudy": false,
+      "group": "GreenTech",
+      "groupEn": "GreenTech"
+    },
+    {
+      "id": "hexidesigns",
+      "client": "Hexi Designs",
+      "sector": "Mode",
+      "sectorEn": "Fashion",
+      "year": "2023",
+      "url": "https://hexidesigns.com",
+      "caseStudy": false,
+      "group": "Mode",
+      "groupEn": "Fashion"
+    },
+    {
+      "id": "mardieditions",
+      "client": "Mardi Editions",
+      "sector": "Mode",
+      "sectorEn": "Fashion",
+      "year": "2022",
+      "url": "https://mardi-editions.com/",
+      "caseStudy": false,
+      "group": "Mode",
+      "groupEn": "Fashion"
+    },
+    {
+      "id": "locafut",
+      "client": "Locafût",
+      "sector": "HORECA",
+      "sectorEn": "HORECA",
+      "year": "2023",
+      "url": "https://locafut.be",
+      "caseStudy": false,
+      "group": "HORECA",
+      "groupEn": "HORECA"
+    },
+    {
+      "id": "defierlant",
+      "client": "Christophe de Fierlant",
+      "sector": "Art",
+      "sectorEn": "Art",
+      "year": "2024",
+      "url": "https://christophedefierlant.com/",
+      "caseStudy": false,
+      "group": "Art",
+      "groupEn": "Art"
+    },
+    {
+      "id": "wamigrooming",
+      "client": "Wami Grooming",
+      "sector": "Toilettage & Bien-être animal",
+      "sectorEn": "Pet Grooming & Wellbeing",
+      "year": "2025",
+      "url": "https://wamigrooming.be",
+      "caseStudy": true,
+      "group": "Toilettage & Bien-être animal",
+      "groupEn": "Pet Grooming & Wellbeing"
+    }
+  ]
+}
