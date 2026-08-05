@@ -783,6 +783,23 @@
             "title": "And when AI is not the answer?",
             "text": "We say so. An AI integration is only worth it if it changes a result that matters to you — not because of a trend. If a simple script, a better process or nothing at all does the job, that is what we will recommend. That, too, is what a technical partner is for."
           },
+          "data": {
+            "title": "Where your data goes.",
+            "rows": {
+              "flow": {
+                "title": "Decided before the first line of code",
+                "text": "Which data leaves your systems, to which provider, under which contract: that is settled during scoping, before any integration. Nothing gets wired blindly into an API because it happens to be convenient."
+              },
+              "sensitive": {
+                "title": "What is sensitive stays with you",
+                "text": "When data is sensitive, we favour solutions that keep it on your own infrastructure. GDPR is not a box ticked at the end of a project: it decides the architecture."
+              },
+              "reversible": {
+                "title": "Reversible by design",
+                "text": "The AI provider stays replaceable — models move too fast to lock yourself into one. And the code that calls them belongs to you, like the rest."
+              }
+            }
+          },
           "faq": {
             "items": [
               {

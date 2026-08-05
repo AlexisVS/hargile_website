@@ -18,6 +18,7 @@ import {getTranslations} from "next-intl/server";
 import {Link} from "@/i18n/navigation";
 import section from "@/components/pages/homepage/v2/v2-section.module.scss";
 import MiniFaq from "@/components/pages/services/v2/shared/mini-faq";
+import DataGuarantees from "./data-guarantees";
 import BentoSpotlight from "./bento-spotlight";
 import styles from "./ia-offre-section.module.scss";
 
@@ -102,6 +103,11 @@ const IaOffreSection = async ({locale}) => {
                     <h3 className={styles.counterTitle}>{t("honesty.title")}</h3>
                     <p className={styles.counterText}>{t("honesty.text")}</p>
                 </article>
+
+                {/* Where the data goes. Ahead of the FAQ because on this page
+                    it is the question that decides whether there is a project
+                    at all, not a detail to check afterwards. */}
+                <DataGuarantees locale={locale}/>
 
                 {/* The FAQ every other service page mounts. It is a client
                     component inside this Server Component, which costs nothing

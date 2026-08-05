@@ -783,6 +783,23 @@
             "title": "Et quand l'IA n'est pas la réponse ?",
             "text": "On vous le dit. Une intégration IA n'a de valeur que si elle change un résultat qui compte pour vous — pas pour suivre une tendance. Si un script simple, un meilleur process ou rien du tout fait l'affaire, c'est ce qu'on recommandera. C'est aussi ça, être un partenaire technique."
           },
+          "data": {
+            "title": "Où vont vos données.",
+            "rows": {
+              "flow": {
+                "title": "Décidé avant la première ligne de code",
+                "text": "Quelles données sortent de chez vous, vers quel fournisseur, sous quel contrat : c'est défini au cadrage, avant toute intégration. Rien n'est branché à l'aveugle sur une API parce qu'elle est pratique."
+              },
+              "sensitive": {
+                "title": "Ce qui est sensible reste chez vous",
+                "text": "Quand les données sont sensibles, on privilégie les solutions qui les gardent sur votre infrastructure. Le RGPD n'est pas une case à cocher en fin de projet : il décide de l'architecture."
+              },
+              "reversible": {
+                "title": "Réversible par conception",
+                "text": "Le fournisseur d'IA reste remplaçable — les modèles évoluent trop vite pour s'enfermer chez l'un d'eux. Et le code qui les appelle vous appartient, comme le reste."
+              }
+            }
+          },
           "faq": {
             "items": [
               {

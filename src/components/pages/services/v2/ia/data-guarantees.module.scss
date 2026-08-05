@@ -1,0 +1,73 @@
+/* Data guarantees — three hairline rows inside the ia body.
+
+   --block-gap and --step-gap are inherited from .ia in ia-offre-section: this
+   block keeps the page's rhythm rather than declaring its own. Fallbacks match
+   the values there in case the block is ever mounted elsewhere. */
+
+.block {
+  margin-top: var(--block-gap, clamp(76px, 9vw, 150px));
+}
+
+.title {
+  margin: 0;
+  max-width: 20ch;
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(24px, 2.4vw, 36px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #ededed;
+}
+
+.rows {
+  margin-top: var(--step-gap, clamp(40px, 4.5vw, 72px));
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(20px, 3vw, 44px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: clamp(24px, 3vw, 34px) 0;
+
+  &:last-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* numLg's proportions, scaled to sit beside a paragraph rather than above it. */
+.num {
+  font-size: clamp(40px, 3.6vw, 60px);
+  line-height: 0.9;
+}
+
+.rowTitle {
+  margin: 0;
+  font-family: var(--font-headings);
+  font-weight: 600;
+  font-size: clamp(19px, 1.6vw, 24px);
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  color: #ededed;
+}
+
+.rowText {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.62);
+  line-height: 1.6;
+  max-width: 68ch;
+  margin: 10px 0 0;
+}
+
+@media (max-width: 620px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .num {
+    font-size: 44px;
+  }
+}
