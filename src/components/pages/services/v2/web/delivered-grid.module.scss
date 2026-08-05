@@ -1,0 +1,182 @@
+/* Grille de comptage — la forme de la planche de propositions, à l'échelle de
+   la page : huit carrés par rang, coins adoucis, gouttière proportionnelle.
+   Les carrés ne sont plus à 18 px fixes ; ils occupent la colonne et grandissent
+   avec elle. Le nombre de colonnes reste figé (8, puis 6 en étroit) parce que
+   c'est lui qui tient les bandes de secteurs : une grille qui se recompose à
+   chaque point de rupture casserait le seul regroupement lisible. */
+
+.block {
+  display: grid;
+  /* La grille domine, les chiffres accompagnent — ils étaient à parts égales,
+     ce qui donnait trois nombres plus lourds que les vingt-trois preuves. */
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: start;
+  margin-top: clamp(38px, 4.6vw, 58px);
+}
+
+.grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: clamp(8px, 0.9vw, 14px);
+  /* Au-delà, les carrés deviennent des tuiles et la grille cesse de se lire
+     d'un coup d'œil comme un décompte. */
+  max-width: 560px;
+  margin: 0;
+  padding: 0;
+}
+
+/* Un seul accent, sur une rampe continue. Le rang de chaque secteur arrive par
+   --cell-tint (delivered-grid.jsx, qui porte aussi le calcul du plancher) ; le
+   repli couvre le cas où la variable manquerait — un carré invisible serait un
+   lien invisible. */
+.cell {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 6px;
+  background: rgba(150, 185, 249, var(--cell-tint, 0.95));
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+
+  &:hover,
+  &:focus-visible {
+    transform: scale(1.09);
+    box-shadow: 0 0 0 1.5px rgba(150, 185, 249, 0.9);
+  }
+
+  /* Le halo au focus est la même forme qu'au survol : un contour par défaut
+     décalé se lirait comme un cadre flottant au-dessus de la grille. */
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+/* Deux lignes empilées : le nom survolé au-dessus, la consigne en dessous.
+   Chacune garde sa place — rien ne se substitue à rien, donc rien ne clignote
+   quand la souris traverse la grille. */
+.readout {
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.5;
+  max-width: 44ch;
+  margin: 20px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* La hauteur est réservée même vide : la ligne se remplit au survol, elle ne
+   pousse jamais ce qui suit. */
+.readoutName {
+  min-height: 1.5em;
+  color: rgba(237, 237, 237, 0.62);
+
+  b {
+    font-weight: 500;
+    color: rgba(150, 185, 249, 0.92);
+  }
+}
+
+.readoutHint {
+  color: rgba(237, 237, 237, 0.52);
+}
+
+/* La colonne de droite : les compteurs, puis ce que la section pose dessous.
+   La grille fait trois rangs, les compteurs un seul — sans le second bloc, les
+   deux tiers de cette colonne seraient du vide. */
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(30px, 3.6vw, 48px);
+}
+
+/* Trois de front, et d'un cran plus discrets qu'avant : empilés ils faisaient
+   une colonne de chiffres aussi haute que la grille, et trois nombres ne
+   valent pas la même place que vingt-trois preuves. */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(14px, 1.8vw, 26px);
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tileNum {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(32px, 3vw, 46px);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: #ededed;
+  font-variant-numeric: tabular-nums;
+}
+
+.tileInfinity {
+  color: rgba(150, 185, 249, 0.92);
+}
+
+.tileLabel {
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(237, 237, 237, 0.52);
+}
+
+@media (max-width: 900px) {
+  .block {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+
+  .grid {
+    max-width: none;
+  }
+
+  .tiles {
+    gap: 24px;
+  }
+}
+
+/* Six colonnes plutôt que huit : au doigt, un carré doit rester une cible,
+   et huit colonnes sur un téléphone les ramènent sous les 40 px. */
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* Les trois nombres restent sur un rang jusqu'en bas de l'échelle : empilés,
+   ils ajoutaient deux hauteurs d'écran à une page qui n'en avait pas besoin, et
+   laissaient la moitié droite du téléphone vide. C'est le type qui rétrécit,
+   pas la grille qui se casse. */
+@media (max-width: 520px) {
+  .tiles {
+    gap: 10px;
+  }
+
+  .tileNum {
+    font-size: 30px;
+  }
+
+  .tileLabel {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cell {
+    transition: none;
+
+    &:hover,
+    &:focus-visible {
+      transform: none;
+    }
+  }
+}
