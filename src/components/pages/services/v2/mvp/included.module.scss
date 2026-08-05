@@ -24,8 +24,12 @@
   margin: 0;
 }
 
+/* Dimmed, but never below the readable floor. Measured on #080c16: .86 is
+   12.4:1, .56 is 5.65:1, and .44 — where this list first landed — is 3.89:1,
+   under the 4.5:1 body-text threshold. The hierarchy still reads at .55/.56;
+   it just no longer costs anyone the ability to read it. */
 .colOut .kicker {
-  color: rgba(237, 237, 237, 0.38);
+  color: rgba(237, 237, 237, 0.55);
 }
 
 .list {
@@ -63,15 +67,16 @@
 
   li {
     font-size: clamp(14px, 1.15vw, 15px);
-    color: rgba(237, 237, 237, 0.44);
+    color: rgba(237, 237, 237, 0.56);
 
-    /* Removed: a dash, and no accent. */
+    /* Removed: a dash, and no accent. It carries meaning, so it clears the
+       3:1 floor for non-text marks rather than fading to decoration. */
     &::before {
       top: 0.78em;
       width: 9px;
       height: 1px;
       border-radius: 0;
-      background: rgba(237, 237, 237, 0.3);
+      background: rgba(237, 237, 237, 0.45);
     }
   }
 }
