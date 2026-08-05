@@ -953,6 +953,23 @@
               "View this page's source: it is all there."
             ]
           },
+          "measured": {
+            "title": "This page, in numbers.",
+            "lead": "Measured on {date} on this very page, with {tool}, under mobile conditions. You can run the tool yourself and land on the same figures — that is the whole point of publishing them.",
+            "scores": {
+              "performance": "Performance",
+              "accessibility": "Accessibility",
+              "bestPractices": "Best practices",
+              "seo": "SEO"
+            },
+            "vitals": {
+              "lcp": "Main content paint",
+              "cls": "Visual stability",
+              "ttfb": "Server response"
+            },
+            "targetLabel": "target {value}",
+            "note": "The main content paint is still over its 2.5 second threshold, and we leave it on display rather than picking the numbers that suit us. That one is work in progress. An agency that only publishes its good scores is not telling you what it measures: it is telling you what it shows."
+          },
           "geo": {
             "title": "Being cited by AI answers.",
             "lead": "When a client asks ChatGPT or Perplexity which agency builds web applications in Brussels, the assistant answers by citing its sources. Being one of those sources is where visibility now starts — and it is worked page by page.",

@@ -4,6 +4,7 @@ import {useTranslations} from "next-intl";
 import PosterHero from "@/components/pages/services/v2/shared/poster-hero";
 import Process from "@/components/pages/services/v2/seo/process";
 import MetaProof from "@/components/pages/services/v2/seo/meta-proof";
+import MeasuredProof from "@/components/pages/services/v2/seo/measured-proof";
 import GeoAnswer from "@/components/pages/services/v2/seo/geo-answer";
 import Measures from "@/components/pages/services/v2/seo/measures";
 import MiniFaq from "@/components/pages/services/v2/shared/mini-faq";
@@ -32,6 +33,11 @@ export default function ServiceSeoClient() {
             />
             <Process/>
             <MetaProof/>
+            {/* Straight after MetaProof, which makes the claims this section
+                then puts numbers on. Figures live in src/data/site-metrics.js
+                and carry their measurement date — re-measure after any deploy
+                that touches this page. */}
+            <MeasuredProof/>
             {/* The three build on each other: MetaProof demonstrates the
                 technique on this page, GeoAnswer says what it is as an offer,
                 Measures says how we are held to it. The VENIZI proof case stays

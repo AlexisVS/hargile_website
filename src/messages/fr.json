@@ -953,6 +953,23 @@
               "Affichez le code source de cette page : tout y est."
             ]
           },
+          "measured": {
+            "title": "Les chiffres de cette page.",
+            "lead": "Mesuré le {date} sur cette page même, avec {tool}, en conditions mobiles. Vous pouvez relancer l'outil et retomber sur les mêmes chiffres — c'est tout l'intérêt de les publier.",
+            "scores": {
+              "performance": "Performance",
+              "accessibility": "Accessibilité",
+              "bestPractices": "Bonnes pratiques",
+              "seo": "SEO"
+            },
+            "vitals": {
+              "lcp": "Affichage principal",
+              "cls": "Stabilité visuelle",
+              "ttfb": "Réponse du serveur"
+            },
+            "targetLabel": "seuil {value}",
+            "note": "L'affichage principal dépasse encore son seuil de 2,5 secondes, et nous le laissons affiché plutôt que de choisir les chiffres qui nous arrangent. C'est le chantier en cours. Une agence qui ne publie que ses bons scores ne vous dit pas ce qu'elle mesure : elle vous dit ce qu'elle montre."
+          },
           "geo": {
             "title": "Être cité par les IA.",
             "lead": "Quand un client demande à ChatGPT ou à Perplexity quelle agence développe des applications web à Bruxelles, l'assistant répond en citant ses sources. Être l'une de ces sources, c'est le référencement qui commence — et il se travaille, page par page.",
