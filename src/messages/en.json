@@ -883,6 +883,15 @@
             "title": "Fixed price, no surprises.",
             "text": "The price is announced before the project starts, and it does not move: no time-based billing, no overrun discovered along the way. If a new idea comes up mid-project, it is priced separately and you decide."
           },
+          "scope": {
+            "title": "The boundary that holds the promise.",
+            "text": "Thirty days is not a question of speed: it is a question of scope. Week 1 exists to cut — to keep the smallest version that already gives real users something, and to set the rest aside without losing it.",
+            "points": [
+              "What overflows goes onto the v2 roadmap: prioritised and written down, not forgotten.",
+              "The business content stays yours: copy, photos, prices — nobody else can write those for you.",
+              "The one real condition on our side of the deadline: someone who can decide, available in week 1 and able to settle questions quickly at each checkpoint."
+            ]
+          },
           "proofCase": {
             "text": "La Marquisette: a character cottage in the Belgian Ardennes, launched with a tight scope — a trilingual showcase site with integrated booking."
           },

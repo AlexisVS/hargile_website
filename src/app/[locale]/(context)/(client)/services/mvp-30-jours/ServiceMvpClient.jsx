@@ -5,6 +5,7 @@ import PosterHero from "@/components/pages/services/v2/shared/poster-hero";
 import WeekTimeline from "@/components/pages/services/v2/mvp/week-timeline";
 import Included from "@/components/pages/services/v2/mvp/included";
 import FixedPrice from "@/components/pages/services/v2/mvp/fixed-price";
+import ScopeGuard from "@/components/pages/services/v2/mvp/scope-guard";
 import MiniFaq from "@/components/pages/services/v2/shared/mini-faq";
 import SiblingOffers from "@/components/pages/services/v2/shared/sibling-offers";
 import CtaBand from "@/components/pages/services/v2/shared/cta-band";
@@ -32,9 +33,11 @@ export default function ServiceMvpClient() {
             <WeekTimeline/>
             <Included/>
             <FixedPrice/>
-            {/* La Marquisette proof case pulled out for now — shared/proof-case.jsx
-                and the mvp.proofCase copy stay in place, so it comes back with
-                one line. */}
+            {/* Directly after the price, because it is the same argument seen
+                from the other end: the price holds because the scope does.
+                The La Marquisette proof case stays on disk with its copy
+                (shared/proof-case.jsx) — one line brings it back. */}
+            <ScopeGuard/>
             <MiniFaq namespace="pages.services.detail.mvp.faq"/>
             <SiblingOffers current="mvp"/>
             <CtaBand/>

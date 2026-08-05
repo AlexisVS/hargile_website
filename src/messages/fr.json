@@ -883,6 +883,15 @@
             "title": "Prix fixe, sans surprise.",
             "text": "Le prix est annoncé avant le début du projet, et il ne bouge pas : pas de facturation au temps passé, pas de dépassement découvert en cours de route. Si une idée nouvelle surgit en chemin, elle est chiffrée à part et vous décidez."
           },
+          "scope": {
+            "title": "La limite qui tient la promesse.",
+            "text": "Trente jours, ce n'est pas une question de vitesse : c'est une question de périmètre. La semaine 1 existe pour découper — garder la plus petite version qui apporte déjà quelque chose à de vrais utilisateurs, et écarter le reste sans le perdre.",
+            "points": [
+              "Ce qui déborde part sur la feuille de route v2 : priorisé et écrit, pas oublié.",
+              "Le contenu métier reste à vous : textes, photos, tarifs — personne d'autre ne peut les écrire à votre place.",
+              "La seule vraie condition de notre côté du délai : un décideur joignable, disponible en semaine 1 et capable de trancher vite aux points d'étape."
+            ]
+          },
           "proofCase": {
             "text": "La Marquisette : un gîte de caractère dans les Ardennes belges, mis en ligne avec un périmètre resserré — site vitrine trilingue et réservation intégrée."
           },
