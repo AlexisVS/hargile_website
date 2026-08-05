@@ -11,17 +11,146 @@
    chasse fixe sur le site. */
 $mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
 
+/* La lueur derrière la colonne de gauche.
+
+   C'était un disque opaque de 560px en `filter: blur(170px)`, posé à
+   bottom:-140px / left:-160px — donc débordant de la section par trois côtés,
+   et coupé net sur les trois : en bas par .work, qui suit dans le flux avec un
+   `background: var(--color-background-dark)` opaque et repeint donc la moitié
+   basse du halo ; à gauche par l'`overflow-x: hidden` du body ; et tout autour
+   par la région de filtre du blur, qui est finie et laisse sa propre arête.
+
+   La correction n'est pas de déborder davantage, c'est de n'avoir plus rien à
+   couper. Deux dégradés radiaux qui atteignent `transparent` À L'INTÉRIEUR de
+   leur propre boîte : le dernier stop est à 70 % du rayon, donc les 30 %
+   extérieurs sont déjà transparents et un rognage sur le bord de la boîte ne
+   retire rien de visible. Plus de blur non plus — un dégradé n'a ni région de
+   filtre ni arête, et il ne coûte pas une passe de compositing sur un disque
+   de 560px.
+
+   Deux couches plutôt qu'une pour la profondeur : un cœur resserré sur l'accent
+   clair du site, et un halo large sur le bleu profond. Une seule couche à
+   opacité uniforme lit comme un aplat ; c'est le décalage entre les deux
+   falloffs qui donne l'impression de volume. */
 .orb {
   position: absolute;
-  bottom: -140px;
-  left: -160px;
-  width: 560px;
-  height: 560px;
-  border-radius: 50%;
-  background: #2563eb;
-  opacity: 0.06;
-  filter: blur(170px);
+  /* Ancré dans la section et remonté du bas : le halo s'éteint AVANT le bord de
+     la boîte, qui s'arrête lui-même avant la fin de la section. Rien n'atteint
+     la frontière avec .work, donc il n'y a rien à couper. */
+  /* Le centre est une variable : le halo doit s'ancrer en bas à gauche sur la
+     colonne de texte en desktop, et en haut près du titre une fois la section
+     empilée. Seules les deux variables et l'ancrage changent au palier — les
+     stops, eux, ne sont écrits qu'une fois. */
+  /* 8 % de la largeur de la boîte : le cœur tombe vers x≈100px, donc à gauche du
+     titre plutôt que derrière lui, et la chute traverse la colonne de texte pour
+     mourir dans l'espace entre celle-ci et la fenêtre valeurs.md — puis
+     légèrement dessous. C'est le seul endroit où la fin du halo n'est pas
+     lisible : entre deux blocs de contenu plutôt qu'en terrain vide.
+
+     --orb-y reste à 50 % à tous les paliers. Le décentrer verticalement fait
+     sortir la chute de la boîte et rend l'arête — voir la note du media query. */
+  --orb-x: 8%;
+  --orb-y: 50%;
+
+  /* Insets en POURCENTAGE, et pas une hauteur fixe. La section ne fait que
+     ~656px de haut : une boîte de 560px la remplissait presque, donc la chute
+     du dégradé arrivait sur les bords haut et bas au lieu de s'éteindre avant,
+     et on voyait le halo s'arrêter net en haut de « Nos valeurs ». À 14 % de
+     marge en haut comme en bas, la boîte fait 72 % de la section quelle que
+     soit sa hauteur, et les 22 % extérieurs du dégradé (déjà à l'alpha 0)
+     tombent dans cette marge.
+
+     La largeur, elle, est volontairement généreuse : le halo doit passer
+     DERRIÈRE la colonne de texte et mordre légèrement sur la fenêtre
+     valeurs.md. Une lumière qui s'éteint en terrain vide laisse voir son
+     rayon ; une lumière qui s'éteint derrière du contenu, non. */
+  top: 8%;
+  bottom: 8%;
+  left: 0;
+  width: min(1280px, 88vw);
+
+  /* Deux dégradés, et AUCUN mot-clé `transparent`.
+
+     C'est là qu'était l'arête visible : `transparent` ne veut pas dire « cette
+     couleur en alpha 0 », il vaut rgba(0, 0, 0, 0). Le navigateur interpole
+     donc du bleu vers du NOIR transparent, et les valeurs intermédiaires se
+     désaturent — d'où l'anneau grisâtre qui dessine exactement la fin du halo.
+     Chaque dégradé finit ici sur sa propre teinte en alpha 0, donc la couleur
+     ne bouge jamais pendant la disparition.
+
+     Beaucoup de stops aussi : sur un dégradé long et très peu contrasté, trois
+     ou quatre stops donnent du banding — les paliers de quantification 8 bits
+     deviennent visibles. Six à sept rapprochent les marches sous le seuil de
+     perception.
+
+     Le cœur est à 18 % de la largeur : la lumière tient le bord gauche de
+     l'écran et effleure le début de la colonne de texte, au lieu de se poser
+     derrière elle. */
+  background:
+    radial-gradient(
+      ellipse 50% 50% at var(--orb-x) var(--orb-y),
+      rgba(150, 185, 249, 0.042) 0%,
+      rgba(150, 185, 249, 0.031) 16%,
+      rgba(150, 185, 249, 0.019) 30%,
+      rgba(150, 185, 249, 0.010) 44%,
+      rgba(150, 185, 249, 0.004) 58%,
+      rgba(150, 185, 249, 0.001) 68%,
+      rgba(150, 185, 249, 0) 76%
+    ),
+    radial-gradient(
+      ellipse 58% 56% at var(--orb-x) var(--orb-y),
+      rgba(37, 99, 235, 0.115) 0%,
+      rgba(37, 99, 235, 0.083) 14%,
+      rgba(37, 99, 235, 0.052) 27%,
+      rgba(37, 99, 235, 0.029) 40%,
+      rgba(37, 99, 235, 0.014) 53%,
+      rgba(37, 99, 235, 0.005) 64%,
+      rgba(37, 99, 235, 0.001) 72%,
+      rgba(37, 99, 235, 0) 78%
+    );
   pointer-events: none;
+}
+
+/* Empilé, le halo doit accompagner le titre : ancré en haut plutôt qu'en bas,
+   et recentré vers le milieu de la colonne puisqu'il n'y a plus de colonne de
+   gauche à border. Plus large aussi — sur 390px, un 62vw ne fait que 240px et
+   la lumière ressemble à une tache ; en la laissant déborder la largeur du
+   viewport, la chute redevient longue. Le débordement est sans risque : les
+   stops atteignent l'alpha 0 à 76–78 % du rayon, donc tout ce que l'
+   `overflow-x: hidden` du body rogne est déjà transparent. */
+/* Empilé (tablette comprise), le halo est ancré par le haut plutôt qu'étiré sur
+   toute la section — celle-ci devient très longue une fois la fenêtre passée
+   sous le texte, et un halo à sa demi-hauteur tomberait au milieu du terminal.
+
+   --orb-y RESTE à 50 %. C'est la correction : à 26 %, le centre était à 114px
+   du haut d'une boîte de 439px alors que la chute en réclame 192 — le dégradé
+   demandait 78px AU-DESSUS de sa propre boîte, se faisait rogner, et laissait
+   la ligne nette qu'on voyait en haut sur mobile comme sur tablette. Centré,
+   la chute a la même distance des deux côtés et rien n'est coupé.
+
+   Descendre le halo se fait donc avec `top`, jamais en déplaçant --orb-y vers
+   le haut. */
+@media (max-width: 1024px) {
+  .orb {
+    /* 16 % et non 34 % : empilée, la lumière doit toujours venir du bord gauche
+       de l'écran. À 34 % elle se posait au milieu de la colonne et se lisait
+       comme une tache centrée derrière le texte plutôt que comme un éclairage
+       latéral. */
+    --orb-x: 16%;
+
+    /* En pourcentages de la section, comme en desktop, et pour la même raison :
+       une hauteur en px ne peut pas savoir si elle rentre. Un `top: 259px` +
+       `height: 620px` sur une section empilée de 761px dépassait de 118px, et
+       .work — opaque, juste en dessous — repeignait par-dessus. D'où la coupure
+       nette qu'on voyait aussi en tablette.
+
+       12 % + 52 % = 64 % : il reste 36 % de marge sous la boîte, largement de
+       quoi absorber la chute (43,7 % de la demi-hauteur). */
+    top: 12%;
+    bottom: auto;
+    height: 52%;
+    width: min(1000px, 132vw);
+  }
 }
 
 /* 0.42 / 1 plutôt que le `flex: 0 0 360px` de la maquette : la colonne de
