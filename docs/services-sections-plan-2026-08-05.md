@@ -1,8 +1,11 @@
 # Nouvelles sections des pages services — plan (session du 2026-08-05)
 
-> **Plan validé par Mihai le 2026-08-05. Pas encore exécuté** — la construction
-> attend son go ; reprendre à la section 0 (infrastructure partagée), dans
-> l'ordre des commits de la section 8.
+> **Plan validé et exécuté le 2026-08-05**, dans l'ordre des commits de la
+> section 8. Vérification passée : build OK, lint à la baseline de 3 erreurs,
+> les 8 URLs (4 pages × FR/EN) en 200 avec canonical et hreflang corrects,
+> toute la copie des nouvelles sections présente dans le HTML sans JS, JSON-LD
+> valide sur 18 sources et `FAQPage` toujours uniquement sur `/faq`.
+> **Rien n'est poussé ni déployé** — reste la validation visuelle de Mihai.
 
 ## Contexte
 
