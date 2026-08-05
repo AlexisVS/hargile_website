@@ -155,6 +155,9 @@ Planche des douze formes :
 **https://claude.ai/code/artifact/38f4933e-4829-4e1d-a0f7-d0bf1a4af7e2**
 
 - **Fait** : jauges Lighthouse + barres mesure-contre-seuil → `seo/measured-proof.jsx`.
+- **Fait le même jour, en fin de session** : la grille de comptage (D) →
+  `web/delivered-grid.jsx`, sur `/services/applications-web` et pas sur
+  `/services`. Voir §8, qui prime sur ce qui précède la concernant.
 - **Écarté avec raison** : l'avant/après Ecole du Bonheur (l'ancien WordPress
   n'est plus mesurable équitablement — sur une archive Wayback on mesurerait
   Wayback) ; la barre de couverture SSR (100 % partout : graphique plat que
@@ -230,3 +233,62 @@ si les offres ont bougé, le maillage a porté.
 
 Toujours **11 clics et 20 requêtes sur 90 jours**. **Ne pas ouvrir la prochaine
 session en promettant un plan piloté par la donnée : il n'y en a toujours pas.**
+
+---
+
+## 8. Addendum du 2026-08-05, fin de journée — la grille de comptage est en ligne
+
+> Écrit après les §1–7 : **en cas de contradiction avec ce qui précède, ce
+> paragraphe gagne.** Trois commits, rien de poussé.
+
+**Ce qui a changé sur `/services/applications-web` :**
+
+```
+web : PosterHero · MadeInHouse[grille + compteurs + propriété] · Deliverables
+      · PriceMethod[+ conçu/codé/maintenu] · MiniFaq · Siblings · CtaBand
+```
+
+- `web/delivered-grid.jsx` — 23 carrés, un par projet livré, **chacun un lien**
+  vers le site du client. Rampe d'un seul accent sur l'année, du plus récent au
+  plus ancien. Plancher d'opacité **0,52** : ce sont des liens, donc 3:1
+  minimum ; 0,45 tombe à 2,81:1. Compteurs **23 / 15 / ∞**, les deux premiers
+  calculés, jamais écrits.
+- **Conçu / codé / maintenu a quitté `MadeInHouse` pour `PriceMethod`**, clés
+  i18n comprises (`madeInHouse.cols` → `priceMethod.cols`). L'encadré de
+  propriété reste dans `MadeInHouse`, sous les compteurs — la proposition 3A de
+  la planche (le déplacer vers `Deliverables`) **reste ouverte**.
+- Les filets au-dessus des trois colonnes sont retirés (Mihai). Écart local au
+  hairline-led, comme sur mvp : **ne pas les rétablir sans lui demander.**
+
+**La source des projets a changé de dépôt.** `scripts/sync-portfolio.mjs` lit
+`Hargile Portfolio/hargile-portfolio/src/data/projects` et écrit
+`src/data/portfolio-projects.json`, commité. `npm run sync:portfolio`.
+
+⚠️ **`src/data/portfolio-data.js` est périmé et toujours en service** : 22
+projets, 13 catégories, contre 23 et 18 en amont. Il alimente encore la page
+portfolio, et **`index/hero-stats.jsx` affiche un `22` écrit en dur** —
+c'est-à-dire que `/services` annonce aujourd'hui un chiffre faux d'une unité.
+Le brancher sur le nouveau JSON est le prochain geste évident, et il n'est pas
+fait.
+
+⚠️ **Le `15` n'est pas le `18` du portfolio.** `SECTOR_GROUPS`, dans le script,
+fusionne « Tourisme », « Hotellerie » et « Hébergement & Tourisme » en un métier
+et « Streetwear » dans « Mode ». C'est un jugement éditorial assumé, écrit à un
+seul endroit. Le correctif réel est en amont : renommer les `industry` du
+portfolio, après quoi le tableau se vide.
+
+**Planches à jour :**
+
+- Variantes des sections web (2·D est celle qui a été construite) :
+  [https://claude.ai/code/artifact/b09099e7-07a9-4c24-a1bf-31090b6f6453](https://claude.ai/code/artifact/b09099e7-07a9-4c24-a1bf-31090b6f6453)
+- Les douze formes : voir §4.
+
+**Côté dépôt portfolio** — plan écrit, **aucun code touché** :
+`.planning/phases/16-visual-alignment-with-hargile-com/`. Alignement complet
+décidé par Mihai (Outfit + Manrope, Cormorant abandonnée, fond `#080c16`).
+Trois pièges y sont consignés : l'ordre des `@font-face`, le fond qui bouge en
+famille, et `--color-text-muted` à 0,3 qui échoue AA sur le nouveau fond.
+
+**Vérifié** : build propre, lint à 3 (baseline), 200 en FR nu et sous `/en`,
+`seo:jsonld` 0 erreur sur 18 sources, les 23 liens et les deux compteurs
+présents dans le HTML rendu serveur dans les deux langues.
