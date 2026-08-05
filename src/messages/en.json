@@ -1035,19 +1035,13 @@
           },
           "madeInHouse": {
             "title": "Everything happens in-house.",
-            "cols": {
-              "design": {
-                "title": "Designed",
-                "text": "The design starts from your business, not from a template. Mockups and user flows are drawn in-house, with you."
-              },
-              "build": {
-                "title": "Built",
-                "text": "Developed with modern web technologies — like this site. No plugin assembly: code we know line by line."
-              },
-              "maintain": {
-                "title": "Maintained",
-                "text": "After launch, the foundations keep being cared for. You stay by choice, never out of necessity."
-              }
+            "lead": "Designed, built and maintained by the same team, in Brussels. Here is what that adds up to: every square is a site that is live today — click one, you are there.",
+            "grid": {
+              "projects": "projects delivered",
+              "sectors": "industries",
+              "code": "lines of code",
+              "hint": "Newest first. Click a square to open the site.",
+              "cell": "{client} — {sector}, {year} (opens in a new tab)"
             },
             "ownership": {
               "title": "Your code, your data.",
@@ -1084,7 +1078,22 @@
               "No billing by time spent, so no overrun discovered along the way.",
               "An idea that comes up mid-project is quoted separately: you decide whether to take it or keep it for later, and the initial price does not change."
             ],
-            "note": "For a first product, the MVP in 30 days offer applies the same method, with a fixed price and a launch date both known from the start."
+            "note": "For a first product, the MVP in 30 days offer applies the same method, with a fixed price and a launch date both known from the start.",
+            "cols": {
+              "title": "Designed, built, maintained — in-house.",
+              "design": {
+                "title": "Designed",
+                "text": "The design starts from your business, not from a template. Mockups and user flows are drawn in-house, with you."
+              },
+              "build": {
+                "title": "Built",
+                "text": "Developed with modern web technologies — like this site. No plugin assembly: code we know line by line."
+              },
+              "maintain": {
+                "title": "Maintained",
+                "text": "After launch, the foundations keep being cared for. You stay by choice, never out of necessity."
+              }
+            }
           },
           "cases": {
             "title": "Three proofs rather than a promise.",
