@@ -15,4 +15,23 @@ export const BottomBarStyled = styled.div`
         gap: 1rem;
         flex-direction: row;
     }
+
+    /* Three columns rather than space-between, because space-between does not
+       centre anything: it shares out the leftover space, so the middle item
+       lands off-centre by half the difference between the two flanks (measured
+       at 1440px: address 249px, copyright 212px, offers pushed 18px right).
+       Equal minmax(0, 1fr) flanks put the middle column on the page's centre
+       line, where it lines up with the nav above it.
+
+       900px is where the three stop fitting: 787px of content plus gaps in a
+       bar that is the viewport less 40px of padding. */
+    @media (min-width: 900px) {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: baseline;
+
+        > *:last-child {
+            justify-self: end;
+        }
+    }
 `;

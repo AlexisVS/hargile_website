@@ -7,6 +7,7 @@ import {FooterContentStyled} from "@/components/footer/footer-content.styled";
 import {BottomBarStyled} from "@/components/footer/bottom-bar.styled";
 import {BottomLinksStyled} from "@/components/footer/bottom-links.styled";
 import {BrandBlockStyled, BrandStyled, BrandTaglineStyled} from "@/components/footer/brand.styled";
+import {OfferLinksStyled, OfferLinkStyled} from "@/components/footer/offer-links.styled";
 import {Link} from "@/i18n/navigation";
 import {useTranslations} from 'next-intl';
 import {Address} from "@/components/footer/Adress.styled";
@@ -17,10 +18,20 @@ import LinkedinIcon from "@/components/icons/LinkedinIcon";
 import {NAP, napCityLine} from "@/lib/nap";
 
 
+/* The four offer pages. Titles come from the services index — same names in
+   the footer as on the page they lead to, one source. */
+const OFFERS = [
+    {id: 'web', href: '/services/applications-web'},
+    {id: 'ia', href: '/services/ia'},
+    {id: 'seo', href: '/services/seo'},
+    {id: 'mvp', href: '/services/mvp-30-jours'},
+];
+
 const Footer = () => {
     const t = useTranslations('components.footer');
     // "Tech Studio" lives with the hero copy — one source for the label site-wide
     const tHero = useTranslations('pages.homepage.sections.hero.v2');
+    const tOffers = useTranslations('pages.services.index.offers');
 
     // Calling new Date() during render of a client component makes the output
     // non-deterministic (server prerender vs. hydration can straddle a year
@@ -59,7 +70,8 @@ const Footer = () => {
 
     return (
         <FooterContainerStyled>
-            {/* Top bar: brand — site links — socials. New site links belong in the nav. */}
+            {/* Top bar: brand — nav column — socials. New site links belong in
+                the nav column. */}
             <FooterContentStyled>
                 <BrandBlockStyled>
                     <BrandStyled as={Link} href="/">HARGILE</BrandStyled>
@@ -85,14 +97,33 @@ const Footer = () => {
                 </SocialContainer>
             </FooterContentStyled>
 
-            {/* Bottom bar: address + email on one line, copyright on the other side */}
+            {/* Bottom bar: address — offer pages — copyright. The offers sit in
+                the middle column, under the nav above and between the two lines
+                that were already here. DOM order is the wide-screen order; below
+                1100px the three no longer fit on one line and the offers take
+                their own row back, on top (see OfferLinksStyled). */}
             <BottomBarStyled>
-                {/* Address and email come from @/lib/nap so the copy and the
-                    JSON-LD entity cannot drift apart. Only the country is translated. */}
+                {/* Address comes from @/lib/nap so the copy and the JSON-LD
+                    entity cannot drift apart. Only the country is translated.
+
+                    The email used to close this line. It was the fourth place
+                    it appeared — it is still in the JSON-LD (Organization and
+                    contactPoint), in llms.txt and in the overlay menu, and the
+                    page already ends on a contact CTA. Dropping it here costs
+                    no signal and buys the width that lets the offers sit in the
+                    middle: the line now matches the copyright opposite it. */}
                 <Address>
-                    {NAP.street} · {napCityLine} · {t('address.country')} ·{' '}
-                    <a target={'_blank'} href={`mailto:${NAP.email}`}>{NAP.email}</a>
+                    {NAP.street} · {napCityLine} · {t('address.country')}
                 </Address>
+
+                <OfferLinksStyled aria-label={t('sections.services')}>
+                    {OFFERS.map((offer) => (
+                        <OfferLinkStyled as={Link} key={offer.id} href={offer.href}>
+                            {tOffers(`${offer.id}.title`)}
+                        </OfferLinkStyled>
+                    ))}
+                </OfferLinksStyled>
+
                 <Copyright>{t('copyright', {year})}</Copyright>
             </BottomBarStyled>
         </FooterContainerStyled>

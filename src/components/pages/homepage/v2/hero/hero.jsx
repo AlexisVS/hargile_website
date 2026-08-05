@@ -2,12 +2,23 @@
 
 import {useEffect, useRef, useState} from "react";
 import {useTranslations} from "next-intl";
+import {Link} from "@/i18n/navigation";
 import CtaLink from "@/components/ui/cta-link/cta-link";
 import styles from "./hero.module.scss";
 import HeroBackdrop from "./backdrops/hero-backdrop";
 import {useHeroLoading} from "@/components/providers/hero-loading-provider";
 
-const CARDS = ["webdev", "ai", "marketing"];
+/* Each row is the offer page it names. The three services were deliberately
+   inert until now — but the pages they describe exist, and this is the home
+   page's only route to them: without these links the four offers hung off a
+   single hub, which is what left them "Discovered – currently not indexed" in
+   Search Console. MVP is the fourth offer and is not here on purpose: it has
+   its own section further down the page, which carries its own link. */
+const CARDS = [
+    {key: "webdev", href: "/services/applications-web"},
+    {key: "ai", href: "/services/ia"},
+    {key: "marketing", href: "/services/seo"},
+];
 
 /* The hero backdrop is the wave grid, at every width and with no branch left to
    resolve — chosen over cubes and colour bends after comparing them side by
@@ -168,8 +179,11 @@ const HeroV2 = () => {
                     vertical light spine threads three luminous dots. The spine
                     draws on once at load and each node ignites with its row as the
                     line reaches it — a single one-shot reveal, then stillness. The
-                    column stays transparent so the grid reads through it. Not
-                    links — it states what we provide, it doesn't navigate.
+                    column stays transparent so the grid reads through it.
+
+                    The rows navigate now (see CARDS): the chevron only appears
+                    on hover or keyboard focus, so at rest the column is the same
+                    object it was when it merely stated what we provide.
 
                     The alternative used to live right here as a second branch:
                     three .floatCard glass panels (20px backdrop-filter, border,
@@ -185,7 +199,7 @@ const HeroV2 = () => {
                         <ul className={styles.capList}>
                             {CARDS.map((card, i) => (
                                 <li
-                                    key={card}
+                                    key={card.key}
                                     className={styles.capItem}
                                     /* The only thing that varies per row. Everything
                                        else about the reveal lives in the stylesheet —
@@ -193,11 +207,29 @@ const HeroV2 = () => {
                                        is motion.* any more. */
                                     style={{"--cap-delay": `${0.55 + i * 0.22}s`}}
                                 >
+                                    {/* The dot stays outside the link: it is
+                                        absolutely positioned against the row, and
+                                        the row is padded past it. */}
                                     <span className={styles.capDot} aria-hidden="true"/>
-                                    <span className={styles.capBody}>
-                                        <span className={styles.capTitle}>{t(`cards.${card}.title`)}</span>
-                                        <span className={styles.capText}>{t(`cards.${card}.text`)}</span>
-                                    </span>
+                                    <Link href={card.href} className={styles.capLink}>
+                                        <span className={styles.capBody}>
+                                            <span className={styles.capTitle}>
+                                                {t(`cards.${card.key}.title`)}
+                                                <span className={styles.capChevron} aria-hidden="true">
+                                                    <svg viewBox="0 0 16 16" fill="none">
+                                                        <path
+                                                            d="M6 3.5 10.5 8 6 12.5"
+                                                            stroke="currentColor"
+                                                            strokeWidth="1.6"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                        />
+                                                    </svg>
+                                                </span>
+                                            </span>
+                                            <span className={styles.capText}>{t(`cards.${card.key}.text`)}</span>
+                                        </span>
+                                    </Link>
                                 </li>
                             ))}
                         </ul>

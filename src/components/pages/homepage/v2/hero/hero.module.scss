@@ -457,6 +457,38 @@
     animation: none;
     transform: scaleY(1);
   }
+
+  /* The chevron still appears on hover, it just stops sliding in. */
+  .capChevron {
+    transition: opacity 0.22s ease;
+    transform: none;
+  }
+}
+
+/* The row is a link, and looks like one only once you reach for it: no
+   underline, no colour of its own, nothing added at rest. The whole row is the
+   target — the dot sits outside it and stays decorative. */
+.capLink {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+
+  &:hover .capTitle,
+  &:focus-visible .capTitle {
+    color: #ffffff;
+  }
+
+  &:hover .capChevron,
+  &:focus-visible .capChevron {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(150, 185, 249, 0.7);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
 }
 
 .capBody {
@@ -464,6 +496,23 @@
   flex-direction: column;
   gap: 4px;
   min-width: 0;
+}
+
+/* Sits on the title's baseline, hidden until the row is reached for. Nudged
+   left at rest so it slides in rather than blinking on. */
+.capChevron {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 7px;
+  opacity: 0;
+  transform: translateX(-4px);
+  color: rgba(150, 185, 249, 0.9);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+
+  svg {
+    width: 13px;
+    height: 13px;
+  }
 }
 
 /* The halos are what make this readable over the moving grid — tight and dark, so
@@ -483,6 +532,7 @@
   text-shadow:
     0 1px 3px rgba(0, 0, 0, 1),
     0 2px 14px rgba(0, 0, 0, 0.85);
+  transition: color 0.22s ease;
 }
 
 .capText {

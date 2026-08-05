@@ -55,6 +55,7 @@ const Step = ({step, i, fill, reveal, t}) => {
 
 const MvpPromoV2 = () => {
     const t = useTranslations("pages.homepage.sections.mvp-promo");
+    const tOffer = useTranslations("pages.services.index");
     const reveal = useReveal();
     const reducedMotion = useReducedMotion();
     const vertical = useVerticalRail();
@@ -101,9 +102,16 @@ const MvpPromoV2 = () => {
                     </div>
                 </div>
 
+                {/* The second action is the home page's only route to the MVP
+                    offer page — the hero rail carries the other three. Label
+                    borrowed from the services index rather than duplicated:
+                    same words for the same move, one source. */}
                 <div className={styles.ctaWrap} {...reveal(3)}>
                     <CtaLink href="/contact" variant="primary">
                         {t("cta")}
+                    </CtaLink>
+                    <CtaLink href="/services/mvp-30-jours" variant="ghost">
+                        {tOffer("detailCta")}
                     </CtaLink>
                 </div>
             </div>

@@ -140,6 +140,9 @@
 
 .ctaWrap {
   margin-top: 44px;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
 /* CTA button comes from the shared CtaLink component (components/ui/cta-link). */
