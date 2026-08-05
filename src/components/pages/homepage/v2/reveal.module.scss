@@ -41,6 +41,39 @@
   }
 }
 
+/* Rule variant — for the 1px hairlines that open a column or split a frame.
+   Same observer, same stagger: the call site adds .hairline next to its own
+   class and spreads reveal(i) as usual, so a rule drawn at the same index as
+   the copy it belongs to lands with it rather than after it.
+
+   A hairline that rose 16px and faded would read as a slab; it draws from its
+   left edge instead. Opacity stays 1 the whole way — the line is never a ghost,
+   it is simply not there yet. Everything below the fold is still parked by the
+   same first pass, so the server HTML keeps a full-width rule. */
+.hairline {
+  /* Marker only. The pairs below are what carry the behaviour. */
+}
+
+.pending.hairline {
+  opacity: 1;
+  transform: scaleX(0.001);
+  transform-origin: left;
+}
+
+.revealIn.hairline {
+  animation-name: v2RevealRule;
+  transform-origin: left;
+}
+
+@keyframes v2RevealRule {
+  from {
+    transform: scaleX(0.001);
+  }
+  to {
+    transform: none;
+  }
+}
+
 /* Replaces the old useReducedMotion() branch: fade only, no rise. */
 @keyframes v2RevealFade {
   from {
@@ -57,6 +90,17 @@
   }
 
   .revealIn {
+    animation-name: v2RevealFade;
+  }
+
+  /* A line that draws itself is motion whichever axis it uses: the hairlines
+     fall back to the same fade as everything else. */
+  .pending.hairline {
+    opacity: 0.01;
+    transform: none;
+  }
+
+  .revealIn.hairline {
     animation-name: v2RevealFade;
   }
 }
