@@ -1,6 +1,17 @@
-/* Mini-FAQ — a closing sub-block, so its title sits a step below the
-   section heading scale. */
+/* Mini-FAQ — same split as the /services/ia block: heading and the way out on
+   the left, accordion on the right. Every number here matches .faq / .faqTitle
+   in ia-offre-section.module.scss, which re-expresses the same block for
+   server-rendered markup. */
 
+.faq {
+  display: grid;
+  grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.38fr);
+  gap: clamp(24px, 4vw, 72px);
+  align-items: start;
+}
+
+/* A closing sub-block, so its title sits a step below the section heading
+   scale. */
 .title {
   font-family: var(--font-headings);
   font-weight: 700;
@@ -11,11 +22,14 @@
   color: #ededed;
 }
 
-.accordionWrap {
-  margin-top: 32px;
-  max-width: 860px;
+.allWrap {
+  margin-top: 22px;
 }
 
-.allWrap {
-  margin-top: 28px;
+/* Same breakpoint /faq and /services/ia drop their split at. */
+@media (max-width: 900px) {
+  .faq {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
 }

@@ -17,7 +17,7 @@
 import {getTranslations} from "next-intl/server";
 import {Link} from "@/i18n/navigation";
 import section from "@/components/pages/homepage/v2/v2-section.module.scss";
-import FaqAccordion from "./faq-accordion-island";
+import MiniFaq from "@/components/pages/services/v2/shared/mini-faq";
 import BentoSpotlight from "./bento-spotlight";
 import styles from "./ia-offre-section.module.scss";
 
@@ -58,8 +58,6 @@ const IaOffreSection = async ({locale}) => {
     const t = await getTranslations({locale, namespace: "pages.services.detail.ia"});
     const shared = await getTranslations({locale, namespace: "pages.services.shared"});
     const offers = await getTranslations({locale, namespace: "pages.services.index.offers"});
-
-    const faqItems = t.raw("faq.items");
 
     return (
         <section className={`${section.section} ${section.sectionEnd}`}>
@@ -105,58 +103,13 @@ const IaOffreSection = async ({locale}) => {
                     <p className={styles.counterText}>{t("honesty.text")}</p>
                 </article>
 
-                {/* FAQ: heading and the way out on the left, accordion on the right.
-                    The answers rest OPEN in this HTML — the island collapses them
-                    after mount, so a crawler with no JS reads all four. */}
-                <div className={styles.faq}>
-                    <div>
-                        <h3 className={styles.faqTitle}>{shared("miniFaq.title")}</h3>
-                        <Link className={styles.pill} href="/faq">
-                            {shared("miniFaq.allLink")}
-                            <Chevron/>
-                        </Link>
-                    </div>
-
-                    <div className={styles.faqList} data-accordion>
-                        {faqItems.map((item, i) => (
-                            <div key={item.q} className={styles.faqItem} data-faq>
-                                <h4 className={styles.faqHeading}>
-                                    <button
-                                        type="button"
-                                        id={`ia-faq-q${i}`}
-                                        className={styles.faqBtn}
-                                        data-faq-btn
-                                        aria-expanded="true"
-                                        aria-controls={`ia-faq-a${i}`}
-                                    >
-                                        <span>{item.q}</span>
-                                        <span className={styles.faqPlus} data-plus aria-hidden="true">
-                                            <svg viewBox="0 0 16 16" fill="none">
-                                                <path
-                                                    d="M8 2.5v11M2.5 8h11"
-                                                    stroke="currentColor"
-                                                    strokeWidth="1.4"
-                                                    strokeLinecap="round"
-                                                />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                </h4>
-                                {/* 1fr -> 0fr: the answer never leaves the DOM. */}
-                                <div
-                                    id={`ia-faq-a${i}`}
-                                    role="region"
-                                    aria-labelledby={`ia-faq-q${i}`}
-                                    className={styles.faqPanel}
-                                    data-faq-panel
-                                >
-                                    <div className={styles.faqPanelInner}>
-                                        <p className={styles.faqAnswer}>{item.a}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                {/* The FAQ every other service page mounts. It is a client
+                    component inside this Server Component, which costs nothing
+                    here: its answers ship in this page's first HTML response
+                    all the same, and the collapse no longer has to open
+                    everything and shut it after hydration. */}
+                <div className={styles.faqBlock}>
+                    <MiniFaq namespace="pages.services.detail.ia.faq" bare/>
                 </div>
 
                 {/* The three offers you are not reading — one hairline each, the
@@ -194,10 +147,8 @@ const IaOffreSection = async ({locale}) => {
                 </div>
             </div>
 
-            {/* Islands: the first collapses the accordion (HTML resting state is
-                all open), the second drives --mx/--my on the bento. Neither
-                renders markup, so nothing here depends on them running. */}
-            <FaqAccordion/>
+            {/* Island: drives --mx/--my on the bento. It renders no markup, so
+                nothing here depends on it running. */}
             <BentoSpotlight/>
         </section>
     );

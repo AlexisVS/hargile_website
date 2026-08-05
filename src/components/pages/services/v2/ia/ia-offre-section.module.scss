@@ -216,105 +216,10 @@
 
 /* ---------- FAQ ---------- */
 
-/* Same split as the chapters on /faq (faq-groups.module.scss .group): a narrow
-   title column beside a wider question column, not an even half-and-half. */
-.faq {
-  display: grid;
-  grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.38fr);
-  gap: clamp(24px, 4vw, 72px);
+/* The block itself is shared/mini-faq.jsx now — only its place in the page
+   rhythm is set here. */
+.faqBlock {
   margin-top: var(--block-gap);
-  align-items: start;
-}
-
-/* A closing sub-block, so its title sits a step below the section heading. */
-.faqTitle {
-  margin: 0;
-  font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: clamp(24px, 2.2vw, 32px);
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: #ededed;
-}
-
-.faqList {
-  display: grid;
-  gap: 6px;
-}
-
-.faqHeading {
-  margin: 0;
-}
-
-/* Every number below matches ui/faq-accordion.module.scss — this is the /faq
-   page's accordion, re-expressed for server-rendered markup. Closed rows sit a
-   step back so the open one reads as the one in front; no rules, no fills, the
-   gap is the only separator. */
-.faqBtn {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 24px;
-  width: 100%;
-  padding: 14px 0;
-  text-align: left;
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-  color: rgba(237, 237, 237, 0.72);
-  font-family: var(--font-headings);
-  font-weight: 600;
-  font-size: clamp(16px, 1.25vw, 19px);
-  letter-spacing: -0.01em;
-  line-height: 1.35;
-  transition: color 0.2s;
-
-  &:hover,
-  &[aria-expanded="true"] {
-    color: #ededed;
-  }
-
-  &:focus-visible {
-    outline: 2px solid rgba(150, 185, 249, 0.7);
-    outline-offset: 2px;
-  }
-}
-
-/* The island rotates this to 45deg — plus becomes a multiply sign. */
-.faqPlus {
-  display: inline-flex;
-  flex: 0 0 auto;
-  /* Optical alignment against the first text line, as on /faq. */
-  transform: translateY(1px);
-  color: rgba(150, 185, 249, 0.85);
-  transition: transform 0.3s ease;
-
-  svg {
-    width: 14px;
-    height: 14px;
-  }
-}
-
-/* Resting state is OPEN: the answers ship visible and the island closes them.
-   Collapsing is 1fr -> 0fr, never display:none — the copy stays in the DOM. */
-.faqPanel {
-  display: grid;
-  grid-template-rows: 1fr;
-}
-
-.faqPanelInner {
-  overflow: hidden;
-  min-height: 0;
-}
-
-.faqAnswer {
-  margin: 0;
-  padding: 0 0 18px;
-  max-width: 68ch;
-  font-size: 15px;
-  font-weight: 300;
-  line-height: 1.65;
-  color: rgba(237, 237, 237, 0.68);
 }
 
 /* ---------- Autres offres ---------- */
@@ -540,14 +445,6 @@
   }
 }
 
-/* Same breakpoint /faq drops its chapter split at. */
-@media (max-width: 900px) {
-  .faq {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
-  }
-}
-
 /* Stacked: the promise drops under the name and the chevron holds the right
    edge across both lines, so the row still reads as one target. */
 @media (max-width: 700px) {
@@ -569,15 +466,9 @@
   }
 }
 
-/* !important because the accordion island writes grid-template-rows inline —
-   this is the one declaration that has to beat it. The blanket rule below is
-   scoped to this section on purpose: a bare `*` would strip transitions from
+/* Scoped to this section on purpose: a bare `*` would strip transitions from
    the whole site, navbar and page transitions included. */
 @media (prefers-reduced-motion: reduce) {
-  .faqPanel {
-    grid-template-rows: 1fr !important;
-  }
-
   .ia,
   .ia * {
     transition: none !important;
