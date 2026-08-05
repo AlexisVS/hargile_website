@@ -1,17 +1,18 @@
-/* Included / not included — no rules, no frames.
+/* Included / not included — stacked, unframed, no rules.
  *
- * The two lists used to be told apart by a hairline over each column. They are
- * now told apart by everything else: the included items sit larger and in fuller
- * ink with a filled accent dot, the excluded ones sit smaller, dimmer, and
- * carry a dash instead — present versus removed, read before the words are.
- * Column widths are uneven on purpose; two equal columns imply two equal
- * halves, and this offer is not half excluded. */
+ * The included list runs first and full width, in two columns so six short
+ * lines fill the measure instead of trailing down one thin edge. The excluded
+ * list follows in a single narrow column: shorter, quieter, and visibly the
+ * coda rather than the counterweight. Asymmetry is the message — six against
+ * three, and the reader sees which way the offer leans before reading a word. */
 
-.cols {
-  display: grid;
-  grid-template-columns: minmax(0, 1.32fr) minmax(0, 0.92fr);
-  gap: clamp(40px, 6vw, 110px);
-  margin-top: clamp(44px, 5vw, 68px);
+.in {
+  margin-top: clamp(40px, 5vw, 62px);
+}
+
+.out {
+  margin-top: clamp(46px, 5.5vw, 76px);
+  max-width: 62ch;
 }
 
 .kicker {
@@ -24,11 +25,10 @@
   margin: 0;
 }
 
-/* Dimmed, but never below the readable floor. Measured on #080c16: .86 is
-   12.4:1, .56 is 5.65:1, and .44 — where this list first landed — is 3.89:1,
-   under the 4.5:1 body-text threshold. The hierarchy still reads at .55/.56;
-   it just no longer costs anyone the ability to read it. */
-.colOut .kicker {
+/* Dimmed, never below the readable floor. Measured on #080c16: .86 is 12.4:1,
+   .56 is 5.65:1, and .44 — where this list first landed — is 3.89:1, under the
+   4.5:1 body threshold. The hierarchy still reads at .55/.56. */
+.out .kicker {
   color: rgba(237, 237, 237, 0.55);
 }
 
@@ -36,54 +36,53 @@
   list-style: none;
   margin: clamp(22px, 2.4vw, 30px) 0 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: clamp(14px, 1.5vw, 18px);
+  display: grid;
+  gap: clamp(14px, 1.5vw, 18px) clamp(28px, 4vw, 64px);
 
   li {
-    position: relative;
-    padding-left: 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
     font-size: clamp(16px, 1.4vw, 18px);
     font-weight: 300;
     color: rgba(237, 237, 237, 0.86);
     line-height: 1.5;
-
-    /* Present: a filled dot. */
-    &::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0.62em;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: rgba(150, 185, 249, 0.95);
-    }
   }
 }
 
-.colOut .list {
+/* Six short lines read better as two columns than as one long rail. */
+.in .list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.out .list {
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(12px, 1.3vw, 15px);
 
   li {
     font-size: clamp(14px, 1.15vw, 15px);
     color: rgba(237, 237, 237, 0.56);
-
-    /* Removed: a dash, and no accent. It carries meaning, so it clears the
-       3:1 floor for non-text marks rather than fading to decoration. */
-    &::before {
-      top: 0.78em;
-      width: 9px;
-      height: 1px;
-      border-radius: 0;
-      background: rgba(237, 237, 237, 0.45);
-    }
   }
 }
 
-@media (max-width: 820px) {
-  .cols {
+/* The marks are decoration on lists the headings already name, so they carry
+   colour only — the accent for what is in, plain dimmed ink for what is out.
+   flex-none + the nudge keeps them optically on the first line's cap height. */
+.mark {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  margin-top: 0.24em;
+  color: rgba(150, 185, 249, 0.95);
+}
+
+.out .mark {
+  width: 13px;
+  color: rgba(237, 237, 237, 0.45);
+}
+
+@media (max-width: 720px) {
+  .in .list {
     grid-template-columns: minmax(0, 1fr);
-    gap: clamp(34px, 7vw, 48px);
   }
 }
