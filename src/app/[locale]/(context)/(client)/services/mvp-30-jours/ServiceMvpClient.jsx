@@ -3,6 +3,7 @@
 import {useTranslations} from "next-intl";
 import PosterHero from "@/components/pages/services/v2/shared/poster-hero";
 import WeekTimeline from "@/components/pages/services/v2/mvp/week-timeline";
+import WeekCalendar from "@/components/pages/services/v2/mvp/week-calendar";
 import Included from "@/components/pages/services/v2/mvp/included";
 import FixedPrice from "@/components/pages/services/v2/mvp/fixed-price";
 import ScopeGuard from "@/components/pages/services/v2/mvp/scope-guard";
@@ -31,6 +32,11 @@ export default function ServiceMvpClient() {
                 backdrop={<WaveGridBackdrop composition="wave-97"/>}
             />
             <WeekTimeline/>
+            {/* ⚠ TEMPORAIRE — les deux traitements du même contenu, l'un sous
+                l'autre, le temps que Mihai tranche. L'un des deux part ensuite :
+                tant qu'ils coexistent, la copie des semaines est en double dans
+                le HTML, donc cet état ne se déploie pas. */}
+            <WeekCalendar/>
             <Included/>
             <FixedPrice/>
             {/* Directly after the price, because it is the same argument seen
