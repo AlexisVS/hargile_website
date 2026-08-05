@@ -1,23 +1,26 @@
-/* Scope guard — the framed statement with the ghost numeral behind it.
+/* Scope guard — the ghost numeral, now with nothing around it.
+ *
+ * numGhost is a whisper by design (7% accent), which is what lets the "30" sit
+ * under the copy instead of beside it. With the frame gone it can run much
+ * larger and bleed past the text column: it reads as the ground the section is
+ * written on rather than as an ornament parked in a corner.
+ *
+ * overflow: clip on the wrapper, not hidden — clip does not create a scroll
+ * container, so a numeral wider than the column can never turn into a
+ * horizontal scrollbar on the page. */
 
-   numGhost is a whisper by design (7% accent), which is what lets the "30" sit
-   under the copy rather than beside it: it reads as the page's watermark, not
-   as a second heading competing with the one on top of it. Copy keeps its own
-   stacking context so the numeral can never sit over a word. */
-
-.frame {
+.wrap {
   position: relative;
-  overflow: hidden;
-  border: 1px solid rgba(150, 185, 249, 0.3);
-  border-radius: 16px;
-  padding: clamp(32px, 4.5vw, 56px);
+  overflow: clip;
 }
 
 .num {
   position: absolute;
-  right: clamp(-8px, 1vw, 24px);
-  bottom: -0.18em;
+  right: -0.06em;
+  top: -0.14em;
   z-index: 0;
+  font-size: clamp(150px, 22vw, 340px);
+  line-height: 0.8;
   pointer-events: none;
   user-select: none;
 }
@@ -28,57 +31,59 @@
 }
 
 .title {
-  font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: clamp(24px, 2.4vw, 36px);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  margin: 0;
-  color: #ededed;
+  max-width: 18ch;
 }
 
 .text {
-  font-size: 15px;
+  font-size: clamp(16px, 1.5vw, 19px);
   font-weight: 300;
-  color: rgba(237, 237, 237, 0.68);
+  color: rgba(237, 237, 237, 0.78);
   line-height: 1.6;
-  max-width: 66ch;
-  margin: 14px 0 0;
+  max-width: 58ch;
+  margin: clamp(18px, 2vw, 26px) 0 0;
+  text-wrap: pretty;
 }
 
 .points {
   list-style: none;
-  margin: 26px 0 0;
+  margin: clamp(30px, 3.4vw, 44px) 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: clamp(14px, 1.5vw, 18px);
 
   li {
     position: relative;
-    padding-left: 26px;
-    font-size: 15px;
+    padding-left: 24px;
+    font-size: clamp(15px, 1.25vw, 16px);
     font-weight: 300;
-    color: rgba(237, 237, 237, 0.72);
-    line-height: 1.6;
-    max-width: 66ch;
+    color: rgba(237, 237, 237, 0.7);
+    line-height: 1.55;
+    max-width: 62ch;
 
+    /* Same dot as the "included" list — across the three sections the accent
+       only ever appears as this one mark. */
     &::before {
       content: "";
       position: absolute;
       left: 0;
-      top: 0.62em;
-      width: 14px;
-      height: 1px;
-      background: rgba(150, 185, 249, 0.7);
+      top: 0.6em;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(150, 185, 249, 0.95);
     }
   }
 }
 
-/* Below the stack point the numeral would sit under the list rather than in the
-   margin beside it — it goes rather than fights for the space. */
-@media (max-width: 860px) {
+/* The numeral needs a column of its own to sit in; below this it would land on
+   the words instead of behind them. */
+@media (max-width: 900px) {
   .num {
     display: none;
+  }
+
+  .title {
+    max-width: none;
   }
 }

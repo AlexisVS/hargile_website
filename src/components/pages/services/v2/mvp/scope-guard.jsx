@@ -13,7 +13,13 @@
    section heading above and in the copy here, so screen readers are not made
    to hear it a third time as a bare digit.
 
-   No figure here that the studio cannot stand behind: 30 is the offer itself. */
+   No figure here that the studio cannot stand behind: 30 is the offer itself.
+
+   Unframed since 2026-08-05. Without a box to sit in, the numeral stops being
+   a decoration in a corner and becomes the ground the copy is written over —
+   which is the right relationship, since the whole section is about what that
+   number costs. It is clipped by the wrapper rather than allowed to widen the
+   page. */
 
 import {useTranslations} from "next-intl";
 import section from "@/components/pages/homepage/v2/v2-section.module.scss";
@@ -27,18 +33,16 @@ const ScopeGuard = () => {
 
     return (
         <section className={section.section}>
-            <div className={section.container}>
-                <div className={styles.frame} {...reveal(0)}>
-                    <span className={`${section.numXl} ${section.numGhost} ${styles.num}`} aria-hidden="true">
-                        <CountUp to={30}/>
-                    </span>
-                    <div className={styles.body}>
-                        <h2 className={styles.title}>{t("title")}</h2>
-                        <p className={styles.text}>{t("text")}</p>
-                        <ul className={styles.points}>
-                            {t.raw("points").map((point) => <li key={point}>{point}</li>)}
-                        </ul>
-                    </div>
+            <div className={`${section.container} ${styles.wrap}`}>
+                <span className={`${section.numXl} ${section.numGhost} ${styles.num}`} aria-hidden="true">
+                    <CountUp to={30}/>
+                </span>
+                <div className={styles.body}>
+                    <h2 className={`${section.heading} ${styles.title}`} {...reveal(0)}>{t("title")}</h2>
+                    <p className={styles.text} {...reveal(1)}>{t("text")}</p>
+                    <ul className={styles.points} {...reveal(2)}>
+                        {t.raw("points").map((point) => <li key={point}>{point}</li>)}
+                    </ul>
                 </div>
             </div>
         </section>

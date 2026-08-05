@@ -1,27 +1,48 @@
-/* Fixed price — the one framed block of the page: a hairline card, tinted
-   toward the accent, so the commitment reads as signed rather than said. */
+/* Fixed price — the page's one scale jump, and no frame at all.
+ *
+ * Heading left, statement right, on an uneven split so the text column starts
+ * past the middle: the eye crosses a wide empty gutter before it lands on the
+ * claim, which is what the frame used to do with a border and does better with
+ * nothing. Type is set well above body size because the sentence is the
+ * product — "the price is announced before the start and does not move" is the
+ * whole offer in one line. */
 
-.frame {
-  border: 1px solid rgba(150, 185, 249, 0.3);
-  border-radius: 16px;
-  padding: clamp(32px, 4.5vw, 56px);
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+  gap: clamp(32px, 5vw, 96px);
+  align-items: start;
 }
 
 .title {
-  font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: clamp(26px, 2.6vw, 40px);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  margin: 0;
-  color: #ededed;
+  /* Holds its own column, so it wraps early and stacks rather than running the
+     full width the way the other section headings do. */
+  max-width: 14ch;
 }
 
 .text {
-  font-size: clamp(15px, 1.15vw, 17px);
+  font-size: clamp(18px, 1.9vw, 25px);
   font-weight: 300;
-  color: rgba(237, 237, 237, 0.72);
-  line-height: 1.65;
-  max-width: 62ch;
-  margin: 18px 0 0;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+  color: rgba(237, 237, 237, 0.82);
+  max-width: 42ch;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+@media (max-width: 860px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 30px);
+  }
+
+  .title {
+    max-width: none;
+  }
+
+  .text {
+    font-size: clamp(17px, 4.4vw, 21px);
+    max-width: 46ch;
+  }
 }
