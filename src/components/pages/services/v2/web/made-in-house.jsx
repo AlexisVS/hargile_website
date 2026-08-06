@@ -44,7 +44,7 @@ const MadeInHouse = () => {
                     reveal={reveal}
                     aside={
                         <div className={styles.ownership} {...reveal(4)}>
-                            <h3 className={styles.ownTitle}>{t("ownership.title")}</h3>
+                            <h3 className={section.blockHeading}>{t("ownership.title")}</h3>
                             <p className={styles.ownText}>{t("ownership.text")}</p>
                         </div>
                     }

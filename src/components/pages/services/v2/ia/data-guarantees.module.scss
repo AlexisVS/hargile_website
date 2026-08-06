@@ -13,15 +13,10 @@
   margin-top: var(--block-gap, clamp(76px, 9vw, 150px));
 }
 
+/* Type comes from section.heading — this is a section title, at the size every
+   other section title on the six pages uses. */
 .title {
-  margin: 0;
   max-width: 20ch;
-  font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: clamp(24px, 2.4vw, 36px);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  color: #ededed;
 }
 
 /* ---------- The figure ---------- */
@@ -204,16 +199,6 @@
 .col {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: clamp(20px, 2vw, 26px);
-}
-
-.colTitle {
-  margin: 0;
-  font-family: var(--font-headings);
-  font-weight: 600;
-  font-size: clamp(19px, 1.6vw, 24px);
-  letter-spacing: -0.015em;
-  line-height: 1.25;
-  color: #ededed;
 }
 
 .colText {

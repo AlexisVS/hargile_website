@@ -54,7 +54,7 @@ const PriceMethod = () => {
                     {t.raw("points").map((point) => <li key={point}>{point}</li>)}
                 </ul>
 
-                <h3 className={styles.craftTitle} {...reveal(3)}>{t("cols.title")}</h3>
+                <h3 className={`${section.blockHeading} ${styles.craftTitle}`} {...reveal(3)}>{t("cols.title")}</h3>
                 {/* A list, and marked like one: three trades read as three
                     items, the same shape as the commitments above. */}
                 <ul className={styles.craftList} {...reveal(4)}>

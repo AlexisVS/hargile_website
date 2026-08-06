@@ -42,6 +42,7 @@
    and those are the two elements the three paragraphs never mention. */
 
 import {getTranslations} from "next-intl/server";
+import section from "@/components/pages/homepage/v2/v2-section.module.scss";
 import styles from "./data-guarantees.module.scss";
 
 const ROWS = ["flow", "sensitive", "reversible"];
@@ -66,7 +67,13 @@ const DataGuarantees = async ({locale}) => {
 
     return (
         <div className={styles.block}>
-            <h3 className={styles.title}>{t("title")}</h3>
+            {/* h2 at section scale: "Où vont vos données" opens a topic of its
+                own, the peer of the use cases above it — not a sub-point of
+                them. It read as a sub-point because this page packs its whole
+                body into one <section>, so everything inside defaulted a level
+                down. The other five pages give a block this weight its own h2;
+                this one now does too. */}
+            <h2 className={`${section.heading} ${styles.title}`}>{t("title")}</h2>
 
             {/* aria-hidden: the three paragraphs below carry the whole argument
                 in prose, so announcing the figure would read it out twice. The
@@ -247,7 +254,7 @@ const DataGuarantees = async ({locale}) => {
             <div className={styles.cols}>
                 {ROWS.map((key) => (
                     <div key={key} className={styles.col}>
-                        <h4 className={styles.colTitle}>{t(`rows.${key}.title`)}</h4>
+                        <h4 className={section.blockHeading}>{t(`rows.${key}.title`)}</h4>
                         <p className={styles.colText}>{t(`rows.${key}.text`)}</p>
                     </div>
                 ))}

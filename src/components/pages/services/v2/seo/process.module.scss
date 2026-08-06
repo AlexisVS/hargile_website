@@ -61,12 +61,8 @@
 }
 
 .stepTitle {
-  font-family: var(--font-headings);
-  font-weight: 600;
-  font-size: clamp(19px, 1.7vw, 24px);
-  letter-spacing: -0.015em;
+  /* Type comes from section.blockHeading; only the rhythm is local. */
   margin: 10px 0 8px;
-  color: #ededed;
 }
 
 .stepText {

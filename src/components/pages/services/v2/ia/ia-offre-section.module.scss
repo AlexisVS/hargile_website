@@ -117,15 +117,9 @@
 /* One size for all four, and a big one: the titles are what the cell is for.
    18ch lets the long ones take two lines and hold the top of the cell. */
 .cardTitle {
+  /* Type comes from section.blockHeading; the rest is the card. */
   position: relative;
-  font-family: var(--font-headings);
-  font-weight: 600;
-  font-size: clamp(22px, 2.3vw, 32px);
-  letter-spacing: -0.018em;
-  line-height: 1.15;
   max-width: 18ch;
-  margin: 0;
-  color: #ededed;
   transition: color 0.25s ease;
 }
 
@@ -185,33 +179,29 @@
 /* Counter-argument. Its own block below the grid, not a fifth cell in it: it
    answers the four cases rather than continuing them. No rule of its own —
    the space above it and the title's scale are enough to set it apart, and
-   the figure right above is already carrying every line on this screen. */
+   the figure right above is already carrying every line on this screen.
+
+   Built exactly like MVP's fixed price, because it is the same block: heading
+   left on an uneven split, statement past the middle, type from section.heading
+   and section.statement. It used to be an even auto-fit grid at two thirds the
+   type size, which is why the two pages read as different sites at the same
+   moment in the argument. */
 .counter {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-  gap: clamp(24px, 3vw, 56px);
-  align-items: center;
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+  gap: clamp(32px, 5vw, 96px);
+  align-items: start;
   margin-top: var(--block-gap);
 }
 
+/* Type comes from section.heading. */
 .counterTitle {
-  margin: 0;
-  max-width: 18ch;
-  font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: clamp(24px, 2.4vw, 36px);
-  letter-spacing: -0.02em;
-  line-height: 1.12;
-  color: #ededed;
+  max-width: 14ch;
 }
 
+/* Type comes from section.statement. */
 .counterText {
-  margin: 0;
-  max-width: 56ch;
-  font-size: clamp(15px, 1.15vw, 17px);
-  font-weight: 300;
-  line-height: 1.7;
-  color: rgba(237, 237, 237, 0.72);
+  max-width: 46ch;
 }
 
 /* ---------- FAQ ---------- */
@@ -222,123 +212,20 @@
   margin-top: var(--block-gap);
 }
 
-/* ---------- Autres offres ---------- */
-
-.others {
-  margin-top: var(--block-gap);
-}
-
-.othersHead {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-
-.kicker {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(237, 237, 237, 0.45);
-}
-
-.link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  color: rgba(237, 237, 237, 0.62);
-  text-decoration: none;
-  transition: color 0.25s ease;
-
-  &:hover,
-  &:focus-visible {
-    color: #96b9f9;
-  }
-}
-
-.othersList {
-  display: flex;
-  flex-direction: column;
-}
-
-/* The rule opens each row rather than closing it, so the block ends on the
-   last offer instead of on a line under it. */
-.othersRow {
-  display: grid;
-  grid-template-columns: minmax(0, clamp(260px, 24vw, 340px)) minmax(0, 1fr) 16px;
-  align-items: baseline;
-  gap: 8px 24px;
-  padding: 20px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  text-decoration: none;
-  transition: border-color 0.25s ease;
-
-  &:hover,
-  &:focus-visible {
-    border-top-color: rgba(150, 185, 249, 0.55);
-
-    .othersTitle {
-      color: #96b9f9;
-    }
-  }
-}
-
-.othersTitle {
-  font-family: var(--font-headings);
-  font-weight: 600;
-  font-size: clamp(19px, 1.8vw, 24px);
-  letter-spacing: -0.015em;
-  color: #ededed;
-  transition: color 0.25s ease;
-}
-
-.othersNote {
-  font-size: 14px;
-  font-weight: 300;
-  line-height: 1.5;
-  color: rgba(237, 237, 237, 0.55);
-}
-
-/* The one piece of motion the links carry, same 2–4px nudge as everywhere. */
-.chevron {
-  display: inline-flex;
-  flex: 0 0 auto;
-  color: currentColor;
-  transition: transform 0.2s ease;
-
-  svg {
-    width: 12px;
-    height: 12px;
-  }
-}
-
-.link:hover .chevron {
-  transform: translateX(2px);
-}
-
-.othersRow .chevron {
-  width: 16px;
-  color: rgba(237, 237, 237, 0.45);
-  transition: transform 0.25s ease, color 0.25s ease;
-
-  svg {
-    width: 16px;
-    height: 16px;
-  }
-}
-
-.othersRow:hover .chevron,
-.othersRow:focus-visible .chevron {
-  transform: translateX(4px);
-  color: #96b9f9;
-}
-
 /* ---------- Responsive ---------- */
+
+/* Same breakpoint the MVP block stacks at, for the same reason: past here the
+   uneven split leaves the statement column too narrow to read. */
+@media (max-width: 860px) {
+  .counter {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(20px, 4vw, 30px);
+  }
+
+  .counterTitle {
+    max-width: none;
+  }
+}
 
 /* Stacked, and still glued: one column, each cell keeping the bottom rule that
    separates it from the next. */
@@ -349,27 +236,6 @@
 
   .card {
     grid-column: span 1 !important;
-  }
-}
-
-/* Stacked: the promise drops under the name and the chevron holds the right
-   edge across both lines, so the row still reads as one target. */
-@media (max-width: 700px) {
-  .othersRow {
-    grid-template-columns: minmax(0, 1fr) 16px;
-    align-items: start;
-    gap: 6px 16px;
-  }
-
-  .othersTitle,
-  .othersNote {
-    grid-column: 1;
-  }
-
-  .othersRow .chevron {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    align-self: center;
   }
 }
 

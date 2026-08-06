@@ -24,19 +24,20 @@ import styles from "./mini-faq.module.scss";
 
 /**
  * namespace: the page's faq subtree, e.g. "pages.services.detail.mvp.faq"
- * bare: render the block alone, for a page that already owns its section —
- *       the headings then sit one level down, under that section's h2.
+ * bare: drop the <section> wrapper, for a page that already owns its section.
+ *       Layout only — the heading stays an h2 either way. It used to drop to
+ *       h3 under `bare`, which made /services/ia the one page where the FAQ
+ *       was a sub-point of the block above it rather than a topic of its own.
  */
 const MiniFaq = ({namespace, bare = false}) => {
     const t = useTranslations(namespace);
     const shared = useTranslations("pages.services.shared.miniFaq");
     const reveal = useReveal();
-    const Title = bare ? "h3" : "h2";
 
     const block = (
         <div className={styles.faq}>
             <div {...reveal(0)}>
-                <Title className={styles.title}>{shared("title")}</Title>
+                <h2 className={`${section.heading} ${styles.title}`}>{shared("title")}</h2>
                 <div className={styles.allWrap}>
                     <CtaLink href="/faq" variant="ghost" size="sm">
                         {shared("allLink")}

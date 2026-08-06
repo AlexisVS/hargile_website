@@ -51,6 +51,47 @@
   margin: 20px 0 0;
 }
 
+/* One level under .heading: the title of a block *inside* a section — a bento
+   card, a grid cell, a column, a process step. Every page used to size these
+   itself, which is why the same kind of content came out at seven different
+   sizes across the six M4 pages (18→24 up to 22→32, weight flipping 600/700
+   with it). One rule now, so a card title is a card title everywhere.
+
+   Anything that opens a topic of its own belongs in .heading instead. There is
+   no third, quieter heading size on purpose: the sibling-offers rail had one
+   for a while and a header set below the weight of its own rows reads as a
+   mistake, whatever the strip does. */
+.blockHeading {
+  font-family: var(--font-headings);
+  font-weight: 600;
+  font-size: clamp(20px, 2vw, 28px);
+  letter-spacing: -0.018em;
+  line-height: 1.2;
+  margin: 0;
+  color: #ededed;
+}
+
+/* The statement across from a section heading in a two-column block: MVP's
+   fixed price, the AI page's counter-argument. Set well above body size on
+   purpose — in a block shaped like this the sentence *is* the product, not a
+   description of it. Both pages used to size it themselves, 15→17px on one and
+   18→25px on the other, for what is visibly the same block. */
+.statement {
+  font-size: clamp(18px, 1.9vw, 25px);
+  font-weight: 300;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+  color: rgba(237, 237, 237, 0.82);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+@media (max-width: 860px) {
+  .statement {
+    font-size: clamp(17px, 4.4vw, 21px);
+  }
+}
+
 /* Display numerals — shared by the M5 service pages (offer rows, SEO steps,
    MVP weeks). At this scale a numeral is structure: it holds a column or grounds
    a row, it never floats over copy as decoration. Always aria-hidden — the

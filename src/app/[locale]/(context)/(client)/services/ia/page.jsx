@@ -1,5 +1,6 @@
 import ServiceIaClient from "@/app/[locale]/(context)/(client)/services/ia/ServiceIaClient";
 import IaOffreSection from "@/components/pages/services/v2/ia/ia-offre-section";
+import SiblingOffers from "@/components/pages/services/v2/shared/sibling-offers";
 import CtaBand from "@/components/pages/services/v2/shared/cta-band";
 import {generatePageMetadata} from "@/seo/generate-page-metadata";
 import JsonLdForPage from "@/components/seo/JsonLdForPage";
@@ -19,8 +20,10 @@ export default async function ServiceIaPage({params}) {
             <JsonLdForPage params={params} pagePath="services.ia"/>
             <ServiceIaClient/>
             <IaOffreSection locale={locale}/>
-            {/* Same closing band as the four other service pages, mounted at
-                page level for the same reason they do it. */}
+            {/* Same rail and same closing band as the three other service
+                pages, in the same order, mounted at page level the way they
+                mount them. */}
+            <SiblingOffers current="ia"/>
             <CtaBand/>
         </>
     );

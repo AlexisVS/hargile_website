@@ -25,15 +25,9 @@
 }
 
 .cellTitle {
-  font-family: var(--font-headings);
-  font-weight: 600;
-  font-size: clamp(20px, 2vw, 28px);
-  letter-spacing: -0.018em;
-  line-height: 1.2;
-  /* 20ch lets the long ones take two lines and hold the top of the cell. */
+  /* Type comes from section.blockHeading.
+     20ch lets the long ones take two lines and hold the top of the cell. */
   max-width: 20ch;
-  margin: 0;
-  color: #ededed;
 }
 
 /* The accent the cells carry at rest — on the noun that names what is handed

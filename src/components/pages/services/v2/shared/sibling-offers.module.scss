@@ -6,22 +6,16 @@
    Same restraint as offers-index on the hub page, one size down — this is a
    footer to the page, not the page. */
 
+/* Heading left, the way out across from it — the same row CtaBand builds.
+   Baseline rather than centre: the small link then sits on the heading’s last
+   line instead of floating half a heading up. */
 .head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 24px;
   flex-wrap: wrap;
-}
-
-.title {
-  font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: clamp(24px, 2.2vw, 32px);
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  margin: 0;
-  color: #ededed;
+  margin-bottom: clamp(28px, 3vw, 44px);
 }
 
 .all {
@@ -78,12 +72,9 @@
   }
 }
 
+/* Type comes from section.blockHeading — an offer name is a block title, the
+   same as a bento card’s or a grid cell’s. */
 .name {
-  font-family: var(--font-headings);
-  font-weight: 600;
-  font-size: clamp(19px, 1.8vw, 24px);
-  letter-spacing: -0.015em;
-  color: #ededed;
   transition: color 0.25s ease;
 }
 

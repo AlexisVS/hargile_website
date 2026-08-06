@@ -25,7 +25,7 @@ const FixedPrice = () => {
                 <h2 className={`${section.heading} ${styles.title}`} {...reveal(0)}>
                     {t("title")}
                 </h2>
-                <p className={styles.text} {...reveal(1)}>{t("text")}</p>
+                <p className={`${section.statement} ${styles.text}`} {...reveal(1)}>{t("text")}</p>
             </div>
         </section>
     );

@@ -44,7 +44,7 @@ const SiblingOffers = ({current}) => {
         <section className={section.section}>
             <div className={section.container}>
                 <div className={styles.head} {...reveal(0)}>
-                    <h2 className={styles.title}>{t("title")}</h2>
+                    <h2 className={section.heading}>{t("title")}</h2>
                     <Link href="/services" className={styles.all}>
                         {t("all")}
                         <Chevron/>
@@ -57,7 +57,7 @@ const SiblingOffers = ({current}) => {
                             {/* One anchor per row: the whole row is the hit area
                                 and the accessible name stays the offer title. */}
                             <Link href={offer.href} className={styles.row}>
-                                <span className={styles.name}>
+                                <span className={`${section.blockHeading} ${styles.name}`}>
                                     {offers(`offers.${offer.key}.title`)}
                                 </span>
                                 <span className={styles.promise}>

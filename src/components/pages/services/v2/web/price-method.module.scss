@@ -64,13 +64,8 @@
    The space above the heading is the largest step in the section — it is what
    tells the reader a new claim starts here, now that no rule does. */
 .craftTitle {
-  font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: clamp(18px, 1.7vw, 24px);
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+  /* Type comes from section.blockHeading; only the rhythm is local. */
   margin: clamp(52px, 6vw, 80px) 0 0;
-  color: #ededed;
 }
 
 .craftList {

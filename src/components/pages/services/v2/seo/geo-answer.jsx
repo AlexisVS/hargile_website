@@ -230,7 +230,7 @@ const GeoAnswer = () => {
                                 {/* Le même repère que dans la figure — c'est ce
                                     qui fait des deux un seul objet. */}
                                 <span className={styles.colMark} aria-hidden="true">{mark}</span>
-                                <h3 className={styles.colTitle}>{t(`cols.${key}.title`)}</h3>
+                                <h3 className={section.blockHeading}>{t(`cols.${key}.title`)}</h3>
                                 <p className={styles.colText}>{t(`cols.${key}.text`)}</p>
                             </div>
                         </div>

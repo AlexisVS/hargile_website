@@ -48,7 +48,7 @@ const Deliverables = () => {
                             {/* One heading, two spans: the accented opener and
                                 the qualifier are the same sentence, so the text
                                 a crawler reads is unchanged. */}
-                            <h3 className={styles.cellTitle}>
+                            <h3 className={`${section.blockHeading} ${styles.cellTitle}`}>
                                 <span className={styles.titleLead}>{t(`items.${key}.titleLead`)}</span>{" "}
                                 {t(`items.${key}.titleRest`)}
                             </h3>

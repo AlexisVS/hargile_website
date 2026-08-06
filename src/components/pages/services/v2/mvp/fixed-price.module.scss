@@ -20,15 +20,9 @@
   max-width: 14ch;
 }
 
+/* Type comes from section.statement, shared with the AI page's counter-block. */
 .text {
-  font-size: clamp(18px, 1.9vw, 25px);
-  font-weight: 300;
-  line-height: 1.5;
-  letter-spacing: -0.005em;
-  color: rgba(237, 237, 237, 0.82);
   max-width: 42ch;
-  margin: 0;
-  text-wrap: pretty;
 }
 
 @media (max-width: 860px) {
@@ -42,7 +36,6 @@
   }
 
   .text {
-    font-size: clamp(17px, 4.4vw, 21px);
     max-width: 46ch;
   }
 }

@@ -12,14 +12,11 @@
 
 /* A closing sub-block, so its title sits a step below the section heading
    scale. */
+/* Type comes from section.heading. It used to sit at 24→32px, between the
+   section headings above and below it and matching neither — the FAQ is a
+   section like any other and now reads at that scale. */
 .title {
-  font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: clamp(24px, 2.2vw, 32px);
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  margin: 0;
-  color: #ededed;
+  max-width: 16ch;
 }
 
 .allWrap {

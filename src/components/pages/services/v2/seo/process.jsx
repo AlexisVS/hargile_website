@@ -72,7 +72,7 @@ const Step = ({step, i, fill, reveal, t}) => {
                 <motion.div className={styles.num} style={{opacity: numOpacity}} aria-hidden="true">
                     {step.num}
                 </motion.div>
-                <h3 className={styles.stepTitle}>{t(`steps.${step.key}.title`)}</h3>
+                <h3 className={`${section.blockHeading} ${styles.stepTitle}`}>{t(`steps.${step.key}.title`)}</h3>
                 <p className={styles.stepText}>{t(`steps.${step.key}.text`)}</p>
             </div>
         </div>

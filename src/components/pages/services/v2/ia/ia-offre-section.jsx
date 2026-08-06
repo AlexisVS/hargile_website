@@ -1,9 +1,10 @@
 /* The whole body of /services/ia below the hero, in one Server Component:
    the four use cases as an asymmetric bento, the anti-hype counter-argument,
-   the mini-FAQ and the sibling offers. The closing CTA is the shared CtaBand,
-   mounted from page.jsx like every other service page mounts it: this file
-   used to carry its own copy of that block, and the copy is what made the
-   page read differently at the fold.
+   and the mini-FAQ. The sibling-offers rail and the closing CTA are the shared
+   SiblingOffers and CtaBand, mounted from page.jsx exactly as the other three
+   service pages mount them: this file used to carry its own copy of both, and
+   those copies are what made the page read differently from its siblings at
+   the same points in the argument.
 
    Server Component on purpose — every string ships in the initial HTML and
    stays readable with JS off, which is the GEO constraint the five sections
@@ -18,7 +19,6 @@
    label can be a styled span rather than part of the sentence. */
 
 import {getTranslations} from "next-intl/server";
-import {Link} from "@/i18n/navigation";
 import section from "@/components/pages/homepage/v2/v2-section.module.scss";
 import MiniFaq from "@/components/pages/services/v2/shared/mini-faq";
 import DataGuarantees from "./data-guarantees";
@@ -36,32 +36,8 @@ const CASES = [
     {key: "data", span: 4},
 ];
 
-/* Same hrefs and same sales order as offers-index.jsx / sibling-offers.jsx —
-   /services/ia itself left out, since this is the page. */
-const OTHER_OFFERS = [
-    {key: "web", href: "/services/applications-web"},
-    {key: "seo", href: "/services/seo"},
-    {key: "mvp", href: "/services/mvp-30-jours"},
-];
-
-const Chevron = () => (
-    <span className={styles.chevron} aria-hidden="true">
-        <svg viewBox="0 0 16 16" fill="none">
-            <path
-                d="M6 3.5 10.5 8 6 12.5"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            />
-        </svg>
-    </span>
-);
-
 const IaOffreSection = async ({locale}) => {
     const t = await getTranslations({locale, namespace: "pages.services.detail.ia"});
-    const shared = await getTranslations({locale, namespace: "pages.services.shared"});
-    const offers = await getTranslations({locale, namespace: "pages.services.index.offers"});
 
     return (
         <section className={section.section}>
@@ -76,7 +52,7 @@ const IaOffreSection = async ({locale}) => {
                             {/* Hover spotlight, positioned by --mx / --my. */}
                             <span className={styles.spot} aria-hidden="true"/>
 
-                            <h3 className={styles.cardTitle}>
+                            <h3 className={`${section.blockHeading} ${styles.cardTitle}`}>
                                 {t(`useCases.items.${useCase.key}.title`)}
                             </h3>
 
@@ -103,8 +79,8 @@ const IaOffreSection = async ({locale}) => {
                 {/* Outside the grid on purpose: this answers the four cases
                     rather than being a fifth one. */}
                 <article className={styles.counter}>
-                    <h3 className={styles.counterTitle}>{t("honesty.title")}</h3>
-                    <p className={styles.counterText}>{t("honesty.text")}</p>
+                    <h2 className={`${section.heading} ${styles.counterTitle}`}>{t("honesty.title")}</h2>
+                    <p className={`${section.statement} ${styles.counterText}`}>{t("honesty.text")}</p>
                 </article>
 
                 {/* Where the data goes. Ahead of the FAQ because on this page
@@ -119,27 +95,6 @@ const IaOffreSection = async ({locale}) => {
                     everything and shut it after hydration. */}
                 <div className={styles.faqBlock}>
                     <MiniFaq namespace="pages.services.detail.ia.faq" bare/>
-                </div>
-
-                {/* The three offers you are not reading — one hairline each, the
-                    row itself is the target. */}
-                <div className={styles.others}>
-                    <div className={styles.othersHead}>
-                        <span className={styles.kicker}>{shared("siblings.title")}</span>
-                        <Link className={styles.link} href="/services">
-                            {shared("siblings.all")}
-                            <Chevron/>
-                        </Link>
-                    </div>
-                    <div className={styles.othersList}>
-                        {OTHER_OFFERS.map((offer) => (
-                            <Link key={offer.key} className={styles.othersRow} href={offer.href}>
-                                <span className={styles.othersTitle}>{offers(`${offer.key}.title`)}</span>
-                                <span className={styles.othersNote}>{offers(`${offer.key}.promise`)}</span>
-                                <Chevron/>
-                            </Link>
-                        ))}
-                    </div>
                 </div>
 
             </div>
