@@ -4,7 +4,7 @@
    same rule as mvp/fixed-price.jsx: the citable claim is the mechanism, not a
    range. If ranges are published later they belong in the messages, not here.
 
-   05/08 (Mihai): nothing in this section is boxed. Heading, paragraph, the
+   06/08 (Mihai): nothing in this section is boxed. Heading, paragraph, the
    three commitments across one row, the three trades, then the note — one
    column of statements, held apart by space alone. The deliverables grid right
    above is already a hard-edged figure; a frame here made the page two boxes in
