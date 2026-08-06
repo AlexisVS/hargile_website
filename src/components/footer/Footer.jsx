@@ -1,6 +1,5 @@
 "use client"
 
-import React, {useEffect, useState} from 'react';
 import {FooterLinkStyled} from "@/components/footer/footer-link.styled";
 import {FooterContainerStyled} from "@/components/footer/footer-container.styled";
 import {FooterContentStyled} from "@/components/footer/footer-content.styled";
@@ -33,17 +32,19 @@ const Footer = () => {
     const tHero = useTranslations('pages.homepage.sections.hero.v2');
     const tOffers = useTranslations('pages.services.index.offers');
 
-    // Calling new Date() during render of a client component makes the output
-    // non-deterministic (server prerender vs. hydration can straddle a year
-    // boundary), which Next.js 16 flags. So seed with a stable value and correct
-    // to the live year after mount. The seed is the *build* year, inlined by
-    // next.config.mjs: the previous hardcoded 2025 meant the raw HTML — the only
-    // thing AI crawlers ever read, since none of them run JS — advertised a
-    // stale year indefinitely.
-    const [year, setYear] = useState(() => Number(process.env.NEXT_PUBLIC_BUILD_YEAR) || 2025);
-    useEffect(() => {
-        setYear(new Date().getFullYear());
-    }, []);
+    // The *build* year, inlined by next.config.mjs. Calling new Date() during
+    // render of a client component would be non-deterministic (server prerender
+    // and hydration can straddle a year boundary), which Next.js 16 flags — and
+    // the previous hardcoded 2025 meant the raw HTML, the only thing AI crawlers
+    // ever read since none of them run JS, advertised a stale year indefinitely.
+    //
+    // An effect used to correct this to the live year after mount. It was
+    // dropped: it fired a cascading render on every visit to fix a value that is
+    // already correct in the HTML, and it only ever fixed it for JS-running
+    // humans — crawlers kept reading the build year regardless. If a deploy ever
+    // sits unrebuilt across New Year the footer lags, which is what `postbuild`
+    // refreshing this env var on every build is there to prevent.
+    const year = Number(process.env.NEXT_PUBLIC_BUILD_YEAR) || 2025;
 
     const iconSize = '22px'
 
