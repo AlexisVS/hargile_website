@@ -1086,15 +1086,12 @@
             "cols": {
               "title": "Conçu, codé, maintenu — en interne.",
               "design": {
-                "title": "Conçu",
                 "text": "Le design part de votre métier, pas d'un template. Maquettes et parcours sont dessinés en interne, avec vous."
               },
               "build": {
-                "title": "Codé",
                 "text": "Développé avec des technologies web modernes — comme ce site. Pas d'assemblage de plugins : du code que nous connaissons ligne par ligne."
               },
               "maintain": {
-                "title": "Maintenu",
                 "text": "Après la mise en ligne, les fondations continuent d'être entretenues. Vous restez par choix, jamais par contrainte."
               }
             }

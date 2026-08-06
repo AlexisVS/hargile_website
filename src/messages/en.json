@@ -1086,15 +1086,12 @@
             "cols": {
               "title": "Designed, built, maintained — in-house.",
               "design": {
-                "title": "Designed",
                 "text": "The design starts from your business, not from a template. Mockups and user flows are drawn in-house, with you."
               },
               "build": {
-                "title": "Built",
                 "text": "Developed with modern web technologies — like this site. No plugin assembly: code we know line by line."
               },
               "maintain": {
-                "title": "Maintained",
                 "text": "After launch, the foundations keep being cared for. You stay by choice, never out of necessity."
               }
             }

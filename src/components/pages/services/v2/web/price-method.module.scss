@@ -1,87 +1,40 @@
-/* Price method — an uneven split rather than a panel (05/08). Same geometry as
-   mvp/fixed-price: the title holds the left column on its own, the argument
-   runs down the right. Two drawn rules do the work the frame's border used to
-   do, splitting mechanism from commitments and commitments from craft.
+/* Price method — nothing here is boxed (05/08). One column of statements,
+   separated by space rather than by borders: the deliverables grid right above
+   is already a hard-edged figure, and answering it with a frame made the page
+   two boxes in a row.
 
-   Three areas, and the note is placed rather than ordered: it is last in the
-   DOM (see the component) and lands under the title on wide screens, after the
-   argument on narrow ones. Row gap is the note's offset from the title; column
-   gap is the gutter between the two columns. */
+   Two three-up lists sit near each other — the commitments and the trades — and
+   they are deliberately built the same way: same grid, same drawn dash, same
+   measure. What separates them is rank, not shape. The commitments are the
+   checkable claims about the price, so they keep the brighter text and the
+   dash at full strength; the trades run one step down on both. Same family,
+   read in the right order. */
 
-.split {
-  display: grid;
-  grid-template-columns: 0.78fr 1.22fr;
-  grid-template-areas:
-          "title  method"
-          "note   method";
-  gap: clamp(24px, 3vw, 40px) clamp(32px, 5vw, 96px);
-  align-items: start;
-}
-
-/* The identity ramp — same recipe as shared/cta-band and the poster hero. It is
-   this section's one flourish, and it is spent on the question the whole page
-   circles. width must shrink-wrap so the gradient maps onto glyphs, not an
-   empty box; .section already clears the inherited text-shadow, which would
-   otherwise paint a shadow of the box behind transparent glyphs. */
-.title {
-  grid-area: title;
-  font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: clamp(28px, 3vw, 44px);
-  letter-spacing: -0.02em;
-  line-height: 1.08;
-  margin: 0;
-  width: fit-content;
-  max-width: 14ch;
-  text-wrap: balance;
-  background: linear-gradient(135deg, #ffffff 30%, #dce7fd 68%, #96b9f9 105%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  padding-bottom: 0.06em;
-}
-
-.method {
-  grid-area: method;
-}
-
-/* The lead promoted: with no frame around it this paragraph is what the reader
-   lands on, so it sets at statement scale and one step brighter than body copy
-   rather than at the 15px the frame used to justify. */
-.statement {
-  font-size: clamp(18px, 1.9vw, 25px);
+.text {
+  font-size: 16px;
   font-weight: 300;
-  color: rgba(237, 237, 237, 0.82);
-  line-height: 1.55;
-  letter-spacing: -0.01em;
-  margin: 0;
+  color: rgba(237, 237, 237, 0.68);
+  line-height: 1.6;
+  max-width: 72ch;
+  margin: 20px 0 0;
 }
 
-.rule {
-  display: block;
-  width: 100%;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.1);
-  margin-top: clamp(28px, 3.2vw, 38px);
-}
-
-.points {
+.points,
+.craftList {
   list-style: none;
-  margin: clamp(28px, 3.2vw, 38px) 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 2.5vw, 40px);
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
 
   li {
     position: relative;
     padding-left: 26px;
     font-size: 15px;
     font-weight: 300;
-    color: rgba(237, 237, 237, 0.72);
     line-height: 1.6;
-    max-width: 72ch;
 
+    /* The site's list marker: a drawn 1px rule, never a glyph. */
     &::before {
       content: "";
       position: absolute;
@@ -89,97 +42,64 @@
       top: 0.62em;
       width: 14px;
       height: 1px;
+    }
+  }
+}
+
+/* Three across: parallel conditions on one commitment, not steps. */
+.points {
+  margin: clamp(32px, 3.6vw, 44px) 0 0;
+
+  li {
+    color: rgba(237, 237, 237, 0.72);
+
+    &::before {
       background: rgba(150, 185, 249, 0.7);
     }
   }
 }
 
-/* Dimmed one step: it points at another page's offer. */
+/* Conçu / codé / maintenu — arrivés de made-in-house.jsx le 05/08. The heading
+   names the three trades; the three items under it do not name them again.
+   The space above the heading is the largest step in the section — it is what
+   tells the reader a new claim starts here, now that no rule does. */
+.craftTitle {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: clamp(18px, 1.7vw, 24px);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: clamp(52px, 6vw, 80px) 0 0;
+  color: #ededed;
+}
+
+.craftList {
+  margin: clamp(20px, 2.2vw, 28px) 0 0;
+
+  li {
+    color: rgba(237, 237, 237, 0.62);
+
+    &::before {
+      background: rgba(150, 185, 249, 0.45);
+    }
+  }
+}
+
+/* Dimmed one step: it points at another page's offer, and it closes the
+   section — "la même méthode" only means something after the method. */
 .note {
-  grid-area: note;
   font-size: 14px;
   font-weight: 300;
   color: rgba(237, 237, 237, 0.5);
   line-height: 1.6;
-  max-width: 34ch;
-  margin: 0;
+  max-width: 68ch;
+  margin: clamp(44px, 5vw, 64px) 0 0;
 }
 
-/* Conçu / codé / maintenu — arrivés de made-in-house.jsx le 05/08, entrés dans
-   cette section le même jour. A label rather than a heading now: at 12px it
-   names the three trades and hands the weight back to the crafts themselves,
-   which also keeps it from reading as a second promise about the price. */
-.colsTitle {
-  font-family: var(--font-headings);
-  font-weight: 600;
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  line-height: 1.4;
-  text-transform: uppercase;
-  color: rgba(150, 185, 249, 0.9);
-  margin: clamp(28px, 3.2vw, 38px) 0 0;
-}
-
-/* Rows, not columns: three narrow columns inside the right half would set the
-   craft copy at half the measure of everything above it. The trade name holds
-   its own column so the three line up on one left edge. */
-.cols {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-  margin-top: 26px;
-}
-
-.col {
-  display: grid;
-  grid-template-columns: clamp(90px, 10vw, 130px) minmax(0, 1fr);
-  gap: clamp(16px, 2vw, 32px);
-  align-items: baseline;
-}
-
-.colTitle {
-  font-family: var(--font-headings);
-  font-weight: 600;
-  font-size: 18px;
-  letter-spacing: -0.015em;
-  line-height: 1.3;
-  margin: 0;
-  color: #ededed;
-}
-
-.colText {
-  font-size: 15px;
-  font-weight: 300;
-  color: rgba(237, 237, 237, 0.62);
-  line-height: 1.6;
-  max-width: 62ch;
-  margin: 0;
-}
-
-@media (max-width: 860px) {
-  .split {
+@media (max-width: 820px) {
+  .points,
+  .craftList {
     grid-template-columns: minmax(0, 1fr);
-    /* The note goes last once the columns stack — which is also its DOM order,
-       so nothing is reordered here, the areas simply stop moving it. */
-    grid-template-areas:
-            "title"
-            "method"
-            "note";
-    gap: clamp(32px, 5vw, 44px);
-  }
-
-  .title {
-    max-width: 20ch;
-  }
-
-  .note {
-    max-width: 62ch;
-  }
-}
-
-@media (max-width: 700px) {
-  .col {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 8px;
+    gap: 14px;
   }
 }
