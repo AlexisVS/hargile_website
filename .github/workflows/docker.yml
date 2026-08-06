@@ -12,6 +12,20 @@ permissions:
   contents: read
   packages: write
 
+# `git push --follow-tags` sends refs/heads/main and refs/tags/vX.Y.Z in one
+# push, so two runs start on the same commit in the same second and both ask
+# GitHub to resolve the same five actions. One of them comes back 503 and dies
+# at "Set up job", before checkout — which is what v0.25.0 and v0.26.0 both did
+# while the branch run beside them passed in 90 seconds.
+#
+# Keying the group on the SHA puts the two in one queue instead of a race.
+# cancel-in-progress stays false on purpose: the second run is not a newer
+# version of the first, it is the tagged build of the same commit, and it is
+# the one that would be cancelled. It waits, then builds off a warm cache.
+concurrency:
+  group: docker-${{ github.sha }}
+  cancel-in-progress: false
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository_owner }}/hargile-website
