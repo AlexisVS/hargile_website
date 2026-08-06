@@ -10,19 +10,7 @@
 
 @use "./sass/sections/_earth";
 
-@use 'tailwindcss';
 @use "./sass/fluid-typography/_typography-helpers";
-
-
-@layer utilities {
-  .w-192 {
-    width: 48rem;
-  }
-
-  .h-192 {
-    height: 48rem;
-  }
-}
 
 // Apply Sass variables to CSS variables
 :root {

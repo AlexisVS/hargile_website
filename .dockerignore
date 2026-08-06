@@ -10,3 +10,16 @@ npm-debug.log*
 Dockerfile
 .dockerignore
 README.md
+
+# Nothing below is read by `next build` (or by next-sitemap, which only needs
+# next-sitemap.config.js at the root). They were being shipped into the build
+# context by `COPY . .` for no reason — a few MB per build.
+docs
+examplesPages
+raw-screenshots
+banner
+scripts
+.claude
+.github
+.playwright-mcp
+.cache
