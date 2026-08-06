@@ -1,9 +1,14 @@
-/* GEO — three columns under drawn hairlines, closed by the honest-boundary
-   strip. Same left accent hairline as web/made-in-house's ownership block: on
-   both pages that shape means "and here is the limit of what we claim". */
+/* GEO — la figure de la citation, puis les trois conditions et la clôture.
 
-/* The identity ramp, same recipe as shared/cta-band — shrink-wrapped so the
-   gradient maps onto glyphs rather than an empty box. */
+   Un seul point de bascule pour toute la section : à 1100px la figure large
+   passe la main à la figure en colonne et les trois conditions s'empilent. Les
+   deux basculent ensemble, comme sur ia/data-guarantees — une bande large
+   au-dessus de rangs empilés, ou une figure étroite au-dessus de trois
+   colonnes, se lisent l'une comme l'autre comme une mise en page qui n'a pas
+   fini de se redimensionner. */
+
+/* Le dégradé identitaire, même recette que shared/cta-band — ajusté au contenu
+   pour que le dégradé tombe sur les glyphes et non sur une boîte vide. */
 .title {
   width: fit-content;
   max-width: 100%;
@@ -18,11 +23,167 @@
   max-width: 68ch;
 }
 
+/* ---------- La figure ---------- */
+
+.schema {
+  margin-top: clamp(44px, 5.5vw, 72px);
+}
+
+.fig {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Comme pour data-guarantees : aucune largeur maximale sur la figure large.
+   Elle court sur toute la mesure du conteneur, bord à bord avec le H2 et les
+   colonnes. Le prix est qu'un viewBox met sa typo à l'échelle avec sa
+   géométrie — 13 unités tombent vers 11,7px là où la figure large commence.
+   C'est pour ça que la bascule se fait aussi haut que 1100px : en dessous, les
+   libellés passeraient sous les 11px. */
+
+/* 320 unités de large, plafonné à 400px : environ 1:1 sur un téléphone de
+   390px, un quart au-dessus sur une tablette — jamais plus petit que dessiné. */
+.figCompact {
+  display: none;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Texte dans la figure. Les tailles sont en unités de viewBox, donc déclarées
+   par figure — les deux dessins ne sont pas à la même échelle. Toutes les
+   alphas sont à 0,55 ou au-dessus : ce sont des libellés, pas de la
+   décoration, et #ededed a besoin de 0,50 sur #080c16 pour tenir le 4,5:1. */
+
+.mark {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  fill: rgba(150, 185, 249, 0.9);
+}
+
+/* Pas de font-family : la famille est héritée dans le SVG, donc les libellés
+   prennent la police de texte de la page comme le ferait un <p>. */
+.label {
+  font-weight: 500;
+  fill: rgba(237, 237, 237, 0.58);
+}
+
+.labelAccent {
+  font-weight: 600;
+  fill: #96b9f9;
+}
+
+.boxTitle {
+  font-family: var(--font-headings);
+  font-weight: 600;
+  fill: rgba(237, 237, 237, 0.88);
+}
+
+/* Le contre-exemple porte le même titre d'un cran plus bas : c'est la même
+   sorte d'objet qu'une page travaillée, et c'est tout l'argument. */
+.boxTitleDim {
+  font-family: var(--font-headings);
+  font-weight: 600;
+  fill: rgba(237, 237, 237, 0.6);
+}
+
+/* Le domaine cité — la seule ligne de la figure qui prend l'accent en plein.
+   C'est le point d'arrivée de tout le dessin. */
+.source {
+  font-family: var(--font-headings);
+  font-weight: 700;
+  fill: #96b9f9;
+}
+
+.figWide {
+  .mark { font-size: 12px; }
+  .label { font-size: 13px; }
+  .labelAccent { font-size: 13px; }
+  .boxTitle { font-size: 15px; }
+  .boxTitleDim { font-size: 14px; }
+  .source { font-size: 15px; }
+}
+
+.figCompact {
+  .mark { font-size: 11px; }
+  .label { font-size: 12px; }
+  .labelAccent { font-size: 12px; }
+  .boxTitle { font-size: 14px; }
+  .boxTitleDim { font-size: 12px; }
+  .source { font-size: 13px; }
+}
+
+/* Traits. non-scaling-stroke sur tous, pour que les filets tombent à exactement
+   1px quelle que soit l'échelle de la figure — le même 1px que les règles CSS
+   tout autour. Sans lui, les lignes épaissiraient et maigriraient avec la
+   fenêtre pendant que les bordures voisines resteraient fixes. */
+.box,
+.mount,
+.tick,
+.tickDim,
+.flow,
+.flowDim,
+.closed {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.box {
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 1;
+}
+
+/* Un mount, pas une boîte nommée : ce sont les équerres qui font le travail,
+   le corps reste à 0,16 pour que les coins se lisent comme la forme. Même
+   notation que ia/data-guarantees, où elle veut dire « un emplacement ». */
+.mount {
+  stroke: rgba(255, 255, 255, 0.16);
+  stroke-width: 1;
+}
+
+.tick {
+  stroke: rgba(150, 185, 249, 0.9);
+  stroke-width: 1.4;
+}
+
+.tickDim {
+  stroke: rgba(237, 237, 237, 0.3);
+  stroke-width: 1.4;
+}
+
+.flow {
+  stroke: #96b9f9;
+  stroke-width: 1.4;
+}
+
+/* Pointillé : ce qui part d'une page vide n'est pas un flux, c'est une
+   tentative. La différence doit survivre au niveau de gris, donc elle passe
+   par la forme du trait et pas seulement par son alpha. */
+.flowDim {
+  stroke: rgba(237, 237, 237, 0.4);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 5;
+}
+
+/* La barre qui arrête. La seule marque de la figure qui veut dire « fermé »,
+   donc plus lourde qu'un flux — même rôle et même poids que le .closed de
+   data-guarantees. */
+.closed {
+  stroke: rgba(150, 185, 249, 0.95);
+  stroke-width: 2;
+}
+
+.headAccent {
+  fill: #96b9f9;
+}
+
+/* ---------- Les trois conditions ---------- */
+
 .cols {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(28px, 3.5vw, 56px);
-  margin-top: clamp(40px, 5vw, 60px);
+  margin-top: clamp(48px, 6vw, 76px);
 }
 
 .rule {
@@ -34,6 +195,18 @@
 
 .body {
   padding-top: 24px;
+}
+
+/* Le repère qui renvoie à la figure. Même lettre, même accent, et il monte
+   au-dessus du titre plutôt qu'à côté : à côté, il aurait fallu réserver une
+   colonne sur trois largeurs différentes. */
+.colMark {
+  display: block;
+  font-family: var(--font-headings);
+  font-weight: 700;
+  font-size: 13px;
+  color: rgba(150, 185, 249, 0.9);
+  margin-bottom: 10px;
 }
 
 .colTitle {
@@ -53,32 +226,40 @@
   margin: 12px 0 0;
 }
 
-.closing {
-  margin-top: clamp(48px, 6vw, 72px);
-  border-left: 1px solid rgba(150, 185, 249, 0.6);
-  padding-left: clamp(24px, 3vw, 40px);
-}
+/* Les styles de la bande de clôture (.closing, .closingTitle, .closingText)
+   sont partis le 06/08/2026 avec leur markup : la limite de ce que la page
+   revendique est maintenant dans measures.refusal, une section plus bas. Voir
+   l'en-tête de geo-answer.jsx. */
 
-.closingTitle {
-  font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: clamp(22px, 2vw, 30px);
-  letter-spacing: -0.02em;
-  margin: 0;
-  color: #ededed;
-}
+/* ---------- Bascule ---------- */
 
-.closingText {
-  font-size: 15px;
-  font-weight: 300;
-  color: rgba(237, 237, 237, 0.68);
-  line-height: 1.65;
-  max-width: 60ch;
-  margin: 12px 0 0;
-}
+@media (max-width: 1100px) {
+  .figWide {
+    display: none;
+  }
 
-@media (max-width: 720px) {
+  .figCompact {
+    display: block;
+  }
+
+  /* Empilées, les colonnes redeviennent les rangs à filet que la section
+     était : gap 0, chacune padded en haut et en bas, la dernière fermant le
+     bloc. Le pas au-dessus s'ouvre aussi — la figure en colonne est haute. */
   .cols {
     grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    margin-top: clamp(48px, 9vw, 76px);
+  }
+
+  .body {
+    padding: clamp(22px, 4vw, 30px) 0;
+  }
+
+  .col:last-child .body {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .colText {
+    max-width: 68ch;
   }
 }

@@ -967,9 +967,9 @@
             "title": "Cette page est la démonstration.",
             "text": "La méthode qu'on vous propose est celle qu'on applique à notre propre site :",
             "points": [
-              "Tout le contenu est présent dans le HTML dès la première réponse — lisible par les moteurs comme par les assistants IA.",
-              "Chaque page porte ses données structurées (schema.org), validées automatiquement avant chaque mise en production.",
               "Chaque page existe en français et en anglais, avec les balises qui disent aux moteurs laquelle servir.",
+              "Chaque page porte ses données structurées (schema.org), validées automatiquement avant chaque mise en production.",
+              "Tout le contenu est présent dans le HTML dès la première réponse — lisible par les moteurs comme par les assistants IA.",
               "Affichez le code source de cette page : tout y est."
             ]
           },
@@ -1007,9 +1007,20 @@
                 "text": "Les pages sont écrites pour répondre nettement à une question que vos clients posent réellement. C'est le format que les moteurs de réponse reprennent et attribuent."
               }
             },
-            "closing": {
-              "title": "Ce que ça ne garantit pas.",
-              "text": "Personne ne contrôle les modèles, et personne ne peut promettre d'être cité. Ce sur quoi nous nous engageons, c'est la méthode et la transparence sur ce qu'elle produit."
+            "schema": {
+              "page": "Votre page",
+              "readable": "Le texte, dans le HTML",
+              "structured": "schema.org : quoi, et qui",
+              "answers": "Une question, une réponse",
+              "engine": "Le moteur de réponse",
+              "engineNote": "ChatGPT · Perplexity",
+              "answer": "La réponse citée",
+              "source": "hargile.com/services/seo",
+              "sourceNote": "votre page, citée comme source",
+              "blank": "Une page qui n'est pas travaillée",
+              "blankCompact": ["Une page qui n'est", "pas travaillée"],
+              "blankNote": "rien à lire",
+              "nothing": "rien à citer"
             }
           },
           "measures": {
@@ -1020,7 +1031,7 @@
               "Le trafic organique, avec l'échéance honnête : quelques semaines pour ce qui relève de la technique, plusieurs mois pour ce qui relève du contenu.",
               "Les pages citées par les moteurs de réponse, suivies au même titre que les positions Google."
             ],
-            "refusal": "Ce que nous ne vendrons pas : la première position garantie. Personne de sérieux ne peut la promettre, et une agence qui la promet vous dit déjà quelque chose sur le reste."
+            "refusal": "Ce que nous ne vendrons pas : la première position garantie, ni la certitude d'être cité par les IA. Personne ne contrôle l'algorithme de Google, personne ne contrôle les modèles, et une agence qui vous les promet vous dit déjà quelque chose sur le reste. Ce sur quoi nous nous engageons, c'est la méthode et la transparence sur ce qu'elle produit."
           },
           "proofCase": {
             "text": "VENIZI vend ses bijoux en ligne et dans un réseau de 50 boutiques en Belgique et en France — un catalogue où chaque produit doit être trouvable."

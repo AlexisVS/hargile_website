@@ -1,75 +1,72 @@
-/* What we measure — the same neutral frame as meta-proof, since it is the same
-   kind of statement: checkable, not persuasive. The refusal below the drawn
-   rule keeps full text colour rather than the dimmed note treatment; it is not
-   a footnote. */
+/* Ce qu'on mesure — une colonne d'énoncés, aucun cadre.
 
-.frame {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  padding: clamp(32px, 4.5vw, 56px);
-}
+   Même moule que web/price-method depuis son dé-cadrage : titre, paragraphe,
+   les trois mesures sur une ligne, puis un écart deux fois plus large que tous
+   les autres, et le refus. Ce qui annonce le changement de registre est cet
+   écart, maintenant qu'aucune règle ne le fait. */
 
-.title {
-  font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: clamp(24px, 2.4vw, 36px);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  margin: 0;
-  color: #ededed;
-}
-
-.text {
-  font-size: 15px;
-  font-weight: 300;
-  color: rgba(237, 237, 237, 0.68);
-  line-height: 1.6;
+.lead {
   max-width: 72ch;
-  margin: 14px 0 0;
 }
 
-.points {
-  list-style: none;
-  margin: 26px 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-
-  li {
-    position: relative;
-    padding-left: 26px;
-    font-size: 15px;
-    font-weight: 300;
-    color: rgba(237, 237, 237, 0.72);
-    line-height: 1.6;
-    max-width: 72ch;
-
-    &::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0.62em;
-      width: 14px;
-      height: 1px;
-      background: rgba(150, 185, 249, 0.7);
-    }
-  }
+.cols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 3.5vw, 56px);
+  margin-top: clamp(40px, 5vw, 60px);
 }
 
-.rule {
-  display: block;
-  width: 100%;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.1);
-  margin-top: clamp(26px, 3vw, 34px);
-}
-
-.refusal {
+/* Le filet ouvre chaque mesure au lieu de la fermer : le bloc se termine sur
+   la dernière phrase, pas sur une ligne sous elle. */
+.point {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 22px;
+  margin: 0;
   font-size: 15px;
   font-weight: 300;
-  color: rgba(237, 237, 237, 0.68);
-  line-height: 1.65;
-  max-width: 68ch;
-  margin: clamp(24px, 3vw, 32px) 0 0;
+  color: rgba(237, 237, 237, 0.66);
+  line-height: 1.6;
+}
+
+/* Le plus grand pas vertical de la page — délibérément le double d'un pas de
+   bloc ordinaire. C'est lui qui dit « on change de registre ». */
+.refusalBlock {
+  margin-top: clamp(64px, 8vw, 104px);
+}
+
+/* Court et accent, à gauche : la même marque que le bloc « ownership » de
+   web/made-in-house, réduite à un tiret. Sur ce site, l'accent sur un filet
+   veut dire « et voici la limite de ce que nous revendiquons » — et depuis le
+   06/08/2026 c'est le seul endroit de /services/seo qui la porte. */
+.refusalRule {
+  display: block;
+  width: 44px;
+  height: 1px;
+  background: rgba(150, 185, 249, 0.7);
+}
+
+/* Pleine encre et un cran plus gros que le corps courant : ce n'est pas une
+   note de bas de section, c'est l'énoncé sur lequel la page s'arrête. */
+.refusal {
+  font-size: clamp(17px, 1.5vw, 21px);
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.88);
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  max-width: 58ch;
+  margin: clamp(22px, 2.5vw, 30px) 0 0;
+}
+
+@media (max-width: 860px) {
+  .cols {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  /* Empilées, les trois mesures redeviennent des rangs : le filet les ouvre
+     toujours, mais l'air passe dans le padding plutôt que dans le gap. */
+  .point {
+    padding: clamp(20px, 4vw, 26px) 0;
+    max-width: 68ch;
+  }
 }

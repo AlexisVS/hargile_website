@@ -967,9 +967,9 @@
             "title": "This page is the demonstration.",
             "text": "The method we propose is the one we apply to our own site:",
             "points": [
-              "All the content is in the HTML from the first response — readable by search engines and AI assistants alike.",
-              "Every page carries its structured data (schema.org), validated automatically before every release.",
               "Every page exists in French and English, with the tags that tell engines which one to serve.",
+              "Every page carries its structured data (schema.org), validated automatically before every release.",
+              "All the content is in the HTML from the first response — readable by search engines and AI assistants alike.",
               "View this page's source: it is all there."
             ]
           },
@@ -1007,9 +1007,20 @@
                 "text": "Pages are written to answer, plainly, a question your clients actually ask. That is the format answer engines quote and attribute."
               }
             },
-            "closing": {
-              "title": "What this does not guarantee.",
-              "text": "Nobody controls the models, and nobody can promise you will be cited. What we commit to is the method, and transparency about what it produces."
+            "schema": {
+              "page": "Your page",
+              "readable": "The text, in the HTML",
+              "structured": "schema.org: what, and who",
+              "answers": "One question, one answer",
+              "engine": "The answer engine",
+              "engineNote": "ChatGPT · Perplexity",
+              "answer": "The answer, attributed",
+              "source": "hargile.com/services/seo",
+              "sourceNote": "your page, cited as a source",
+              "blank": "A page nobody worked on",
+              "blankCompact": ["A page nobody", "worked on"],
+              "blankNote": "nothing to read",
+              "nothing": "nothing to cite"
             }
           },
           "measures": {
@@ -1020,7 +1031,7 @@
               "Organic traffic, with the honest timeline: a few weeks for what is technical, several months for what is editorial.",
               "Pages cited by answer engines, tracked on the same footing as Google positions."
             ],
-            "refusal": "What we will not sell: a guaranteed first position. Nobody serious can promise it, and an agency that does has already told you something about the rest."
+            "refusal": "What we will not sell: a guaranteed first position, or the certainty of being cited by AI. Nobody controls Google's algorithm, nobody controls the models, and an agency that promises you either has already told you something about the rest. What we commit to is the method, and transparency about what it produces."
           },
           "proofCase": {
             "text": "VENIZI sells its jewellery online and across a network of 50 boutiques in Belgium and France — a catalogue where every product has to be findable."

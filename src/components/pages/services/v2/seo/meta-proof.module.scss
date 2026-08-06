@@ -1,55 +1,127 @@
-/* Meta-proof — framed like a spec sheet: the claims are checkable in the
-   page source, so the frame is the neutral hairline, not the accent. */
+/* La vue source — l'extrait à gauche, les quatre points en annotations à
+   droite. Aucun cadre : le panneau de code est tenu par un filet haut et par
+   sa police, pas par une boîte. Le cadre 16px d'avant rimait avec Measures. */
 
-.frame {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  padding: clamp(32px, 4.5vw, 56px);
+.lead {
+  max-width: 68ch;
 }
 
-.title {
-  font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: clamp(24px, 2.4vw, 36px);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  margin: 0;
-  color: #ededed;
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(32px, 4.5vw, 72px);
+  margin-top: clamp(40px, 5vw, 60px);
+  align-items: start;
 }
 
-.text {
-  font-size: 15px;
-  font-weight: 300;
-  color: rgba(237, 237, 237, 0.68);
-  line-height: 1.6;
-  margin: 14px 0 0;
+.code {
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  padding-top: clamp(20px, 2.4vw, 28px);
+  min-width: 0;
 }
 
-.points {
+.codeScroll {
+  font-family: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
+  font-size: clamp(11.5px, 1vw, 13px);
+  line-height: 1.75;
+  color: rgba(237, 237, 237, 0.56);
+}
+
+/* Les lignes se replient, elles ne défilent pas.
+
+   Première version : white-space: pre dans un conteneur en overflow-x: auto.
+   Sur un téléphone, ça obligeait à balayer latéralement pour lire une section
+   dont l'argument est justement que tout est là — et le geste emportait la
+   gouttière des numéros hors de l'écran, donc les renvois « 11–13 » des
+   annotations ne renvoyaient plus à rien de visible.
+
+   Deux colonnes de grille — le numéro, puis le texte — donnent l'indentation
+   suspendue gratuitement : une ligne trop longue repart sous le début du code
+   et jamais sous son numéro. `anywhere` parce qu'une URL n'a pas d'espace où
+   se couper. Ça ne rend pas l'extrait moins vrai : les caractères sont les
+   mêmes et les numéros comptent toujours les lignes réelles.
+
+   L'alternative — un second extrait plus court réservé au mobile — a été
+   écartée : elle doublerait le nombre de textes à garder synchronisés avec la
+   page, c'est-à-dire exactement la servitude que seo-source-excerpt.js existe
+   pour tenir à une seule copie. */
+.line,
+.lineProven {
+  display: grid;
+  grid-template-columns: 2.6em minmax(0, 1fr);
+  /* Les deux variantes portent le même retrait, pour que les lignes prouvées
+     et les autres partagent exactement la même marge gauche : seul le filet
+     les distingue. */
+  margin-left: -14px;
+  padding-left: 14px;
+}
+
+.lineText {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Les lignes qu'un des quatre points revendique. Le filet accent porte la
+   marque, et la couleur du texte monte d'un cran pour que la distinction
+   survive au niveau de gris et aux forced-colors — jamais la couleur seule. */
+.lineProven {
+  color: rgba(237, 237, 237, 0.82);
+  box-shadow: inset 1px 0 0 rgba(150, 185, 249, 0.55);
+}
+
+.ln {
+  color: rgba(150, 185, 249, 0.38);
+  user-select: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.notes {
   list-style: none;
-  margin: 26px 0 0;
+  margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
+  gap: clamp(20px, 2.4vw, 28px);
+}
+
+.note {
+  display: grid;
+  grid-template-columns: 5.5ch minmax(0, 1fr);
   gap: 14px;
+  align-items: baseline;
+}
 
-  li {
-    position: relative;
-    padding-left: 26px;
-    font-size: 15px;
-    font-weight: 300;
-    color: rgba(237, 237, 237, 0.72);
-    line-height: 1.6;
-    max-width: 72ch;
+/* L'invitation finale ne renvoie à aucune ligne : elle porte sur tout
+   l'extrait, donc elle prend toute la largeur au lieu de laisser une colonne
+   de renvoi vide, et un filet la sépare des trois annotations. */
+.noteWide {
+  display: block;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: clamp(18px, 2vw, 24px);
+}
 
-    &::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0.62em;
-      width: 14px;
-      height: 1px;
-      background: rgba(150, 185, 249, 0.7);
-    }
+.ref {
+  font-family: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: rgba(150, 185, 249, 0.78);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.noteText {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(237, 237, 237, 0.72);
+  line-height: 1.6;
+}
+
+.noteWide .noteText {
+  color: rgba(237, 237, 237, 0.6);
+}
+
+@media (max-width: 900px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

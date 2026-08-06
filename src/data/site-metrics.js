@@ -37,7 +37,14 @@ export const SCORES = [
 ];
 
 /* Field metrics against the thresholds Google publishes as "good".
-   `over: true` means we are above the target — worse, and shown as such. */
+   `over: true` means we are above the target — worse, and shown as such.
+
+   ⚠️ PLUS AFFICHÉ DEPUIS LE 06/08/2026, ET C'EST PROVISOIRE. La section ne
+   montre plus que les quatre scores, le temps que le LCP soit corrigé :
+   publier un chiffre qu'on sait sur le point de bouger n'apprend rien à
+   personne. Rien n'est supprimé ici — le bloc se remonte depuis git dès que le
+   chantier LCP est fini. Voir l'en-tête de seo/measured-proof.jsx, qui porte
+   le raisonnement complet et le coût éditorial du retrait. */
 export const VITALS = [
     {key: "lcp", value: 3.0, target: 2.5, unit: "s", decimals: 1, over: true},
     {key: "cls", value: 0, target: 0.1, unit: "", decimals: 2, over: false},

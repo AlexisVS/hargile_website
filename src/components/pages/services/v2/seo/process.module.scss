@@ -1,24 +1,63 @@
-/* Four-step process — numbered hairline columns. */
+/* Les quatre étapes sur le rail animé — traitement repris de
+   homepage/v2/mvp-promo.module.scss. Le rail est la piste sourde, .railFill se
+   met à l'échelle avec le scroll (scaleX en large, scaleY en colonne, piloté
+   depuis process.jsx). Les points s'allument quand le front les atteint. */
 
+.timeline {
+  position: relative;
+  margin-top: clamp(56px, 6vw, 84px);
+}
+
+.rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 5px;
+  height: 1px;
+  background: rgba(150, 185, 249, 0.14);
+}
+
+.railFill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #96b9f9, rgba(150, 185, 249, 0.45));
+  box-shadow: 0 0 12px rgba(150, 185, 249, 0.4);
+}
+
+/* Quatre pistes égales, jamais auto-fit : les points sont positionnés au
+   départ de chaque piste, donc un repli en deux rangs les décrocherait du
+   rail. Sous 1100px on ne replie pas, on bascule à la verticale. */
 .steps {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: clamp(28px, 3.5vw, 48px);
-  margin-top: clamp(40px, 5vw, 60px);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(28px, 3vw, 44px);
 }
 
 .step {
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  padding-top: 22px;
+  position: relative;
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #96b9f9;
+  box-shadow: 0 0 16px rgba(150, 185, 249, 0.9);
+}
+
+.stepBody {
+  position: relative;
+  padding-top: 24px;
+  padding-left: 16px;
 }
 
 .num {
   font-family: var(--font-headings);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 14px;
   letter-spacing: 0.08em;
-  color: rgba(150, 185, 249, 0.65);
-  margin: 0;
+  color: #96b9f9;
+  font-variant-numeric: tabular-nums;
 }
 
 .stepTitle {
@@ -26,7 +65,7 @@
   font-weight: 600;
   font-size: clamp(19px, 1.7vw, 24px);
   letter-spacing: -0.015em;
-  margin: 12px 0 0;
+  margin: 10px 0 8px;
   color: #ededed;
 }
 
@@ -35,5 +74,59 @@
   font-weight: 300;
   color: rgba(237, 237, 237, 0.62);
   line-height: 1.6;
-  margin: 10px 0 0;
+  margin: 0;
+  max-width: 34ch;
+}
+
+/* Rail vertical. Le seuil doit correspondre à useVerticalRail() dans
+   process.jsx — quatre colonnes deviennent illisibles bien avant le 640px de
+   la homepage, qui n'en aligne que trois. */
+@media (max-width: 1100px) {
+  .rail {
+    left: 5px;
+    right: auto;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    height: auto;
+  }
+
+  .railFill {
+    background: linear-gradient(180deg, #96b9f9, rgba(150, 185, 249, 0.45));
+  }
+
+  /* L'indentation va sur le conteneur, pas sur .step : le point est positionné
+     contre la boîte de padding de .step, donc un padding là emporterait le
+     point avec la copie et le décrocherait du rail. */
+  .steps {
+    grid-template-columns: minmax(0, 1fr);
+    padding-left: 36px;
+    gap: clamp(40px, 5vw, 56px);
+  }
+
+  .stepText {
+    max-width: 62ch;
+  }
+}
+
+/* Disposition empilée — doit venir APRÈS les règles .dot / .stepBody de base
+   plutôt que dans le @media ci-dessus : une media query ne porte aucune
+   spécificité supplémentaire, donc une règle simple placée plus bas l'emporte.
+   Même piège que sur mvp-promo.module.scss, et même correctif.
+
+   Le point et son numéral tiennent la même ligne : le point est ce qui marque
+   l'étape, un libellé une ligne en dessous se lit comme détaché. */
+@media (max-width: 1100px) {
+  .dot {
+    position: absolute;
+    /* Retour sur le rail, qui est à left: 5px — 5.5px le centre dessus. */
+    left: -36px;
+    /* Centre optique de la boîte de ligne du numéral 14px, pas son haut. */
+    top: 3px;
+  }
+
+  .stepBody {
+    padding-top: 0;
+    padding-left: 0;
+  }
 }

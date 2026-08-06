@@ -1,47 +1,52 @@
 "use client";
 
-/* The scores, right after MetaProof claims them.
+/* Les scores, juste après que MetaProof les a revendiqués.
  *
- * MetaProof says "this page is the demonstration — view the source". This is
- * the same argument with the tool's own numbers attached, so the claim stops
- * being a claim. Every figure comes from src/data/site-metrics.js, measured on
- * the live page; the measurement date is printed so nobody has to trust that
- * it is current.
+ * MetaProof dit « cette page est la démonstration, affichez la source ». C'est
+ * le même argument avec les chiffres de l'outil attachés, pour que la
+ * revendication cesse d'en être une. Tout vient de src/data/site-metrics.js,
+ * mesuré sur la page en ligne ; la date de mesure est imprimée pour que
+ * personne n'ait à croire qu'elle est fraîche.
  *
- * The LCP row is above its target and is shown that way. That is the whole
- * reason the vitals block exists: four perfect gauges read as marketing, and
- * this page ends on a section about what we refuse to promise. A miss we
- * publish ourselves is worth more than a score we curate.
+ * ── LES CORE WEB VITALS SONT RETIRÉS, TEMPORAIREMENT ─────────────────────
+ * 06/08/2026 (décision de Mihai) : les trois barres (affichage principal,
+ * stabilité visuelle, réponse du serveur) et la note qui les accompagnait ne
+ * sont plus affichées, parce que le LCP est en cours de correction et que les
+ * publier maintenant reviendrait à publier un chiffre qu'on sait sur le point
+ * de changer.
  *
- * Arcs are static — the count-up on the numbers is the one moving part, the
- * same island /services and the mvp scope section already use. */
+ * ⚠️ CE RETRAIT A UN COÛT ÉDITORIAL, ET IL EST ASSUMÉ COMME PROVISOIRE.
+ * Le LCP était le seul chiffre en échec de la page, et la note disait « une
+ * agence qui ne publie que ses bons scores ne vous dit pas ce qu'elle mesure :
+ * elle vous dit ce qu'elle montre ». En l'état la section ne montre plus que
+ * quatre bons scores — exactement ce que cette phrase dénonçait. C'est
+ * pourquoi la note part avec les barres au lieu de rester seule : la garder
+ * au-dessus de quatre scores choisis serait pire que de la retirer.
+ *
+ * Les clés `measured.vitals.*`, `measured.targetLabel` et `measured.note`
+ * restent dans fr.json et en.json, et VITALS reste exporté par site-metrics.js.
+ * Rien n'est à réécrire le jour où le LCP passe sous son seuil : il suffit de
+ * remonter le bloc depuis git (état du 06/08/2026) — sauf `measured.note`, qui
+ * parle explicitement de l'écart et devra être reformulée si l'écart a disparu.
+ *
+ * Les arcs sont statiques — le compteur sur les nombres est la seule pièce
+ * mobile, la même île que /services et la section scope du MVP utilisent
+ * déjà. Le moment signature de la page est le rail de Process, plus haut. */
 
 import {useLocale, useTranslations} from "next-intl";
 import section from "@/components/pages/homepage/v2/v2-section.module.scss";
-import revealStyles from "@/components/pages/homepage/v2/reveal.module.scss";
 import {useReveal} from "@/components/pages/homepage/v2/useReveal";
 import CountUp from "@/components/pages/services/v2/shared/count-up";
-import {LIGHTHOUSE, SCORES, VITALS} from "@/data/site-metrics";
+import {LIGHTHOUSE, SCORES} from "@/data/site-metrics";
 import styles from "./measured-proof.module.scss";
 
 const R = 30;
 const CIRC = 2 * Math.PI * R;
 
-/* The target tick sits at a fixed point on every track, so three different
-   scales stay comparable at a glance: left of the tick is inside budget. */
-const TARGET_X = 62;
-const MAX_X = 100;
-
 const MeasuredProof = () => {
     const t = useTranslations("pages.services.detail.seo.measured");
     const locale = useLocale();
     const reveal = useReveal();
-
-    const nf = (value, decimals) =>
-        new Intl.NumberFormat(locale, {
-            minimumFractionDigits: decimals,
-            maximumFractionDigits: decimals,
-        }).format(value);
 
     const measuredOn = new Intl.DateTimeFormat(locale, {
         day: "numeric", month: "long", year: "numeric",
@@ -58,54 +63,28 @@ const MeasuredProof = () => {
                 <div className={styles.gauges}>
                     {SCORES.map(({key, value}, i) => (
                         <div key={key} className={styles.gauge} {...reveal(2 + i)}>
-                            <svg className={styles.dial} viewBox="0 0 80 80" aria-hidden="true">
-                                <circle cx="40" cy="40" r={R} className={styles.track}/>
-                                <circle
-                                    cx="40" cy="40" r={R}
-                                    className={styles.arc}
-                                    transform="rotate(-90 40 40)"
-                                    strokeDasharray={`${(CIRC * value) / 100} ${CIRC}`}
-                                />
-                            </svg>
-                            <span className={styles.score}>
-                                <CountUp to={value}/>
-                            </span>
+                            {/* Le cadran et son nombre partagent une seule
+                                cellule de grille : le nombre est centré dans
+                                l'anneau par la grille, pas par une marge
+                                négative accordée à une taille de cadran. */}
+                            <div className={styles.dialWrap}>
+                                <svg className={styles.dial} viewBox="0 0 80 80" aria-hidden="true">
+                                    <circle cx="40" cy="40" r={R} className={styles.track}/>
+                                    <circle
+                                        cx="40" cy="40" r={R}
+                                        className={styles.arc}
+                                        transform="rotate(-90 40 40)"
+                                        strokeDasharray={`${(CIRC * value) / 100} ${CIRC}`}
+                                    />
+                                </svg>
+                                <span className={styles.score}>
+                                    <CountUp to={value}/>
+                                </span>
+                            </div>
                             <span className={styles.scoreLabel}>{t(`scores.${key}`)}</span>
                         </div>
                     ))}
                 </div>
-
-                <span
-                    className={`${styles.rule} ${revealStyles.hairline}`}
-                    aria-hidden="true"
-                    {...reveal(6)}
-                />
-
-                <div className={styles.vitals} {...reveal(7)}>
-                    {VITALS.map(({key, value, target, unit, decimals, over}) => {
-                        const width = Math.min(
-                            MAX_X,
-                            target ? (value / target) * TARGET_X : 0
-                        );
-                        return (
-                            <div key={key} className={styles.vital} data-over={over ? "1" : undefined}>
-                                <span className={styles.vitalLabel}>{t(`vitals.${key}`)}</span>
-                                <span className={styles.vitalTrack} aria-hidden="true">
-                                    <span className={styles.vitalFill} style={{width: `${width}%`}}/>
-                                    <span className={styles.vitalTick} style={{left: `${TARGET_X}%`}}/>
-                                </span>
-                                <span className={styles.vitalValue}>
-                                    {nf(value, decimals)}{unit ? ` ${unit}` : ""}
-                                </span>
-                                <span className={styles.vitalTarget}>
-                                    {t("targetLabel", {value: `${nf(target, decimals)}${unit ? ` ${unit}` : ""}`})}
-                                </span>
-                            </div>
-                        );
-                    })}
-                </div>
-
-                <p className={styles.note} {...reveal(8)}>{t("note")}</p>
             </div>
         </section>
     );
