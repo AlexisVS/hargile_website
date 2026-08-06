@@ -798,6 +798,23 @@
                 "title": "Réversible par conception",
                 "text": "Le fournisseur d'IA reste remplaçable — les modèles évoluent trop vite pour s'enfermer chez l'un d'eux. Et le code qui les appelle vous appartient, comme le reste."
               }
+            },
+            "schema": {
+              "zoneYou": "Chez vous",
+              "zoneProvider": "Fournisseur d'IA",
+              "boundary": "La frontière — décidée au cadrage",
+              "boundaryCompact": "La frontière — au cadrage",
+              "systems": "Vos systèmes",
+              "sensitive": "Données sensibles",
+              "out": "Ce qui sort : choisi, sous contrat",
+              "outCompact": ["Ce qui sort :", "choisi, sous contrat"],
+              "back": "Les résultats reviennent",
+              "stays": "Restent chez vous — en priorité",
+              "staysCompact": ["Restent ici —", "en priorité"],
+              "code": "Le code qui appelle le fournisseur vous appartient.",
+              "slot": "Modèle A · B · C…",
+              "slotNote": "un emplacement, pas un mariage",
+              "swap": "remplaçable"
             }
           },
           "faq": {

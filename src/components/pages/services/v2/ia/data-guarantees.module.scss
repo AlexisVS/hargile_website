@@ -1,8 +1,13 @@
-/* Data guarantees — three hairline rows inside the ia body.
+/* Data guarantees — the boundary figure and the three guarantees under it.
 
    --block-gap and --step-gap are inherited from .ia in ia-offre-section: this
    block keeps the page's rhythm rather than declaring its own. Fallbacks match
-   the values there in case the block is ever mounted elsewhere. */
+   the values there in case the block is ever mounted elsewhere.
+
+   One breakpoint runs the whole section: at 1100px the wide figure hands over
+   to the column one and the three guarantees stack. Both switch together on
+   purpose — a wide bandeau above stacked rows, or a narrow figure above three
+   columns, each read as a layout that had not finished resizing. */
 
 .block {
   margin-top: var(--block-gap, clamp(76px, 9vw, 150px));
@@ -19,30 +24,180 @@
   color: #ededed;
 }
 
-.rows {
+/* ---------- The figure ---------- */
+
+.schema {
   margin-top: var(--step-gap, clamp(40px, 4.5vw, 72px));
 }
 
-.row {
+.fig {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Uncapped: the figure runs the full container measure, edge to edge with the
+   H3 above it and the three columns below. A cap here left it visibly narrower
+   than everything it sits between, which read as an unfinished layout.
+
+   The cost is that a viewBox scales its type along with its geometry, so the
+   labels are sized for the middle of the band rather than for one width: 13
+   units lands near 11.7px where the wide figure starts and near 17px on a
+   1920px screen. That band is why the handover to .figCompact happens as high
+   as 1100px — below it the labels would fall under 11px. The width comes from
+   .fig; there is deliberately no max-width to add here. */
+
+/* 320 units wide, capped at 400px: roughly 1:1 on a 390px phone, a quarter over
+   on a tablet, which is the right direction — never smaller than drawn. */
+.figCompact {
+  display: none;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Text inside the figure. Sizes are viewBox units, so they are declared per
+   figure — the two drawings are on different scales. Every alpha is at or above
+   0.55: these are labels, not decoration, and #ededed needs 0.50 on #080c16 to
+   clear 4.5:1. */
+
+.kicker {
+  font-family: var(--font-headings);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  fill: rgba(237, 237, 237, 0.55);
+}
+
+.kickerAccent {
+  fill: rgba(150, 185, 249, 0.9);
+}
+
+/* No font-family: font-family inherits into SVG text, so the labels pick up the
+   page's body face the same way a <p> does. There is no --font-body token to
+   name it with — the stack is set on <body>. */
+.label {
+  font-weight: 500;
+  fill: rgba(237, 237, 237, 0.58);
+}
+
+.labelBright {
+  fill: rgba(237, 237, 237, 0.85);
+}
+
+.labelAccent {
+  fill: #96b9f9;
+}
+
+.boxTitle {
+  font-family: var(--font-headings);
+  font-weight: 600;
+  fill: rgba(237, 237, 237, 0.88);
+}
+
+.figWide {
+  .kicker { font-size: 11px; }
+  .label { font-size: 13px; }
+  .boxTitle { font-size: 15px; }
+}
+
+.figCompact {
+  .kicker { font-size: 10px; }
+  .label { font-size: 12px; }
+  .boxTitle { font-size: 14px; }
+}
+
+/* Strokes. non-scaling-stroke on all of them so the hairlines land at exactly
+   1px whatever the figure's scale — the same 1px the rest of the page draws its
+   rules with. Without it the lines would thicken and thin with the viewport
+   while the CSS borders beside them held still. */
+.zone,
+.boundary,
+.box,
+.boxAccent,
+.slot,
+.tick,
+.flow,
+.flowDim,
+.stop {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.zone {
+  stroke: rgba(255, 255, 255, 0.13);
+  stroke-width: 1;
+}
+
+/* Deliberately the brightest neutral line in the figure. It is the subject —
+   at 0.28 it read fainter than the zone outline drawn around it, which put the
+   emphasis on the box rather than on the edge the whole section is about. */
+.boundary {
+  stroke: rgba(255, 255, 255, 0.45);
+  stroke-width: 1;
+}
+
+.box {
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 1;
+}
+
+.boxAccent {
+  stroke: rgba(150, 185, 249, 0.55);
+  stroke-width: 1;
+}
+
+/* Dashed body plus bracketed corners: an empty mount, not a named supplier. */
+.slot {
+  stroke: rgba(255, 255, 255, 0.38);
+  stroke-width: 1;
+  stroke-dasharray: 5 6;
+}
+
+.tick {
+  stroke: rgba(150, 185, 249, 0.9);
+  stroke-width: 1.4;
+}
+
+.flow {
+  stroke: #96b9f9;
+  stroke-width: 1.4;
+}
+
+.flowDim {
+  stroke: rgba(237, 237, 237, 0.4);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 5;
+}
+
+/* The bar that ends the sensitive-data stroke. Heavier than a flow line
+   because it is the one mark in the figure that means "no further". */
+.stop {
+  stroke: rgba(150, 185, 249, 0.95);
+  stroke-width: 2;
+}
+
+.headAccent {
+  fill: #96b9f9;
+}
+
+.headDim {
+  fill: rgba(237, 237, 237, 0.5);
+}
+
+/* ---------- The three guarantees ---------- */
+
+.cols {
   display: grid;
-  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
-  align-items: start;
-  gap: clamp(20px, 3vw, 44px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 3vw, 48px);
+  margin-top: var(--step-gap, clamp(40px, 4.5vw, 72px));
+}
+
+.col {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: clamp(24px, 3vw, 34px) 0;
-
-  &:last-child {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
+  padding-top: clamp(20px, 2vw, 26px);
 }
 
-/* numLg's proportions, scaled to sit beside a paragraph rather than above it. */
-.num {
-  font-size: clamp(40px, 3.6vw, 60px);
-  line-height: 0.9;
-}
-
-.rowTitle {
+.colTitle {
   margin: 0;
   font-family: var(--font-headings);
   font-weight: 600;
@@ -52,22 +207,44 @@
   color: #ededed;
 }
 
-.rowText {
+.colText {
+  margin: 10px 0 0;
   font-size: 15px;
   font-weight: 300;
-  color: rgba(237, 237, 237, 0.62);
   line-height: 1.6;
-  max-width: 68ch;
-  margin: 10px 0 0;
+  color: rgba(237, 237, 237, 0.62);
 }
 
-@media (max-width: 620px) {
-  .row {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1100px) {
+  .figWide {
+    display: none;
   }
 
-  .num {
-    font-size: 44px;
+  .figCompact {
+    display: block;
+  }
+
+  /* Stacked, the columns become the hairline rows this section used to be:
+     gap: 0, each one padded top and bottom, the last closing the block.
+     The step above them opens up too — the column figure is tall, and at this
+     width the default step let it sit right on top of the first guarantee. */
+  .cols {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    margin-top: clamp(48px, 9vw, 76px);
+  }
+
+  .col {
+    padding: clamp(26px, 4.5vw, 34px) 0;
+  }
+
+  .col:last-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .colText {
+    max-width: 68ch;
   }
 }

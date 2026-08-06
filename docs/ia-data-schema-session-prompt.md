@@ -218,3 +218,69 @@ si `/` est 404, ce n'est pas la section qu'on vient d'écrire.
 ⚠️ Un serveur d'un **autre projet** tournait sur le port 3001 pendant la
 session : vérifier le `<title>` de ce qu'on interroge avant de conclure quoi que
 ce soit d'une réponse HTTP.
+
+---
+
+## 9. Exécuté le 2026-08-06 (session suivante) — la variante A
+
+Planche des cinq formes présentée
+([artifact](https://claude.ai/code/artifact/c4523010-cce8-48c1-a5fb-8554bcaf700a),
+desktop + cadres mobile 390px). **Mihai a choisi A** : le schéma en bandeau
+pleine largeur, les trois garanties en colonnes.
+
+**Les deux questions ouvertes, tranchées :**
+
+- **§3 (préférence ou promesse)** : le trait de la donnée sensible porte
+  « Restent chez vous — **en priorité** » / « by preference ». Le dessin affirme
+  exactement ce que la copie affirme, pas davantage. ⚠️ Si un jour l'engagement
+  fort est décidé, il se change **dans les deux** — clé `stays` et la copie.
+- **§5 (les numéros)** : **retirés**, même raison que `web/deliverables.jsx`.
+  Trois garanties simultanées ne sont pas une séquence.
+
+**Ce qui est en place** (`ia/data-guarantees.jsx` + `.module.scss`, Server
+Component, aucune animation) :
+
+- **Deux SVG dans le même HTML**, l'un masqué en CSS. Un `<text>` SVG ne se
+  re-wrappe pas : une seule figure ne peut pas tenir 1440px et 390px.
+  `figWide` viewBox 1040×380, `figCompact` 320×568.
+- **Un seul point de bascule, 1100px**, pour la figure **et** les colonnes. Au
+  même endroit exprès : bandeau large au-dessus de rangées empilées, ou figure
+  étroite au-dessus de trois colonnes, se lisent comme un layout inachevé.
+  Vérifié : jamais deux figures visibles, jamais zéro.
+- **La figure large n'est pas plafonnée** — elle prend toute la mesure du
+  container. ⚠️ Conséquence à connaître : un viewBox met le texte à l'échelle
+  avec la géométrie, donc les étiquettes vont de ~11,7px à 1101px jusqu'à ~17px
+  à 1920px. C'est ce qui fixe la bascule si haut ; **ne pas la descendre** sans
+  redimensionner les `font-size` en unités viewBox.
+- `vector-effect: non-scaling-stroke` partout : les filets tombent à 1px exact
+  quelle que soit l'échelle, comme les bordures CSS d'à côté.
+- **La frontière est à 0,45** d'alpha, plus claire que le cadre à 0,13 qui
+  l'entoure. À 0,28 le cadre gagnait sur le sujet du schéma.
+- **Le trait qui s'arrête ne flotte pas** : il rejoint la frontière, et c'est la
+  frontière qui s'épaissit en accent à cet endroit. Les deux autres flux la
+  franchissent par des **trous** dans la ligne ; celui-ci la rencontre pleine.
+  C'est ce contraste qui porte l'argument — une barre isolée avant la ligne ne
+  disait rien.
+- Le retour (« Les résultats reviennent ») **entre dans « Vos systèmes »** par le
+  bas, il ne s'arrête plus dans le vide entre les deux boîtes.
+- Le fournisseur occupe la **même bande verticale (84–278)** que les deux boîtes
+  d'en face, pour que les deux côtés pèsent pareil.
+- La figure compacte porte **deux flux au lieu de trois** : le retour et la note
+  sur la propriété du code sautent. À 320 unités chaque trait réclame son
+  étiquette, et ce sont les deux seuls éléments qu'aucun paragraphe en dessous
+  ne reprend. ⚠️ Ne pas les « rétablir par cohérence ».
+- i18n : `pages.services.detail.ia.data.schema`, **15 clés**, les deux locales.
+  `outCompact` et `staysCompact` sont des **tableaux de lignes** — c'est la
+  locale qui décide où couper, puisque le FR est plus long que l'EN partout ici.
+- `aria-hidden` sur les deux figures : les trois paragraphes portent l'argument
+  en entier, l'annoncer le lirait deux fois. Les étiquettes restent dans le HTML.
+
+**Vérifié** : lint à la baseline (3 erreurs), build OK, `seo:jsonld` 0 erreur sur
+les deux locales, les 24 chaînes de la section présentes dans le HTML SSR en FR
+**et** en EN, aucun `useReveal`/`@keyframes`/`transition` ajouté, et — mesuré
+dans le navigateur, pas à l'œil — **aucune étiquette ne déborde de son viewBox
+ni n'en chevauche une autre**, dans les deux langues.
+
+⚠️ Piège retrouvé : la route FR est **nue** (`/services/ia`) — `/fr/services/ia`
+répond 301. Un `curl | grep` sur l'URL préfixée ne trouve rien et ressemble à une
+régression de rendu.

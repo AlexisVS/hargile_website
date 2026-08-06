@@ -798,6 +798,23 @@
                 "title": "Reversible by design",
                 "text": "The AI provider stays replaceable — models move too fast to lock yourself into one. And the code that calls them belongs to you, like the rest."
               }
+            },
+            "schema": {
+              "zoneYou": "Your side",
+              "zoneProvider": "AI provider",
+              "boundary": "The boundary — settled during scoping",
+              "boundaryCompact": "The boundary — at scoping",
+              "systems": "Your systems",
+              "sensitive": "Sensitive data",
+              "out": "What leaves: chosen, under contract",
+              "outCompact": ["What leaves:", "chosen, under contract"],
+              "back": "Results come back",
+              "stays": "Stays with you — by preference",
+              "staysCompact": ["Stays here —", "by preference"],
+              "code": "The code that calls the provider is yours.",
+              "slot": "Model A · B · C…",
+              "slotNote": "a slot, not a marriage",
+              "swap": "replaceable"
             }
           },
           "faq": {
