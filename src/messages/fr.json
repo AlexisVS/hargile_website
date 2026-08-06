@@ -21,7 +21,7 @@
         },
         "title": "Informations de contact"
       },
-      "description": "Parlez-nous de votre projet — nous vous recontactons sous 48 heures.",
+      "description": "Parlez-nous de votre projet. Nous vous recontactons sous 48 heures.",
       "privacy": {
         "link": "politique de confidentialité",
         "requiredFields": "Champs obligatoires",
@@ -30,7 +30,7 @@
       "prose": {
         "emailPlaceholder": "votre@email.com",
         "greeting": "Bonjour, je m'appelle",
-        "messagePlaceholder": "Le contexte, les objectifs, le timing — tout ce qui nous aide à bien nous préparer.",
+        "messagePlaceholder": "Le contexte, les objectifs, le timing : tout ce qui nous aide à bien nous préparer.",
         "moreLabel": "Dites-nous en un peu plus",
         "namePlaceholder": "votre nom",
         "objectPlaceholder": "votre projet",
@@ -143,19 +143,19 @@
           },
           "highlighted": "Révolutionner l'innovation par une technologie responsable",
           "paragraph1": "Notre conviction est d’agir concrètement par des actions significatives pour un numérique plus vertueux afin que notre engagement se mesure en résultats tangibles.",
-          "paragraph2": "L’environnement social et environnemental est notre priorité. Notre vision est de transformer leurs contraintes en opportunités d'excellence. Nos solutions ne sont pas seulement performantes – elles sont résolument tournées vers l'avenir.",
+          "paragraph2": "L’environnement social et environnemental est notre priorité. Notre vision est de transformer leurs contraintes en opportunités d'excellence. Nos solutions ne sont pas seulement performantes : elles sont résolument tournées vers l'avenir.",
           "pillars": {
             "environmental": "Responsabilité Environnementale",
             "ethical": "Innovation Éthique",
             "inclusion": "Inclusion Numérique"
           },
-          "subtitle": "Performances et responsabilités.",
+          "subtitle": "Performances et responsabilités",
           "title": "Notre Engagement"
         },
         "our-mission": {
           "description": "Nous ne créons pas seulement des solutions numériques, nous bâtissons des partenariats qui grandissent avec vous.\n\n L'innovation et le développement commercial sont au cœur de notre équipe, afin de vous offrir des solutions évolutives qui anticipent vos défis futurs.",
           "highlighted": "Transformer les expériences numériques",
-          "subheading": "par l'innovation centrée sur l'humain et la technologie.",
+          "subheading": "par l'innovation centrée sur l'humain et la technologie",
           "title": "Notre Mission",
           "values": {
             "creativity": {
@@ -208,7 +208,7 @@
       "ctaSecondary": "Voir les services",
       "hero": {
         "eyebrow": "FAQ",
-        "title": "Les questions qu'on nous pose vraiment.",
+        "title": "Les questions qu'on nous pose vraiment",
         "answer": "HARGILE est un studio web indépendant à Bruxelles qui développe des applications web sur mesure pour les PME. Voici les réponses directes aux questions posées avant de choisir une agence : combien coûte une application sur mesure en Belgique, en combien de temps, agence ou freelance, et à qui appartient le code à la fin. Il manque la vôtre ? Écrivez-nous."
       },
       "groups": {
@@ -221,7 +221,7 @@
           "id": "agence",
           "group": "project",
           "q": "Comment choisir une agence web à Bruxelles pour développer une application sur mesure ?",
-          "a": "Trois points se vérifient avant de signer. Qui écrit réellement le code : chez HARGILE, le design et le développement sont faits en interne à Bruxelles, jamais sous-traités. Comment le prix est arrêté : au cadrage, avant le début du projet, et il ne bouge plus ensuite. Et à qui appartient le code à la fin : à vous. Le reste — références, disponibilité, langue de travail — tient en un appel."
+          "a": "Trois points se vérifient avant de signer. Qui écrit réellement le code : chez HARGILE, le design et le développement sont faits en interne à Bruxelles, jamais sous-traités. Comment le prix est arrêté : au cadrage, avant le début du projet, et il ne bouge plus ensuite. Et à qui appartient le code à la fin : à vous. Le reste tient en un appel : références, disponibilité, langue de travail."
         },
         {
           "id": "process",
@@ -233,37 +233,37 @@
           "id": "delai",
           "group": "project",
           "q": "Combien de temps faut-il pour développer une application web sur mesure pour une PME ?",
-          "a": "Cela dépend du périmètre — et le périmètre est fixé au cadrage, pas découvert en route. Le repère le plus concret : notre offre MVP livre un produit complet et utilisable en 30 jours. Un site vitrine peut aller plus vite ; une application métier plus riche prend plusieurs mois, par étapes planifiées."
+          "a": "Cela dépend du périmètre, et le périmètre est fixé au cadrage, pas découvert en route. Le repère le plus concret : notre offre MVP livre un produit complet et utilisable en 30 jours. Un site vitrine peut aller plus vite ; une application métier plus riche prend plusieurs mois, par étapes planifiées."
         },
         {
           "id": "mvp-30",
           "group": "project",
           "q": "Est-il vraiment possible de développer un MVP en 30 jours ?",
-          "a": "Oui, à une condition : le périmètre est figé avant de commencer. Semaine 1, cadrage et design ; semaines 2 et 3, développement ; semaine 4, tests et mise en ligne. Ce qui sort au bout est un produit réel, en ligne, utilisable par de vrais utilisateurs — pas une maquette. Ce qui n'entre pas dans les 30 jours est chiffré séparément, et vient ensuite."
+          "a": "Oui, à une condition : le périmètre est figé avant de commencer. Semaine 1, cadrage et design ; semaines 2 et 3, développement ; semaine 4, tests et mise en ligne. Ce qui sort au bout est un produit réel, en ligne, utilisable par de vrais utilisateurs, pas une maquette. Ce qui n'entre pas dans les 30 jours est chiffré séparément, et vient ensuite."
         },
         {
           "id": "start",
           "group": "project",
           "q": "Que faut-il préparer avant de contacter une agence web pour un projet sur mesure ?",
-          "a": "Rien d'obligatoire : votre idée et votre réalité métier suffisent. Si vous avez des exemples de sites que vous aimez, des contraintes connues ou un existant à reprendre, c'est utile — mais c'est précisément le rôle du cadrage de transformer tout ça en périmètre clair."
+          "a": "Rien d'obligatoire : votre idée et votre réalité métier suffisent. Si vous avez des exemples de sites que vous aimez, des contraintes connues ou un existant à reprendre, c'est utile, mais c'est précisément le rôle du cadrage de transformer tout ça en périmètre clair."
         },
         {
           "id": "langues",
           "group": "project",
           "q": "Où est basée HARGILE, et travaillez-vous avec des PME partout en Belgique ?",
-          "a": "À Bruxelles. Nous travaillons avec des PME partout en Belgique : sur place quand la rencontre sert à quelque chose, à distance le reste du temps — la proximité se joue sur la disponibilité, pas sur les kilomètres. Nos deux langues de travail sont le français et l'anglais, et les sites multilingues sont une habitude : La Marquisette est trilingue, celui-ci existe en français et en anglais."
+          "a": "À Bruxelles. Nous travaillons avec des PME partout en Belgique : sur place quand la rencontre sert à quelque chose, à distance le reste du temps. La proximité se joue sur la disponibilité, pas sur les kilomètres. Nos deux langues de travail sont le français et l'anglais, et les sites multilingues sont une habitude : La Marquisette est trilingue, celui-ci existe en français et en anglais."
         },
         {
           "id": "cout",
           "group": "budget",
           "q": "Combien coûte le développement d'une application web sur mesure pour une PME en Belgique ?",
-          "a": "Il n'y a pas de tarif unique honnête : le prix dépend du périmètre. Notre engagement porte sur la méthode : le prix est fixé au cadrage, annoncé avant le début du projet, et il ne bouge pas — pas de facturation au temps passé ni de dépassement surprise. Pour un premier produit, l'offre MVP en 30 jours est à prix fixe."
+          "a": "Il n'y a pas de tarif unique honnête : le prix dépend du périmètre. Notre engagement porte sur la méthode : le prix est fixé au cadrage, annoncé avant le début du projet, et il ne bouge pas. Pas de facturation au temps passé ni de dépassement surprise. Pour un premier produit, l'offre MVP en 30 jours est à prix fixe."
         },
         {
           "id": "prix-fixe",
           "group": "budget",
           "q": "Peut-on obtenir un prix fixe pour un développement sur mesure, sans facturation au temps passé ?",
-          "a": "Oui, et c'est possible parce que le périmètre est figé avant de commencer : le cadrage définit précisément ce qui sera livré, et le prix correspond à ce périmètre. Si une idée nouvelle apparaît en cours de projet, elle est chiffrée séparément et vous décidez de l'ajouter ou non — le prix initial, lui, ne change pas."
+          "a": "Oui, et c'est possible parce que le périmètre est figé avant de commencer : le cadrage définit précisément ce qui sera livré, et le prix correspond à ce périmètre. Si une idée nouvelle apparaît en cours de projet, elle est chiffrée séparément et vous décidez de l'ajouter ou non. Le prix initial, lui, ne change pas."
         },
         {
           "id": "freelance",
@@ -281,31 +281,31 @@
           "id": "stack",
           "group": "tech",
           "q": "Quelles technologies utilisez-vous pour développer une application web sur mesure ?",
-          "a": "Des technologies web modernes et éprouvées — React et Next.js notamment : c'est avec ce framework que ce site est construit. Le choix précis se fait au cadrage, en fonction de votre projet et de votre existant, jamais l'inverse."
+          "a": "Des technologies web modernes et éprouvées, React et Next.js notamment : c'est avec ce framework que ce site est construit. Le choix précis se fait au cadrage, en fonction de votre projet et de votre existant, jamais l'inverse."
         },
         {
           "id": "wordpress",
           "group": "tech",
           "q": "Faut-il choisir WordPress ou un développement sur mesure pour le site d'une PME ?",
-          "a": "WordPress est pertinent pour publier du contenu avec un budget serré. Le sur-mesure devient le bon choix quand votre site doit faire quelque chose : réservation, vente, processus métier — ou quand le thème générique freine votre image. L'Ecole du Bonheur est venue avec un WordPress générique ; nous l'avons transformé en expérience digitale à la hauteur de son projet."
+          "a": "WordPress est pertinent pour publier du contenu avec un budget serré. Le sur-mesure devient le bon choix quand votre site doit faire quelque chose : réservation, vente, processus métier, ou quand le thème générique freine votre image. L'Ecole du Bonheur est venue avec un WordPress générique ; nous l'avons transformé en expérience digitale à la hauteur de son projet."
         },
         {
           "id": "maintenance",
           "group": "tech",
           "q": "Qui assure la maintenance d'un site web après sa mise en ligne ?",
-          "a": "Nous, si vous le souhaitez — le site ne part pas à l'abandon : nous maintenons ce que nous livrons, mises à jour, sécurité et évolutions. La maintenance est proposée séparément, sans obligation : comme vous êtes propriétaire du code, vous restez libre de la confier à qui vous voulez."
+          "a": "Nous, si vous le souhaitez. Le site ne part pas à l'abandon : nous maintenons ce que nous livrons, mises à jour, sécurité et évolutions. La maintenance est proposée séparément, sans obligation : comme vous êtes propriétaire du code, vous restez libre de la confier à qui vous voulez."
         },
         {
           "id": "seo-inclus",
           "group": "tech",
           "q": "Le référencement naturel (SEO) est-il inclus dans un projet de développement web ?",
-          "a": "Les fondations, oui, d'office : structure propre, vitesse, données structurées, contenu lisible par les moteurs — tout ce qui fait qu'un site peut être bien référencé. Le travail de visibilité continu (contenu, suivi des positions, citations par les IA) fait l'objet de notre offre SEO dédiée."
+          "a": "Les fondations, oui, d'office. Structure propre, vitesse, données structurées, contenu lisible par les moteurs : tout ce qui fait qu'un site peut être bien référencé. Le travail de visibilité continu (contenu, suivi des positions, citations par les IA) fait l'objet de notre offre SEO dédiée."
         },
         {
           "id": "ia-projets",
           "group": "tech",
           "q": "Quand l'intégration d'une IA a-t-elle vraiment du sens dans un projet web de PME ?",
-          "a": "Quand elle change le résultat : automatisation des tâches répétitives, recherche intelligente, exploitation de vos données. Et quand elle n'apporte rien à votre cas, nous vous le disons — une intégration IA doit se justifier par un résultat mesurable, pas par la tendance."
+          "a": "Quand elle change le résultat : automatisation des tâches répétitives, recherche intelligente, exploitation de vos données. Et quand elle n'apporte rien à votre cas, nous vous le disons. Une intégration IA doit se justifier par un résultat mesurable, pas par la tendance."
         }
       ],
       "more": {
@@ -367,7 +367,7 @@
           "quote": "Se démarquer, grandir et prospérer dans un monde de plus en plus connecté.",
           "v2": {
             "eyebrow": "Tech Studio",
-            "headline": "Nous développons des applications web sur mesure pour les PME.",
+            "headline": "Nous développons des applications web sur mesure pour les PME",
             "paragraph": "HARGILE est le partenaire technique sur qui nos clients peuvent compter, avec la réactivité et l'expertise d'une équipe qui s'implique comme si c'était son propre projet.",
             "ctaAudit": "Nous contacter",
             "ctaWork": "Portfolio",
@@ -391,7 +391,7 @@
         "mvp-promo": {
           "title": "Votre MVP en",
           "titleAccent": "1 mois",
-          "lead": "Transformez votre idée en un produit concret, prêt pour vos utilisateurs — livré en 30 jours, à prix fixe.",
+          "lead": "Transformez votre idée en un produit concret, prêt pour vos utilisateurs, livré en 30 jours, à prix fixe.",
           "steps": {
             "scope": {
               "week": "Semaine 1",
@@ -435,7 +435,7 @@
             },
             "your-project": {
               "description": "Derrière chaque projet, chaque personne, il y a une rencontre unique. Nous mettons la technologie au service d’une vision : la vôtre. Créer des expériences qui touchent, qui rassemblent, qui font grandir, durables et porteuses de sens est notre participation à votre succès.",
-              "subtitle": "Facteur de croissance.",
+              "subtitle": "Facteur de croissance",
               "title": "Votre projet"
             }
           },
@@ -471,7 +471,7 @@
             "items": {
               "api": "Développement d'APIs",
               "qa": "Tests et assurance qualité (QA)",
-              "reporting": "Analyse – reporting"
+              "reporting": "Analyse et reporting"
             },
             "title": "Analyse et qualité"
           },
@@ -522,7 +522,7 @@
           "offers": {
             "your-project": {
               "title": "Votre projet",
-              "tagline": "Facteur de croissance.",
+              "tagline": "Facteur de croissance",
               "description": "On écoute. On construit. On reste."
             }
           }
@@ -544,7 +544,7 @@
         },
         "aluvi": {
           "description": "ALUVI-immo propose des services immobiliers de confiance incluant la gestion immobilière (syndic & privative), la vente et la location à Bruxelles & en Brabant Wallon.",
-          "subtitle": "Gestion de biens immobiliers."
+          "subtitle": "Gestion de biens immobiliers"
         },
         "azza": {
           "description": "Leader du scrapbooking européen et des loisirs créatifs, proposant des produits uniques (styles Azza & Izzy), outils et inspiration pour la création de beaux albums photos.",
@@ -595,7 +595,7 @@
           "subtitle": "Site Institutionnel · Éducation"
         },
         "marquisette": {
-          "description": "Gîte de caractère du XIXe siècle au cœur des Ardennes belges — site vitrine trilingue avec réservation intégrée.",
+          "description": "Gîte de caractère du XIXe siècle au cœur des Ardennes belges : site vitrine trilingue avec réservation intégrée.",
           "subtitle": "Gîte de Caractère · Ardennes"
         },
         "itsabouttogo": {
@@ -653,11 +653,11 @@
       "print": "Imprimer",
       "sections": {
         "contactSupport": {
-          "content": "Délégué à la protection des données : HARGILE exerçant son activité via SMART (Productions Associées ASBL), le traitement de vos données relève du DPO de SMART, joignable à dpo@smart.coop — Smart, Délégué à la protection des données, Rue Coenraets 72, 1060 Bruxelles.",
+          "content": "Délégué à la protection des données : HARGILE exerçant son activité via SMART (Productions Associées ASBL), le traitement de vos données relève du DPO de SMART, joignable à dpo@smart.coop (Smart, Délégué à la protection des données, Rue Coenraets 72, 1060 Bruxelles).",
           "title": "Contactez-nous"
         },
         "contactUs": {
-          "content": "Responsable du traitement : HARGILE (activité menée via SMART) — Productions Associées ASBL, Rue Coenraets 72, 1060 Bruxelles · BCE 0896.755.397. Pour toute question sur cette politique ou l'exercice de vos droits : charles@hargile.com.",
+          "content": "Responsable du traitement : HARGILE (activité menée via SMART), Productions Associées ASBL, Rue Coenraets 72, 1060 Bruxelles · BCE 0896.755.397. Pour toute question sur cette politique ou l'exercice de vos droits : charles@hargile.com.",
           "title": "Nous contacter"
         },
         "cookies": {
@@ -749,13 +749,13 @@
         "ia": {
           "hero": {
             "eyebrow": "Solutions IA",
-            "title": "L'IA là où elle change le résultat.",
-            "answer": "Nous intégrons l'intelligence artificielle dans les produits et les processus des PME — uniquement là où elle apporte un résultat mesurable : moins de tâches répétitives, un meilleur service, des données enfin exploitées. Quand l'IA n'apporte rien à votre cas, nous vous le disons."
+            "title": "L'IA là où elle change le résultat",
+            "answer": "Nous intégrons l'intelligence artificielle dans les produits et les processus des PME, uniquement là où elle apporte un résultat mesurable : moins de tâches répétitives, un meilleur service, des données enfin exploitées. Quand l'IA n'apporte rien à votre cas, nous vous le disons."
           },
           "useCases": {
-            "title": "Quatre endroits où l'IA gagne sa place.",
-            "signalLabel": "Le signal —",
-            "resultLabel": "Le résultat —",
+            "title": "Quatre endroits où l'IA gagne sa place",
+            "signalLabel": "Le signal :",
+            "resultLabel": "Le résultat :",
             "items": {
               "automation": {
                 "title": "Automatisation du back-office",
@@ -781,14 +781,14 @@
           },
           "honesty": {
             "title": "Et quand l'IA n'est pas la réponse ?",
-            "text": "On vous le dit. Une intégration IA n'a de valeur que si elle change un résultat qui compte pour vous — pas pour suivre une tendance. Si un script simple, un meilleur process ou rien du tout fait l'affaire, c'est ce qu'on recommandera. C'est aussi ça, être un partenaire technique."
+            "text": "On vous le dit. Une intégration IA n'a de valeur que si elle change un résultat qui compte pour vous, pas pour suivre une tendance. Si un script simple, un meilleur process ou rien du tout fait l'affaire, c'est ce qu'on recommandera. C'est aussi ça, être un partenaire technique."
           },
           "data": {
-            "title": "Où vont vos données.",
+            "title": "Où vont vos données",
             "rows": {
               "flow": {
                 "title": "Décidé avant la première ligne de code",
-                "text": "Quelles données sortent de chez vous — si elles sortent — vers quel fournisseur et sous quel contrat : c'est défini au cadrage, avant toute intégration. Rien n'est branché à l'aveugle sur une API parce qu'elle est pratique."
+                "text": "Quelles données sortent de chez vous, si elles sortent, vers quel fournisseur et sous quel contrat : c'est défini au cadrage, avant toute intégration. Rien n'est branché à l'aveugle sur une API parce qu'elle est pratique."
               },
               "sensitive": {
                 "title": "Ce qui est sensible reste chez vous",
@@ -796,14 +796,14 @@
               },
               "reversible": {
                 "title": "Réversible par conception",
-                "text": "Quand le modèle est un service, il reste remplaçable — ils évoluent trop vite pour s'enfermer chez l'un d'eux. Quand on l'entraîne pour vous, il vous appartient. Dans les deux cas le code qui l'appelle est à vous, et vous n'êtes captif de personne."
+                "text": "Quand le modèle est un service, il reste remplaçable : ils évoluent trop vite pour s'enfermer chez l'un d'eux. Quand on l'entraîne pour vous, il vous appartient. Dans les deux cas le code qui l'appelle est à vous, et vous n'êtes captif de personne."
               }
             },
             "schema": {
               "zoneYou": "Chez vous",
               "zoneProvider": "Fournisseur tiers",
-              "boundary": "La frontière — décidée au cadrage",
-              "boundaryCompact": "La frontière — au cadrage",
+              "boundary": "La frontière, décidée au cadrage",
+              "boundaryCompact": "La frontière au cadrage",
               "systems": "Vos systèmes",
               "sensitive": "Données sensibles",
               "out": "Ce qui sort : choisi, sous contrat",
@@ -816,7 +816,7 @@
               "mountMarket": "Modèle du marché",
               "mountMarketNote": "un emplacement, pas un mariage",
               "swap": "remplaçable",
-              "code": "Le code vous appartient — dans les deux cas."
+              "code": "Le code vous appartient dans les deux cas."
             }
           },
           "faq": {
@@ -827,7 +827,7 @@
               },
               {
                 "q": "Faut-il un gros budget pour commencer ?",
-                "a": "Non. On commence par le cas d'usage au meilleur rapport résultat/effort — souvent une automatisation ciblée — et on mesure avant d'élargir. L'IA se déploie par étapes, pas en big bang."
+                "a": "Non. On commence par le cas d'usage au meilleur rapport résultat/effort, souvent une automatisation ciblée, et on mesure avant d'élargir. L'IA se déploie par étapes, pas en big bang."
               },
               {
                 "q": "Serons-nous dépendants d'un fournisseur d'IA ?",
@@ -843,11 +843,11 @@
         "mvp": {
           "hero": {
             "eyebrow": "MVP en 30 jours",
-            "title": "De l'idée au produit, en 30 jours.",
+            "title": "De l'idée au produit, en 30 jours",
             "answer": "Oui, on peut lancer un vrai produit en un mois. Notre offre MVP transforme votre idée en produit utilisable en 30 jours, à prix fixe annoncé avant le début : semaine 1, cadrage et design ; semaines 2 et 3, développement ; semaine 4, tests et mise en ligne."
           },
           "timeline": {
-            "title": "Les 30 jours, semaine par semaine.",
+            "title": "Les 30 jours, semaine par semaine",
             "weeks": {
               "w1": {
                 "label": "Semaine 1",
@@ -862,7 +862,7 @@
               "w23": {
                 "label": "Semaines 2–3",
                 "title": "Développement",
-                "text": "On construit le produit avec des technologies web modernes. Vous suivez l'avancement en continu — pas de tunnel de trois semaines sans nouvelles.",
+                "text": "On construit le produit avec des technologies web modernes. Vous suivez l'avancement en continu : pas de tunnel de trois semaines sans nouvelles.",
                 "deliverables": [
                   "Produit fonctionnel en fin de semaine 3",
                   "Points d'étape réguliers"
@@ -871,7 +871,7 @@
               "w4": {
                 "label": "Semaine 4",
                 "title": "Tests & mise en ligne",
-                "text": "On teste, on corrige, on peaufine — et on met en ligne. Votre MVP est entre les mains de ses premiers utilisateurs à J+30.",
+                "text": "On teste, on corrige, on peaufine, et on met en ligne. Votre MVP est entre les mains de ses premiers utilisateurs à J+30.",
                 "deliverables": [
                   "Produit testé",
                   "Mise en production",
@@ -882,7 +882,7 @@
             "endMarker": "J+30"
           },
           "included": {
-            "title": "Ce qui est compris — et ce qui ne l'est pas.",
+            "title": "Ce qui est compris et ce qui ne l'est pas",
             "inLabel": "Inclus dans les 30 jours",
             "outLabel": "Pas dans les 30 jours",
             "in": [
@@ -896,42 +896,42 @@
             "out": [
               "Les fonctionnalités reportées ensemble en v2",
               "Le contenu métier que vous seul pouvez écrire",
-              "La maintenance long terme — proposée séparément, sans obligation"
+              "La maintenance long terme, proposée séparément, sans obligation"
             ]
           },
           "price": {
-            "title": "Prix fixe, sans surprise.",
+            "title": "Prix fixe, sans surprise",
             "text": "Le prix est annoncé avant le début du projet, et il ne bouge pas : pas de facturation au temps passé, pas de dépassement découvert en cours de route. Si une idée nouvelle surgit en chemin, elle est chiffrée à part et vous décidez."
           },
           "scope": {
-            "title": "La limite qui tient la promesse.",
-            "text": "Trente jours, ce n'est pas une question de vitesse : c'est une question de périmètre. La semaine 1 existe pour découper — garder la plus petite version qui apporte déjà quelque chose à de vrais utilisateurs, et écarter le reste sans le perdre.",
+            "title": "La limite qui tient la promesse",
+            "text": "Trente jours, ce n'est pas une question de vitesse : c'est une question de périmètre. La semaine 1 existe pour découper : garder la plus petite version qui apporte déjà quelque chose à de vrais utilisateurs, et écarter le reste sans le perdre.",
             "points": [
               "Ce qui déborde part sur la feuille de route v2 : priorisé et écrit, pas oublié.",
-              "Le contenu métier reste à vous : textes, photos, tarifs — personne d'autre ne peut les écrire à votre place.",
+              "Le contenu métier reste à vous : textes, photos, tarifs. Personne d'autre ne peut les écrire à votre place.",
               "La seule vraie condition de notre côté du délai : un décideur joignable, disponible en semaine 1 et capable de trancher vite aux points d'étape."
             ]
           },
           "proofCase": {
-            "text": "La Marquisette : un gîte de caractère dans les Ardennes belges, mis en ligne avec un périmètre resserré — site vitrine trilingue et réservation intégrée."
+            "text": "La Marquisette : un gîte de caractère dans les Ardennes belges, mis en ligne avec un périmètre resserré, site vitrine trilingue et réservation intégrée."
           },
           "faq": {
             "items": [
               {
                 "q": "Que se passe-t-il après les 30 jours ?",
-                "a": "Le produit est à vous et il tourne. Ensuite, trois chemins possibles : vous continuez seul (le code vous appartient), on itère ensemble vers la v2, ou on assure la maintenance. Rien n'est imposé — vous restez par choix."
+                "a": "Le produit est à vous et il tourne. Ensuite, trois chemins possibles : vous continuez seul (le code vous appartient), on itère ensemble vers la v2, ou on assure la maintenance. Rien n'est imposé : vous restez par choix."
               },
               {
                 "q": "Que dois-je fournir pour tenir le délai ?",
-                "a": "Votre disponibilité en semaine 1 pour les décisions de cadrage, puis des retours rapides aux points d'étape. Le délai de 30 jours suppose un décideur joignable — c'est la seule vraie condition."
+                "a": "Votre disponibilité en semaine 1 pour les décisions de cadrage, puis des retours rapides aux points d'étape. Le délai de 30 jours suppose un décideur joignable : c'est la seule vraie condition."
               },
               {
                 "q": "Et si mon idée est trop grosse pour 30 jours ?",
-                "a": "C'est le rôle de la semaine 1 : découper. Un MVP n'est pas votre produit complet, c'est la plus petite version qui apporte de la valeur à de vrais utilisateurs. Ce qui déborde est posé sur la feuille de route de la v2 — pas oublié, priorisé."
+                "a": "C'est le rôle de la semaine 1 : découper. Un MVP n'est pas votre produit complet, c'est la plus petite version qui apporte de la valeur à de vrais utilisateurs. Ce qui déborde est posé sur la feuille de route de la v2, pas oublié, priorisé."
               },
               {
                 "q": "Le MVP est-il un vrai produit ou un prototype jetable ?",
-                "a": "Un vrai produit, construit sur des fondations faites pour durer : le même soin que pour nos projets au long cours. Si le MVP valide votre marché, la v2 se construit dessus — pas à partir de zéro."
+                "a": "Un vrai produit, construit sur des fondations faites pour durer : le même soin que pour nos projets au long cours. Si le MVP valide votre marché, la v2 se construit dessus, pas à partir de zéro."
               }
             ]
           }
@@ -939,11 +939,11 @@
         "seo": {
           "hero": {
             "eyebrow": "SEO",
-            "title": "Votre visibilité, automatisée.",
-            "answer": "Nous rendons les PME visibles là où leurs clients cherchent : sur Google, et désormais dans les réponses des assistants IA comme ChatGPT ou Perplexity. SEO technique, contenu et mesure — automatisés là où c'est possible, pour un résultat durable plutôt qu'une campagne ponctuelle."
+            "title": "Votre visibilité, automatisée",
+            "answer": "Nous rendons les PME visibles là où leurs clients cherchent : sur Google, et désormais dans les réponses des assistants IA comme ChatGPT ou Perplexity. SEO technique, contenu et mesure, automatisés là où c'est possible, pour un résultat durable plutôt qu'une campagne ponctuelle."
           },
           "process": {
-            "title": "Comment on s'y prend.",
+            "title": "Comment on s'y prend",
             "steps": {
               "audit": {
                 "title": "Audit",
@@ -955,7 +955,7 @@
               },
               "content": {
                 "title": "Contenu",
-                "text": "Des pages qui répondent chacune à une vraie question de vos clients — le format que Google et les moteurs de réponse citent."
+                "text": "Des pages qui répondent chacune à une vraie question de vos clients, le format que Google et les moteurs de réponse citent."
               },
               "measure": {
                 "title": "Mesure",
@@ -964,18 +964,18 @@
             }
           },
           "metaProof": {
-            "title": "Cette page est la démonstration.",
+            "title": "Cette page est la démonstration",
             "text": "La méthode qu'on vous propose est celle qu'on applique à notre propre site :",
             "points": [
               "Chaque page existe en français et en anglais, avec les balises qui disent aux moteurs laquelle servir.",
               "Chaque page porte ses données structurées (schema.org), validées automatiquement avant chaque mise en production.",
-              "Tout le contenu est présent dans le HTML dès la première réponse — lisible par les moteurs comme par les assistants IA.",
+              "Tout le contenu est présent dans le HTML dès la première réponse, lisible par les moteurs comme par les assistants IA.",
               "Affichez le code source de cette page : tout y est."
             ]
           },
           "measured": {
-            "title": "Les chiffres de cette page.",
-            "lead": "Mesuré le {date} sur cette page même, avec {tool}, en conditions mobiles. Vous pouvez relancer l'outil et retomber sur les mêmes chiffres — c'est tout l'intérêt de les publier.",
+            "title": "Les chiffres de cette page",
+            "lead": "Mesuré le {date} sur cette page même, avec {tool}, en conditions mobiles. Vous pouvez relancer l'outil et retomber sur les mêmes chiffres, et c'est tout l'intérêt de les publier.",
             "scores": {
               "performance": "Performance",
               "accessibility": "Accessibilité",
@@ -991,8 +991,8 @@
             "note": "L'affichage principal dépasse encore son seuil de 2,5 secondes, et nous le laissons affiché plutôt que de choisir les chiffres qui nous arrangent. C'est le chantier en cours. Une agence qui ne publie que ses bons scores ne vous dit pas ce qu'elle mesure : elle vous dit ce qu'elle montre."
           },
           "geo": {
-            "title": "Être cité par les IA.",
-            "lead": "Quand un client demande à ChatGPT ou à Perplexity quelle agence développe des applications web à Bruxelles, l'assistant répond en citant ses sources. Être l'une de ces sources, c'est le référencement qui commence — et il se travaille, page par page.",
+            "title": "Être cité par les IA",
+            "lead": "Quand un client demande à ChatGPT ou à Perplexity quelle agence développe des applications web à Bruxelles, l'assistant répond en citant ses sources. Être l'une de ces sources, c'est le référencement qui commence, et il se travaille, page par page.",
             "cols": {
               "readable": {
                 "title": "Un contenu lisible par les machines",
@@ -1024,7 +1024,7 @@
             }
           },
           "measures": {
-            "title": "Ce qu'on mesure — et ce qu'on ne promet pas.",
+            "title": "Ce qu'on mesure et ce qu'on ne promet pas",
             "text": "Vous n'avez pas à nous croire sur parole. Les chiffres sont suivis et partagés : on regarde les mêmes que vous, aux mêmes moments.",
             "points": [
               "Les positions sur les requêtes qui comptent pour votre métier, pas sur celles qui font joli dans un rapport.",
@@ -1034,21 +1034,21 @@
             "refusal": "Ce que nous ne vendrons pas : la première position garantie, ni la certitude d'être cité par les IA. Personne ne contrôle l'algorithme de Google, personne ne contrôle les modèles, et une agence qui vous les promet vous dit déjà quelque chose sur le reste. Ce sur quoi nous nous engageons, c'est la méthode et la transparence sur ce qu'elle produit."
           },
           "proofCase": {
-            "text": "VENIZI vend ses bijoux en ligne et dans un réseau de 50 boutiques en Belgique et en France — un catalogue où chaque produit doit être trouvable."
+            "text": "VENIZI vend ses bijoux en ligne et dans un réseau de 50 boutiques en Belgique et en France : un catalogue où chaque produit doit être trouvable."
           },
           "faq": {
             "items": [
               {
                 "q": "Au bout de combien de temps voit-on des résultats ?",
-                "a": "Le SEO est un investissement de fond : les premiers effets se mesurent en semaines pour les corrections techniques, en mois pour le contenu. C'est plus lent qu'une publicité — mais ça ne s'arrête pas quand on coupe le budget."
+                "a": "Le SEO est un investissement de fond : les premiers effets se mesurent en semaines pour les corrections techniques, en mois pour le contenu. C'est plus lent qu'une publicité, mais ça ne s'arrête pas quand on coupe le budget."
               },
               {
                 "q": "Garantissez-vous la première position sur Google ?",
-                "a": "Non, et personne de sérieux ne le peut : les résultats dépendent d'un algorithme que personne ne contrôle. Ce qu'on garantit, c'est la méthode — technique propre, contenu qui répond aux vraies questions, mesure — et la transparence sur ce qu'elle produit."
+                "a": "Non, et personne de sérieux ne le peut : les résultats dépendent d'un algorithme que personne ne contrôle. Ce qu'on garantit, c'est la méthode : technique propre, contenu qui répond aux vraies questions, mesure, et la transparence sur ce qu'elle produit."
               },
               {
                 "q": "C'est quoi, être visible dans les réponses des IA ?",
-                "a": "Quand quelqu'un demande à ChatGPT ou Perplexity quelle agence peut créer une application web à Bruxelles, ces assistants citent leurs sources. Être cité, c'est le nouveau référencement — et ça se travaille : contenu lisible par les machines, données structurées, réponses nettes aux questions que les gens posent réellement."
+                "a": "Quand quelqu'un demande à ChatGPT ou Perplexity quelle agence peut créer une application web à Bruxelles, ces assistants citent leurs sources. Être cité, c'est le nouveau référencement, et ça se travaille : contenu lisible par les machines, données structurées, réponses nettes aux questions que les gens posent réellement."
               },
               {
                 "q": "Comment suit-on les résultats ?",
@@ -1060,26 +1060,26 @@
         "web": {
           "hero": {
             "eyebrow": "Applications web",
-            "title": "Des applications web sur mesure pour les PME.",
+            "title": "Des applications web sur mesure pour les PME",
             "answer": "Nous concevons, codons et maintenons des applications web sur mesure, entièrement en interne, depuis Bruxelles. Pas de sous-traitance : l'équipe qui conçoit votre produit est celle qui le développe et le fait vivre. Et à la livraison, le code et les données vous appartiennent."
           },
           "madeInHouse": {
-            "title": "Tout se passe chez nous.",
-            "lead": "Conçu, codé et maintenu par la même équipe, à Bruxelles. Voilà ce que ça donne : chaque carré est un site en ligne aujourd'hui — cliquez, vous y êtes.",
+            "title": "Tout se passe chez nous",
+            "lead": "Conçu, codé et maintenu par la même équipe, à Bruxelles. Voilà ce que ça donne : chaque carré est un site en ligne aujourd'hui. Cliquez, vous y êtes.",
             "grid": {
               "projects": "projets livrés",
               "sectors": "secteurs d'activité",
               "code": "lignes de code",
               "hint": "Du plus récent au plus ancien. Cliquez un carré pour ouvrir le site.",
-              "cell": "{client} — {sector}, {year} (nouvel onglet)"
+              "cell": "{client}, {sector}, {year} (nouvel onglet)"
             },
             "ownership": {
-              "title": "Votre code, vos données.",
-              "text": "À la livraison, vous êtes propriétaire du code et de vos données. Vous pouvez partir, héberger ailleurs, ou continuer avec nous — par choix."
+              "title": "Votre code, vos données",
+              "text": "À la livraison, vous êtes propriétaire du code et de vos données. Vous pouvez partir, héberger ailleurs, ou continuer avec nous, par choix."
             }
           },
           "deliverables": {
-            "title": "Ce que vous recevez.",
+            "title": "Ce que vous recevez",
             "lead": "À la fin d'un projet, quatre choses vous appartiennent. Rien ne reste chez nous : tout est conçu et codé en interne à Bruxelles, sans sous-traitance, et ce qui est produit part avec vous.",
             "items": {
               "design": {
@@ -1095,7 +1095,7 @@
               "live": {
                 "titleLead": "Le site en ligne,",
                 "titleRest": "dans vos langues",
-                "text": "Mis en production sur votre domaine, en une ou plusieurs langues — un site trilingue est une demande courante ici, pas une option exotique."
+                "text": "Mis en production sur votre domaine, en une ou plusieurs langues : un site trilingue est une demande courante ici, pas une option exotique."
               },
               "keys": {
                 "titleLead": "Les accès",
@@ -1105,8 +1105,8 @@
             }
           },
           "priceMethod": {
-            "title": "Comment le prix est fixé.",
-            "text": "Il n'existe pas de tarif unique honnête pour une application sur mesure : le prix dépend de ce qu'il y a à construire. Ce sur quoi nous nous engageons, c'est la méthode — le prix est arrêté au cadrage, annoncé avant que le développement commence, et il ne bouge plus ensuite.",
+            "title": "Comment le prix est fixé",
+            "text": "Il n'existe pas de tarif unique honnête pour une application sur mesure : le prix dépend de ce qu'il y a à construire. Ce sur quoi nous nous engageons, c'est la méthode : le prix est arrêté au cadrage, annoncé avant que le développement commence, et il ne bouge plus ensuite.",
             "points": [
               "Le périmètre est figé au cadrage : le prix correspond à ce périmètre-là, écrit noir sur blanc.",
               "Pas de facturation au temps passé, donc pas de dépassement découvert en cours de route.",
@@ -1114,12 +1114,12 @@
             ],
             "note": "Pour un premier produit, l'offre MVP en 30 jours applique la même méthode, avec un prix fixe et une date de mise en ligne connus dès le départ.",
             "cols": {
-              "title": "Conçu, codé, maintenu — en interne.",
+              "title": "Conçu, codé, maintenu en interne",
               "design": {
                 "text": "Le design part de votre métier, pas d'un template. Maquettes et parcours sont dessinés en interne, avec vous."
               },
               "build": {
-                "text": "Développé avec des technologies web modernes — comme ce site. Pas d'assemblage de plugins : du code que nous connaissons ligne par ligne."
+                "text": "Développé avec des technologies web modernes, comme ce site. Pas d'assemblage de plugins : du code que nous connaissons ligne par ligne."
               },
               "maintain": {
                 "text": "Après la mise en ligne, les fondations continuent d'être entretenues. Vous restez par choix, jamais par contrainte."
@@ -1127,21 +1127,21 @@
             }
           },
           "cases": {
-            "title": "Trois preuves plutôt qu'une promesse.",
+            "title": "Trois preuves plutôt qu'une promesse",
             "items": {
               "edb": {
                 "client": "Ecole du Bonheur",
-                "sector": "Site institutionnel — éducation",
+                "sector": "Site institutionnel, éducation",
                 "text": "Un WordPress générique transformé en expérience digitale à la hauteur d'une école qui méritait mieux."
               },
               "marquisette": {
                 "client": "La Marquisette",
-                "sector": "Gîte de caractère — Ardennes belges",
-                "text": "Un gîte du XIXe siècle au cœur des Ardennes belges — site vitrine trilingue avec réservation intégrée."
+                "sector": "Gîte de caractère, Ardennes belges",
+                "text": "Un gîte du XIXe siècle au cœur des Ardennes belges : site vitrine trilingue avec réservation intégrée."
               },
               "venizi": {
                 "client": "VENIZI",
-                "sector": "E-commerce — bijoux",
+                "sector": "E-commerce, bijoux",
                 "text": "Bijoux d'inspiration vénitienne, vendus en ligne et dans un réseau de 50 boutiques en Belgique et en France."
               }
             }
@@ -1154,7 +1154,7 @@
               },
               {
                 "q": "Pouvez-vous faire un site multilingue ?",
-                "a": "Oui — en Belgique, c'est presque une habitude. La Marquisette est un site trilingue avec réservation intégrée, et ce site-ci est servi en français et en anglais avec le référencement adapté à chaque langue."
+                "a": "Oui, en Belgique, c'est presque une habitude. La Marquisette est un site trilingue avec réservation intégrée, et ce site-ci est servi en français et en anglais avec le référencement adapté à chaque langue."
               },
               {
                 "q": "Faites-vous aussi le design ?",
@@ -1173,7 +1173,7 @@
         "detailCta": "Découvrir l'offre",
         "hero": {
           "eyebrow": "Services",
-          "title": "Ce que nous livrons.",
+          "title": "Ce que nous livrons",
           "answer": "HARGILE est un studio web indépendant basé à Bruxelles. Nous concevons, développons et maintenons des applications web sur mesure pour les PME, intégrons l'IA là où elle change le résultat, automatisons votre visibilité sur les moteurs de recherche, et transformons une idée en MVP en 30 jours, à prix fixe."
         },
         "offers": {
@@ -1226,7 +1226,7 @@
       },
       "shared": {
         "ctaBand": {
-          "title": "Parlons de votre projet.",
+          "title": "Parlons de votre projet",
           "text": "Racontez-nous où vous en êtes ; on vous dit ce qu'on ferait, et à quel prix.",
           "button": "Nous contacter"
         },
@@ -1374,7 +1374,7 @@
         "title": "À Propos d'HARGILE - Notre Histoire & Mission | Agence d'Innovation Digitale"
       },
       "contact": {
-        "description": "Contactez l'équipe HARGILE pour une consultation gratuite. Développement web, IA et marketing digital – parlons de votre projet.",
+        "description": "Contactez l'équipe HARGILE pour une consultation gratuite. Développement web, IA et marketing digital. Parlons de votre projet.",
         "og": {
           "description": "Commencez votre parcours de transformation numérique avec HARGILE. Contactez notre équipe pour une consultation personnalisée et découvrez des solutions adaptées à vos besoins uniques.",
           "imageAlt": "Contact HARGILE",
@@ -1398,10 +1398,10 @@
         "og": {
           "description": "Libérez le potentiel de votre entreprise avec les solutions numériques personnalisées d'HARGILE. Du développement web à l'intégration IA, nous délivrons des stratégies efficaces.",
           "imageAlt": "HARGILE - Agence digitale",
-          "title": "HARGILE – Tech studio : développement web sur mesure & IA"
+          "title": "HARGILE | Tech studio : développement web sur mesure & IA"
         },
         "schemaType": "WebPage",
-        "title": "HARGILE – Tech studio : développement web sur mesure & IA"
+        "title": "HARGILE | Tech studio : développement web sur mesure & IA"
       },
       "legal": {
         "privacy": {
@@ -1430,8 +1430,8 @@
         "ia": {
           "description": "Intégration d'IA dans les produits et processus des PME, uniquement là où elle change le résultat : automatisation, support, exploitation des données. Sans gadget.",
           "og": {
-            "description": "Automatisation, support client, données : l'IA intégrée là où elle apporte un résultat mesurable — et un non honnête quand elle n'apporte rien.",
-            "imageAlt": "Solutions IA — HARGILE",
+            "description": "Automatisation, support client, données : l'IA intégrée là où elle apporte un résultat mesurable, et un non honnête quand elle n'apporte rien.",
+            "imageAlt": "Solutions IA, HARGILE",
             "title": "Solutions IA pour PME : intégrée là où elle compte | HARGILE"
           },
           "schemaType": "WebPage",
@@ -1441,7 +1441,7 @@
           "description": "Votre idée devient un produit réel en 30 jours, à prix fixe annoncé avant le début : cadrage et design, développement, tests et mise en ligne. Par un studio bruxellois.",
           "og": {
             "description": "Semaine 1 : cadrage et design. Semaines 2–3 : développement. Semaine 4 : mise en ligne. Un vrai produit en un mois, à prix fixe.",
-            "imageAlt": "MVP en 30 jours — HARGILE",
+            "imageAlt": "MVP en 30 jours, HARGILE",
             "title": "MVP en 30 jours, à prix fixe | HARGILE"
           },
           "schemaType": "WebPage",
@@ -1454,10 +1454,10 @@
         },
         "schemaType": "CollectionPage",
         "seo": {
-          "description": "SEO technique, contenu et mesure pour PME — visible sur Google et cité par les assistants IA comme ChatGPT. Une méthode durable, appliquée à notre propre site.",
+          "description": "SEO technique, contenu et mesure pour PME, visible sur Google et cité par les assistants IA comme ChatGPT. Une méthode durable, appliquée à notre propre site.",
           "og": {
             "description": "Votre visibilité, automatisée : SEO classique et citations par les moteurs de réponse IA, avec une méthode que notre propre site démontre.",
-            "imageAlt": "SEO automatisé — HARGILE",
+            "imageAlt": "SEO automatisé, HARGILE",
             "title": "SEO automatisé : visible sur Google et dans les IA | HARGILE"
           },
           "schemaType": "WebPage",
@@ -1467,8 +1467,8 @@
         "web": {
           "description": "Conception, développement et maintenance d'applications web sur mesure pour PME, entièrement en interne à Bruxelles. Votre code et vos données vous appartiennent.",
           "og": {
-            "description": "Une équipe qui conçoit, code et maintient votre application web chez elle, à Bruxelles — et un code qui vous appartient à la livraison.",
-            "imageAlt": "Applications web sur mesure — HARGILE",
+            "description": "Une équipe qui conçoit, code et maintient votre application web chez elle, à Bruxelles, et un code qui vous appartient à la livraison.",
+            "imageAlt": "Applications web sur mesure, HARGILE",
             "title": "Applications web sur mesure pour PME | HARGILE"
           },
           "schemaType": "WebPage",
