@@ -12,17 +12,34 @@
    would draw in the browser, which would keep these labels out of the initial
    HTML and break the rule /services/seo makes a selling point of.
 
-   What it draws is the three rows seen at once: a boundary, what crosses it,
-   what does not, and the fact that the box on the right is a slot rather than a
-   partner. The stroke that stays home is labelled "en priorité" on purpose —
-   the copy says we *favour* solutions that keep sensitive data in-house, and a
-   drawing that sealed it in would promise more than the sentence does.
+   What it draws: a boundary, what crosses it, what does not, and — the thing
+   the first version got wrong — two mounts rather than one. That version put
+   the model on the far side by construction and called the right-hand zone
+   "AI provider", so the line read as separating your data from the model.
+   True of a Claude or GPT integration; false of a classifier, a forecaster or
+   a vision model we train, where the model sits inside the zone and there is
+   nobody on the other side. It is also false of an open-weight LLM fine-tuned
+   and served on the client's own hardware, which is the case that settles it:
+   any figure keyed on model *type* has no cell for that, while one keyed on
+   model *location* takes it without a redraw. So the two mounts are drawn
+   identically, one on each side of the line, and where the model goes reads as
+   the same kind of scoping decision as everything else in the drawing. The
+   section is called "where does your data go" — location is its axis.
+
+   The mounts are bracket corners over a near-invisible body, not the dashed
+   rectangles the first version used. Standard DFD/STRIDE notation reserves
+   dashes for trust boundaries (every other line solid), so a dashed box inside
+   the zone reads to anyone who knows that notation as a second boundary nested
+   in the first — the exact opposite of what the in-house mount means. We keep
+   the boundary itself solid and bright, against the convention, because it is
+   the subject and most of this page's readers are not reading a threat model.
+   Brackets carry "a fitted slot" better than dashes did anyway.
 
    Two figures, one wide and one column, both in the markup with CSS choosing
    between them: an SVG <text> does not re-wrap, so a single drawing cannot
-   survive both 1440px and 390px. The compact one drops the return leg — three
-   crossings in a 320-unit column collide, and the return is the one element the
-   three paragraphs never mention. */
+   survive both 1440px and 390px. The compact one drops the return leg and the
+   note about owning the code — three crossings in a 320-unit column collide,
+   and those are the two elements the three paragraphs never mention. */
 
 import {getTranslations} from "next-intl/server";
 import styles from "./data-guarantees.module.scss";
@@ -57,37 +74,49 @@ const DataGuarantees = async ({locale}) => {
             <div className={styles.schema}>
                 <svg
                     className={`${styles.fig} ${styles.figWide}`}
-                    viewBox="0 0 1040 380"
+                    viewBox="0 0 1040 400"
                     aria-hidden="true"
                     focusable="false"
                 >
                     <text className={styles.kicker} x="2" y="32">{s("zoneYou")}</text>
-                    <text className={styles.kicker} x="752" y="70">{s("zoneProvider")}</text>
+                    <text className={styles.kicker} x="752" y="58">{s("zoneProvider")}</text>
 
                     {/* Your side is drawn on three sides only — its fourth edge
                         is the boundary itself, so the zone and the line are one
                         object rather than two things near each other. */}
-                    <path className={styles.zone} d="M600 44 H1 V344 H600"/>
+                    <path className={styles.zone} d="M600 44 H1 V364 H600"/>
 
-                    {/* The boundary, broken exactly where a flow crosses it. */}
+                    {/* The boundary, broken exactly where a flow crosses it:
+                        gaps at 100–124 and 148–172, nowhere else. */}
                     <line className={styles.boundary} x1="600" y1="44" x2="600" y2="100"/>
-                    <line className={styles.boundary} x1="600" y1="124" x2="600" y2="168"/>
-                    <line className={styles.boundary} x1="600" y1="192" x2="600" y2="344"/>
+                    <line className={styles.boundary} x1="600" y1="124" x2="600" y2="148"/>
+                    <line className={styles.boundary} x1="600" y1="172" x2="600" y2="364"/>
+
+                    {/* Accented along the full height of the in-house mount
+                        facing it. The first version put this mark where a
+                        stroke died against the line, which said "one flow was
+                        turned back"; run the length of the mount instead it
+                        says "this stretch is not crossed at all", which is the
+                        actual claim once the model is on your side. */}
+                    <line className={styles.closed} x1="600" y1="200" x2="600" y2="328"/>
+
                     <text
                         className={`${styles.kicker} ${styles.kickerAccent}`}
-                        x="600" y="368" textAnchor="middle"
+                        x="600" y="388" textAnchor="middle"
                     >
                         {s("boundary")}
                     </text>
 
-                    <rect className={styles.box} x="40" y="84" width="210" height="56"/>
-                    <text className={styles.boxTitle} x="145" y="118" textAnchor="middle">{s("systems")}</text>
+                    <rect className={styles.box} x="30" y="84" width="190" height="56"/>
+                    <text className={styles.boxTitle} x="125" y="118" textAnchor="middle">{s("systems")}</text>
 
-                    <rect className={styles.boxAccent} x="40" y="222" width="210" height="56"/>
-                    <text className={styles.boxTitle} x="145" y="256" textAnchor="middle">{s("sensitive")}</text>
+                    <rect className={styles.boxAccent} x="30" y="226" width="190" height="56"/>
+                    <text className={styles.boxTitle} x="125" y="260" textAnchor="middle">{s("sensitive")}</text>
 
-                    {/* What leaves. */}
-                    <line className={styles.flow} x1="250" y1="112" x2="746" y2="112"/>
+                    {/* What crosses. Labelled with what leaves and under what
+                        safeguard, which is the one annotation a residency
+                        diagram is useless without. */}
+                    <line className={styles.flow} x1="220" y1="112" x2="746" y2="112"/>
                     <path className={styles.headAccent} d="M752 112 l-11 -5.5 v11 z"/>
                     <text
                         className={`${styles.label} ${styles.labelAccent}`}
@@ -99,61 +128,59 @@ const DataGuarantees = async ({locale}) => {
                     {/* What comes back — under the boxes, then up into the
                         middle of the one it came from. A straight run would end
                         in the gap between the two boxes, pointing at nothing. */}
-                    <path className={styles.flowDim} d="M752 180 H145 V152"/>
-                    <path className={styles.headDim} d="M145 140 l-5.5 11 h11 z"/>
-                    <text className={styles.label} x="430" y="202" textAnchor="middle">{s("back")}</text>
+                    <path className={styles.flowDim} d="M752 160 H125 V152"/>
+                    <path className={styles.headDim} d="M125 140 l-5.5 11 h11 z"/>
+                    <text className={styles.label} x="430" y="182" textAnchor="middle">{s("back")}</text>
 
-                    {/* What stays: the one stroke that reaches the boundary and
-                        does not pass. The other two cross through gaps in the
-                        line; this one meets it where it is unbroken, and the
-                        boundary thickens to accent exactly there. That contrast
-                        is the whole argument — the mark belongs on the line it
-                        fails to cross, not floating short of it. */}
-                    <line className={styles.flow} x1="250" y1="250" x2="594" y2="250"/>
-                    <line className={styles.stop} x1="600" y1="228" x2="600" y2="272"/>
+                    {/* What does not cross: a short run into the mount that is
+                        already on this side. Nothing leaves that mount. */}
+                    <line className={styles.flow} x1="220" y1="254" x2="294" y2="254"/>
+                    <path className={styles.headAccent} d="M300 254 l-11 -5.5 v11 z"/>
+
+                    {/* The in-house mount. Same body, same brackets, same size
+                        as the one opposite — the only difference between them
+                        is which side of the line they are on, which is the
+                        whole argument. */}
+                    <rect className={styles.mount} x="300" y="200" width="270" height="128"/>
+                    <path className={styles.tick} d="M300 214 V200 H314"/>
+                    <path className={styles.tick} d="M556 200 H570 V214"/>
+                    <path className={styles.tick} d="M300 314 V328 H314"/>
+                    <path className={styles.tick} d="M556 328 H570 V314"/>
+                    <text className={styles.boxTitle} x="435" y="250" textAnchor="middle">{s("mountHome")}</text>
+                    <text className={styles.label} x="435" y="274" textAnchor="middle">{s("mountHomeNote")}</text>
                     <text
                         className={`${styles.label} ${styles.labelBright}`}
-                        x="400" y="238" textAnchor="middle"
+                        x="435" y="296" textAnchor="middle"
                     >
-                        {s("stays")}
+                        {s("mountHomeStays")}
                     </text>
 
-                    <text className={styles.label} x="40" y="322">{s("code")}</text>
+                    <rect className={styles.mount} x="752" y="72" width="278" height="128"/>
+                    <path className={styles.tick} d="M752 86 V72 H766"/>
+                    <path className={styles.tick} d="M1016 72 H1030 V86"/>
+                    <path className={styles.tick} d="M752 186 V200 H766"/>
+                    <path className={styles.tick} d="M1016 200 H1030 V186"/>
+                    <text className={styles.boxTitle} x="891" y="130" textAnchor="middle">{s("mountMarket")}</text>
+                    <text className={styles.label} x="891" y="154" textAnchor="middle">{s("mountMarketNote")}</text>
 
-                    {/* The provider as a slot: dashed body, bracketed corners.
-                        A logo would name a supplier; a slot says it is fitted.
-
-                        It spans the same 84–278 band as the two boxes opposite,
-                        so the two sides of the figure carry equal weight: your
-                        side holds two named things, theirs holds one mount. */}
-                    <rect className={styles.slot} x="752" y="84" width="278" height="194"/>
-                    <path className={styles.tick} d="M752 98 V84 H766"/>
-                    <path className={styles.tick} d="M1016 84 H1030 V98"/>
-                    <path className={styles.tick} d="M752 264 V278 H766"/>
-                    <path className={styles.tick} d="M1016 278 H1030 V264"/>
-                    <text className={styles.boxTitle} x="891" y="175" textAnchor="middle">{s("slot")}</text>
-                    <text className={styles.label} x="891" y="199" textAnchor="middle">{s("slotNote")}</text>
+                    <text className={styles.label} x="30" y="348">{s("code")}</text>
                 </svg>
 
                 {/* Not the wide figure squeezed — a different drawing of the
                     same object, stood on its end so the boundary is a rule the
-                    eye crosses on its way down the page.
-
-                    It carries two strokes where the wide one carries three. The
-                    return leg and the note about owning the code are both gone:
-                    at 320 units every stroke needs a label beside it, and those
-                    two are the ones no paragraph below would miss. What is left
-                    is the argument itself — one thing crosses, one thing meets
-                    the line and stops. */}
+                    eye crosses on its way down the page. One mount above the
+                    line, one below, and the single stroke that crosses runs
+                    down the left margin because the in-zone mount now occupies
+                    the width the old version routed through. */}
                 <svg
                     className={`${styles.fig} ${styles.figCompact}`}
-                    viewBox="0 0 320 568"
+                    viewBox="0 0 320 556"
                     aria-hidden="true"
                     focusable="false"
                 >
                     <text className={styles.kicker} x="2" y="14">{s("zoneYou")}</text>
 
-                    <path className={styles.zone} d="M2 312 V30 H318 V312"/>
+                    <path className={styles.zone} d="M2 350 V30 H318 V350"/>
 
                     <rect className={styles.box} x="64" y="52" width="192" height="50"/>
                     <text className={styles.boxTitle} x="160" y="84" textAnchor="middle">{s("systems")}</text>
@@ -161,47 +188,55 @@ const DataGuarantees = async ({locale}) => {
                     <rect className={styles.boxAccent} x="64" y="142" width="192" height="50"/>
                     <text className={styles.boxTitle} x="160" y="174" textAnchor="middle">{s("sensitive")}</text>
 
-                    {/* Out of the left edge, down the margin, across the
-                        boundary through a gap in it, and it stops short of the
-                        slot rather than touching it — an arrow resting on the
-                        frame it points at reads as a collision. */}
-                    <path className={styles.flow} d="M64 77 H34 V420 H160 V425"/>
-                    <path className={styles.headAccent} d="M160 436 l-5.5 -11 h11 z"/>
+                    {/* Straight down into the mount that never leaves. */}
+                    <line className={styles.flow} x1="160" y1="192" x2="160" y2="216"/>
+                    <path className={styles.headAccent} d="M160 222 l-5.5 -11 h11 z"/>
 
-                    {/* Straight down to the line, and no further. */}
-                    <line className={styles.flow} x1="160" y1="192" x2="160" y2="298"/>
+                    <rect className={styles.mount} x="76" y="222" width="220" height="94"/>
+                    <path className={styles.tick} d="M76 236 V222 H90"/>
+                    <path className={styles.tick} d="M282 222 H296 V236"/>
+                    <path className={styles.tick} d="M76 302 V316 H90"/>
+                    <path className={styles.tick} d="M282 316 H296 V302"/>
+                    <text className={styles.boxTitle} x="186" y="252" textAnchor="middle">{s("mountHome")}</text>
                     <Label
-                        className={`${styles.label} ${styles.labelBright}`}
-                        value={t.raw("schema.staysCompact")}
-                        x="174" y="226" dy="20"
+                        className={styles.label}
+                        value={t.raw("schema.mountHomeNoteCompact")}
+                        x="186" y="278" dy="18" anchor="middle"
                     />
 
-                    {/* The gap at 22–46 is where the flow crosses; the accent
-                        run at 138–182 is where the other one does not. */}
-                    <line className={styles.boundary} x1="2" y1="312" x2="22" y2="312"/>
-                    <line className={styles.boundary} x1="46" y1="312" x2="318" y2="312"/>
-                    <line className={styles.stop} x1="138" y1="312" x2="182" y2="312"/>
+                    {/* The gap at 22–46 is where the one crossing goes; the
+                        accent run at 120–252 is the stretch under the in-zone
+                        mount, which nothing approaches. */}
+                    <line className={styles.boundary} x1="2" y1="350" x2="22" y2="350"/>
+                    <line className={styles.boundary} x1="46" y1="350" x2="318" y2="350"/>
+                    <line className={styles.closed} x1="120" y1="350" x2="252" y2="350"/>
                     <text
                         className={`${styles.kicker} ${styles.kickerAccent}`}
-                        x="318" y="336" textAnchor="end"
+                        x="318" y="342" textAnchor="end"
                     >
                         {s("boundaryCompact")}
                     </text>
 
+                    {/* Down the left margin, through the gap, then across and
+                        down — stopping short of the mount rather than touching
+                        it. An arrow resting on the frame it points at reads as
+                        a collision. */}
+                    <path className={styles.flow} d="M64 77 H34 V416 H159 V421"/>
+                    <path className={styles.headAccent} d="M159 432 l-5.5 -11 h11 z"/>
                     <Label
                         className={`${styles.label} ${styles.labelAccent}`}
                         value={t.raw("schema.outCompact")}
-                        x="46" y="368" dy="20"
+                        x="318" y="372" dy="18" anchor="end"
                     />
 
-                    <text className={styles.kicker} x="318" y="416" textAnchor="end">{s("zoneProvider")}</text>
-                    <rect className={styles.slot} x="22" y="444" width="274" height="104"/>
-                    <path className={styles.tick} d="M22 458 V444 H36"/>
-                    <path className={styles.tick} d="M282 444 H296 V458"/>
-                    <path className={styles.tick} d="M22 534 V548 H36"/>
-                    <path className={styles.tick} d="M282 548 H296 V534"/>
-                    <text className={styles.boxTitle} x="160" y="488" textAnchor="middle">{s("slot")}</text>
-                    <text className={styles.label} x="160" y="512" textAnchor="middle">{s("swap")}</text>
+                    <text className={styles.kicker} x="318" y="410" textAnchor="end">{s("zoneProvider")}</text>
+                    <rect className={styles.mount} x="22" y="436" width="274" height="100"/>
+                    <path className={styles.tick} d="M22 450 V436 H36"/>
+                    <path className={styles.tick} d="M282 436 H296 V450"/>
+                    <path className={styles.tick} d="M22 522 V536 H36"/>
+                    <path className={styles.tick} d="M282 536 H296 V522"/>
+                    <text className={styles.boxTitle} x="159" y="478" textAnchor="middle">{s("mountMarket")}</text>
+                    <text className={styles.label} x="159" y="502" textAnchor="middle">{s("swap")}</text>
                 </svg>
             </div>
 

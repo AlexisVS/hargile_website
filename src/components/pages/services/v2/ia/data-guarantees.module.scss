@@ -113,11 +113,11 @@
 .boundary,
 .box,
 .boxAccent,
-.slot,
+.mount,
 .tick,
 .flow,
 .flowDim,
-.stop {
+.closed {
   fill: none;
   vector-effect: non-scaling-stroke;
 }
@@ -145,11 +145,19 @@
   stroke-width: 1;
 }
 
-/* Dashed body plus bracketed corners: an empty mount, not a named supplier. */
-.slot {
-  stroke: rgba(255, 255, 255, 0.38);
+/* An empty mount, not a named supplier. The brackets do that work; the body is
+   left at 0.16 so the corners read as the shape.
+
+   Deliberately not dashed, though a dashed box says "placeholder" more loudly.
+   DFD/STRIDE notation makes every line solid except trust boundaries, which are
+   dashed — so a dashed rectangle sitting inside the zone reads, to a CTO who
+   has drawn a threat model, as a second boundary nested in the first. That is
+   the reverse of what the in-house mount means, and this figure now has two of
+   these, one on each side of the real boundary. Losing the dash costs some
+   "unfilled slot" and buys back the sentence the drawing exists to make. */
+.mount {
+  stroke: rgba(255, 255, 255, 0.16);
   stroke-width: 1;
-  stroke-dasharray: 5 6;
 }
 
 .tick {
@@ -168,9 +176,10 @@
   stroke-dasharray: 4 5;
 }
 
-/* The bar that ends the sensitive-data stroke. Heavier than a flow line
-   because it is the one mark in the figure that means "no further". */
-.stop {
+/* The stretch of boundary nothing crosses — run the full height of the in-zone
+   mount opposite it, not the short bar it used to be. Heavier than a flow line
+   because it is the one mark in the figure that means "closed". */
+.closed {
   stroke: rgba(150, 185, 249, 0.95);
   stroke-width: 2;
 }

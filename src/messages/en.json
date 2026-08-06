@@ -788,20 +788,20 @@
             "rows": {
               "flow": {
                 "title": "Decided before the first line of code",
-                "text": "Which data leaves your systems, to which provider, under which contract: that is settled during scoping, before any integration. Nothing gets wired blindly into an API because it happens to be convenient."
+                "text": "Which data leaves your systems — if any does — to which provider and under which contract: that is settled during scoping, before any integration. Nothing gets wired blindly into an API because it happens to be convenient."
               },
               "sensitive": {
                 "title": "What is sensitive stays with you",
-                "text": "When data is sensitive, we favour solutions that keep it on your own infrastructure. GDPR is not a box ticked at the end of a project: it decides the architecture."
+                "text": "When data is sensitive, we favour solutions that keep it on your own infrastructure: a model trained or hosted on your side rather than a third-party API. GDPR is not a box ticked at the end of a project: it decides the architecture."
               },
               "reversible": {
                 "title": "Reversible by design",
-                "text": "The AI provider stays replaceable — models move too fast to lock yourself into one. And the code that calls them belongs to you, like the rest."
+                "text": "When the model is a service, it stays replaceable — they move too fast to lock yourself into one. When we train it for you, it is yours. Either way the code that calls it belongs to you, and you are captive to nobody."
               }
             },
             "schema": {
               "zoneYou": "Your side",
-              "zoneProvider": "AI provider",
+              "zoneProvider": "Third party",
               "boundary": "The boundary — settled during scoping",
               "boundaryCompact": "The boundary — at scoping",
               "systems": "Your systems",
@@ -809,12 +809,14 @@
               "out": "What leaves: chosen, under contract",
               "outCompact": ["What leaves:", "chosen, under contract"],
               "back": "Results come back",
-              "stays": "Stays with you — by preference",
-              "staysCompact": ["Stays here —", "by preference"],
-              "code": "The code that calls the provider is yours.",
-              "slot": "Model A · B · C…",
-              "slotNote": "a slot, not a marriage",
-              "swap": "replaceable"
+              "mountHome": "Model on your side",
+              "mountHomeNote": "trained or hosted on your infra",
+              "mountHomeNoteCompact": ["trained or hosted", "on your infra"],
+              "mountHomeStays": "it does not leave the zone",
+              "mountMarket": "Model off the shelf",
+              "mountMarketNote": "a slot, not a marriage",
+              "swap": "replaceable",
+              "code": "The code is yours — in both cases."
             }
           },
           "faq": {

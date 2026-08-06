@@ -788,20 +788,20 @@
             "rows": {
               "flow": {
                 "title": "Décidé avant la première ligne de code",
-                "text": "Quelles données sortent de chez vous, vers quel fournisseur, sous quel contrat : c'est défini au cadrage, avant toute intégration. Rien n'est branché à l'aveugle sur une API parce qu'elle est pratique."
+                "text": "Quelles données sortent de chez vous — si elles sortent — vers quel fournisseur et sous quel contrat : c'est défini au cadrage, avant toute intégration. Rien n'est branché à l'aveugle sur une API parce qu'elle est pratique."
               },
               "sensitive": {
                 "title": "Ce qui est sensible reste chez vous",
-                "text": "Quand les données sont sensibles, on privilégie les solutions qui les gardent sur votre infrastructure. Le RGPD n'est pas une case à cocher en fin de projet : il décide de l'architecture."
+                "text": "Quand les données sont sensibles, on privilégie les solutions qui les gardent sur votre infrastructure : un modèle entraîné ou hébergé chez vous plutôt qu'une API tierce. Le RGPD n'est pas une case à cocher en fin de projet : il décide de l'architecture."
               },
               "reversible": {
                 "title": "Réversible par conception",
-                "text": "Le fournisseur d'IA reste remplaçable — les modèles évoluent trop vite pour s'enfermer chez l'un d'eux. Et le code qui les appelle vous appartient, comme le reste."
+                "text": "Quand le modèle est un service, il reste remplaçable — ils évoluent trop vite pour s'enfermer chez l'un d'eux. Quand on l'entraîne pour vous, il vous appartient. Dans les deux cas le code qui l'appelle est à vous, et vous n'êtes captif de personne."
               }
             },
             "schema": {
               "zoneYou": "Chez vous",
-              "zoneProvider": "Fournisseur d'IA",
+              "zoneProvider": "Fournisseur tiers",
               "boundary": "La frontière — décidée au cadrage",
               "boundaryCompact": "La frontière — au cadrage",
               "systems": "Vos systèmes",
@@ -809,12 +809,14 @@
               "out": "Ce qui sort : choisi, sous contrat",
               "outCompact": ["Ce qui sort :", "choisi, sous contrat"],
               "back": "Les résultats reviennent",
-              "stays": "Restent chez vous — en priorité",
-              "staysCompact": ["Restent ici —", "en priorité"],
-              "code": "Le code qui appelle le fournisseur vous appartient.",
-              "slot": "Modèle A · B · C…",
-              "slotNote": "un emplacement, pas un mariage",
-              "swap": "remplaçable"
+              "mountHome": "Modèle chez vous",
+              "mountHomeNote": "entraîné ou hébergé sur votre infra",
+              "mountHomeNoteCompact": ["entraîné ou hébergé", "sur votre infra"],
+              "mountHomeStays": "il ne sort pas de la zone",
+              "mountMarket": "Modèle du marché",
+              "mountMarketNote": "un emplacement, pas un mariage",
+              "swap": "remplaçable",
+              "code": "Le code vous appartient — dans les deux cas."
             }
           },
           "faq": {
