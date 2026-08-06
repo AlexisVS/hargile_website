@@ -11,6 +11,14 @@
      Margin et non padding : le calcul d'épinglage (rect.top → translateX)
      suppose que le sticky démarre au bord de la boîte. */
   margin-top: clamp(112px, 10vw, 200px);
+  /* Dernière section de la homepage, et le footer n'ouvre que sur 1rem : sans
+     ça, le logo du footer arrivait collé au bouton « Toutes nos réalisations ».
+     Même valeur que .sectionEnd (v2-section), qui donne cette respiration aux
+     pages services — la homepage se terminait sur la seule section qui n'en
+     avait pas. Margin ici aussi : la hauteur de .work est écrite en JS
+     (100vh + distance d'épinglage), un padding serait mangé par ce calcul et
+     volerait d'autant au rail horizontal. */
+  margin-bottom: clamp(112px, 10vw, 180px);
   background: var(--color-background-dark);
 
   h2,
