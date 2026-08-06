@@ -23,7 +23,7 @@ export default function ServicesIndexClient() {
                 backdrop={<WaveGridBackdrop/>}
             />
             <OffersIndex/>
-            <CtaBand variant="box" framed={false} secondary={{href: "/faq", label: t("ctaSecondary")}}/>
+            <CtaBand secondary={{href: "/faq", label: t("ctaSecondary")}}/>
         </>
     );
 }

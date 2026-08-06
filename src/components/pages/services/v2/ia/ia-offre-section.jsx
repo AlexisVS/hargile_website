@@ -1,6 +1,9 @@
 /* The whole body of /services/ia below the hero, in one Server Component:
    the four use cases as an asymmetric bento, the anti-hype counter-argument,
-   the mini-FAQ, the sibling offers and the closing CTA.
+   the mini-FAQ and the sibling offers. The closing CTA is the shared CtaBand,
+   mounted from page.jsx like every other service page mounts it: this file
+   used to carry its own copy of that block, and the copy is what made the
+   page read differently at the fold.
 
    Server Component on purpose — every string ships in the initial HTML and
    stays readable with JS off, which is the GEO constraint the five sections
@@ -61,7 +64,7 @@ const IaOffreSection = async ({locale}) => {
     const offers = await getTranslations({locale, namespace: "pages.services.index.offers"});
 
     return (
-        <section className={`${section.section} ${section.sectionEnd}`}>
+        <section className={section.section}>
             <div className={`${section.container} ${styles.ia}`}>
                 <h2 className={`${section.heading} ${styles.title}`}>{t("useCases.title")}</h2>
 
@@ -139,18 +142,6 @@ const IaOffreSection = async ({locale}) => {
                     </div>
                 </div>
 
-                <div className={styles.cta}>
-                    <div>
-                        <h3 className={styles.ctaTitle}>{shared("ctaBand.title")}</h3>
-                        <p className={styles.ctaText}>{shared("ctaBand.text")}</p>
-                    </div>
-                    <div className={styles.ctaActions}>
-                        <Link className={`${styles.pill} ${styles.pillAccent}`} href="/contact">
-                            {shared("ctaBand.button")}
-                            <Chevron/>
-                        </Link>
-                    </div>
-                </div>
             </div>
 
             {/* Island: drives --mx/--my on the bento. It renders no markup, so

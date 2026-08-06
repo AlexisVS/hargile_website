@@ -34,7 +34,7 @@ export default function FaqPageClient() {
                 backdrop={<WaveGridBackdrop composition="wave-70"/>}
             />
             <FaqGroups/>
-            <CtaBand variant="box" secondary={{href: "/services", label: t("ctaSecondary")}}/>
+            <CtaBand secondary={{href: "/services", label: t("ctaSecondary")}}/>
         </>
     );
 }

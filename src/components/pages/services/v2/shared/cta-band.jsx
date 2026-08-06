@@ -2,15 +2,13 @@
 
 /* Closing contact band shared by every M4 page.
 
-   One layout — copy left, actions across from it on the same row, stacking on
-   narrow — in two shapes:
-   - default — a hairline opens the band (service pages).
-   - "box"   — the bordered panel from examplesPages/exports, used by the two
-               hub pages (/services, /faq).
+   One shape for all of them: a hairline opens the band, copy left, actions
+   across from it on the same row, stacking on narrow. The hub pages used to
+   sit in a bordered panel instead; the frame made /faq and /services read as
+   a different page from the four service pages, so there is now a single
+   band and no variant to pick.
 
-   `secondary` is the optional quiet second action ({href, label}).
-   `framed={false}` keeps the box layout but drops the frame and its inset, so
-   the copy sits on the container edge like every other section (/services). */
+   `secondary` is the optional quiet second action ({href, label}). */
 
 import {useTranslations} from "next-intl";
 import CtaLink from "@/components/ui/cta-link/cta-link";
@@ -18,16 +16,14 @@ import section from "@/components/pages/homepage/v2/v2-section.module.scss";
 import {useReveal} from "@/components/pages/homepage/v2/useReveal";
 import styles from "./cta-band.module.scss";
 
-const CtaBand = ({variant = "default", framed = true, secondary}) => {
+const CtaBand = ({secondary}) => {
     const t = useTranslations("pages.services.shared.ctaBand");
     const reveal = useReveal();
-    const box = variant === "box";
-    const boxClass = framed ? styles.box : `${styles.box} ${styles.bare}`;
 
     return (
         <section className={`${section.section} ${section.sectionEnd}`}>
             <div className={section.container}>
-                <div className={box ? boxClass : styles.band}>
+                <div className={styles.band}>
                     <div className={styles.copy}>
                         <h2 className={`${section.heading} ${styles.title}`} {...reveal(0)}>
                             {t("title")}

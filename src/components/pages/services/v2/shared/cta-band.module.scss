@@ -1,34 +1,16 @@
-/* Closing CTA — a hairline opens the band, the pill CTA closes the page.
+/* Closing CTA, a hairline opens the band and the pill CTA closes the page.
 
-   One layout for both shapes: copy left, actions across from it on the same
-   row. auto-fit rather than a fixed split, so the actions drop under the copy
-   on their own once the band gets narrow — the gap then does the spacing the
-   stacked version used to ask for. */
-.band,
-.box {
+   Copy left, actions across from it on the same row. auto-fit rather than a
+   fixed split, so the actions drop under the copy on their own once the band
+   gets narrow, and the gap then does the spacing the stacked version used to
+   ask for. */
+.band {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   gap: clamp(28px, 4vw, 64px);
   align-items: center;
-}
-
-/* Default (service pages): a hairline opens the band. */
-.band {
   border-top: 1px solid rgba(255, 255, 255, 0.09);
   padding-top: clamp(48px, 6vw, 80px);
-}
-
-/* Box variant (hub pages): the same row inside a hairline panel. */
-.box {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: clamp(32px, 5vw, 80px);
-}
-
-/* Unframed box: same two-column layout, no frame. The panel inset went with the
-   border — kept, it would indent the copy past every section above it. */
-.bare {
-  border: 0;
-  padding: 0;
 }
 
 .copy {

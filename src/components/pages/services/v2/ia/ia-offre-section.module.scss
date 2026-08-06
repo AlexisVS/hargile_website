@@ -304,94 +304,6 @@
   color: rgba(237, 237, 237, 0.55);
 }
 
-/* ---------- CTA ---------- */
-
-.cta {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-  gap: clamp(24px, 3vw, 56px);
-  align-items: center;
-  margin-top: var(--block-gap);
-}
-
-/* The page still lands on the identity ramp, the way all six M4 pages do. */
-.ctaTitle {
-  width: fit-content;
-  max-width: 100%;
-  margin: 0;
-  font-family: var(--font-headings);
-  font-weight: 700;
-  font-size: clamp(24px, 2.4vw, 36px);
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  background: linear-gradient(135deg, #ffffff 30%, #dce7fd 68%, #96b9f9 105%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  padding-bottom: 0.06em;
-}
-
-.ctaText {
-  margin: 16px 0 0;
-  max-width: 52ch;
-  font-size: 16px;
-  font-weight: 300;
-  line-height: 1.6;
-  color: rgba(237, 237, 237, 0.68);
-}
-
-.ctaActions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-/* ---------- Pilules ---------- */
-
-/* Same treatment as ui/cta-link: hairline full-round border, transparent body,
-   small chevron. Not imported from it because that component is a client
-   component and this section is a Server Component. */
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: 22px;
-  padding: 13px 26px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: transparent;
-  color: rgba(237, 237, 237, 0.75);
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 500;
-  white-space: nowrap;
-  text-decoration: none;
-  transition: background 0.2s, border-color 0.2s, color 0.2s;
-
-  &:hover {
-    color: #ededed;
-    border-color: rgba(255, 255, 255, 0.35);
-    background: rgba(255, 255, 255, 0.04);
-  }
-
-  &:focus-visible {
-    outline: 2px solid rgba(150, 185, 249, 0.7);
-    outline-offset: 2px;
-  }
-}
-
-.pillAccent {
-  margin-top: 0;
-  color: #96b9f9;
-  font-weight: 600;
-  border-color: rgba(150, 185, 249, 0.55);
-
-  &:hover {
-    color: #b8cdfb;
-    border-color: rgba(150, 185, 249, 0.85);
-    background: rgba(150, 185, 249, 0.07);
-  }
-}
-
 /* The one piece of motion the links carry, same 2–4px nudge as everywhere. */
 .chevron {
   display: inline-flex;
@@ -405,7 +317,6 @@
   }
 }
 
-.pill:hover .chevron,
 .link:hover .chevron {
   transform: translateX(2px);
 }
@@ -438,10 +349,6 @@
 
   .card {
     grid-column: span 1 !important;
-  }
-
-  .ctaActions {
-    justify-content: flex-start;
   }
 }
 
