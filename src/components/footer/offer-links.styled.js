@@ -38,8 +38,13 @@ export const OfferLinksStyled = styled.nav`
     }
 `;
 
+/* The site accent, #96b9f9, carried at 0.78 so the four names read as links
+   without outshouting the address and the copyright flanking them. It is the
+   only colour in the bottom bar: everything else there is white at a low
+   alpha, which left the one row of real destinations looking like more small
+   print. Full accent on hover, where the underline already fires. */
 export const OfferLinkStyled = styled.a`
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(150, 185, 249, 0.78);
     display: inline-block;
     text-decoration: none;
     font-weight: 200;
@@ -47,18 +52,18 @@ export const OfferLinkStyled = styled.a`
     transition: color 0.2s;
 
     &:hover {
-        color: rgba(255, 255, 255, 0.85);
+        color: #96b9f9;
         text-decoration: underline;
     }
 
     /* The link is the target: 44px tall, text unmoved. The contrast also goes
-       up a step — at arm's length on a phone, 60% white over this background is
-       a guess rather than a link. */
+       up a step — at arm's length on a phone, a dimmed accent over this
+       background is a guess rather than a link. */
     @media (max-width: 699px) {
         display: flex;
         align-items: center;
         min-height: 44px;
         font-size: 1rem;
-        color: rgba(255, 255, 255, 0.75);
+        color: #96b9f9;
     }
 `;

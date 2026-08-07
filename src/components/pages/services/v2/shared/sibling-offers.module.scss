@@ -18,21 +18,6 @@
   margin-bottom: clamp(28px, 3vw, 44px);
 }
 
-.all {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  color: rgba(237, 237, 237, 0.62);
-  text-decoration: none;
-  transition: color 0.25s ease;
-
-  &:hover,
-  &:focus-visible {
-    color: #96b9f9;
-  }
-}
 
 .list {
   list-style: none;

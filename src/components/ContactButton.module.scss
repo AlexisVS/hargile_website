@@ -1,0 +1,29 @@
+/* The dock, not the button. The button inside is the site's CtaLink, exactly
+   as it is everywhere else — this file only parks it in the corner.
+
+   It used to be its own styled-component: dark glass fill, drop shadow, a
+   leading mail icon, no chevron, and a 3px lift on hover. None of that appears
+   on any other button on the site, which is what made the one control users
+   see on every page the one that looked foreign.
+
+   The one thing an inline CTA does not need and this does: a ground. It floats
+   over whatever the page happens to be showing, so the pill's transparent body
+   is filled from behind, here, rather than by overriding CtaLink's own
+   background — that would fight its hover wash. */
+.dock {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 100;
+  display: inline-flex;
+  border-radius: 999px;
+  background: rgba(10, 14, 26, 0.72);
+  backdrop-filter: blur(6px);
+}
+
+@media (max-width: 640px) {
+  .dock {
+    right: 16px;
+    bottom: 16px;
+  }
+}

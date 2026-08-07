@@ -19,6 +19,7 @@
 
 import {useTranslations} from "next-intl";
 import {Link} from "@/i18n/navigation";
+import CtaLink from "@/components/ui/cta-link/cta-link";
 import section from "@/components/pages/homepage/v2/v2-section.module.scss";
 import {useReveal} from "@/components/pages/homepage/v2/useReveal";
 import styles from "./sibling-offers.module.scss";
@@ -45,10 +46,13 @@ const SiblingOffers = ({current}) => {
             <div className={section.container}>
                 <div className={styles.head} {...reveal(0)}>
                     <h2 className={section.heading}>{t("title")}</h2>
-                    <Link href="/services" className={styles.all}>
+                    {/* The same "see all" action the mini-FAQ puts next to its
+                        own heading, so it gets the same pill. It used to be a
+                        bare text link here and a ghost pill there, two shapes
+                        for one job on the same page. */}
+                    <CtaLink href="/services" variant="ghost" size="sm">
                         {t("all")}
-                        <Chevron/>
-                    </Link>
+                    </CtaLink>
                 </div>
 
                 <ul className={styles.list}>

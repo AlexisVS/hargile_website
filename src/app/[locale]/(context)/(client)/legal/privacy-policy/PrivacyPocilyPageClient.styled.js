@@ -289,35 +289,55 @@ export const ActionButtons = styled.div`
     }
 `;
 
+/* The site's pill-outline treatment, matching components/ui/cta-link: hairline
+   border, transparent body, blue as text and border for the primary action and
+   a neutral hairline for the secondary. These were the only filled buttons on
+   the site — a solid blue slab and a grey slab with a glow — which made the one
+   page a visitor reaches for a legal document the page that looked like a
+   different product.
+
+   Not the CtaLink component itself: these are <button>s that print and export,
+   not links. The leading icon stays for the same reason — these label a tool,
+   they are not the CTA whose shared affordance is the trailing chevron. */
 export const ActionButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    border-radius: 2rem;
+    gap: 7px;
+    padding: 13px 26px;
+    border-radius: 999px;
+    background: transparent;
+    font-family: inherit;
+    font-size: 15px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+
+    &:focus-visible {
+        outline: 2px solid rgba(150, 185, 249, 0.7);
+        outline-offset: 2px;
+    }
 
     &:first-child {
-        background-color: #96b9f9;
-        color: #0a0a12;
-        border: none;
+        color: #96b9f9;
+        font-weight: 600;
+        border: 1px solid rgba(150, 185, 249, 0.55);
 
         &:hover {
-            background-color: #b8cdfb;
-            box-shadow: 0 0 24px rgba(150, 185, 249, 0.3);
+            color: #b8cdfb;
+            border-color: rgba(150, 185, 249, 0.85);
+            background: rgba(150, 185, 249, 0.07);
         }
     }
 
     &:last-child {
-        background-color: rgba(255, 255, 255, 0.1);
-        color: white;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: rgba(237, 237, 237, 0.75);
+        border: 1px solid rgba(255, 255, 255, 0.16);
 
         &:hover {
-            background-color: rgba(255, 255, 255, 0.15);
+            color: #ededed;
+            border-color: rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.04);
         }
     }
 `;

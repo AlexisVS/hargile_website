@@ -20,7 +20,10 @@ const Chevron = () => (
     </svg>
 );
 
-const CtaLink = ({href, variant = "primary", size, external = false, className, children, ...rest}) => {
+/* size and className carry defaults so they stay optional: without them TypeScript
+   infers every destructured prop as required, and a .tsx caller that omits one
+   fails the type check (ContactButton did). */
+const CtaLink = ({href, variant = "primary", size = "", external = false, className = "", children, ...rest}) => {
     const cls = [
         styles.cta,
         styles[variant] ?? styles.primary,
