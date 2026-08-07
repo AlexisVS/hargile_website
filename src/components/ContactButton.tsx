@@ -20,10 +20,16 @@ export const ContactButton = () => {
     // same blue, same chevron as the contact CTA that closes every page. The
     // leading mail icon went with the old styled-component — no other button
     // on the site carries one, and the chevron is the shared affordance.
+    //
+    // Two labels, swapped in CSS rather than by measuring the viewport in JS:
+    // a media query has no hydration mismatch to get wrong, and this renders
+    // identically on the server. The accessible name stays the full phrase via
+    // aria-label, so the short one is only ever the visual label.
     return (
         <div className={styles.dock}>
             <CtaLink href="/contact" variant="primary" size="sm" aria-label={t('title')}>
-                {t('title')}
+                <span className={styles.full} aria-hidden="true">{t('title')}</span>
+                <span className={styles.short} aria-hidden="true">{t('short')}</span>
             </CtaLink>
         </div>
     );

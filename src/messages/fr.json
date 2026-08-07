@@ -1,7 +1,8 @@
 {
   "components": {
     "contact-button": {
-      "title": "Contactez-nous"
+      "title": "Contactez-nous",
+      "short": "Contact"
     },
     "contact-form": {
       "contact": {

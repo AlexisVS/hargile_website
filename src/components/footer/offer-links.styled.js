@@ -49,8 +49,11 @@ export const OfferLinkStyled = styled.a`
     color: #96b9f9;
     display: inline-block;
     text-decoration: none;
-    font-weight: 200;
     font-size: 0.9375rem;
+    /* 500, not the 200 these carried: a hairline weight thins the accent until
+       the colour barely registers on this background. Same weight and size as
+       the nav links above, so colour is the only thing separating the two rows. */
+    font-weight: 500;
     transition: color 0.2s;
 
     &:hover {

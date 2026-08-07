@@ -21,9 +21,31 @@
   backdrop-filter: blur(6px);
 }
 
+/* Label swap. Both ship in the HTML and CSS picks one, so there is no viewport
+   measurement in JS and nothing to mismatch on hydration. */
+.short {
+  display: none;
+}
+
+/* On a phone this pill sits over the content the whole way down the page, so
+   it gets as small as it can while staying a 44px target: the short label, a
+   tighter pill, and a smaller corner inset. */
 @media (max-width: 640px) {
   .dock {
-    right: 16px;
-    bottom: 16px;
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .full {
+    display: none;
+  }
+
+  .short {
+    display: inline;
+  }
+
+  .dock a {
+    font-size: 13px;
+    padding: 10px 16px;
   }
 }
