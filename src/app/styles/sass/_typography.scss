@@ -195,10 +195,14 @@ time {
   @include fluid.element-typography('time');
 }
 
+/* No underline anywhere on the site. Links separate themselves by colour and
+   by a colour shift on hover: an accent link brightens to #b8cdfb, a neutral
+   one turns accent. The rule is explicit rather than left to the UA default,
+   which underlines. */
 a {
   @include fluid.element-typography('a');
 
   & {
-    text-decoration: underline;
+    text-decoration: none;
   }
 }

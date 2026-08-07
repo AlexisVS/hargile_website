@@ -263,9 +263,10 @@ export const PrivacyText = styled.p`
     a {
         color: #96b9f9;
         text-decoration: none;
+        transition: color 0.2s;
 
         &:hover {
-            text-decoration: underline;
+            color: #b8cdfb;
         }
     }
 `;

@@ -10,9 +10,10 @@ export const Address = styled.address.attrs({
     a {
         color: inherit;
         text-decoration: none;
+        transition: color 0.2s;
 
         &:hover {
-            text-decoration: underline;
+            color: #96b9f9;
         }
     }
 `;

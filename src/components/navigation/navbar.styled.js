@@ -264,9 +264,10 @@ export const ContactEmail = styled.a`
     text-decoration: none;
     font-size: 16px;
     font-weight: 400;
-    
+    transition: color 0.2s;
+
     &:hover {
-        text-decoration: underline;
+        color: #b8cdfb;
     }
 `;
 
@@ -276,13 +277,14 @@ export const ContactPhone = styled.a`
     font-size: 16px;
     font-weight: 400;
     margin-bottom: 5px;
-    
+    transition: color 0.2s;
+
     &:last-of-type {
         margin-bottom: 20px;
     }
     
     &:hover {
-        text-decoration: underline;
+        color: #b8cdfb;
     }
 `;
 

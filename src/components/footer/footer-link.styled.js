@@ -7,10 +7,10 @@ export const FooterLinkStyled = styled.a.attrs({
     display: inline-block;
     text-decoration: none;
     font-weight: 200;
-
+    transition: color 0.2s;
 
     &:hover {
-        text-decoration: underline;
+        color: #96b9f9;
     }
 
     /* Stacked on mobile (see BottomLinksStyled), so the row is the target: the
