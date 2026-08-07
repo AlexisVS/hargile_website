@@ -19,6 +19,35 @@
   border-radius: 999px;
   background: rgba(10, 14, 26, 0.72);
   backdrop-filter: blur(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Parked off the bottom edge rather than merely faded: visibility takes it out
+   of the tab order too, so focus never lands on a control nobody can see. It
+   flips back the instant the pill returns, and only leaves after the fade —
+   hence the delay on that one property. */
+.hidden {
+  opacity: 0;
+  transform: translateY(calc(100% + 24px));
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0.25s;
+}
+
+/* The slide is the only thing that goes: the pill still appears and disappears,
+   it just stops travelling to do it. */
+@media (prefers-reduced-motion: reduce) {
+  .dock {
+    transform: none;
+    transition: opacity 0.2s ease;
+  }
+
+  /* The visibility delay belongs to the hidden state alone — on .dock it would
+     delay the pill *appearing* by the length of the fade. */
+  .hidden {
+    transform: none;
+    transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+  }
 }
 
 /* Label swap. Both ship in the HTML and CSS picks one, so there is no viewport
