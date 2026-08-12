@@ -47,7 +47,11 @@ if (dates.size === 1 && PAGES.length > 1) {
     console.warn('  all pages share one date: correct after a copy-wide change, suspicious after a shallow checkout');
 }
 
+/* Loud, but never fatal. An earlier version exited 1 here and took the whole
+   release down with it when the git call broke — a sitemap hint blocking a
+   deploy is the wrong trade. The sitemap simply ships without lastmod, which
+   is what it did for its entire life before this script existed. */
 if (missing === PAGES.length) {
-    console.error('no dates resolved at all — is this a git checkout?');
-    process.exit(1);
+    console.error('::warning::no lastmod resolved for any page — the sitemap will ship without it.');
+    console.error('  a shallow checkout (needs fetch-depth: 0) or a non-git build context does this.');
 }

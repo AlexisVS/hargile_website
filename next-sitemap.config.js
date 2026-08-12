@@ -64,12 +64,18 @@ const cachedLastmod = (() => {
     }
 })();
 
-/* GIT_LITERAL_PATHSPECS because the route paths contain [locale] and (context),
-   which git would otherwise read as glob syntax. */
+/* execFileSync, not execSync: the route paths contain (context) and [locale],
+   and execSync hands its string to /bin/sh, where bare parentheses are a syntax
+   error. That failed on the Linux runner for every page while passing locally
+   on Windows, where the string goes to cmd.exe instead. Passing argv straight
+   to git removes the shell — and with it the quoting question entirely.
+
+   GIT_LITERAL_PATHSPECS is still needed: git itself would otherwise read
+   [locale] as a glob. */
 const gitLastmodOf = (sources) => {
     try {
         const out = require('child_process')
-            .execSync(`git log -1 --format=%cI -- ${sources.join(' ')}`, {
+            .execFileSync('git', ['log', '-1', '--format=%cI', '--', ...sources], {
                 encoding: 'utf8',
                 stdio: ['ignore', 'pipe', 'ignore'],
                 env: {...process.env, GIT_LITERAL_PATHSPECS: '1'},
