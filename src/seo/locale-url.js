@@ -10,9 +10,14 @@ import {routing} from '@/i18n/routing';
    The sitemap cannot import this module (next-sitemap.config.js is CommonJS) —
    it duplicates the rule inline. Change both together.
 
-   The French home is `${SITE_URL}/`, with the trailing slash: a bare origin
-   string is not a valid canonical form. */
+   The French home is the bare origin, no trailing slash. It used to return
+   `${SITE_URL}/` on the reasoning that a bare origin is not a valid canonical
+   form — but an empty path and "/" are the same URL per RFC 3986, and Google
+   treats them as one. The slash only ever created a disagreement: Next.js
+   normalises the canonical and the HTML hreflang to the bare origin whatever
+   this returns, while JSON-LD ships the raw string, so the home page went out
+   declaring `"url":"https://hargile.com"` and `"url":"https://hargile.com/"`
+   in the same document. One form, and it is the one the framework emits. */
 export function localeUrl(locale, pathSuffix = '') {
-    const path = `${locale === routing.defaultLocale ? '' : `/${locale}`}${pathSuffix}`;
-    return path ? `${SITE_URL}${path}` : `${SITE_URL}/`;
+    return `${SITE_URL}${locale === routing.defaultLocale ? '' : `/${locale}`}${pathSuffix}`;
 }
