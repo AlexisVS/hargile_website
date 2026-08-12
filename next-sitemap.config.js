@@ -39,17 +39,34 @@ const PAGES = [
         sources: [`${ROUTES}/legal/privacy-policy`]},
 ];
 
-/* lastmod straight from git: the commit date of the newest source a page is
-   built from. The sitemap carried no lastmod at all, which throws away the one
-   crawl-scheduling signal a sitemap can give — and the obvious shortcut, a
-   build-time `new Date()`, is worse than nothing: it re-dates every page on
-   every deploy, and Google only honours lastmod when it is verifiably
-   accurate. Derived this way it needs no upkeep and cannot drift.
+/* lastmod is the commit date of the newest source a page is built from. The
+   sitemap carried none at all, which throws away the one crawl-scheduling
+   signal a sitemap can give — and the obvious shortcut, a build-time
+   `new Date()`, is worse than nothing: it re-dates every page on every deploy,
+   and Google only honours lastmod when it is verifiably accurate.
 
-   GIT_LITERAL_PATHSPECS because the route paths contain [locale] and (context),
-   which git would otherwise read as glob syntax. Any failure — no git binary in
-   the Docker builder, a shallow clone — drops the field rather than guessing. */
-const lastmodOf = (sources) => {
+   Two ways in, because the release build cannot reach git. The Docker image
+   builds from node:20-alpine with no git binary, and `.git` is in
+   .dockerignore anyway — so v0.27.1 shipped a sitemap with no lastmod at all,
+   the fallback below doing its job. CI therefore resolves the dates where git
+   does exist (scripts/gen-sitemap-lastmod.cjs, run before `docker build`) and
+   leaves them in LASTMOD_FILE for the build to read.
+
+   Order: the CI file if present, then git for a local `npm run build`, then
+   nothing. Never a guess — a wrong lastmod is worse than an absent one. */
+const LASTMOD_FILE = 'sitemap-lastmod.json';
+
+const cachedLastmod = (() => {
+    try {
+        return JSON.parse(require('fs').readFileSync(LASTMOD_FILE, 'utf8'));
+    } catch {
+        return null;
+    }
+})();
+
+/* GIT_LITERAL_PATHSPECS because the route paths contain [locale] and (context),
+   which git would otherwise read as glob syntax. */
+const gitLastmodOf = (sources) => {
     try {
         const out = require('child_process')
             .execSync(`git log -1 --format=%cI -- ${sources.join(' ')}`, {
@@ -63,6 +80,10 @@ const lastmodOf = (sources) => {
         return undefined;
     }
 };
+
+const lastmodOf = (page) =>
+    cachedLastmod?.[page.path] ??
+    gitLastmodOf([...page.sources, ...COMMON_SOURCES]);
 
 /* French — the default locale — is unprefixed, English keeps /en. This mirrors
    src/seo/locale-url.js (this file is CommonJS and cannot import it): change
@@ -111,7 +132,7 @@ module.exports = {
 
     additionalPaths: async () =>
         PAGES.flatMap((page) => {
-            const lastmod = lastmodOf([...page.sources, ...COMMON_SOURCES]);
+            const lastmod = lastmodOf(page);
             return LOCALES.map((locale) => ({
                 loc: url(locale, page.path),
                 changefreq: page.changefreq,
@@ -135,3 +156,12 @@ module.exports = {
             }));
         }),
 };
+
+/* Attached after the assignment above, not before — `module.exports = {…}`
+   replaces the whole object and would drop anything set earlier.
+   scripts/gen-sitemap-lastmod.cjs reads these so the page→sources map has one
+   home; duplicating it in the workflow is how it would silently drift. */
+module.exports.PAGES = PAGES;
+module.exports.COMMON_SOURCES = COMMON_SOURCES;
+module.exports.gitLastmodOf = gitLastmodOf;
+module.exports.LASTMOD_FILE = LASTMOD_FILE;

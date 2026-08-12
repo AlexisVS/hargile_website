@@ -39,6 +39,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          # Full history: the sitemap's lastmod comes from the commit date of
+          # each page's sources. On the default depth-1 clone `git log -1` has
+          # only one commit to find and returns it for every page — a uniform
+          # date that looks authoritative and is wrong, which is exactly what
+          # Google discards lastmod for.
+          fetch-depth: 0
+
+      # Must run before the build: the image has no git (node:20-alpine, and
+      # .git is in .dockerignore), so next-sitemap cannot resolve these itself
+      # and silently omits lastmod — which is what shipped in v0.27.1.
+      - name: Resolve sitemap lastmod from git
+        run: node scripts/gen-sitemap-lastmod.cjs
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
