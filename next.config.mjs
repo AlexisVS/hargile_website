@@ -82,6 +82,10 @@ const nextConfig = {
             // /services and /services/* again. Visitors who cached the old 301
             // eat that cost — accepted, the traffic was near zero.
             {path: 'sitemap', to: '/', permanent: true},
+            // The AI and MVP offer pages were retired: 301 both to the services
+            // index, the closest surviving destination, rather than 404.
+            {path: 'services/ia', to: '/services', permanent: true},
+            {path: 'services/mvp-30-jours', to: '/services', permanent: true},
             {path: 'solutions/agves', to: '/', permanent: true},
             {path: 'solutions/i-go', to: '/', permanent: true},
             {path: 'solutions/multipass', to: '/', permanent: true},

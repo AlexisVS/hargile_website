@@ -16,7 +16,6 @@ import {useHeroLoading} from "@/components/providers/hero-loading-provider";
    its own section further down the page, which carries its own link. */
 const CARDS = [
     {key: "webdev", href: "/services/applications-web"},
-    {key: "ai", href: "/services/ia"},
     {key: "marketing", href: "/services/seo"},
 ];
 

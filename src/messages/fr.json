@@ -378,39 +378,12 @@
                 "title": "Création de sites internet",
                 "text": "Conçus, codés et maintenus chez nous"
               },
-              "ai": {
-                "title": "Solutions IA",
-                "text": "Intégrée là où ça compte"
-              },
               "marketing": {
                 "title": "SEO",
                 "text": "Votre visibilité, automatisée"
               }
             }
           }
-        },
-        "mvp-promo": {
-          "title": "Votre MVP en",
-          "titleAccent": "1 mois",
-          "lead": "Transformez votre idée en un produit concret, prêt pour vos utilisateurs, livré en 30 jours, à prix fixe.",
-          "steps": {
-            "scope": {
-              "week": "Semaine 1",
-              "title": "Cadrage & design",
-              "text": "On définit ensemble le périmètre, les priorités et les maquettes."
-            },
-            "build": {
-              "week": "Sem. 2–3",
-              "title": "Développement",
-              "text": "On construit votre produit avec des technologies modernes, adaptées à vos besoins."
-            },
-            "launch": {
-              "week": "Semaine 4",
-              "title": "Tests & mise en ligne",
-              "text": "On teste, on peaufine et on met votre MVP en ligne."
-            }
-          },
-          "cta": "Démarrons votre projet"
         },
         "latest-insights": {
           "subtitle": "Nos réflexions et perspectives sur le monde numérique",
@@ -747,196 +720,6 @@
     },
     "services": {
       "detail": {
-        "ia": {
-          "hero": {
-            "eyebrow": "Solutions IA",
-            "title": "L'IA là où elle change le résultat",
-            "answer": "Nous intégrons l'intelligence artificielle dans les produits et les processus des PME, uniquement là où elle apporte un résultat mesurable : moins de tâches répétitives, un meilleur service, des données enfin exploitées. Quand l'IA n'apporte rien à votre cas, nous vous le disons."
-          },
-          "useCases": {
-            "title": "Quatre endroits où l'IA gagne sa place",
-            "signalLabel": "Le signal :",
-            "resultLabel": "Le résultat :",
-            "items": {
-              "automation": {
-                "title": "Automatisation du back-office",
-                "signal": "Vos équipes recopient des données d'un outil à l'autre.",
-                "outcome": "Des heures récupérées chaque semaine, et moins d'erreurs de saisie."
-              },
-              "content": {
-                "title": "Contenu & visibilité",
-                "signal": "Vous savez quoi dire, mais jamais le temps de le publier.",
-                "outcome": "Une présence régulière, alimentée par vos vrais savoir-faire."
-              },
-              "support": {
-                "title": "Support client",
-                "signal": "Les mêmes questions reviennent, et les réponses attendent.",
-                "outcome": "Des réponses immédiates aux questions courantes, l'équipe concentrée sur les cas qui comptent."
-              },
-              "data": {
-                "title": "Exploitation de vos données",
-                "signal": "Les chiffres existent, mais personne ne les regarde.",
-                "outcome": "Des décisions appuyées sur vos données, pas sur l'intuition."
-              }
-            }
-          },
-          "honesty": {
-            "title": "Et quand l'IA n'est pas la réponse ?",
-            "text": "On vous le dit. Une intégration IA n'a de valeur que si elle change un résultat qui compte pour vous, pas pour suivre une tendance. Si un script simple, un meilleur process ou rien du tout fait l'affaire, c'est ce qu'on recommandera. C'est aussi ça, être un partenaire technique."
-          },
-          "data": {
-            "title": "Où vont vos données",
-            "rows": {
-              "flow": {
-                "title": "Décidé avant la première ligne de code",
-                "text": "Quelles données sortent de chez vous, si elles sortent, vers quel fournisseur et sous quel contrat : c'est défini au cadrage, avant toute intégration. Rien n'est branché à l'aveugle sur une API parce qu'elle est pratique."
-              },
-              "sensitive": {
-                "title": "Ce qui est sensible reste chez vous",
-                "text": "Quand les données sont sensibles, on privilégie les solutions qui les gardent sur votre infrastructure : un modèle entraîné ou hébergé chez vous plutôt qu'une API tierce. Le RGPD n'est pas une case à cocher en fin de projet : il décide de l'architecture."
-              },
-              "reversible": {
-                "title": "Réversible par conception",
-                "text": "Quand le modèle est un service, il reste remplaçable : ils évoluent trop vite pour s'enfermer chez l'un d'eux. Quand on l'entraîne pour vous, il vous appartient. Dans les deux cas le code qui l'appelle est à vous, et vous n'êtes captif de personne."
-              }
-            },
-            "schema": {
-              "zoneYou": "Chez vous",
-              "zoneProvider": "Fournisseur tiers",
-              "boundary": "La frontière, décidée au cadrage",
-              "boundaryCompact": "La frontière au cadrage",
-              "systems": "Vos systèmes",
-              "sensitive": "Données sensibles",
-              "out": "Ce qui sort : choisi, sous contrat",
-              "outCompact": ["Ce qui sort :", "choisi, sous contrat"],
-              "back": "Les résultats reviennent",
-              "mountHome": "Modèle chez vous",
-              "mountHomeNote": "entraîné ou hébergé sur votre infra",
-              "mountHomeNoteCompact": ["entraîné ou hébergé", "sur votre infra"],
-              "mountHomeStays": "il ne sort pas de la zone",
-              "mountMarket": "Modèle du marché",
-              "mountMarketNote": "un emplacement, pas un mariage",
-              "swap": "remplaçable",
-              "code": "Le code vous appartient dans les deux cas."
-            }
-          },
-          "faq": {
-            "items": [
-              {
-                "q": "Où vont nos données ?",
-                "a": "C'est défini avant toute intégration : quelles données sortent de chez vous, vers quel fournisseur, avec quel contrat. Quand une donnée est sensible, on privilégie des solutions qui la gardent chez vous. Rien n'est branché sans que vous sachiez exactement ce qui circule."
-              },
-              {
-                "q": "Faut-il un gros budget pour commencer ?",
-                "a": "Non. On commence par le cas d'usage au meilleur rapport résultat/effort, souvent une automatisation ciblée, et on mesure avant d'élargir. L'IA se déploie par étapes, pas en big bang."
-              },
-              {
-                "q": "Serons-nous dépendants d'un fournisseur d'IA ?",
-                "a": "On conçoit l'intégration pour que le fournisseur reste remplaçable : les modèles évoluent vite, votre produit ne doit pas être marié à l'un d'eux. Et comme pour tout ce qu'on livre, le code vous appartient."
-              },
-              {
-                "q": "Par où commencer si on n'a jamais rien fait avec l'IA ?",
-                "a": "Par une conversation sur vos processus, pas sur la technologie. On identifie ensemble une tâche mesurable où l'IA peut faire une différence, on la met en place, et on juge sur le résultat."
-              }
-            ]
-          }
-        },
-        "mvp": {
-          "hero": {
-            "eyebrow": "MVP en 30 jours",
-            "title": "De l'idée au produit, en 30 jours",
-            "answer": "Oui, on peut lancer un vrai produit en un mois. Notre offre MVP transforme votre idée en produit utilisable en 30 jours, à prix fixe annoncé avant le début : semaine 1, cadrage et design ; semaines 2 et 3, développement ; semaine 4, tests et mise en ligne."
-          },
-          "timeline": {
-            "title": "Les 30 jours, semaine par semaine",
-            "weeks": {
-              "w1": {
-                "label": "Semaine 1",
-                "title": "Cadrage & design",
-                "text": "On définit ensemble le périmètre : ce qui fait partie du MVP, ce qui attendra la v2. Maquettes et parcours utilisateur sont validés avant d'écrire une ligne de code.",
-                "deliverables": [
-                  "Périmètre figé",
-                  "Maquettes validées",
-                  "Prix fixe confirmé"
-                ]
-              },
-              "w23": {
-                "label": "Semaines 2–3",
-                "title": "Développement",
-                "text": "On construit le produit avec des technologies web modernes. Vous suivez l'avancement en continu : pas de tunnel de trois semaines sans nouvelles.",
-                "deliverables": [
-                  "Produit fonctionnel en fin de semaine 3",
-                  "Points d'étape réguliers"
-                ]
-              },
-              "w4": {
-                "label": "Semaine 4",
-                "title": "Tests & mise en ligne",
-                "text": "On teste, on corrige, on peaufine, et on met en ligne. Votre MVP est entre les mains de ses premiers utilisateurs à J+30.",
-                "deliverables": [
-                  "Produit testé",
-                  "Mise en production",
-                  "Passation"
-                ]
-              }
-            },
-            "endMarker": "J+30"
-          },
-          "included": {
-            "title": "Ce qui est compris et ce qui ne l'est pas",
-            "inLabel": "Inclus dans les 30 jours",
-            "outLabel": "Pas dans les 30 jours",
-            "in": [
-              "Cadrage du périmètre et priorisation",
-              "Design des écrans et des parcours",
-              "Développement du produit",
-              "Tests et corrections",
-              "Mise en ligne sur votre domaine",
-              "La propriété du code et des données"
-            ],
-            "out": [
-              "Les fonctionnalités reportées ensemble en v2",
-              "Le contenu métier que vous seul pouvez écrire",
-              "La maintenance long terme, proposée séparément, sans obligation"
-            ]
-          },
-          "price": {
-            "title": "Prix fixe, sans surprise",
-            "text": "Le prix est annoncé avant le début du projet, et il ne bouge pas : pas de facturation au temps passé, pas de dépassement découvert en cours de route. Si une idée nouvelle surgit en chemin, elle est chiffrée à part et vous décidez."
-          },
-          "scope": {
-            "title": "La limite qui tient la promesse",
-            "text": "Trente jours, ce n'est pas une question de vitesse : c'est une question de périmètre. La semaine 1 existe pour découper : garder la plus petite version qui apporte déjà quelque chose à de vrais utilisateurs, et écarter le reste sans le perdre.",
-            "points": [
-              "Ce qui déborde part sur la feuille de route v2 : priorisé et écrit, pas oublié.",
-              "Le contenu métier reste à vous : textes, photos, tarifs. Personne d'autre ne peut les écrire à votre place.",
-              "La seule vraie condition de notre côté du délai : un décideur joignable, disponible en semaine 1 et capable de trancher vite aux points d'étape."
-            ]
-          },
-          "proofCase": {
-            "text": "La Marquisette : un gîte de caractère dans les Ardennes belges, mis en ligne avec un périmètre resserré, site vitrine trilingue et réservation intégrée."
-          },
-          "faq": {
-            "items": [
-              {
-                "q": "Que se passe-t-il après les 30 jours ?",
-                "a": "Le produit est à vous et il tourne. Ensuite, trois chemins possibles : vous continuez seul (le code vous appartient), on itère ensemble vers la v2, ou on assure la maintenance. Rien n'est imposé : vous restez par choix."
-              },
-              {
-                "q": "Que dois-je fournir pour tenir le délai ?",
-                "a": "Votre disponibilité en semaine 1 pour les décisions de cadrage, puis des retours rapides aux points d'étape. Le délai de 30 jours suppose un décideur joignable : c'est la seule vraie condition."
-              },
-              {
-                "q": "Et si mon idée est trop grosse pour 30 jours ?",
-                "a": "C'est le rôle de la semaine 1 : découper. Un MVP n'est pas votre produit complet, c'est la plus petite version qui apporte de la valeur à de vrais utilisateurs. Ce qui déborde est posé sur la feuille de route de la v2, pas oublié, priorisé."
-              },
-              {
-                "q": "Le MVP est-il un vrai produit ou un prototype jetable ?",
-                "a": "Un vrai produit, construit sur des fondations faites pour durer : le même soin que pour nos projets au long cours. Si le MVP valide votre marché, la v2 se construit dessus, pas à partir de zéro."
-              }
-            ]
-          }
-        },
         "seo": {
           "hero": {
             "eyebrow": "SEO",
@@ -1019,7 +802,10 @@
               "source": "hargile.com/services/seo",
               "sourceNote": "votre page, citée comme source",
               "blank": "Une page qui n'est pas travaillée",
-              "blankCompact": ["Une page qui n'est", "pas travaillée"],
+              "blankCompact": [
+                "Une page qui n'est",
+                "pas travaillée"
+              ],
               "blankNote": "rien à lire",
               "nothing": "rien à citer"
             }
@@ -1175,27 +961,9 @@
         "hero": {
           "eyebrow": "Services",
           "title": "Ce que nous livrons",
-          "answer": "HARGILE est un studio web indépendant basé à Bruxelles. Nous concevons, développons et maintenons des applications web sur mesure pour les PME, intégrons l'IA là où elle change le résultat, automatisons votre visibilité sur les moteurs de recherche, et transformons une idée en MVP en 30 jours, à prix fixe."
+          "answer": "HARGILE est un studio web indépendant basé à Bruxelles. Nous concevons, développons et maintenons des applications web sur mesure pour les PME, et automatisons votre visibilité sur les moteurs de recherche."
         },
         "offers": {
-          "ia": {
-            "title": "Solutions IA",
-            "promise": "Intégrée là où elle change le résultat, pas comme gadget.",
-            "deliverables": [
-              "Automatisation des tâches répétitives",
-              "IA intégrée à votre produit",
-              "Un non honnête quand elle n'apporte rien"
-            ]
-          },
-          "mvp": {
-            "title": "MVP en 30 jours",
-            "promise": "De l'idée au produit en un mois, à prix fixe.",
-            "deliverables": [
-              "Semaine 1 : cadrage & design",
-              "Semaines 2–3 : développement",
-              "Semaine 4 : tests & mise en ligne"
-            ]
-          },
           "seo": {
             "title": "SEO",
             "promise": "Votre visibilité, automatisée.",
@@ -1216,11 +984,10 @@
           }
         },
         "spine": {
-          "kicker": "Quatre offres",
+          "kicker": "Deux offres",
           "text": "Chaque offre est un engagement de livraison, pas une ligne de catalogue. Vous parlez à l'équipe qui conçoit et qui code, du cadrage à la mise en ligne."
         },
         "stats": {
-          "mvp": "jours pour un MVP",
           "projects": "projets en ligne",
           "offers": "offres, un studio"
         }
@@ -1241,7 +1008,7 @@
         },
         "siblings": {
           "title": "Les autres offres",
-          "all": "Voir les quatre offres"
+          "all": "Voir les deux offres"
         }
       }
     },
@@ -1427,31 +1194,11 @@
         "title": "Notre Portfolio | Projets Digitaux Innovants | HARGILE"
       },
       "services": {
-        "description": "Les quatre offres d'HARGILE pour les PME : applications web sur mesure, IA là où elle compte, SEO automatisé et MVP livré en 30 jours à prix fixe. Studio indépendant à Bruxelles.",
-        "ia": {
-          "description": "Intégration d'IA dans les produits et processus des PME, uniquement là où elle change le résultat : automatisation, support, exploitation des données. Sans gadget.",
-          "og": {
-            "description": "Automatisation, support client, données : l'IA intégrée là où elle apporte un résultat mesurable, et un non honnête quand elle n'apporte rien.",
-            "imageAlt": "Solutions IA, HARGILE",
-            "title": "Solutions IA pour PME : intégrée là où elle compte | HARGILE"
-          },
-          "schemaType": "WebPage",
-          "title": "Solutions IA pour PME : intégrée là où elle compte | HARGILE"
-        },
-        "mvp": {
-          "description": "Votre idée devient un produit réel en 30 jours, à prix fixe annoncé avant le début : cadrage et design, développement, tests et mise en ligne. Par un studio bruxellois.",
-          "og": {
-            "description": "Semaine 1 : cadrage et design. Semaines 2–3 : développement. Semaine 4 : mise en ligne. Un vrai produit en un mois, à prix fixe.",
-            "imageAlt": "MVP en 30 jours, HARGILE",
-            "title": "MVP en 30 jours, à prix fixe | HARGILE"
-          },
-          "schemaType": "WebPage",
-          "title": "MVP en 30 jours, à prix fixe | HARGILE"
-        },
+        "description": "Les offres d'HARGILE pour les PME : applications web sur mesure et SEO automatisé. Studio indépendant à Bruxelles.",
         "og": {
-          "description": "Applications web sur mesure, IA là où elle compte, SEO automatisé, MVP en 30 jours : comment HARGILE fait avancer les PME.",
+          "description": "Applications web sur mesure et SEO automatisé : comment HARGILE fait avancer les PME.",
           "imageAlt": "Services HARGILE",
-          "title": "Nos services : applications web, IA, SEO, MVP 30 jours | HARGILE"
+          "title": "Nos services : applications web et SEO | HARGILE"
         },
         "schemaType": "CollectionPage",
         "seo": {
@@ -1464,7 +1211,7 @@
           "schemaType": "WebPage",
           "title": "SEO automatisé : visible sur Google et dans les IA | HARGILE"
         },
-        "title": "Nos services : applications web, IA, SEO, MVP 30 jours | HARGILE",
+        "title": "Nos services : applications web et SEO | HARGILE",
         "web": {
           "description": "Conception, développement et maintenance d'applications web sur mesure pour PME, entièrement en interne à Bruxelles. Votre code et vos données vous appartiennent.",
           "og": {

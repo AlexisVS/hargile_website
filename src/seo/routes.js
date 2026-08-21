@@ -15,9 +15,7 @@ export const ROUTES = {
        The dotted keys stay short and stable — the slug can change, the key
        must not (it names the seo.pages.* message subtree). */
     'services.web': '/services/applications-web',
-    'services.ia': '/services/ia',
     'services.seo': '/services/seo',
-    'services.mvp': '/services/mvp-30-jours',
     'faq': '/faq',
 };
 

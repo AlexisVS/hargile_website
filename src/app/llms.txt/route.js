@@ -35,8 +35,8 @@ function body() {
 > HARGILE (also HARGILE Tech Studio) is an independent web and software studio
 > based in Brussels, Belgium, founded in 2025. It designs, builds
 > and maintains custom web applications for small and medium-sized businesses,
-> integrates AI where it earns its place, and automates SEO. Work is done
-> in-house; clients keep ownership of their code and data.
+> and automates SEO. Work is done in-house; clients keep ownership of their
+> code and data.
 
 The site is published in French and English. French is the default and is
 served at the root: ${page("/")} is the French home page. English lives under
@@ -48,10 +48,10 @@ JavaScript execution is required to read this site.
 
 ## Pages
 
-- [Home — FR](${page("/")}): what the studio does, the four offers, three
+- [Home — FR](${page("/")}): what the studio does, the offers, three
   recent projects, and the studio's values.
 - [Home — EN](${page("/en")}): English version of the above.
-- [Services — FR](${page("/services")}): index of the four offers, each linking
+- [Services — FR](${page("/services")}): index of the offers, each linking
   to its own page.
 - [Services — EN](${page("/en/services")}): English version of the above.
 - [Custom web applications — FR](${page("/services/applications-web")}): the
@@ -59,16 +59,9 @@ JavaScript execution is required to read this site.
   the code; three case narratives.
 - [Custom web applications — EN](${page("/en/services/applications-web")}):
   English version of the above.
-- [AI solutions — FR](${page("/services/ia")}): where AI earns its place in an
-  SME, and when the honest answer is no.
-- [AI solutions — EN](${page("/en/services/ia")}): English version of the above.
 - [SEO — FR](${page("/services/seo")}): the four-step method — audit,
   technical, content, measure — including visibility in AI answers.
 - [SEO — EN](${page("/en/services/seo")}): English version of the above.
-- [MVP in 30 days — FR](${page("/services/mvp-30-jours")}): week-by-week
-  timeline, what is included and what is not, fixed price.
-- [MVP in 30 days — EN](${page("/en/services/mvp-30-jours")}): English version
-  of the above.
 - [FAQ — FR](${page("/faq")}): direct answers on cost, timelines, code
   ownership, technology, maintenance, custom vs WordPress.
 - [FAQ — EN](${page("/en/faq")}): English version of the above.
@@ -83,12 +76,7 @@ JavaScript execution is required to read this site.
 
 - **[Website and web application creation](${page("/services/applications-web")})**
   — custom applications for SMEs, designed, built and maintained in-house.
-- **[AI solutions](${page("/services/ia")})** — AI integrated into a product
-  where it changes the outcome, not as a feature for its own sake.
 - **[SEO](${page("/services/seo")})** — search visibility, automated.
-- **[MVP in 30 days](${page("/services/mvp-30-jours")})** — an idea turned into
-  a real, user-ready product in one month at a fixed price: week 1 scope and
-  design, weeks 2–3 development, week 4 test and launch.
 
 ## Selected work
 

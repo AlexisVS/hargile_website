@@ -6,17 +6,16 @@
    scope section uses, so the two never drift apart.
 
    Numbers are structural, not copy: 22 is the length of the portfolio the site
-   already ships, 4 is OFFERS in offers-index.jsx, 30 is the MVP promise. Only
-   the labels are translated. */
+   already ships, 2 is OFFERS in offers-index.jsx. Only the labels are
+   translated. */
 
 import {useTranslations} from "next-intl";
 import CountUp from "@/components/pages/services/v2/shared/count-up";
 import styles from "./hero-stats.module.scss";
 
 const STATS = [
-    {key: "mvp", to: 30},
     {key: "projects", to: 22},
-    {key: "offers", to: 4},
+    {key: "offers", to: 2},
 ];
 
 const HeroStats = () => {

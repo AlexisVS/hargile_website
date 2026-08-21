@@ -17,13 +17,11 @@ import LinkedinIcon from "@/components/icons/LinkedinIcon";
 import {NAP, napCityLine} from "@/lib/nap";
 
 
-/* The four offer pages. Titles come from the services index — same names in
+/* The offer pages. Titles come from the services index — same names in
    the footer as on the page they lead to, one source. */
 const OFFERS = [
     {id: 'web', href: '/services/applications-web'},
-    {id: 'ia', href: '/services/ia'},
     {id: 'seo', href: '/services/seo'},
-    {id: 'mvp', href: '/services/mvp-30-jours'},
 ];
 
 const Footer = () => {

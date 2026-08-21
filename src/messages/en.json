@@ -378,39 +378,12 @@
                 "title": "Website creation",
                 "text": "Designed, built and maintained in-house"
               },
-              "ai": {
-                "title": "AI solutions",
-                "text": "Built in where it matters"
-              },
               "marketing": {
                 "title": "SEO",
                 "text": "Your visibility, automated"
               }
             }
           }
-        },
-        "mvp-promo": {
-          "title": "Your MVP in",
-          "titleAccent": "1 month",
-          "lead": "Turn your idea into a real, user-ready product, delivered in 30 days, at a fixed price.",
-          "steps": {
-            "scope": {
-              "week": "Week 1",
-              "title": "Scope & design",
-              "text": "We define the scope, priorities and mockups together."
-            },
-            "build": {
-              "week": "Weeks 2–3",
-              "title": "Development",
-              "text": "We build your product with modern technologies, tailored to your needs."
-            },
-            "launch": {
-              "week": "Week 4",
-              "title": "Test & launch",
-              "text": "We test, polish and ship your MVP live."
-            }
-          },
-          "cta": "Start your project"
         },
         "latest-insights": {
           "subtitle": "Our thoughts and perspectives on the digital world",
@@ -747,196 +720,6 @@
     },
     "services": {
       "detail": {
-        "ia": {
-          "hero": {
-            "eyebrow": "AI solutions",
-            "title": "AI where it changes the outcome",
-            "answer": "We integrate artificial intelligence into SME products and processes, only where it delivers a measurable result: fewer repetitive tasks, better service, data finally put to work. When AI adds nothing to your case, we tell you."
-          },
-          "useCases": {
-            "title": "Four places where AI earns its place",
-            "signalLabel": "The signal:",
-            "resultLabel": "The result:",
-            "items": {
-              "automation": {
-                "title": "Back-office automation",
-                "signal": "Your team copies data from one tool to another.",
-                "outcome": "Hours recovered every week, and fewer input errors."
-              },
-              "content": {
-                "title": "Content & visibility",
-                "signal": "You know what to say, but never have time to publish it.",
-                "outcome": "A regular presence, fed by your real expertise."
-              },
-              "support": {
-                "title": "Customer support",
-                "signal": "The same questions keep coming, and the answers keep waiting.",
-                "outcome": "Instant answers to common questions, and a team focused on the cases that matter."
-              },
-              "data": {
-                "title": "Making your data work",
-                "signal": "The numbers exist, but nobody looks at them.",
-                "outcome": "Decisions backed by your data, not by gut feeling."
-              }
-            }
-          },
-          "honesty": {
-            "title": "And when AI is not the answer?",
-            "text": "We say so. An AI integration is only worth it if it changes a result that matters to you, not because of a trend. If a simple script, a better process or nothing at all does the job, that is what we will recommend. That, too, is what a technical partner is for."
-          },
-          "data": {
-            "title": "Where your data goes",
-            "rows": {
-              "flow": {
-                "title": "Decided before the first line of code",
-                "text": "Which data leaves your systems, if any does, to which provider and under which contract: that is settled during scoping, before any integration. Nothing gets wired blindly into an API because it happens to be convenient."
-              },
-              "sensitive": {
-                "title": "What is sensitive stays with you",
-                "text": "When data is sensitive, we favour solutions that keep it on your own infrastructure: a model trained or hosted on your side rather than a third-party API. GDPR is not a box ticked at the end of a project: it decides the architecture."
-              },
-              "reversible": {
-                "title": "Reversible by design",
-                "text": "When the model is a service, it stays replaceable: they move too fast to lock yourself into one. When we train it for you, it is yours. Either way the code that calls it belongs to you, and you are captive to nobody."
-              }
-            },
-            "schema": {
-              "zoneYou": "Your side",
-              "zoneProvider": "Third party",
-              "boundary": "The boundary, settled during scoping",
-              "boundaryCompact": "The boundary at scoping",
-              "systems": "Your systems",
-              "sensitive": "Sensitive data",
-              "out": "What leaves: chosen, under contract",
-              "outCompact": ["What leaves:", "chosen, under contract"],
-              "back": "Results come back",
-              "mountHome": "Model on your side",
-              "mountHomeNote": "trained or hosted on your infra",
-              "mountHomeNoteCompact": ["trained or hosted", "on your infra"],
-              "mountHomeStays": "it does not leave the zone",
-              "mountMarket": "Model off the shelf",
-              "mountMarketNote": "a slot, not a marriage",
-              "swap": "replaceable",
-              "code": "The code is yours in both cases."
-            }
-          },
-          "faq": {
-            "items": [
-              {
-                "q": "Where does our data go?",
-                "a": "That is defined before anything is integrated: which data leaves your company, to which provider, under which contract. When data is sensitive, we favour solutions that keep it with you. Nothing gets plugged in without you knowing exactly what flows where."
-              },
-              {
-                "q": "Do we need a big budget to start?",
-                "a": "No. We start with the use case that has the best result-to-effort ratio, often a targeted automation, and we measure before expanding. AI is rolled out in steps, not in a big bang."
-              },
-              {
-                "q": "Will we be locked into an AI provider?",
-                "a": "We design the integration so the provider stays replaceable: models evolve fast, and your product should not be married to one of them. And as with everything we ship, the code belongs to you."
-              },
-              {
-                "q": "Where do we start if we have never used AI?",
-                "a": "With a conversation about your processes, not about technology. Together we identify one measurable task where AI can make a difference, we put it in place, and we judge it on the result."
-              }
-            ]
-          }
-        },
-        "mvp": {
-          "hero": {
-            "eyebrow": "MVP in 30 days",
-            "title": "From idea to product, in 30 days",
-            "answer": "Yes, a real product can launch in one month. Our MVP offer turns your idea into a usable product in 30 days, at a fixed price announced before we start: week 1, scope and design; weeks 2 and 3, development; week 4, tests and launch."
-          },
-          "timeline": {
-            "title": "The 30 days, week by week",
-            "weeks": {
-              "w1": {
-                "label": "Week 1",
-                "title": "Scope & design",
-                "text": "Together we define the scope: what belongs in the MVP, and what waits for v2. Mockups and user flows are approved before a single line of code is written.",
-                "deliverables": [
-                  "Scope frozen",
-                  "Mockups approved",
-                  "Fixed price confirmed"
-                ]
-              },
-              "w23": {
-                "label": "Weeks 2–3",
-                "title": "Development",
-                "text": "We build the product with modern web technologies. You follow progress continuously: no three-week tunnel without news.",
-                "deliverables": [
-                  "Working product by the end of week 3",
-                  "Regular check-ins"
-                ]
-              },
-              "w4": {
-                "label": "Week 4",
-                "title": "Test & launch",
-                "text": "We test, fix and polish, then go live. Your MVP is in its first users' hands by day 30.",
-                "deliverables": [
-                  "Tested product",
-                  "Production launch",
-                  "Handover"
-                ]
-              }
-            },
-            "endMarker": "D+30"
-          },
-          "included": {
-            "title": "What's included and what isn't",
-            "inLabel": "Included in the 30 days",
-            "outLabel": "Not in the 30 days",
-            "in": [
-              "Scope definition and prioritisation",
-              "Screen and user-flow design",
-              "Product development",
-              "Tests and fixes",
-              "Launch on your domain",
-              "Ownership of the code and the data"
-            ],
-            "out": [
-              "Features deferred together to v2",
-              "The business content only you can write",
-              "Long-term maintenance, offered separately, with no obligation"
-            ]
-          },
-          "price": {
-            "title": "Fixed price, no surprises",
-            "text": "The price is announced before the project starts, and it does not move: no time-based billing, no overrun discovered along the way. If a new idea comes up mid-project, it is priced separately and you decide."
-          },
-          "scope": {
-            "title": "The boundary that holds the promise",
-            "text": "Thirty days is not a question of speed: it is a question of scope. Week 1 exists to cut: to keep the smallest version that already gives real users something, and to set the rest aside without losing it.",
-            "points": [
-              "What overflows goes onto the v2 roadmap: prioritised and written down, not forgotten.",
-              "The business content stays yours: copy, photos, prices. Nobody else can write those for you.",
-              "The one real condition on our side of the deadline: someone who can decide, available in week 1 and able to settle questions quickly at each checkpoint."
-            ]
-          },
-          "proofCase": {
-            "text": "La Marquisette: a character cottage in the Belgian Ardennes, launched with a tight scope, a trilingual showcase site with integrated booking."
-          },
-          "faq": {
-            "items": [
-              {
-                "q": "What happens after the 30 days?",
-                "a": "The product is yours and it is live. From there, three paths: you continue on your own (you own the code), we iterate together towards v2, or we handle maintenance. Nothing is imposed: you stay by choice."
-              },
-              {
-                "q": "What do I need to provide to keep the deadline?",
-                "a": "Your availability in week 1 for scoping decisions, then quick feedback at each check-in. The 30-day deadline assumes a reachable decision-maker: that is the only real condition."
-              },
-              {
-                "q": "What if my idea is too big for 30 days?",
-                "a": "That is what week 1 is for: cutting it down. An MVP is not your full product: it is the smallest version that delivers value to real users. Whatever does not fit goes on the v2 roadmap, not forgotten, prioritised."
-              },
-              {
-                "q": "Is the MVP a real product or a throwaway prototype?",
-                "a": "A real product, built on foundations made to last, with the same care as our long-term projects. If the MVP validates your market, v2 is built on top of it, not from scratch."
-              }
-            ]
-          }
-        },
         "seo": {
           "hero": {
             "eyebrow": "SEO",
@@ -1019,7 +802,10 @@
               "source": "hargile.com/services/seo",
               "sourceNote": "your page, cited as a source",
               "blank": "A page nobody worked on",
-              "blankCompact": ["A page nobody", "worked on"],
+              "blankCompact": [
+                "A page nobody",
+                "worked on"
+              ],
               "blankNote": "nothing to read",
               "nothing": "nothing to cite"
             }
@@ -1175,27 +961,9 @@
         "hero": {
           "eyebrow": "Services",
           "title": "What we deliver",
-          "answer": "HARGILE is an independent web studio based in Brussels. We design, build and maintain custom web applications for SMEs, integrate AI where it changes the outcome, automate your search visibility, and turn an idea into a live MVP in 30 days, at a fixed price."
+          "answer": "HARGILE is an independent web studio based in Brussels. We design, build and maintain custom web applications for SMEs, and automate your search visibility."
         },
         "offers": {
-          "ia": {
-            "title": "AI solutions",
-            "promise": "Integrated where it changes the outcome, never as a gimmick.",
-            "deliverables": [
-              "Automation of repetitive work",
-              "AI built into your product",
-              "An honest no when it adds nothing"
-            ]
-          },
-          "mvp": {
-            "title": "MVP in 30 days",
-            "promise": "From idea to product in one month, at a fixed price.",
-            "deliverables": [
-              "Week 1: scope & design",
-              "Weeks 2–3: development",
-              "Week 4: test & launch"
-            ]
-          },
           "seo": {
             "title": "SEO",
             "promise": "Your visibility, automated.",
@@ -1216,11 +984,10 @@
           }
         },
         "spine": {
-          "kicker": "Four offers",
+          "kicker": "Two offers",
           "text": "Every offer is a delivery commitment, not a catalogue line. You talk to the team that designs it and writes the code, from scoping to launch."
         },
         "stats": {
-          "mvp": "days to an MVP",
           "projects": "projects live",
           "offers": "offers, one studio"
         }
@@ -1241,7 +1008,7 @@
         },
         "siblings": {
           "title": "The other offers",
-          "all": "See all four offers"
+          "all": "See both offers"
         }
       }
     },
@@ -1427,31 +1194,11 @@
         "title": "Our Portfolio | Innovative Digital Projects | HARGILE"
       },
       "services": {
-        "description": "HARGILE's four offers for SMEs: custom web applications, AI where it matters, automated SEO, and an MVP delivered in 30 days at a fixed price. Independent studio in Brussels.",
-        "ia": {
-          "description": "AI integrated into SME products and processes, only where it changes the outcome: automation, support, making data work. No gimmicks.",
-          "og": {
-            "description": "Automation, customer support, data: AI integrated where it delivers a measurable result, and an honest no when it does not.",
-            "imageAlt": "AI solutions, HARGILE",
-            "title": "AI solutions for SMEs: integrated where it matters | HARGILE"
-          },
-          "schemaType": "WebPage",
-          "title": "AI solutions for SMEs: integrated where it matters | HARGILE"
-        },
-        "mvp": {
-          "description": "Your idea becomes a real product in 30 days, at a fixed price announced before the start: scope and design, development, tests and launch. By a Brussels studio.",
-          "og": {
-            "description": "Week 1: scope and design. Weeks 2–3: development. Week 4: launch. A real product in one month, at a fixed price.",
-            "imageAlt": "MVP in 30 days, HARGILE",
-            "title": "MVP in 30 days, at a fixed price | HARGILE"
-          },
-          "schemaType": "WebPage",
-          "title": "MVP in 30 days, at a fixed price | HARGILE"
-        },
+        "description": "HARGILE's offers for SMEs: custom web applications and automated SEO. Independent studio in Brussels.",
         "og": {
-          "description": "Custom web applications, useful AI, automated SEO and a 30-day MVP: how HARGILE moves SMEs forward.",
+          "description": "Custom web applications and automated SEO: how HARGILE moves SMEs forward.",
           "imageAlt": "HARGILE services",
-          "title": "Our services: custom web apps, AI, SEO, 30-day MVP | HARGILE"
+          "title": "Our services: custom web apps and SEO | HARGILE"
         },
         "schemaType": "CollectionPage",
         "seo": {
@@ -1464,7 +1211,7 @@
           "schemaType": "WebPage",
           "title": "Automated SEO: visible on Google and in AI answers | HARGILE"
         },
-        "title": "Our services: custom web apps, AI, SEO, 30-day MVP | HARGILE",
+        "title": "Our services: custom web apps and SEO | HARGILE",
         "web": {
           "description": "Design, development and maintenance of custom web applications for SMEs, fully in-house in Brussels. Your code and your data belong to you.",
           "og": {

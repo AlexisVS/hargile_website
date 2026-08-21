@@ -34,9 +34,7 @@ import styles from "./offers-index.module.scss";
    build-json-ld.js — change one and change the other. */
 const OFFERS = [
     {key: "web", href: "/services/applications-web"},
-    {key: "ia", href: "/services/ia"},
     {key: "seo", href: "/services/seo"},
-    {key: "mvp", href: "/services/mvp-30-jours"},
 ];
 
 const OffersIndex = () => {

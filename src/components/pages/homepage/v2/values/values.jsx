@@ -34,7 +34,7 @@ const Prompt = () => (
      couleur d'accent sur le site, et on dessine au trait plutôt qu'on ne
      remplit.
    - plus de box-shadow ni de radius : la fenêtre est tracée à la hairline, dans
-     la même langue que la figure de /services/ia et l'encoche du portfolio.
+     la même langue que les figures des pages services et l'encoche du portfolio.
    - le corps reste transparent. Un fond propre ferait de la fenêtre le seul
      objet rempli de la page, ce qu'on vient de retirer partout ailleurs.
    - le #2563eb de la maquette (chemin et « ## ») est un bleu très sombre sur un

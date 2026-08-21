@@ -29,9 +29,7 @@ import styles from "./faq-groups.module.scss";
 /* "The long answer" links — mirrors OFFERS in offers-index.jsx. */
 const OFFER_LINKS = [
     {key: "web", href: "/services/applications-web"},
-    {key: "ia", href: "/services/ia"},
     {key: "seo", href: "/services/seo"},
-    {key: "mvp", href: "/services/mvp-30-jours"},
 ];
 
 const FaqGroups = () => {

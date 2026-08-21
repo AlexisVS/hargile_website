@@ -13,9 +13,7 @@ import {SAME_AS} from "@/seo/same-as";
 const KNOWS_ABOUT = [
     "Web development",
     "Custom web application development",
-    "AI integration",
     "Search engine optimization",
-    "MVP development",
 ];
 
 /* The four service pages carry a Service node *alongside* their WebPage node
@@ -24,9 +22,7 @@ const KNOWS_ABOUT = [
    twice is corroboration, two near-identical strings are two topics. */
 const SERVICE_NODES = {
     "services.web": {serviceType: "Custom web application development"},
-    "services.ia": {serviceType: "AI integration"},
     "services.seo": {serviceType: "Search engine optimization"},
-    "services.mvp": {serviceType: "MVP development"},
 };
 
 /* The four offers as /services lists them, in the sales order the page renders
@@ -34,7 +30,7 @@ const SERVICE_NODES = {
    reader sees, or the markup describes a different page. Keys index both
    ROUTES and pages.services.index.offers, so the listed name is the visible
    row title rather than a fifth restatement of it. */
-const SERVICES_INDEX = ["web", "ia", "seo", "mvp"];
+const SERVICES_INDEX = ["web", "seo"];
 
 // Builds the JSON-LD object for a given locale + pagePath.
 // Returns null if SEO translations cannot be loaded (graceful fallback).

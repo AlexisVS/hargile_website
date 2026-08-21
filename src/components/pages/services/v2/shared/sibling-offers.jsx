@@ -28,9 +28,7 @@ import styles from "./sibling-offers.module.scss";
    the ItemList order in build-json-ld.js. Change one, change the others. */
 const OFFERS = [
     {key: "web", href: "/services/applications-web"},
-    {key: "ia", href: "/services/ia"},
     {key: "seo", href: "/services/seo"},
-    {key: "mvp", href: "/services/mvp-30-jours"},
 ];
 
 const SiblingOffers = ({current}) => {
