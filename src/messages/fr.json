@@ -622,7 +622,7 @@
       "downloadPDF": "Télécharger en PDF",
       "inThisPage": "Dans cette page",
       "lastUpdate": "Dernière mise à jour",
-      "lastUpdateDate": "24 juillet 2026",
+      "lastUpdateDate": "21 août 2026",
       "pdfFileName": "hargile-politique-de-confidentialite",
       "print": "Imprimer",
       "sections": {
@@ -650,7 +650,7 @@
           }
         },
         "international": {
-          "content": "Pour l'envoi de nos emails, nous faisons appel à Resend (Resend, Inc., États-Unis) en tant que sous-traitant. Ce transfert de données hors de l'Espace économique européen est encadré par les Clauses Contractuelles Types de la Commission européenne et l'adhésion du prestataire au EU-U.S. Data Privacy Framework.",
+          "content": "Pour l'envoi de nos emails, nous faisons appel à Resend (Resend, Inc., États-Unis) en tant que sous-traitant. Ce transfert de données hors de l'Espace économique européen est encadré par les Clauses Contractuelles Types de la Commission européenne (décision d'exécution (UE) 2021/914).",
           "title": "Transferts Internationaux de données"
         },
         "prospection": {
@@ -671,6 +671,10 @@
           "retention": {
             "title": "Durée de conservation",
             "content": "Vos données de prospection sont conservées jusqu'à votre opposition, et au maximum un an après notre dernier contact. Si vous vous désinscrivez, votre adresse est conservée de manière durable dans notre liste d'opposition, à seule fin de ne plus jamais vous contacter."
+          },
+          "recipients": {
+            "title": "Destinataires",
+            "content": "Vos données de prospection ne sont communiquées à aucun tiers à des fins commerciales. Seul Resend (Resend, Inc., États-Unis), notre prestataire d'envoi d'emails, les traite en tant que sous-traitant, pour l'acheminement de nos messages. L'audit SEO qui accompagne notre prise de contact est réalisé à partir des seules données publiques de votre site : votre adresse email et votre nom de domaine ne sont transmis à aucun outil d'analyse tiers ni à aucun modèle d'intelligence artificielle."
           }
         },
         "privacyPolicy": {

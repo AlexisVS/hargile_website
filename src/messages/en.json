@@ -622,7 +622,7 @@
       "downloadPDF": "Download as PDF",
       "inThisPage": "In this page",
       "lastUpdate": "Last updated",
-      "lastUpdateDate": "July 24, 2026",
+      "lastUpdateDate": "August 21, 2026",
       "pdfFileName": "hargile-privacy-policy",
       "print": "Print",
       "sections": {
@@ -650,7 +650,7 @@
           }
         },
         "international": {
-          "content": "To send our emails we use Resend (Resend, Inc., United States) as a processor. This transfer of data outside the European Economic Area is governed by the European Commission's Standard Contractual Clauses and the provider's certification under the EU-U.S. Data Privacy Framework.",
+          "content": "To send our emails we use Resend (Resend, Inc., United States) as a processor. This transfer of data outside the European Economic Area is governed by the European Commission's Standard Contractual Clauses (Implementing Decision (EU) 2021/914).",
           "title": "International Transfers"
         },
         "prospection": {
@@ -671,6 +671,10 @@
           "retention": {
             "title": "Retention period",
             "content": "Your prospecting data is kept until you object, and for no longer than one year after our last contact. If you unsubscribe, your address is kept durably in our suppression list for the sole purpose of never contacting you again."
+          },
+          "recipients": {
+            "title": "Recipients",
+            "content": "Your prospecting data is not disclosed to any third party for commercial purposes. Only Resend (Resend, Inc., United States), our email-sending provider, processes it as a processor, to deliver our messages. The SEO audit that accompanies our outreach is produced solely from your website's public data: your email address and domain name are not shared with any third-party analysis tool or artificial-intelligence model."
           }
         },
         "privacyPolicy": {

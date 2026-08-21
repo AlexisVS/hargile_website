@@ -297,6 +297,11 @@ export default function PrivacyPolicyPageClient() {
                             5.4 {t("sections.prospection.retention.title")}
                         </SubSectionTitle>
                         <Paragraph>{t("sections.prospection.retention.content")}</Paragraph>
+
+                        <SubSectionTitle>
+                            5.5 {t("sections.prospection.recipients.title")}
+                        </SubSectionTitle>
+                        <Paragraph>{t("sections.prospection.recipients.content")}</Paragraph>
                     </Section>
 
                     <Section id="contact" $active={activeSection === "contactUs"}>
