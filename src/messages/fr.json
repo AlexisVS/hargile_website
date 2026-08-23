@@ -622,7 +622,7 @@
       "downloadPDF": "Télécharger en PDF",
       "inThisPage": "Dans cette page",
       "lastUpdate": "Dernière mise à jour",
-      "lastUpdateDate": "21 août 2026",
+      "lastUpdateDate": "23 août 2026",
       "pdfFileName": "hargile-politique-de-confidentialite",
       "print": "Imprimer",
       "sections": {
@@ -650,7 +650,7 @@
           }
         },
         "international": {
-          "content": "Pour l'envoi de nos emails, nous faisons appel à Resend (Resend, Inc., États-Unis) en tant que sous-traitant. Ce transfert de données hors de l'Espace économique européen est encadré par les Clauses Contractuelles Types de la Commission européenne (décision d'exécution (UE) 2021/914).",
+          "content": "Deux transferts de données hors de l'Espace économique européen ont lieu, tous deux encadrés par les Clauses Contractuelles Types de la Commission européenne (décision d'exécution (UE) 2021/914). Pour l'acheminement de nos emails, nous faisons appel à Plus Five Five, Inc. (Resend), États-Unis. Pour l'analyse technique de votre site, notre sous-traitant établi en France stocke les rapports en Allemagne et recourt à des fournisseurs de modèles d'intelligence artificielle établis aux États-Unis, en qualité de sous-traitants ultérieurs ; ces fournisseurs sont contractuellement tenus de ne pas entraîner leurs modèles sur les données traitées.",
           "title": "Transferts Internationaux de données"
         },
         "prospection": {
@@ -674,7 +674,7 @@
           },
           "recipients": {
             "title": "Destinataires",
-            "content": "Vos données de prospection ne sont communiquées à aucun tiers à des fins commerciales. Seul Resend (Resend, Inc., États-Unis), notre prestataire d'envoi d'emails, les traite en tant que sous-traitant, pour l'acheminement de nos messages. L'audit SEO qui accompagne notre prise de contact est réalisé à partir des seules données publiques de votre site : votre adresse email et votre nom de domaine ne sont transmis à aucun outil d'analyse tiers ni à aucun modèle d'intelligence artificielle."
+            "content": "Vos données de prospection ne sont communiquées à aucun tiers à des fins commerciales. Deux sous-traitants interviennent, sur des périmètres distincts : Plus Five Five, Inc. (Resend), États-Unis, assure l'acheminement de nos messages et traite votre adresse email professionnelle, à l'exclusion de toute autre donnée ; GROW IT SASU (ChatSEO), établi en France, réalise l'analyse technique de votre site et traite l'URL de celui-ci, à l'exclusion de votre adresse email et de votre nom de contact. Cette analyse s'appuie sur des modèles d'intelligence artificielle exploités hors de l'Union européenne, dans les conditions décrites à la section « Transferts Internationaux de données »."
           }
         },
         "privacyPolicy": {
