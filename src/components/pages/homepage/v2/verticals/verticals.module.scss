@@ -1,6 +1,6 @@
 /* Verticals — who the GEO offer serves.
-   A six-cell grid, hairline borders, no fills. Same register as the
-   capability rail: statements, not links. */
+   Six-cell grid, hairline borders, no fills. Hover lifts the border brightness
+   and reveals a quiet glow behind the card. One-shot reveal via useReveal. */
 
 .lead {
   max-width: 52ch;
@@ -17,14 +17,47 @@
 }
 
 .card {
+  position: relative;
   padding: clamp(28px, 3.5vw, 48px);
   border: 1px solid rgba(255, 255, 255, 0.07);
-  /* Collapse inner borders — each cell only draws its own edges, and the
-     negative margins merge adjacent ones into one hairline. */
   margin: -0.5px;
+  transition: border-color 0.35s ease;
+
+  /* Quiet radial glow on hover — fades in behind the content. */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    background: radial-gradient(
+      ellipse at 30% 20%,
+      rgba(150, 185, 249, 0.06) 0%,
+      transparent 70%
+    );
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  &:hover {
+    border-color: rgba(150, 185, 249, 0.18);
+    z-index: 1;
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &:hover .name {
+    color: #ffffff;
+  }
+
+  &:hover .desc {
+    color: rgba(237, 237, 237, 0.78);
+  }
 }
 
 .name {
+  position: relative;
   font-family: var(--font-headings);
   font-weight: 600;
   font-size: clamp(20px, 2vw, 28px);
@@ -32,14 +65,17 @@
   line-height: 1.2;
   margin: 0 0 8px;
   color: #ededed;
+  transition: color 0.3s ease;
 }
 
 .desc {
+  position: relative;
   font-size: 15px;
   font-weight: 300;
   color: rgba(237, 237, 237, 0.62);
   line-height: 1.55;
   margin: 0;
+  transition: color 0.3s ease;
 }
 
 @media (max-width: 900px) {
@@ -51,5 +87,17 @@
 @media (max-width: 540px) {
   .grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card::before {
+    transition: none;
+  }
+
+  .card,
+  .name,
+  .desc {
+    transition: none;
   }
 }

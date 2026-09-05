@@ -1,5 +1,5 @@
-/* Audit CTA — same shape as the services cta-band, kept local so the
-   homepage can exist without importing the services tree. */
+/* Audit CTA — closing band with a slow shimmer on the gradient title.
+   Same shape as the services cta-band. */
 
 .band {
   display: grid;
@@ -14,14 +14,31 @@
   min-width: 0;
 }
 
+/* The gradient title gets a slow highlight sweep — one-shot, triggered by
+   the reveal observer. The resting gradient is the same as cta-band's; the
+   shimmer adds a white highlight layer that travels left to right once. */
 .title {
   width: fit-content;
   max-width: 100%;
-  background: linear-gradient(135deg, #ffffff 30%, #dce7fd 68%, #96b9f9 105%);
+  background:
+    linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.4) 50%, transparent 62%),
+    linear-gradient(135deg, #ffffff 30%, #dce7fd 68%, #96b9f9 105%);
+  background-size: 250% 100%, 100% 100%;
+  background-position: -140% 0, 0 0;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   padding-bottom: 0.06em;
+  animation: ctaShimmer 2.4s ease-in-out 0.6s both;
+}
+
+@keyframes ctaShimmer {
+  from {
+    background-position: -140% 0, 0 0;
+  }
+  to {
+    background-position: 240% 0, 0 0;
+  }
 }
 
 .text {
@@ -38,5 +55,12 @@
 @media (max-width: 760px) {
   .actions {
     justify-content: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .title {
+    animation: none;
+    background-position: 50% 0, 0 0;
   }
 }
