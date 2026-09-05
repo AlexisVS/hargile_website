@@ -1,9 +1,9 @@
-/* The three FAQ chapters, in reading order. Shared by the hero index and the
-   page body so the numbering, the anchors and the order can only be defined
-   once. `id` is the anchor the hero links to; the numeral is the position. */
+/* HARG-302: FAQ chapters match the GEO/SEO pivot.
+   Shared by the hero index and the page body so the numbering, the anchors
+   and the order can only be defined once. */
 
 export const FAQ_GROUPS = [
-    {key: "project", id: "faq-project", num: "01"},
-    {key: "budget", id: "faq-budget", num: "02"},
-    {key: "tech", id: "faq-tech", num: "03"},
+    {key: "geo", id: "faq-geo", num: "01"},
+    {key: "seo", id: "faq-seo", num: "02"},
+    {key: "method", id: "faq-method", num: "03"},
 ];

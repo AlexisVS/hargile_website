@@ -26,8 +26,9 @@ import styles from "./sibling-offers.module.scss";
 
 /* Same order and same hrefs as offers-index.jsx — sales order, which is also
    the ItemList order in build-json-ld.js. Change one, change the others. */
+/* HARG-302: GEO + SEO. */
 const OFFERS = [
-    {key: "web", href: "/services/applications-web"},
+    {key: "geo", href: "/services/seo"},
     {key: "seo", href: "/services/seo"},
 ];
 

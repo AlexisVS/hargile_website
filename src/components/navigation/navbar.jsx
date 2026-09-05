@@ -30,9 +30,10 @@ import {
     SocialIcons,
     SocialIcon
 } from "@/components/navigation/navbar.styled";
+/* HARG-302: /services hub removed from nav — the homepage is the pitch now.
+   FAQ and Contact stay; FAQ carries the GEO questions. */
 const menuItems = [
     {path: '/', id: 'home'},
-    {path: '/services', id: 'services'},
     {path: '/faq', id: 'faq'},
     {path: '/contact', id: 'contact'},
 ];

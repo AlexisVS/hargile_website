@@ -10,18 +10,20 @@ import {SAME_AS} from "@/seo/same-as";
    stable topic names for a knowledge graph, not marketing copy that gets
    reworded. If the hero cards change what they promise, change these too;
    a claim the copy doesn't support is the thing engines discount. */
+/* HARG-302: the site now sells GEO and SEO, not web dev. */
 const KNOWS_ABOUT = [
-    "Web development",
-    "Custom web application development",
+    "Generative Engine Optimization",
     "Search engine optimization",
+    "AI visibility optimization",
 ];
 
 /* The four service pages carry a Service node *alongside* their WebPage node
    (see the schemaType comment below — never in its place). serviceType values
    are copied character for character from KNOWS_ABOUT: the same topic asserted
    twice is corroboration, two near-identical strings are two topics. */
+/* HARG-302: /services/applications-web is being retired. The SEO page
+   covers both SEO and GEO; it carries one Service node for now. */
 const SERVICE_NODES = {
-    "services.web": {serviceType: "Custom web application development"},
     "services.seo": {serviceType: "Search engine optimization"},
 };
 
@@ -30,7 +32,8 @@ const SERVICE_NODES = {
    reader sees, or the markup describes a different page. Keys index both
    ROUTES and pages.services.index.offers, so the listed name is the visible
    row title rather than a fifth restatement of it. */
-const SERVICES_INDEX = ["web", "seo"];
+/* HARG-302: the hub now lists GEO and SEO. */
+const SERVICES_INDEX = ["geo", "seo"];
 
 // Builds the JSON-LD object for a given locale + pagePath.
 // Returns null if SEO translations cannot be loaded (graceful fallback).

@@ -14,9 +14,11 @@ import {useHeroLoading} from "@/components/providers/hero-loading-provider";
    single hub, which is what left them "Discovered – currently not indexed" in
    Search Console. MVP is the fourth offer and is not here on purpose: it has
    its own section further down the page, which carries its own link. */
+/* HARG-302: the two offers are now GEO and SEO — both route to the same
+   SEO page for now until a dedicated GEO page exists. */
 const CARDS = [
-    {key: "webdev", href: "/services/applications-web"},
-    {key: "marketing", href: "/services/seo"},
+    {key: "geo", href: "/services/seo"},
+    {key: "seo", href: "/services/seo"},
 ];
 
 /* The hero backdrop is the wave grid, at every width and with no branch left to
@@ -167,7 +169,7 @@ const HeroV2 = () => {
                         <CtaLink href="/contact" variant="primary">
                             {t("ctaAudit")}
                         </CtaLink>
-                        <CtaLink href="#recent-works" variant="ghost">
+                        <CtaLink href="/faq" variant="ghost">
                             {t("ctaWork")}
                         </CtaLink>
                     </div>

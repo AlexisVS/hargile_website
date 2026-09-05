@@ -26,9 +26,9 @@ import {useReveal} from "@/components/pages/homepage/v2/useReveal";
 import {FAQ_GROUPS} from "./groups";
 import styles from "./faq-groups.module.scss";
 
-/* "The long answer" links — mirrors OFFERS in offers-index.jsx. */
+/* HARG-302: mirrors OFFERS in offers-index.jsx — GEO + SEO. */
 const OFFER_LINKS = [
-    {key: "web", href: "/services/applications-web"},
+    {key: "geo", href: "/services/seo"},
     {key: "seo", href: "/services/seo"},
 ];
 

@@ -10,7 +10,7 @@ import {useReveal} from "../useReveal";
 const Prompt = () => (
     <>
         <span className={styles.arrow}>➜</span>{" "}
-        <span className={styles.path}>~/hargile-tech-studio</span>
+        <span className={styles.path}>~/hargile</span>
     </>
 );
 
