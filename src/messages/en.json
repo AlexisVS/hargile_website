@@ -30,16 +30,16 @@
       },
       "prose": {
         "emailPlaceholder": "your@email.com",
-        "greeting": "My website is",
-        "messagePlaceholder": "The context, the goals, the timing: anything that helps us come prepared.",
-        "moreLabel": "Tell us a bit more",
+        "greeting": "Hi, my name is",
+        "messagePlaceholder": "Context, questions, expectations: anything that helps us prepare your diagnostic.",
+        "moreLabel": "Anything else?",
         "namePlaceholder": "your name",
-        "objectPlaceholder": "your-site.be",
+        "objectPlaceholder": "www.your-site.be",
         "optional": "optional",
         "phonePlaceholder": "+32 4.. .. .. ..",
         "reach": "You can reach me at",
         "reachOr": "or on",
-        "subject": "and I'd like to know if AI mentions me"
+        "subject": "and my site is"
       },
       "services": {
         "advice": "Advice",

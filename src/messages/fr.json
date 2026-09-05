@@ -30,16 +30,16 @@
       },
       "prose": {
         "emailPlaceholder": "votre@email.com",
-        "greeting": "Mon site web est",
-        "messagePlaceholder": "Le contexte, les objectifs, le timing : tout ce qui nous aide à bien nous préparer.",
-        "moreLabel": "Dites-nous en un peu plus",
+        "greeting": "Bonjour, je m'appelle",
+        "messagePlaceholder": "Contexte, questions, attentes : tout ce qui nous aide à préparer votre diagnostic.",
+        "moreLabel": "Un mot de plus ?",
         "namePlaceholder": "votre nom",
-        "objectPlaceholder": "votre-site.be",
+        "objectPlaceholder": "www.votre-site.be",
         "optional": "facultatif",
         "phonePlaceholder": "+32 4.. .. .. ..",
         "reach": "Vous pouvez me joindre à",
         "reachOr": "ou au",
-        "subject": "et j'aimerais savoir si les IA me citent"
+        "subject": "et mon site est"
       },
       "services": {
         "advice": "",
