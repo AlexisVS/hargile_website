@@ -101,8 +101,8 @@ export async function generatePageMetadata({params, pagePath}) {
         return {
             title: 'HARGILE',
             description: locale === 'fr'
-                ? 'Agence digitale spécialisée dans le développement web, les solutions IA et les stratégies marketing pour transformer votre présence en ligne et booster votre croissance.'
-                : 'Digital agency specializing in web development, AI solutions, and marketing strategies to transform your online presence and boost your business growth.'
+                ? 'GEO et SEO pour entreprises en Belgique. Soyez nommé par ChatGPT, Perplexity et les moteurs de réponse IA.'
+                : 'GEO and SEO for businesses in Belgium. Get named by ChatGPT, Perplexity and AI answer engines.'
         };
     }
 }

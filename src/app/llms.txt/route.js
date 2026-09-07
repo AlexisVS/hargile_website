@@ -4,39 +4,26 @@ import {SITE_URL} from "@/lib/site-url";
 
 /* /llms.txt — a plain-Markdown index of the site for LLM crawlers.
  *
+ * HARG-302: rewritten for the GEO/SEO pivot. The site no longer sells web
+ * dev — it sells visibility in AI answers and on Google.
+ *
  * Honest expectations: the evidence for llms.txt is weak. SE Ranking's study
  * of 300 k domains found no correlation with AI citations, only one of the 50
  * most-cited domains publishes one, and Google has said publicly it does not
  * use it. We ship it because it costs nothing and a few smaller crawlers do
- * read it — not because it is expected to move anything. Do not spend more
- * time on this file than it is worth.
- *
- * It is a route rather than a file in public/ so the NAP and the profile list
- * stay single-sourced (@/lib/nap, @/seo/same-as). A hardcoded address here
- * would recreate exactly the divergence those modules exist to prevent — and
- * an address that disagrees with the footer is worse than no address at all,
- * since cross-source agreement is the whole mechanism.
- *
- * The prose below is a summary, not translated copy: llms.txt has no locale
- * dimension, so it is written once in English and links to both locales. When
- * the homepage changes what it sells, change this too — a claim the site does
- * not support is the thing engines discount.
+ * read it — not because it is expected to move anything.
  */
-
-/* No `export const dynamic` here: cacheComponents rejects the route segment
-   config outright. The handler reads nothing request-scoped, so Next prerenders
-   it anyway. */
 
 const page = (path) => `${SITE_URL}${path}`;
 
 function body() {
     return `# HARGILE
 
-> HARGILE (also HARGILE Tech Studio) is an independent web and software studio
-> based in Brussels, Belgium, founded in 2025. It designs, builds
-> and maintains custom web applications for small and medium-sized businesses,
-> and automates SEO. Work is done in-house; clients keep ownership of their
-> code and data.
+> HARGILE is a GEO (Generative Engine Optimization) and SEO agency based in
+> Brussels, Belgium, founded in 2025. It makes businesses visible in AI
+> assistant answers (ChatGPT, Perplexity, Claude) and on Google. The method:
+> monitor what buyers ask AI, optimize sites so they become cited sources,
+> and track the results.
 
 The site is published in French and English. French is the default and is
 served at the root: ${page("/")} is the French home page. English lives under
@@ -48,24 +35,16 @@ JavaScript execution is required to read this site.
 
 ## Pages
 
-- [Home — FR](${page("/")}): what the studio does, the offers, three
-  recent projects, and the studio's values.
+- [Home — FR](${page("/")}): what HARGILE does — GEO and SEO, the problem,
+  the method, who it's for, and a free diagnostic CTA.
 - [Home — EN](${page("/en")}): English version of the above.
-- [Services — FR](${page("/services")}): index of the offers, each linking
-  to its own page.
-- [Services — EN](${page("/en/services")}): English version of the above.
-- [Custom web applications — FR](${page("/services/applications-web")}): the
-  in-house web offer — designed, built and maintained in Brussels, client owns
-  the code; three case narratives.
-- [Custom web applications — EN](${page("/en/services/applications-web")}):
-  English version of the above.
 - [SEO — FR](${page("/services/seo")}): the four-step method — audit,
   technical, content, measure — including visibility in AI answers.
 - [SEO — EN](${page("/en/services/seo")}): English version of the above.
-- [FAQ — FR](${page("/faq")}): direct answers on cost, timelines, code
-  ownership, technology, maintenance, custom vs WordPress.
+- [FAQ — FR](${page("/faq")}): direct answers on GEO, AI citations, SEO
+  timelines, what's guaranteed and what's not.
 - [FAQ — EN](${page("/en/faq")}): English version of the above.
-- [Contact — FR](${page("/contact")}): contact form, email, phone and address.
+- [Contact — FR](${page("/contact")}): free GEO diagnostic form.
 - [Contact — EN](${page("/en/contact")}): English version of the above.
 - [Privacy policy — FR](${page("/legal/privacy-policy")}): how personal data
   is collected, used and protected.
@@ -74,20 +53,10 @@ JavaScript execution is required to read this site.
 
 ## What HARGILE does
 
-- **[Website and web application creation](${page("/services/applications-web")})**
-  — custom applications for SMEs, designed, built and maintained in-house.
-- **[SEO](${page("/services/seo")})** — search visibility, automated.
-
-## Selected work
-
-- **Ecole du Bonheur** (ecoledubonheur.eu) — institutional site for a school;
-  a generic WordPress rebuilt as a digital experience.
-- **La Marquisette** (lamarquisette.be) — trilingual showcase site with
-  integrated booking for a 19th-century character cottage in the Belgian Ardennes.
-- **VENIZI** (venizi.com) — Venetian-inspired jewellery, sold online and across
-  a network of 50 boutiques in Belgium and France.
-
-More at https://portfolio.hargile.com/
+- **GEO (Generative Engine Optimization)** — monitoring and optimizing
+  business visibility in AI assistant answers: ChatGPT, Perplexity, Claude.
+- **[SEO](${page("/services/seo")})** — search engine visibility on Google,
+  from technical foundations to content and measurement.
 
 ## Contact
 

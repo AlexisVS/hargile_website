@@ -13,16 +13,16 @@
         "phone": "Téléphone",
         "projectDescription": "Votre message",
         "timeline": {
-          "1To3months": "1 - 3 mois",
-          "3To6months": "3 - 6 mois",
-          "label": "Échéancier souhaité",
-          "less1month": "Moins d'un mois",
-          "more6months": "Plus de 6 mois",
-          "select": "Sélectionner"
+          "1To3months": "",
+          "3To6months": "",
+          "label": "",
+          "less1month": "",
+          "more6months": "",
+          "select": ""
         },
         "title": "Informations de contact"
       },
-      "description": "Parlez-nous de votre projet. Nous vous recontactons sous 48 heures.",
+      "description": "Entrez l'URL de votre site. Nous analysons votre visibilité dans les réponses des IA et sur Google, et vous envoyons les résultats sous 48 heures.",
       "privacy": {
         "link": "politique de confidentialité",
         "requiredFields": "Champs obligatoires",
@@ -31,24 +31,24 @@
       "prose": {
         "emailPlaceholder": "votre@email.com",
         "greeting": "Bonjour, je m'appelle",
-        "messagePlaceholder": "Le contexte, les objectifs, le timing : tout ce qui nous aide à bien nous préparer.",
-        "moreLabel": "Dites-nous en un peu plus",
+        "messagePlaceholder": "Contexte, questions, attentes : tout ce qui nous aide à préparer votre diagnostic.",
+        "moreLabel": "Un mot de plus ?",
         "namePlaceholder": "votre nom",
-        "objectPlaceholder": "votre projet",
+        "objectPlaceholder": "www.votre-site.be",
         "optional": "facultatif",
         "phonePlaceholder": "+32 4.. .. .. ..",
         "reach": "Vous pouvez me joindre à",
         "reachOr": "ou au",
-        "subject": "et j'aimerais vous parler de"
+        "subject": "et mon site est"
       },
       "services": {
-        "advice": "Conseil",
-        "ai": "Intelligence Artificielle",
-        "cloud": "Solutions Cloud",
-        "description": "Sélectionnez une ou plusieurs options",
-        "mobileApps": "Applications Mobiles",
-        "title": "Type de service",
-        "webDevelopment": "Développement Web"
+        "advice": "",
+        "ai": "",
+        "cloud": "",
+        "description": "",
+        "mobileApps": "",
+        "title": "",
+        "webDevelopment": ""
       },
       "submit": "Envoyer",
       "submitError": "Désolé, une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer.",
@@ -56,7 +56,7 @@
       "submitNetworkError": "Une erreur de réseau s'est produite. Veuillez vérifier votre connexion et réessayer.",
       "submitSuccess": "Merci ! Votre message a été envoyé avec succès.",
       "submitting": "Envoi en cours...",
-      "title": "Contactez-nous",
+      "title": "Diagnostic GEO gratuit",
       "validation": {
         "emailInvalid": "Veuillez entrer une adresse e-mail valide.",
         "emailRequired": "Veuillez entrer votre adresse e-mail.",
@@ -76,12 +76,12 @@
         "contact": "Contact",
         "faq": "FAQ",
         "privacyPolicy": "Politique de confidentialité",
-        "services": "Services",
+        "services": "GEO & SEO",
         "siteMap": "Plan du site"
       },
       "sections": {
         "company": "Entreprise",
-        "services": "Services",
+        "services": "Offres",
         "socials": "Réseaux sociaux",
         "solutions": "Solutions"
       }
@@ -143,8 +143,8 @@
             "renewable": "Alimenté par énergie renouvelable"
           },
           "highlighted": "Révolutionner l'innovation par une technologie responsable",
-          "paragraph1": "Notre conviction est d’agir concrètement par des actions significatives pour un numérique plus vertueux afin que notre engagement se mesure en résultats tangibles.",
-          "paragraph2": "L’environnement social et environnemental est notre priorité. Notre vision est de transformer leurs contraintes en opportunités d'excellence. Nos solutions ne sont pas seulement performantes : elles sont résolument tournées vers l'avenir.",
+          "paragraph1": "Notre conviction est d'agir concrètement par des actions significatives pour un numérique plus vertueux afin que notre engagement se mesure en résultats tangibles.",
+          "paragraph2": "L'environnement social et environnemental est notre priorité. Notre vision est de transformer leurs contraintes en opportunités d'excellence. Nos solutions ne sont pas seulement performantes : elles sont résolument tournées vers l'avenir.",
           "pillars": {
             "environmental": "Responsabilité Environnementale",
             "ethical": "Innovation Éthique",
@@ -183,9 +183,9 @@
         },
         "our-story": {
           "getInTouch": "Nous contacter",
-          "paragraph1": "Chez HARGILE, nous ne construisons pas une entreprise numérique comme les autres. Nous cultivons une équipe aux talents complémentaires, où l’exigence technologique rencontre une vraie intelligence business.\n\nIci, l’innovation ne se fait pas pour briller, mais pour servir concrètement la croissance de nos partenaires.",
+          "paragraph1": "Chez HARGILE, nous ne construisons pas une entreprise numérique comme les autres. Nous cultivons une équipe aux talents complémentaires, où l'exigence technologique rencontre une vraie intelligence business.\n\nIci, l'innovation ne se fait pas pour briller, mais pour servir concrètement la croissance de nos partenaires.",
           "paragraph2": "Notre ambition va au-delà des produits : \n\n Nous créons des alliances durables, ancrées dans la confiance, la co-construction, et le succès partagé.\n\n Chaque solution que nous développons est pensée pour évoluer avec votre entreprise, répondre à vos enjeux réels, et anticiper les défis de demain.",
-          "paragraph3": "Pour nous, accompagner votre croissance, c’est bien plus qu’un service, c’est une responsabilité, et une fierté.",
+          "paragraph3": "Pour nous, accompagner votre croissance, c'est bien plus qu'un service, c'est une responsabilité, et une fierté.",
           "subtitle": "Une vision pour demain",
           "title": "Notre ADN"
         },
@@ -209,104 +209,74 @@
       "ctaSecondary": "Voir les services",
       "hero": {
         "eyebrow": "FAQ",
-        "title": "Les questions qu'on nous pose vraiment",
-        "answer": "HARGILE est un studio web indépendant à Bruxelles qui développe des applications web sur mesure pour les PME. Voici les réponses directes aux questions posées avant de choisir une agence : combien coûte une application sur mesure en Belgique, en combien de temps, agence ou freelance, et à qui appartient le code à la fin. Il manque la vôtre ? Écrivez-nous."
+        "title": "Les questions qu'on nous pose sur le GEO",
+        "answer": "HARGILE rend les entreprises visibles dans les réponses des IA et sur Google. Voici les réponses directes aux questions posées avant de commencer : combien de temps, quels résultats, comment ça marche, et combien ça coûte."
       },
       "groups": {
-        "project": "Projet & délais",
-        "budget": "Budget & propriété",
-        "tech": "Technique & maintenance"
+        "geo": "GEO & IA",
+        "seo": "SEO & Google",
+        "method": "Méthode & suivi"
       },
       "items": [
         {
-          "id": "agence",
-          "group": "project",
-          "q": "Comment choisir une agence web à Bruxelles pour développer une application sur mesure ?",
-          "a": "Trois points se vérifient avant de signer. Qui écrit réellement le code : chez HARGILE, le design et le développement sont faits en interne à Bruxelles, jamais sous-traités. Comment le prix est arrêté : au cadrage, avant le début du projet, et il ne bouge plus ensuite. Et à qui appartient le code à la fin : à vous. Le reste tient en un appel : références, disponibilité, langue de travail."
+          "id": "geo-definition",
+          "group": "geo",
+          "q": "C'est quoi le GEO exactement ?",
+          "a": "GEO, pour Generative Engine Optimization, c'est le travail qui fait que votre entreprise est nommée quand quelqu'un pose une question à ChatGPT, Perplexity ou un autre assistant IA. Ces moteurs de réponse citent des sources : le GEO consiste à faire de votre site l'une de ces sources, en rendant votre contenu lisible par les machines, structuré et pertinent."
         },
         {
-          "id": "process",
-          "group": "project",
-          "q": "Comment se déroule un projet de développement web sur mesure, du cadrage à la mise en ligne ?",
-          "a": "Toujours dans le même ordre : un cadrage où l'on définit ensemble périmètre, priorités et prix ; le design des parcours et des écrans ; le développement, avec des points d'étape réguliers ; les tests ; la mise en ligne. Tout est fait en interne, par la même équipe, et vous avez un interlocuteur direct du début à la fin."
+          "id": "geo-check",
+          "group": "geo",
+          "q": "Comment savoir si les IA me citent déjà ?",
+          "a": "On pose aux IA les 25 questions que vos acheteurs posent réellement, et on regarde qui est cité dans les réponses. Le diagnostic montre où vous apparaissez, où apparaissent vos concurrents, et où personne n'est encore bien positionné. C'est gratuit et c'est la première étape."
         },
         {
-          "id": "delai",
-          "group": "project",
-          "q": "Combien de temps faut-il pour développer une application web sur mesure pour une PME ?",
-          "a": "Cela dépend du périmètre, et le périmètre est fixé au cadrage, pas découvert en route. Le repère le plus concret : notre offre MVP livre un produit complet et utilisable en 30 jours. Un site vitrine peut aller plus vite ; une application métier plus riche prend plusieurs mois, par étapes planifiées."
+          "id": "geo-vs-seo",
+          "group": "geo",
+          "q": "Est-ce que le GEO remplace le SEO ?",
+          "a": "Non. Google reste le premier réflexe pour beaucoup de recherches, et le SEO technique reste la fondation : un site rapide, bien structuré et lisible profite autant au SEO qu'au GEO. Ce qui change, c'est qu'une part croissante de vos prospects ne clique plus sur un lien : ils lisent la réponse directement dans l'assistant IA. Le GEO couvre cette partie-là. Les deux se complètent."
         },
         {
-          "id": "mvp-30",
-          "group": "project",
-          "q": "Est-il vraiment possible de développer un MVP en 30 jours ?",
-          "a": "Oui, à une condition : le périmètre est figé avant de commencer. Semaine 1, cadrage et design ; semaines 2 et 3, développement ; semaine 4, tests et mise en ligne. Ce qui sort au bout est un produit réel, en ligne, utilisable par de vrais utilisateurs, pas une maquette. Ce qui n'entre pas dans les 30 jours est chiffré séparément, et vient ensuite."
+          "id": "geo-target",
+          "group": "geo",
+          "q": "Quels types d'entreprises profitent le plus du GEO ?",
+          "a": "Les entreprises de services professionnels dont les clients posent des questions avant de choisir : fiduciaires, avocats, notaires, consultants, recruteurs, architectes. Si vos prospects tapent « quel comptable choisir à Bruxelles » dans ChatGPT et que votre concurrent est nommé mais pas vous, le GEO est fait pour votre situation."
         },
         {
-          "id": "start",
-          "group": "project",
-          "q": "Que faut-il préparer avant de contacter une agence web pour un projet sur mesure ?",
-          "a": "Rien d'obligatoire : votre idée et votre réalité métier suffisent. Si vous avez des exemples de sites que vous aimez, des contraintes connues ou un existant à reprendre, c'est utile, mais c'est précisément le rôle du cadrage de transformer tout ça en périmètre clair."
+          "id": "seo-timeline",
+          "group": "seo",
+          "q": "Au bout de combien de temps voit-on des résultats ?",
+          "a": "Les corrections techniques (vitesse, structure, données structurées) font effet en quelques semaines. Le travail de contenu prend plus de temps : comptez trois à six mois pour des mouvements significatifs sur Google. Pour les citations IA, les premiers changements apparaissent souvent plus vite, parce que les modèles rafraîchissent leurs sources régulièrement. On suit les chiffres avec vous dès le départ."
         },
         {
-          "id": "langues",
-          "group": "project",
-          "q": "Où est basée HARGILE, et travaillez-vous avec des PME partout en Belgique ?",
-          "a": "À Bruxelles. Nous travaillons avec des PME partout en Belgique : sur place quand la rencontre sert à quelque chose, à distance le reste du temps. La proximité se joue sur la disponibilité, pas sur les kilomètres. Nos deux langues de travail sont le français et l'anglais, et les sites multilingues sont une habitude : La Marquisette est trilingue, celui-ci existe en français et en anglais."
+          "id": "seo-guarantee",
+          "group": "seo",
+          "q": "Garantissez-vous la première position sur Google ?",
+          "a": "Non, et personne de sérieux ne le peut : les résultats dépendent d'un algorithme que personne ne contrôle. Même chose pour les IA : personne ne garantit d'être cité. Ce qu'on garantit, c'est la méthode, la transparence sur ce qu'elle produit, et le fait que vous voyez les mêmes chiffres que nous."
         },
         {
-          "id": "cout",
-          "group": "budget",
-          "q": "Combien coûte le développement d'une application web sur mesure pour une PME en Belgique ?",
-          "a": "Il n'y a pas de tarif unique honnête : le prix dépend du périmètre. Notre engagement porte sur la méthode : le prix est fixé au cadrage, annoncé avant le début du projet, et il ne bouge pas. Pas de facturation au temps passé ni de dépassement surprise. Pour un premier produit, l'offre MVP en 30 jours est à prix fixe."
+          "id": "geo-seo-complement",
+          "group": "seo",
+          "q": "Comment le GEO et le SEO se complètent-ils ?",
+          "a": "Le SEO rend votre site trouvable sur Google. Le GEO rend votre entreprise citable par les assistants IA. La bonne nouvelle : une grande partie du travail est commune. Un contenu bien structuré, des données schema.org, des réponses nettes aux vraies questions de vos clients — tout ça sert les deux. On ne fait pas le travail deux fois."
         },
         {
-          "id": "prix-fixe",
-          "group": "budget",
-          "q": "Peut-on obtenir un prix fixe pour un développement sur mesure, sans facturation au temps passé ?",
-          "a": "Oui, et c'est possible parce que le périmètre est figé avant de commencer : le cadrage définit précisément ce qui sera livré, et le prix correspond à ce périmètre. Si une idée nouvelle apparaît en cours de projet, elle est chiffrée séparément et vous décidez de l'ajouter ou non. Le prix initial, lui, ne change pas."
+          "id": "method-diagnostic",
+          "group": "method",
+          "q": "Comment fonctionne le diagnostic gratuit ?",
+          "a": "Vous nous donnez l'URL de votre site. On identifie les 25 questions que vos acheteurs posent aux IA dans votre secteur, on les soumet à ChatGPT, Perplexity et Claude, et on note qui est cité. On regarde aussi votre position sur Google pour ces mêmes requêtes. Vous recevez les résultats sous 48 heures, sans engagement."
         },
         {
-          "id": "freelance",
-          "group": "budget",
-          "q": "Faut-il choisir une agence web ou un développeur freelance pour un projet de PME ?",
-          "a": "Un freelance est souvent le bon choix pour une mission cadrée qui ne demande qu'une seule compétence. Une équipe devient utile quand le design, le développement et la mise en production avancent en parallèle, et quand quelqu'un doit encore être là dans deux ans. HARGILE est un studio indépendant : un interlocuteur direct comme chez un freelance, une équipe derrière pour livrer et maintenir."
+          "id": "method-monthly",
+          "group": "method",
+          "q": "Que comprend l'accompagnement mensuel ?",
+          "a": "L'optimisation de votre contenu pour qu'il soit repris par les IA et bien positionné sur Google : structure du site, données structurées schema.org, rédaction ou réécriture de pages qui répondent aux questions de vos acheteurs. Plus le suivi : on refait le monitoring chaque mois et on ajuste. Pas de rapport de 40 pages : un tableau partagé avec les chiffres qui comptent."
         },
         {
-          "id": "propriete",
-          "group": "budget",
-          "q": "À qui appartient le code source à la fin d'un projet de développement web ?",
-          "a": "À vous. Code et données vous appartiennent à la livraison : vous pouvez héberger ailleurs, confier la suite à une autre équipe, ou continuer avec nous. Vous restez par choix, jamais par contrainte."
-        },
-        {
-          "id": "stack",
-          "group": "tech",
-          "q": "Quelles technologies utilisez-vous pour développer une application web sur mesure ?",
-          "a": "Des technologies web modernes et éprouvées, React et Next.js notamment : c'est avec ce framework que ce site est construit. Le choix précis se fait au cadrage, en fonction de votre projet et de votre existant, jamais l'inverse."
-        },
-        {
-          "id": "wordpress",
-          "group": "tech",
-          "q": "Faut-il choisir WordPress ou un développement sur mesure pour le site d'une PME ?",
-          "a": "WordPress est pertinent pour publier du contenu avec un budget serré. Le sur-mesure devient le bon choix quand votre site doit faire quelque chose : réservation, vente, processus métier, ou quand le thème générique freine votre image. L'Ecole du Bonheur est venue avec un WordPress générique ; nous l'avons transformé en expérience digitale à la hauteur de son projet."
-        },
-        {
-          "id": "maintenance",
-          "group": "tech",
-          "q": "Qui assure la maintenance d'un site web après sa mise en ligne ?",
-          "a": "Nous, si vous le souhaitez. Le site ne part pas à l'abandon : nous maintenons ce que nous livrons, mises à jour, sécurité et évolutions. La maintenance est proposée séparément, sans obligation : comme vous êtes propriétaire du code, vous restez libre de la confier à qui vous voulez."
-        },
-        {
-          "id": "seo-inclus",
-          "group": "tech",
-          "q": "Le référencement naturel (SEO) est-il inclus dans un projet de développement web ?",
-          "a": "Les fondations, oui, d'office. Structure propre, vitesse, données structurées, contenu lisible par les moteurs : tout ce qui fait qu'un site peut être bien référencé. Le travail de visibilité continu (contenu, suivi des positions, citations par les IA) fait l'objet de notre offre SEO dédiée."
-        },
-        {
-          "id": "ia-projets",
-          "group": "tech",
-          "q": "Quand l'intégration d'une IA a-t-elle vraiment du sens dans un projet web de PME ?",
-          "a": "Quand elle change le résultat : automatisation des tâches répétitives, recherche intelligente, exploitation de vos données. Et quand elle n'apporte rien à votre cas, nous vous le disons. Une intégration IA doit se justifier par un résultat mesurable, pas par la tendance."
+          "id": "method-tracking",
+          "group": "method",
+          "q": "Comment suit-on les résultats ?",
+          "a": "Trois indicateurs, suivis et partagés : vos positions Google sur les requêtes qui comptent pour votre métier, les citations de votre entreprise par les assistants IA, et le trafic organique vers votre site. Les chiffres sont dans un tableau que vous consultez quand vous voulez. On regarde les mêmes que vous, pas un rapport filtré."
         }
       ],
       "more": {
@@ -318,41 +288,37 @@
       "sections": {
         "about-us": {
           "approach_description": "Nous croyons aux partenariats collaboratifs et à la pensée innovante. En comprenant vos objectifs et défis commerciaux, nous livrons des solutions qui génèrent des résultats concrets.",
-          "approach_title": "Chaque projet est une opportunité,\n\n révéler le potentiel d’une idée",
+          "approach_title": "Chaque projet est une opportunité,\n\n révéler le potentiel d'une idée",
           "conclusion": "Votre objectif se construit pas à pas, portée par des collaborations alignées sur nos expertises et nos valeurs. Nous privilégions les projets en phase avec nos expertises clés pour garantir un développement progressif, cohérent et durable, sans compromis sur la qualité.",
           "ideas": [
             "Des sites de présentation élégants et percutants, véritables vitrines de votre identité",
-            "Des plateformes e-commerce centrées sur l’expérience utilisateur, pensées pour convertir et fidéliser",
+            "Des plateformes e-commerce centrées sur l'expérience utilisateur, pensées pour convertir et fidéliser",
             "Des espaces de contenu dynamiques et collaboratifs, qui donnent du souffle à vos communautés",
             "Des applications personnalisées, taillées pour vos enjeux métier, sans superflu"
           ],
           "our-values": [
             {
-              "value": "Transparence",
-              "description": "Une transparence sur l'avancement, les coûts, les choix. Pas de surprises."
+              "value": "Diagnostic",
+              "description": "25 questions de vos acheteurs, posées aux IA. On mesure lesquelles vous citent déjà, et lesquelles citent vos concurrents."
             },
             {
-              "value": "Souveraineté",
-              "description": "Votre code, vos données, votre liberté. Vous restez propriétaire de tout ce qu'on construit pour vous. Si vous restez, c'est par choix, pas par dépendance."
+              "value": "Optimisation",
+              "description": "Contenu lisible par les machines, données structurées, réponses nettes. On travaille votre site pour qu'il soit la source que les moteurs de réponse reprennent."
             },
             {
-              "value": "Fiabilité",
-              "description": "Un partenaire proche, réactif et présent dans la durée."
-            },
-            {
-              "value": "Curiosité",
-              "description": "Curieux par nature. On explore, on teste, on apprend en continu. On pilote l'IA au quotidien pour investir notre temps là où l'humain compte : le contact et le support."
+              "value": "Suivi",
+              "description": "Positions Google, citations par les IA, trafic organique. Les chiffres sont partagés : on regarde les mêmes que vous."
             }
           ],
-          "terminal-file": "valeurs.md",
+          "terminal-file": "methode.md",
           "stats": {
             "projects": "Projets livrés",
             "satisfaction": "Satisfaction client",
             "years": "Années d'expérience"
           },
           "subtitle": "Découvrez notre agence",
-          "who_description": "Chez HARGILE, nous façonnons notre développement comme on sculpte une œuvre : avec soin, intention et sens du détail.",
-          "who_title": "Nos valeurs"
+          "who_description": "Trois étapes, pas de boîte noire. Le diagnostic montre où vous en êtes, les corrections vous rendent citable, et le suivi prouve que ça fonctionne.",
+          "who_title": "Comment ça marche"
         },
         "hero": {
           "arrowAlt": "Flèche",
@@ -367,20 +333,20 @@
           "paragraph": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
           "quote": "Se démarquer, grandir et prospérer dans un monde de plus en plus connecté.",
           "v2": {
-            "eyebrow": "Tech Studio",
-            "headline": "Nous développons des applications web sur mesure pour les PME",
-            "paragraph": "HARGILE est le partenaire technique sur qui nos clients peuvent compter, avec la réactivité et l'expertise d'une équipe qui s'implique comme si c'était son propre projet.",
-            "ctaAudit": "Nous contacter",
-            "ctaWork": "Portfolio",
-            "cardsLabel": "Ce que nous livrons",
+            "eyebrow": "GEO & SEO",
+            "headline": "Vos clients demandent à ChatGPT. Êtes-vous dans la réponse ?",
+            "paragraph": "HARGILE monitore les questions que vos acheteurs posent aux IA, et travaille votre site pour que vous soyez nommé dans les réponses. Google et au-delà.",
+            "ctaAudit": "Diagnostic GEO gratuit",
+            "ctaWork": "Découvrir",
+            "cardsLabel": "Notre approche",
             "cards": {
-              "webdev": {
-                "title": "Création de sites internet",
-                "text": "Conçus, codés et maintenus chez nous"
+              "geo": {
+                "title": "GEO",
+                "text": "Être nommé par les IA"
               },
-              "marketing": {
+              "seo": {
                 "title": "SEO",
-                "text": "Votre visibilité, automatisée"
+                "text": "Être trouvé sur Google"
               }
             }
           }
@@ -398,7 +364,7 @@
           "paragraph": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
           "solutions": {
             "agves": {
-              "description": "Application de gestion des ventes spécialisée pour le secteur de l'éducation. AGVES révolutionne la communication de la vie scolaire et extrascolaire par la mise en place d’un interface simplificateur. Il améliore toutes opérations liées aux transactions financières comme les process de sécurité.",
+              "description": "Application de gestion des ventes spécialisée pour le secteur de l'éducation. AGVES révolutionne la communication de la vie scolaire et extrascolaire par la mise en place d'un interface simplificateur. Il améliore toutes opérations liées aux transactions financières comme les process de sécurité.",
               "subtitle": "ERP évolutif pour la gestion scolaire",
               "title": "AGVES"
             },
@@ -408,7 +374,7 @@
               "title": "I GO"
             },
             "your-project": {
-              "description": "Derrière chaque projet, chaque personne, il y a une rencontre unique. Nous mettons la technologie au service d’une vision : la vôtre. Créer des expériences qui touchent, qui rassemblent, qui font grandir, durables et porteuses de sens est notre participation à votre succès.",
+              "description": "Derrière chaque projet, chaque personne, il y a une rencontre unique. Nous mettons la technologie au service d'une vision : la vôtre. Créer des expériences qui touchent, qui rassemblent, qui font grandir, durables et porteuses de sens est notre participation à votre succès.",
               "subtitle": "Facteur de croissance",
               "title": "Votre projet"
             }
@@ -416,7 +382,7 @@
           "title": "Conception & développement"
         },
         "recent-works": {
-          "title": "Nos réalisations récentes",
+          "title": "Pour qui",
           "view-all": "Toutes nos réalisations",
           "works": {
             "agves": {
@@ -469,27 +435,27 @@
             },
             "title": "Maintenace et modernisation"
           },
-          "subtitle": "Libérez tout le potentiel de votre entreprise grâce à l’univers digital de HARGILE!",
+          "subtitle": "Libérez tout le potentiel de votre entreprise grâce à l'univers digital de HARGILE!",
           "title": "Nos services"
         },
         "trusted-brands": {
           "title": "Ils nous font confiance"
         },
         "design-dev": {
-          "title": "Développement & design",
+          "title": "Le problème",
           "manifesto": [
             {
-              "text": "Nous concevons et développons vos produits digitaux"
+              "text": "Vos prospects demandent à ChatGPT quel comptable choisir à Bruxelles."
             },
             {
-              "text": "avec vous, pas pour vous.",
+              "text": "Votre concurrent est nommé.",
               "accent": true
             },
             {
-              "text": "Des interfaces qu'on aime utiliser, des fondations qu'on continue de faire vivre après la livraison. Votre code, vos données :"
+              "text": "Vous, non. Et vous ne le savez pas. Le référencement ne se limite plus à Google : les moteurs de réponse citent des sources,"
             },
             {
-              "text": "vous restez par choix, jamais par contrainte.",
+              "text": "et ce sont ces sources qu'on travaille.",
               "accent": true
             }
           ],
@@ -497,9 +463,44 @@
             "your-project": {
               "title": "Votre projet",
               "tagline": "Facteur de croissance",
-              "description": "On écoute. On construit. On reste."
+              "description": "On monitore. On optimise. On prouve."
             }
           }
+        },
+        "verticals": {
+          "title": "Pour qui",
+          "lead": "Le GEO fonctionne pour les métiers où les clients cherchent un prestataire local et qualifié — exactement les questions qu'ils posent aux IA.",
+          "items": {
+            "fiduciaries": {
+              "title": "Fiduciaires & comptables",
+              "text": "Vos clients demandent à ChatGPT quel comptable choisir à Bruxelles. Soyez la réponse."
+            },
+            "lawyers": {
+              "title": "Avocats",
+              "text": "Un prospect demande à Perplexity quel avocat spécialisé contacter. Votre cabinet doit apparaître."
+            },
+            "notaries": {
+              "title": "Notaires",
+              "text": "Les acheteurs immobiliers comparent les études notariales en posant la question aux IA."
+            },
+            "consultants": {
+              "title": "Consultants",
+              "text": "Expertise et réputation comptent. Les IA recommandent les consultants dont le site démontre les deux."
+            },
+            "recruiters": {
+              "title": "Cabinets de recrutement",
+              "text": "Les entreprises demandent aux IA quel cabinet contacter pour un recrutement spécialisé."
+            },
+            "architects": {
+              "title": "Architectes & bureaux d'études",
+              "text": "Un maître d'ouvrage demande à ChatGPT quel architecte choisir pour son projet. Votre portfolio parle pour vous — encore faut-il qu'il soit lu."
+            }
+          }
+        },
+        "audit-cta": {
+          "title": "Commencez par la preuve",
+          "text": "Entrez votre URL. Nous analysons votre visibilité dans les réponses des IA et sur Google, et vous envoyons les résultats sous 48 heures. Gratuit, sans engagement.",
+          "button": "Demander le diagnostic"
         }
       }
     },
@@ -662,7 +663,7 @@
           },
           "legalBasis": {
             "title": "Base légale",
-            "content": "Ce traitement repose sur notre intérêt légitime (art. 6.1.f RGPD) à proposer nos services de référencement à des professionnels dont le site présente un potentiel d'amélioration. Un test de mise en balance (LIA) documente cet intérêt légitime et est revu annuellement."
+            "content": "Ce traitement repose sur notre intérêt légitime (art. 6.1.f RGPD) à proposer nos services de référencement et de visibilité IA à des professionnels dont le site présente un potentiel d'amélioration. Un test de mise en balance (LIA) documente cet intérêt légitime et est revu annuellement."
           },
           "optOut": {
             "title": "Droit d'opposition",
@@ -964,17 +965,26 @@
         "detailCta": "Découvrir l'offre",
         "hero": {
           "eyebrow": "Services",
-          "title": "Ce que nous livrons",
-          "answer": "HARGILE est un studio web indépendant basé à Bruxelles. Nous concevons, développons et maintenons des applications web sur mesure pour les PME, et automatisons votre visibilité sur les moteurs de recherche."
+          "title": "GEO & SEO",
+          "answer": "HARGILE monitore la visibilité de votre entreprise dans les réponses des assistants IA et sur les moteurs de recherche, et travaille votre site pour que vous soyez nommé."
         },
         "offers": {
+          "geo": {
+            "title": "GEO",
+            "promise": "Être nommé par les IA.",
+            "deliverables": [
+              "Monitoring des citations IA",
+              "Optimisation du contenu",
+              "Données structurées schema.org"
+            ]
+          },
           "seo": {
             "title": "SEO",
-            "promise": "Votre visibilité, automatisée.",
+            "promise": "Être trouvé sur Google.",
             "deliverables": [
               "SEO technique et contenu",
-              "Visible aussi dans les réponses des IA",
-              "Mesure et suivi"
+              "Suivi des positions et du trafic",
+              "Mesure et reporting partagé"
             ]
           },
           "web": {
@@ -992,15 +1002,15 @@
           "text": "Chaque offre est un engagement de livraison, pas une ligne de catalogue. Vous parlez à l'équipe qui conçoit et qui code, du cadrage à la mise en ligne."
         },
         "stats": {
-          "projects": "projets en ligne",
+          "questions": "questions monitorées",
           "offers": "offres, un studio"
         }
       },
       "shared": {
         "ctaBand": {
-          "title": "Parlons de votre projet",
-          "text": "Racontez-nous où vous en êtes ; on vous dit ce qu'on ferait, et à quel prix.",
-          "button": "Nous contacter"
+          "title": "Parlons de votre visibilité",
+          "text": "Entrez l'URL de votre site ; on analyse votre présence dans les IA et sur Google, et on vous envoie les résultats.",
+          "button": "Diagnostic gratuit"
         },
         "miniFaq": {
           "title": "Questions fréquentes",
@@ -1129,9 +1139,9 @@
   },
   "seo": {
     "global": {
-      "defaultDescription": "Transformez votre présence numérique avec les solutions web innovantes, l'IA et le marketing stratégique d'HARGILE. Élevez votre entreprise dans le paysage concurrentiel actuel.",
-      "defaultImageAlt": "HARGILE Agence Digitale",
-      "defaultTitle": "HARGILE - Innovation digitale au service de votre entreprise",
+      "defaultDescription": "HARGILE rend les entreprises visibles dans les réponses des assistants IA et sur Google. GEO et SEO, depuis Bruxelles.",
+      "defaultImageAlt": "HARGILE — GEO & SEO",
+      "defaultTitle": "HARGILE — Visible dans les IA et sur Google",
       "siteName": "HARGILE"
     },
     "pages": {
@@ -1146,34 +1156,34 @@
         "title": "À Propos d'HARGILE - Notre Histoire & Mission | Agence d'Innovation Digitale"
       },
       "contact": {
-        "description": "Contactez l'équipe HARGILE pour une consultation gratuite. Développement web, IA et marketing digital. Parlons de votre projet.",
+        "description": "Demandez votre diagnostic GEO gratuit. HARGILE analyse votre visibilité dans les IA et sur Google, et vous envoie les résultats sous 48 heures.",
         "og": {
-          "description": "Commencez votre parcours de transformation numérique avec HARGILE. Contactez notre équipe pour une consultation personnalisée et découvrez des solutions adaptées à vos besoins uniques.",
+          "description": "Diagnostic GEO gratuit : découvrez si les IA citent votre entreprise et comment améliorer votre visibilité sur Google et dans les moteurs de réponse.",
           "imageAlt": "Contact HARGILE",
-          "title": "Contactez HARGILE | Équipe d'Experts en Solutions Digitales"
+          "title": "Diagnostic GEO gratuit | HARGILE"
         },
         "schemaType": "ContactPage",
-        "title": "Contactez HARGILE | Équipe d'Experts en Solutions Digitales"
+        "title": "Diagnostic GEO gratuit | HARGILE"
       },
       "faq": {
-        "description": "Combien coûte une application web sur mesure pour une PME en Belgique, en combien de temps, agence ou freelance, WordPress ou sur-mesure, à qui appartient le code : 15 réponses directes d'un studio web bruxellois.",
+        "description": "GEO et SEO pour entreprises en Belgique : qu'est-ce que le GEO, comment savoir si les IA vous citent, combien de temps pour des résultats, méthode et suivi. 10 réponses directes.",
         "og": {
-          "description": "Combien ça coûte, combien de temps, agence ou freelance, à qui appartient le code : les réponses directes d'un studio web bruxellois.",
+          "description": "Qu'est-ce que le GEO, est-ce que les IA me citent, combien de temps pour des résultats : les réponses directes d'HARGILE.",
           "imageAlt": "FAQ HARGILE",
-          "title": "FAQ développement web sur mesure : coût, délais, code | HARGILE"
+          "title": "FAQ GEO & SEO : visibilité IA et Google | HARGILE"
         },
         "schemaType": "FAQPage",
-        "title": "FAQ développement web sur mesure : coût, délais, code | HARGILE"
+        "title": "FAQ GEO & SEO : visibilité IA et Google | HARGILE"
       },
       "home": {
-        "description": "Développement web sur mesure, intégration IA et marketing digital pour PME. Transformez votre présence en ligne avec HARGILE.",
+        "description": "GEO et SEO pour entreprises en Belgique. Soyez nommé par ChatGPT, Perplexity et les moteurs de réponse IA, et trouvé sur Google.",
         "og": {
-          "description": "Libérez le potentiel de votre entreprise avec les solutions numériques personnalisées d'HARGILE. Du développement web à l'intégration IA, nous délivrons des stratégies efficaces.",
-          "imageAlt": "HARGILE - Agence digitale",
-          "title": "HARGILE | Tech studio : développement web sur mesure & IA"
+          "description": "GEO et SEO pour entreprises en Belgique. Soyez nommé par ChatGPT, Perplexity et les moteurs de réponse IA, et trouvé sur Google.",
+          "imageAlt": "HARGILE — GEO & SEO",
+          "title": "HARGILE | Soyez nommé par les IA, pas seulement indexé"
         },
         "schemaType": "WebPage",
-        "title": "HARGILE | Tech studio : développement web sur mesure & IA"
+        "title": "HARGILE | GEO & SEO : visible dans les IA et sur Google"
       },
       "legal": {
         "privacy": {
@@ -1198,24 +1208,24 @@
         "title": "Notre Portfolio | Projets Digitaux Innovants | HARGILE"
       },
       "services": {
-        "description": "Les offres d'HARGILE pour les PME : applications web sur mesure et SEO automatisé. Studio indépendant à Bruxelles.",
+        "description": "GEO et SEO pour entreprises en Belgique : soyez nommé par les assistants IA et trouvé sur Google. HARGILE, depuis Bruxelles.",
         "og": {
-          "description": "Applications web sur mesure et SEO automatisé : comment HARGILE fait avancer les PME.",
+          "description": "GEO et SEO : HARGILE monitore votre visibilité dans les IA et sur Google, et travaille votre site pour que vous soyez nommé.",
           "imageAlt": "Services HARGILE",
-          "title": "Nos services : applications web et SEO | HARGILE"
+          "title": "GEO & SEO : visible dans les IA et sur Google | HARGILE"
         },
         "schemaType": "CollectionPage",
         "seo": {
-          "description": "SEO technique, contenu et mesure pour PME, visible sur Google et cité par les assistants IA comme ChatGPT. Une méthode durable, appliquée à notre propre site.",
+          "description": "SEO technique, contenu et mesure pour entreprises en Belgique. Visible sur Google et cité par les assistants IA comme ChatGPT. GEO + SEO, depuis Bruxelles.",
           "og": {
-            "description": "Votre visibilité, automatisée : SEO classique et citations par les moteurs de réponse IA, avec une méthode que notre propre site démontre.",
-            "imageAlt": "SEO automatisé, HARGILE",
-            "title": "SEO automatisé : visible sur Google et dans les IA | HARGILE"
+            "description": "GEO et SEO : soyez trouvé sur Google et cité par les moteurs de réponse IA, avec une méthode que notre propre site démontre.",
+            "imageAlt": "GEO & SEO, HARGILE",
+            "title": "GEO & SEO : visible sur Google et dans les IA | HARGILE"
           },
           "schemaType": "WebPage",
-          "title": "SEO automatisé : visible sur Google et dans les IA | HARGILE"
+          "title": "GEO & SEO : visible sur Google et dans les IA | HARGILE"
         },
-        "title": "Nos services : applications web et SEO | HARGILE",
+        "title": "GEO & SEO : visible dans les IA et sur Google | HARGILE",
         "web": {
           "description": "Conception, développement et maintenance d'applications web sur mesure pour PME, entièrement en interne à Bruxelles. Votre code et vos données vous appartiennent.",
           "og": {

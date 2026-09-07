@@ -32,8 +32,9 @@ import styles from "./offers-index.module.scss";
 /* Sales order, not the alphabetical order of the message keys. This is now also
    the reading order top-to-bottom, and the ItemList order published in
    build-json-ld.js — change one and change the other. */
+/* HARG-302: GEO + SEO. Both route to /services/seo for now. */
 const OFFERS = [
-    {key: "web", href: "/services/applications-web"},
+    {key: "geo", href: "/services/seo"},
     {key: "seo", href: "/services/seo"},
 ];
 

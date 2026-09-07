@@ -9,33 +9,22 @@ export function generateSharedMetadata(params, translations) {
     // Base URL with locale: French unprefixed, English /en (localeUrl).
     const baseUrl = localeUrl(locale);
 
-    /* Default image path (absolute URL required for OG/Twitter).
-
-       og-hargile-tech-studio.png is Logo_signature_mail.png — the dark-background
-       TECH STUDIO lockup — letterboxed onto its own background at exactly
-       1200×630. The source is 2000×600 (3.33:1) and every OG slot is 1.91:1, so
-       posting it raw would let Twitter's summary_large_image centre-crop it: at
-       that ratio the crop keeps only the middle ~57% of the width, losing the
-       blue H on the left and "STUDIO" on the right. Padding first means no
-       platform has to crop, and the width/height declared below are true rather
-       than the aspirational 1200×630 the old 1754×815 asset claimed. */
+    /* OG image — the existing lockup, still correct as a brand mark. */
     const imageUrl = `${SITE_URL}/images/brand/og-hargile-tech-studio.png`;
 
     return {
         metadataBase: new URL(SITE_URL),
-        /* No `template` here. It appended ' | HARGILE - Innovation digitale' (+32
-           chars) to page titles that already contain HARGILE, pushing every page
-           past the ~60 chars Google displays — /fr/contact rendered at 91 chars.
-           Page titles in seo.pages.* are self-sufficient; `default` still covers
-           any page that ships without one. */
+        /* HARG-302: fallback titles/descriptions reflect the GEO/SEO pivot.
+           Per-page metadata from generate-page-metadata.js overrides these on
+           every routed page; these only fire if a page ships without its own. */
         title: {
             default: isDefault
-                ? 'HARGILE - Innovation digitale au service de votre entreprise'
-                : 'HARGILE - Digital Innovation for Your Business',
+                ? 'HARGILE — Visible dans les IA et sur Google'
+                : 'HARGILE — Visible in AI and on Google',
         },
         description: isDefault
-            ? 'Agence digitale spécialisée dans le développement web, les solutions IA et les stratégies marketing'
-            : 'Digital agency specializing in web development, AI solutions, and marketing strategies',
+            ? 'GEO et SEO pour entreprises en Belgique. Soyez nommé par ChatGPT, Perplexity et les moteurs de réponse IA.'
+            : 'GEO and SEO for businesses in Belgium. Get named by ChatGPT, Perplexity and AI answer engines.',
         applicationName: 'HARGILE',
         // Alternative languages
         alternates: {
@@ -52,11 +41,11 @@ export function generateSharedMetadata(params, translations) {
             url: baseUrl,
             siteName: 'HARGILE',
             title: isDefault
-                ? 'HARGILE - Innovation digitale au service de votre entreprise'
-                : 'HARGILE - Digital Innovation for Your Business',
+                ? 'HARGILE — Visible dans les IA et sur Google'
+                : 'HARGILE — Visible in AI and on Google',
             description: isDefault
-                ? 'Agence digitale spécialisée dans le développement web, les solutions IA et les stratégies marketing'
-                : 'Digital agency specializing in web development, AI solutions, and marketing strategies',
+                ? 'GEO et SEO pour entreprises en Belgique. Soyez nommé par ChatGPT, Perplexity et les moteurs de réponse IA.'
+                : 'GEO and SEO for businesses in Belgium. Get named by ChatGPT, Perplexity and AI answer engines.',
             images: [
                 {
                     url: imageUrl,
@@ -70,11 +59,11 @@ export function generateSharedMetadata(params, translations) {
         twitter: {
             card: 'summary_large_image',
             title: isDefault
-                ? 'HARGILE - Innovation digitale au service de votre entreprise'
-                : 'HARGILE - Digital Innovation for Your Business',
+                ? 'HARGILE — Visible dans les IA et sur Google'
+                : 'HARGILE — Visible in AI and on Google',
             description: isDefault
-                ? 'Agence digitale spécialisée dans le développement web, les solutions IA et les stratégies marketing'
-                : 'Digital agency specializing in web development, AI solutions, and marketing strategies',
+                ? 'GEO et SEO pour entreprises en Belgique. Soyez nommé par ChatGPT, Perplexity et les moteurs de réponse IA.'
+                : 'GEO and SEO for businesses in Belgium. Get named by ChatGPT, Perplexity and AI answer engines.',
             images: [imageUrl],
             // No creator/site — see the note in src/seo/generate-page-metadata.js.
         },

@@ -13,8 +13,10 @@ import {useTranslations} from "next-intl";
 import CountUp from "@/components/pages/services/v2/shared/count-up";
 import styles from "./hero-stats.module.scss";
 
+/* HARG-302: stats reflect the GEO angle — questions monitored per client
+   and the number of offers. */
 const STATS = [
-    {key: "projects", to: 22},
+    {key: "questions", to: 25},
     {key: "offers", to: 2},
 ];
 

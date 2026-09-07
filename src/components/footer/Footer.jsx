@@ -17,10 +17,10 @@ import LinkedinIcon from "@/components/icons/LinkedinIcon";
 import {NAP, napCityLine} from "@/lib/nap";
 
 
-/* The offer pages. Titles come from the services index — same names in
-   the footer as on the page they lead to, one source. */
+/* HARG-302: two offers are now GEO and SEO. Both route to /services/seo
+   until a dedicated GEO page exists. */
 const OFFERS = [
-    {id: 'web', href: '/services/applications-web'},
+    {id: 'geo', href: '/services/seo'},
     {id: 'seo', href: '/services/seo'},
 ];
 
@@ -79,7 +79,6 @@ const Footer = () => {
                     </BrandBlockStyled>
 
                     <BottomLinksStyled as="nav" aria-label={t('sections.company')}>
-                        <FooterLinkStyled as={Link} href="/services">{t('links.services')}</FooterLinkStyled>
                         <FooterLinkStyled as={Link} href="/faq">{t('links.faq')}</FooterLinkStyled>
                         <FooterLinkStyled as={Link} href="/contact">{t('links.contact')}</FooterLinkStyled>
                         <FooterLinkStyled as={Link}
